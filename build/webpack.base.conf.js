@@ -1,11 +1,12 @@
-var path = require('path')
-var utils = require('./utils')
-var config = require('../config')
-var vueLoaderConfig = require('./vue-loader.conf')
+var path = require('path');
+var utils = require('./utils');
+var config = require('../config');
+var vueLoaderConfig = require('./vue-loader.conf');
 var glob = require('glob');
 var entries = utils.getEntry2('./src/view/**/*.js', true);
-function resolve (dir) {
-  return path.join(__dirname, '..', dir)
+
+function resolve(dir) {
+  return path.join(__dirname, '..', dir);
 }
 
 module.exports = {
@@ -24,6 +25,7 @@ module.exports = {
       'src': resolve('src'),
       'assets': resolve('src/assets'),
       'components': resolve('src/components'),
+      'common': resolve('src/common'),
       'router': resolve('src/router')
     }
   },
@@ -57,6 +59,10 @@ module.exports = {
         }
       },
       {
+        test: /\.json$/,
+        loader: 'json'
+      },
+      {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
@@ -66,4 +72,4 @@ module.exports = {
       }
     ]
   }
-}
+};
