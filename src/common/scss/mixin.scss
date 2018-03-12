@@ -99,11 +99,19 @@
     @extend %ellipsis;
 }
 
-@mixin bg-image($url){
-    background: url($url + "@2x.png") no-repeat;
-    background-size: contain;
-    @media screen and (-webkit-device-pixel-ratio: 3), screen and (min-device-pixel-ratio: 3) {
-        background: url($url + "@3x.png") no-repeat;
-        background-size: contain;
-    }
+@mixin bg-image-size($url, $sizeX, $sizeY){
+  background: url($url + "@2x.png") no-repeat;
+  background-size: formatVal($sizeX,rem) formatVal($sizeY,rem);
+  @media screen and (-webkit-device-pixel-ratio: 3), screen and (min-device-pixel-ratio: 3) {
+    background: url($url + "@3x.png") no-repeat;
+    background-size: formatVal($sizeX,rem) formatVal($sizeY,rem);
+  }
+}
+@mixin bg-image($url, $type){
+  background: url($url + "@2x.png") no-repeat;
+  background-size: $type;
+  @media screen and (-webkit-device-pixel-ratio: 3), screen and (min-device-pixel-ratio: 3) {
+    background: url($url + "@3x.png") no-repeat;
+    background-size: $type;
+  }
 }
