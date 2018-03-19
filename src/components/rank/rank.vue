@@ -1,7 +1,6 @@
 <template>
-  <div class="m-header">
-    <div class="icon"></div>
-    <h1 class="text">Chicken Music</h1>
+  <div class="g-rank">
+
   </div>
 </template>
 
@@ -11,7 +10,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "../../common/scss/compile";
-  @import "./m-header";
-
+  @import "./rank";
 
 </style>

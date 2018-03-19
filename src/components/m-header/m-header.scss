@@ -1,0 +1,33 @@
+.m-header {
+    position: relative;
+    height: formatVal(88,rem);
+    text-align: center;
+    color: $color-theme;
+    font-size: 0;
+    .icon {
+        display: inline-block;
+        vertical-align: top;
+        margin-top: formatVal(12,rem);
+        width: formatVal(60,rem);
+        height: formatVal(62,rem);
+        margin-right: formatVal(18,rem);
+        @include bg-image-size('logo',60,62);
+    }
+    .text {
+        display: inline-block;
+        vertical-align: top;
+        line-height: formatVal(88,rem);
+        font-size: $font-size-large;
+    }
+    .mine {
+        position: absolute;
+        top: 0;
+        right: 0;
+        .icon-mine {
+            display: block;
+            padding: formatVal(24,rem);
+            @include fs(20);
+            color: $color-theme;
+        }
+    }
+}
