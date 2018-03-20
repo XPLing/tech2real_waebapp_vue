@@ -1,0 +1,21 @@
+.g-header-title {
+  position: relative;
+  @include h(40);
+  @include lh(40);
+  @include fs(18);
+  color: $whiteColor;
+  text-align: center;
+  background-color: $color-theme;
+  .fa{
+    position: absolute;
+    z-index: 2;
+    @include fs(26);
+    @include lh(40);
+    &.left{
+      left: formatVal(15,rem);
+    }
+    &.right{
+      right: formatVal(15,rem);
+    }
+  }
+}

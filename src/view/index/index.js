@@ -5,6 +5,7 @@ import Vue from 'vue';
 import App from 'components/index/index';
 import router from 'router';
 import 'common/scss/common.scss';
+import 'font-awesome/scss/font-awesome.scss';
 import fastclick from 'fastclick';
 
 fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟

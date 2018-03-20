@@ -1,0 +1,15 @@
+.g-app-wrapper {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: all .3s;
+  .g-nav{
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: formatVal(50,rem);
+  }
+}

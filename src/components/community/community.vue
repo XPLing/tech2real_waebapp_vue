@@ -1,5 +1,5 @@
 <template>
-  <div class="g-search">
+  <div class="g-rank">
 
   </div>
 </template>
@@ -10,6 +10,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "../../common/scss/compile";
-  @import "./search";
+  @import "./community";
 
 </style>

@@ -1,0 +1,27 @@
+.g-tab {
+  display: flex;
+  height: formatVal(50,rem);
+  @include fs(10);
+  box-shadow: 0 -2px 5px $color-shadow-nav;
+  padding-top: formatVal(6,rem);
+  .tab-item{
+    flex: 1;
+    text-align: center;
+    color: $color-text-b;
+    .tab-link,.icon{
+      display: block;
+    }
+    .icon{
+      @include fs(20);
+      padding-bottom: formatVal(5,rem);
+    }
+    .tab-link{
+
+    }
+    &.active {
+      color: $color-theme;
+    }
+  }
+
+
+}

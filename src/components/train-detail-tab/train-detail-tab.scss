@@ -1,0 +1,30 @@
+.g-train-detail-tab {
+  display: flex;
+  @include h(44);
+  @include lh(44);
+  @include fs(16);
+  border-bottom: 1px solid $color-border-nav;
+  .tab-item{
+    position: relative;
+    flex: 1;
+    text-align: center;
+    color: $color-text-b;
+    .tab-link{
+      display: block;
+    }
+    &.active {
+      color: $color-theme;
+      &:after{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 0;
+        bottom: -1px;
+        border-top: 1px solid $color-theme;
+      }
+    }
+  }
+
+
+}

@@ -1,0 +1,43 @@
+.g-train-detail {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $whiteColor;
+
+  .g-join {
+    position: fixed;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    @include fs(16);
+    box-shadow: 0 -2px 5px $color-shadow-nav;
+    text-align: center;
+    .price, .btn {
+      @include h(50);
+      @include lh(50);
+      height: 100%;
+      @extend %lineElem_middle;
+    }
+    .price {
+      width: 65%;
+      color: $color-theme;
+    }
+    .btn {
+      width: 35%;
+      color: $whiteColor;
+      background-color: $color-theme;
+    }
+  }
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translate3d(100%, 0, 0);
+}

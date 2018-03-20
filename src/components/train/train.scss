@@ -1,0 +1,11 @@
+.g-train {
+  position: fixed;
+  z-index: 101;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: formatVal(50,rem);
+  .g-header{
+
+  }
+}

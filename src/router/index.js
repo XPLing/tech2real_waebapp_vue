@@ -1,30 +1,72 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld';
-import Recommend from 'components/recommend/recommend';
-import Singer from 'components/singer/singer';
-import Rank from 'components/rank/rank';
-import Search from 'components/search/search';
-Vue.use(Router)
+import Vue from 'vue';
+import Router from 'vue-router';
+import Info from 'components/info/info';
+import Train from 'components/train/train';
+import TrainDetail from 'components/train-detail/train-detail';
+import TrainDetailIntro from 'components/train-detail/intro/course-intro';
+import TrainDetailChapters from 'components/train-detail/chapters/course-chapters';
+import TrainDetailEvaluate from 'components/train-detail/evaluate/course-evaluate';
+import TrainDetailCommunity from 'components/train-detail/community/course-community';
+import Community from 'components/community/community';
+import Activity from 'components/activity/activity';
+import Me from 'components/me/me';
+
+Vue.use(Router);
 
 export default new Router({
-    linkActiveClass: 'active',
-    routes: [
+  linkActiveClass: 'active',
+  routes: [
+    {
+      path: '/',
+      redirect: '/info'
+    },
+    {
+      path: '/info',
+      component: Info
+    },
+    {
+      path: '/train',
+      component: Train,
+      children: [
         {
-            path: '/recommend',
-            component: Recommend
-        },
-        {
-            path: '/rank',
-            component: Rank
-        },
-        {
-            path: '/search',
-            component: Search
-        },
-        {
-            path: '/singer',
-            component: Singer
+          path: ':id',
+          component: TrainDetail,
+          children: [
+            {
+              path: '',
+              redirect: 'intro'
+            },
+            {
+              path: 'intro',
+              component: TrainDetailIntro
+            },
+            {
+              path: 'evaluate',
+              component: TrainDetailEvaluate
+            },
+            {
+              path: 'community',
+              component: TrainDetailCommunity
+            },
+            {
+              path: 'chapters',
+              component: TrainDetailChapters
+            }
+          ]
         }
-    ]
-})
+      ]
+    },
+    {
+      path: '/community',
+      component: Community
+    },
+    {
+      path: '/activity',
+      component: Activity
+    },
+    {
+      path: '/me',
+      component: Me
+    }
+  ]
+});

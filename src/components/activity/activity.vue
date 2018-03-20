@@ -1,5 +1,5 @@
 <template>
-  <div class="g-rank">
+  <div class="g-singer">
 
   </div>
 </template>
@@ -10,6 +10,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "../../common/scss/compile";
-  @import "./rank";
+  @import "./activity";
 
 </style>

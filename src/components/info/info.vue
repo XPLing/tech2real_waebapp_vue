@@ -10,6 +10,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "../../common/scss/compile";
-  @import "./recommend";
+  @import "./info";
 
 </style>

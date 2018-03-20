@@ -1,64 +1,44 @@
 @font-face {
-    font-family: 'icon';
-    src: url('../fonts/icon.eot?4hi1ny');
-    src: url('../fonts/icon.eot?4hi1ny#iefix') format("embedded-opentype"),
-         url('../fonts/icon.ttf?4hi1ny') format("truetype"),
-         url('../fonts/icon.woff?4hi1ny') format("woff"),
-         url('../fonts/icon.svg?4hi1ny#icon') format("svg");
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'c-icon';
+  src:  url('../fonts/c-icon.eot?65lg7x');
+  src:  url('../fonts/c-icon.eot?65lg7x#iefix') format('embedded-opentype'),
+  url('../fonts/c-icon.ttf?65lg7x') format('truetype'),
+  url('../fonts/c-icon.woff?65lg7x') format('woff'),
+  url('../fonts/c-icon.svg?65lg7x#c-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icon' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+[class^="c-icon-"], [class*=" c-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'c-icon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-add_circle:before {
-    content: "\e900";
+.c-icon-search:before {
+  content: "\e905";
 }
-
-.icon-arrow_lift:before {
-    content: "\e901";
+.c-icon-activity:before {
+  content: "\e900";
 }
-
-.icon-check_circle:before {
-    content: "\e902";
+.c-icon-community:before {
+  content: "\e901";
 }
-
-.icon-close:before {
-    content: "\e903";
+.c-icon-info:before {
+  content: "\e902";
 }
-
-.icon-favorite:before {
-    content: "\e904";
+.c-icon-me:before {
+  content: "\e903";
 }
-
-.icon-keyboard_arrow_right:before {
-    content: "\e905";
-}
-
-.icon-remove_circle_outline:before {
-    content: "\e906";
-}
-
-.icon-shopping_cart:before {
-    content: "\e907";
-}
-
-.icon-thumb_down:before {
-    content: "\e908";
-}
-
-.icon-thumb_up:before {
-    content: "\e909";
+.c-icon-train:before {
+  content: "\e904";
 }

@@ -23,6 +23,10 @@ input[type='text'],input[type='password'],textarea{
     border: none;
     border: 1px solid $borderColor2;
 }
+button{
+  border: none;
+  outline: none;
+}
 .btn{
     /*padding: 0 formatVal(12,rem);
     @include h(32);

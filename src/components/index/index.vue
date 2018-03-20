@@ -1,34 +1,25 @@
 <template>
-    <div id="app">
-        <g-header></g-header>
-        <g-tab></g-tab>
-        <keep-alive>
-            <router-view></router-view>
-        </keep-alive>
-    </div>
+  <div id="app" class="g-app-wrapper">
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+    <nav class="g-nav">
+      <g-tab></g-tab>
+    </nav>
+  </div>
 </template>
 
 <script>
-    import MHeader from 'components/m-header/m-header';
-    import Tab from 'components/tab/tab';
-
-    export default {
-        name: 'App',
-        components: {
-            'g-header': MHeader,
-            'g-tab': Tab
-        }
-    };
+  import Tab from 'components/tab/tab';
+  export default {
+    name: 'App',
+    components: {
+      'g-tab': Tab
+    }
+  };
 </script>
 
-<style>
-    #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 20px;
-        transition: all .3s;
-    }
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../common/scss/compile";
+  @import "./index";
 </style>
