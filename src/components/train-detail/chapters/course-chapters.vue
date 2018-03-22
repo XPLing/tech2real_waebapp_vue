@@ -10,7 +10,8 @@
           </div>
           <ul class="course-list">
             <li class="course-item" v-for="chapter in chapters.chapters" :key="chapter.id">
-              <a href="javascript:void(0);" :data-url="chapter.videoUrl">
+              <a href="javascript:void(0);" :data-url="chapter.videoUrl"
+                 @click.stop="changeVideo(chapter.videoUrl,$event)">
                 <i class="fa fa-caret-square-o-right"></i><em>{{chapter.title}}</em>
               </a>
             </li>
@@ -79,6 +80,9 @@
         console.log(chapters);
         // this.$set('courseChapters[' + index + '].isCollapsed', false);
         chapters.isCollapsed = !chapters.isCollapsed;
+      },
+      changeVideo (url) {
+        this.$emit('changevideo', url);
       }
     },
     components: {

@@ -15,7 +15,7 @@
       <div class="g-main">
         <keep-alive>
           <router-view :product-guid="productGuid" :user-guid="userGuid" :course-data="courseData"
-                       @setdata="setDatas"></router-view>
+                       @setdata="setDatas" @changevideo="changeVideo"></router-view>
         </keep-alive>
       </div>
       <div class="g-join">
@@ -80,6 +80,13 @@
         console.log(this.courseData.chapterResult.result[1]);
         this.$set(this.courseData.chapterResult.result[index], key, val);
 
+      },
+      changeVideo (url) {
+        if (url === this.videoUrl) {
+          return;
+        }
+        this.videoUrl = url;
+        console.log(url);
       }
     },
     components: {
