@@ -20,6 +20,6 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-  @import "../../common/scss/compile";
+  @import "~assets/scss/compile";
   @import "./index";
 </style>

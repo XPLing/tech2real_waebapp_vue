@@ -1,5 +1,6 @@
 .g-header-title {
   position: relative;
+  z-index: 10;
   @include h(40);
   @include lh(40);
   @include fs(18);

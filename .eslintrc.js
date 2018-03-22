@@ -36,6 +36,8 @@ module.exports = {
     'no-trailing-spaces': 0,
     'no-unused-vars': 0,
     "eqeqeq": 0,
-    "one-var": 0
+    "one-var": 0,
+    // 禁止在计算属性中对属性修改
+    'vue/no-side-effects-in-computed-properties': 'off'
   }
 }

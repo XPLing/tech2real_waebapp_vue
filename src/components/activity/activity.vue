@@ -9,7 +9,7 @@
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
-  @import "../../common/scss/compile";
+  @import "~assets/scss/compile";
   @import "./activity";
 
 </style>

@@ -2,7 +2,7 @@
   <div class="g-header-title">
     <i v-if="hasBack" class="fa fa-angle-left left" @click="back" aria-hidden="true"></i>
     <span>{{title}}</span>
-    <i v-if="hasSearch" class="fa fa-search right" aria-hidden="true"></i>
+    <i v-if="hasSearch" class="fa c-icon-search right" aria-hidden="true"></i>
   </div>
 </template>
 
@@ -34,7 +34,7 @@
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
-  @import "../../common/scss/compile";
+  @import "~assets/scss/compile";
   @import "./header-title";
 
 </style>

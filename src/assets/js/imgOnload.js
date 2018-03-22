@@ -1,0 +1,23 @@
+/**
+ * @param singerLoadFn: 每个img加载完成后的回调
+ * @param allLoadFn: 当全部img加载完成后的回调
+ *
+ * */
+export function imgOnload (imgs, vm, flag, singerLoadFn, allLoadFn) {
+  for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i], src = img.src;
+    var imgObj = new Image();
+    var me = vm;
+    (function (i, imgObj) {
+      imgObj.onload = function () {
+        singerLoadFn && singerLoadFn();
+        if (i === len - 1) {
+          me[flag] = true;
+          allLoadFn && allLoadFn();
+        }
+        imgObj = null;
+      };
+    })(i, imgObj);
+    imgObj.src = src;
+  }
+}

@@ -1,4 +1,57 @@
-.g-train-detail {
-
+.g-course-chapters {
+  height: 100%;
+  .chapters {
+    .chapter-item {
+      &.active {
+        .course-list {
+          display: block;
+        }
+        & > .title {
+          .collapsible:before {
+            content: "\f107";
+          }
+        }
+      }
+      & > .title {
+        position: relative;
+        padding: 0 formatVal(15, rem);
+        @include h(40);
+        @include lh(40);
+        @include fs(14);
+        background-color: $color-border-split;
+        .collapsible {
+          position: absolute;
+          right: formatVal(15, rem);
+          top: formatVal(12, rem);
+          &:before {
+            content: "\f106";
+          }
+        }
+      }
+      .course-list {
+        display: none;
+        .course-item {
+          a {
+            display: block;
+            padding: 0 formatVal(15, rem);
+            @include h(35);
+            @include lh(35);
+            @include fs(14);
+            i, em {
+              @extend %lineElem_middle;
+            }
+            em {
+              max-width: 80%;
+              @extend %ellipsis;
+            }
+            i {
+              text-indent: 1em;
+              margin-right: 1em;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 

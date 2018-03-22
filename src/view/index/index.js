@@ -4,7 +4,7 @@ import 'babel-polyfill'; // 转义es6的API，如promise
 import Vue from 'vue';
 import App from 'components/index/index';
 import router from 'router';
-import 'common/scss/common.scss';
+import 'assets/scss/common.scss';
 import 'font-awesome/scss/font-awesome.scss';
 import fastclick from 'fastclick';
 

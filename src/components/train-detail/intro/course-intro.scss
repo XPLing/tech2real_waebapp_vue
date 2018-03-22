@@ -1,4 +1,82 @@
 .g-course-intro {
-  padding-bottom: formatVal(50,rem);
+  height: 100%;
+  .section {
+    &.base-info {
+      padding: formatVal(15, rem);
+      border-bottom: formatVal(10, rem) solid $color-border-split;
+      .title {
+        @include fs(18);
+      }
+      .info {
+        margin: formatVal(17, rem) 0;
+        @include fs(14);
+        color: $color-text-weaken;
+      }
+      .price {
+        @include fs(20);
+        &.red {
+          color: $color-text-stress-r;
+        }
+        &.green {
+          color: $color-text-stress-g;
+        }
+      }
+
+    }
+    &.detail-info {
+      padding: 0 formatVal(15, rem);
+      .detail-info-item {
+        padding: formatVal(15, rem) 0;
+        & + .detail-info-item {
+          position: relative;
+          &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: formatVal(-15, rem);
+            border-bottom: 1px solid $color-border-split;
+          }
+        }
+        & > .title {
+          margin-bottom: formatVal(20, rem);
+          @include fs(16);
+        }
+      }
+
+      .desc {
+        @include fs(14);
+        *{
+          max-width: 100%;
+        }
+      }
+      .c-media-item {
+        .avatar {
+          margin-right: formatVal(15, rem);
+          img {
+            @include w(36);
+            @include h(36);
+            border-radius: 50%;
+          }
+        }
+        .desc {
+          padding-top: 0;
+          .title {
+            @include fs(17);
+            line-height: 0.8;
+          }
+          .info {
+            max-width: 100%;
+            margin-top: 5px;
+            &.career {
+              @include fs(14);
+              color: $color-text-b7e;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 

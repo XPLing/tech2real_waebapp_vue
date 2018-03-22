@@ -31,9 +31,7 @@
 .c-media {
     .c-media-item {
         position: relative;
-        & > div {
-            @extend %lineElem_top;
-        }
+        display: flex;
         .avatar {
             img {
                 @include w(180);
@@ -41,10 +39,27 @@
             }
         }
         .desc {
-            max-width: formatVal(500, rem);
+            flex: 1;
             .title {
                 @include fs(28);
                 //font-weight: bold;
+            }
+            .info {
+              &.float{
+                position: absolute;
+                bottom: 0;
+              }
+              @include fs(18);
+              color: $tipColor;
+              span {
+                & + span {
+                  margin-left: 15px;
+                }
+                display: inline-block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
             }
             .float-chunk {
                 position: absolute;
@@ -419,6 +434,46 @@
             }
         }
     }
+}
+.c-airtcle {
+  .c-airtcle-item {
+    position: relative;
+    & > div {
+      @extend %lineElem_top;
+    }
+    .avatar {
+      font-size: 0;
+      img {
+        @include w(180);
+        @include h(135);
+      }
+    }
+    .desc {
+      &, .info {
+        max-width: formatVal(500, rem);
+      }
+      .title {
+        @include fs(28);
+        word-break: break-all;
+        //font-weight: bold;
+      }
+      .info {
+        position: absolute;
+        bottom: 0;
+        @include fs(18);
+        color: $tipColor;
+        span {
+          & + span {
+            margin-left: 15px;
+          }
+          display: inline-block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
 }
 
 .c-uploadBox {
