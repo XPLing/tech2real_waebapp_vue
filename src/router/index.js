@@ -10,6 +10,8 @@ import TrainDetailCommunity from 'components/train-detail/community/course-commu
 import Community from 'components/community/community';
 import Activity from 'components/activity/activity';
 import Me from 'components/me/me';
+import Login from 'components/user/login/login';
+import Register from 'components/user/register/register';
 
 Vue.use(Router);
 
@@ -67,6 +69,20 @@ export default new Router({
     {
       path: '/me',
       component: Me
+    },
+    {
+      path: '/user',
+      component: Login,
+      children: [
+        {
+          path: 'login',
+          component: Login
+        },
+        {
+          path: 'register',
+          component: Register
+        }
+      ]
     }
   ]
 });

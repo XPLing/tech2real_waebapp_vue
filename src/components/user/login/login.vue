@@ -1,20 +1,20 @@
 <template>
-  <div class="g-train">
+  <div class="g-login">
         <header class="g-header">
-          <HeaderTitle :title="pageTitle"></HeaderTitle>
+          <HeaderTitle :title="pageTitle" :has-back="hasBack"></HeaderTitle>
         </header>
-        <router-link to="/train/67">detail</router-link>
         <router-view></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import HeaderTitle from 'components/header-title/header-title';
+  import HeaderTitle from 'components/header-login/header-login';
   import { commonVariable, ERR_OK } from 'api/config';
   export default {
     data(){
       return {
-        pageTitle: "培训"
+        pageTitle: "登录",
+        hasBack: true
       }
     },
     mounted(){
@@ -27,6 +27,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "./train";
+  @import "./login";
 
 </style>

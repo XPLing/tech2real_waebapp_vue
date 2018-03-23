@@ -15,11 +15,30 @@
     text-align: center;
     background-color: #000;
     overflow: hidden;
-    video{
-      background-color: #000;
+    .video-wrapper{
+      position: relative;
       height: 100%;
-      width: auto;
+      width: 100%;
+      .video-mask{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: $color-background-d;
+        .fa{
+          @include fs(60);
+          @include lh(205);
+          color: $color-text;
+        }
+      }
+      video{
+        background-color: #000;
+        height: 100%;
+        width: auto;
+      }
     }
+
     img{
       display: block;
       height: 100%;
@@ -34,6 +53,10 @@
     left: 0;
     right: 0;
     color: $color-text-b45;
+    background: $color-shadow-nav;
+    &.joined{
+      bottom: 0;
+    }
   }
   .g-join {
     position: fixed;

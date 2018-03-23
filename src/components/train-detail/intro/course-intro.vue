@@ -2,7 +2,7 @@
   <div class="g-course-intro">
     <scroll :data="courseIntro" :refreshDelay="refreshDelay" ref="scroll" @scroll="descImage" :probeType="probeType"
             :listenScroll="listenScroll">
-      <div>
+      <div class="g-scroll-continer">
         <div class="section base-info" v-if="courseIntro">
           <h1 class="title">{{courseIntro.title}}</h1>
           <p class="info">报名人数{{courseIntro.applyCount}} | {{courseIntro.evaluateCount}}人评论</p>
@@ -40,18 +40,11 @@
   import { imgOnload } from 'assets/js/imgOnload';
   import Scroll from 'base/scroll/scroll';
   import { getCourseIntro } from 'api/courseDetail';
-  import { commonVariable, ERR_OK } from 'api/config';
+  import { ERR_OK } from 'api/config';
+  import { getUserGuid, getProductGuid } from 'assets/js/common';
 
   export default {
     props: {
-      productGuid: {
-        type: String,
-        default: commonVariable.productGuid
-      },
-      userGuid: {
-        type: String,
-        default: ''
-      },
       courseData: {
         type: Object,
         default: null
@@ -62,7 +55,9 @@
         id: null,
         refreshDelay: 20,
         probeType: 2,
-        listenScroll: true
+        listenScroll: true,
+        userGuid: getUserGuid(),
+        productGuid: getProductGuid()
       };
     },
     created () {

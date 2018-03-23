@@ -1,0 +1,16 @@
+.loading{
+  width: 100%;
+  text-align: center;
+  .loadingIcon{
+    @include w(24);
+    @include h(24);
+  }
+  .desc{
+    @include lh(20,rem);
+    font-size: $font-size-small;
+    color: $color-text-l;
+  }
+}
+
+
+

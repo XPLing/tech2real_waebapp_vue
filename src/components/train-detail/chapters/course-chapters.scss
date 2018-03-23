@@ -1,5 +1,9 @@
 .g-course-chapters {
   height: 100%;
+  .g-scroll-continer{
+    border-bottom: formatVal(20,rem) solid $color-shadow-nav;
+    background-color: $whiteColor;
+  }
   .chapters {
     .chapter-item {
       &.active {

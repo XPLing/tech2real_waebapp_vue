@@ -1,5 +1,5 @@
 <template>
-  <div class="g-train">
+  <div class="g-login">
         <header class="g-header">
           <HeaderTitle :title="pageTitle"></HeaderTitle>
         </header>
@@ -14,7 +14,7 @@
   export default {
     data(){
       return {
-        pageTitle: "培训"
+        pageTitle: "登录"
       }
     },
     mounted(){
@@ -27,6 +27,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "./train";
+  @import "./register";
 
 </style>

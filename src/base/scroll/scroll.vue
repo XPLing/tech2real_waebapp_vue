@@ -76,6 +76,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" rel="stylesheet/scss">
+  @import "~assets/scss/compile";
   .g-scroll-wrapper{
     height: 100%;
     overflow: hidden;

@@ -1,8 +1,21 @@
 <template>
   <div class="g-header-title">
-    <i v-if="hasBack" class="fa fa-angle-left left" @click="back" aria-hidden="true"></i>
-    <span>{{title}}</span>
-    <i v-if="hasSearch" class="fa c-icon-search right" aria-hidden="true"></i>
+    <i class="fa fa-angle-left back back-hook"></i>
+    <div class="brand">
+      <a href="#" class="brand-logo yj-icon-logo"></a>
+    </div>
+    <div class="tag">
+      <div class="row">
+        <a href="login.html" class="col-xs-6 item">
+          <p>登录</p>
+          <i class="icon active fa fa-caret-up"></i>
+        </a>
+        <a href="register.html" class="col-xs-6 item">
+          <p>注册</p>
+          <i class="icon fa fa-caret-up"></i>
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,6 +48,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "./header-title";
+  @import "./header-login";
 
 </style>

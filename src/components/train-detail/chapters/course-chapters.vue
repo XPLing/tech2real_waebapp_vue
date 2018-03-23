@@ -1,7 +1,7 @@
 <template>
   <div class="g-course-chapters">
     <scroll :data="courseData" ref="scroll">
-      <div class="chapters">
+      <div class="chapters g-scroll-continer">
         <div class="chapter-item" :class="{ 'active': chapters.isCollapsed}" v-if="courseChapters.length>0"
              v-for="(chapters,index) in courseChapters" :key="index">
           <div class="title" @click.stop="chaptersCollapse(chapters,index,$event)">
@@ -25,17 +25,9 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll';
   import { commonVariable, ERR_OK } from 'api/config';
-
+  import { getUserGuid, getProductGuid } from 'assets/js/common';
   export default {
     props: {
-      productGuid: {
-        type: String,
-        default: commonVariable.productGuid
-      },
-      userGuid: {
-        type: String,
-        default: ''
-      },
       courseData: {
         type: Object,
         default: null
@@ -44,7 +36,9 @@
     data () {
       return {
         id: 0,
-        isSetData: false
+        isSetData: false,
+        userGuid: getUserGuid(),
+        productGuid: getProductGuid()
       };
     },
     created () {
@@ -61,10 +55,7 @@
             if (len > 0) {
               for (var i = 0; i < len; i++) {
                 var chapter = chapters[i];
-                console.log(222);
                 this.$emit('setdata', 'isCollapsed', true, i, 'chapterResult');
-                // this.$set('courseChapters[' + i + '].isCollapsed', true);
-                // chapter.isCollapsed = true;
               }
             }
           }
@@ -77,8 +68,6 @@
         this.id = this.$route.params.id;
       },
       chaptersCollapse (chapters, index, event) {
-        console.log(chapters);
-        // this.$set('courseChapters[' + index + '].isCollapsed', false);
         chapters.isCollapsed = !chapters.isCollapsed;
       },
       changeVideo (url) {

@@ -5,44 +5,46 @@
         <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack"></HeaderTitle>
       </header>
       <div class="g-video">
-        <video v-if="videoUrl" controls
-               :src="videoUrl"></video>
+        <div v-if="videoUrl" class="video-wrapper">
+          <video controls :src="videoUrl" ref="video"></video>
+          <p class="video-mask" v-show="isPause" @click.stop="Vclick">
+            <i class="fa" :class="{'fa-spin fa-circle-o-notch': !isCanplay,'fa-play-circle':isCanplay}"></i>
+          </p>
+        </div>
         <img v-if="courseData && courseData.chapterResult.result.length <= 0" :src="coverUrl">
       </div>
       <nav class="g-nav-wrapper">
         <TrainDetailTab></TrainDetailTab>
       </nav>
-      <div class="g-main">
+      <div class="g-main" :class="{'joined':this.appliedState>0}">
         <keep-alive>
           <router-view :product-guid="productGuid" :user-guid="userGuid" :course-data="courseData"
                        @setdata="setDatas" @changevideo="changeVideo"></router-view>
         </keep-alive>
       </div>
-      <div class="g-join">
-        <span class="price">0.00</span>
-        <button class="btn">加入学习</button>
+      <div class="g-join" v-if="courseData && this.appliedState<=0">
+        <span
+          class="price">{{courseData.courseResult.result.price == 0 ? "免费" : courseData.courseResult.result.price}}</span>
+        <button class="btn" @click="join">加入学习</button>
       </div>
+      <confirm ref="confirmsWrapper" :text="confirmTxt" @cancel="cancel" @confirm="confirm"></confirm>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
+  import Confirm from 'base/confirm/confirm';
   import TrainDetailTab from 'components/train-detail-tab/train-detail-tab';
   import { getCourseData } from 'api/courseDetail';
-  import { commonVariable, ERR_OK } from 'api/config';
+  import { ERR_OK } from 'api/config';
+  import { getUserGuid, setUserGuid, getProductGuid } from 'assets/js/common';
+
+  const LOGINTIP = '请先登录!';
+  const JOINTIP = '是否加入课程开始学习?';
 
   export default {
-    props: {
-      productGuid: {
-        type: String,
-        default: commonVariable.productGuid
-      },
-      userGuid: {
-        type: String,
-        default: ''
-      }
-    },
+    props: {},
     data () {
       return {
         courseID: 0,
@@ -51,8 +53,18 @@
         hasBack: true,
         courseData: null,
         videoUrl: null,
-        coverUrl: null
+        coverUrl: null,
+        appliedState: null,
+        isPause: true,
+        isCanplay: false,
+        userGuid: getUserGuid(),
+        productGuid: getProductGuid()
       };
+    },
+    computed: {
+      confirmTxt () {
+        return this.userGuid ? JOINTIP : LOGINTIP;
+      }
     },
     created () {
       this._getCourseID();
@@ -70,28 +82,72 @@
         };
         getCourseData(param).then((res) => {
           this.courseData = res;
-          this.videoUrl = res.chapterResult.result[0].chapters[0].videoUrl;
+          this.videoUrl = res.chapterResult.result.length > 0 ? res.chapterResult.result[0].chapters[0].videoUrl : null;
           this.coverUrl = res.courseResult.result.coverUrl;
+          this.appliedState = res.courseResult.result.appliedState;
         });
       },
       setDatas (key, val, index, dataName) {
-        console.log(111);
-        // var newData = Object.assign({},)
-        console.log(this.courseData.chapterResult.result[1]);
         this.$set(this.courseData.chapterResult.result[index], key, val);
-
       },
       changeVideo (url) {
         if (url === this.videoUrl) {
           return;
         }
+        this.isCanplay = false;
         this.videoUrl = url;
-        console.log(url);
+      },
+      Vclick () {
+        if (this.appliedState <= 0) {
+          this.join();
+          return;
+        }
+        if (this.isCanplay) {
+          this.isPause = false;
+          this.Vplay();
+        }
+      },
+      Vplay () {
+        this.$refs.video.play();
+      },
+      Vpause () {
+        this.$refs.video.pause();
+      },
+      join () {
+        this.$refs.confirmsWrapper.show();
+      },
+      confirm () {
+        if (this.confirmTxt === JOINTIP) {
+          this.appliedState = 1;
+        } else {
+          this.$router.push({
+            path: '/user/login'
+          });
+          setUserGuid('873441c5-be2c-4d90-a4cc-b05c184b99cf');
+          this.userGuid = getUserGuid();
+        }
+      },
+      cancel () {
+        if (this.confirmTxt === JOINTIP) {
+          console.log(JOINTIP);
+        } else {
+          console.log(LOGINTIP);
+        }
       }
     },
     components: {
       HeaderTitle,
-      TrainDetailTab
+      TrainDetailTab,
+      Confirm
+    },
+    watch: {
+      videoUrl () {
+        setTimeout(() => {
+          this.$refs.video.addEventListener('canplay', () => {
+            this.isCanplay = true;
+          });
+        }, 20);
+      }
     }
   };
 </script>

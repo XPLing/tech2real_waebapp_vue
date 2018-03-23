@@ -1,0 +1,15 @@
+.no-result{
+  text-align: center;
+  .no-result-icon{
+    @include w(86);
+    @include h(90);
+    margin: 0 auto;
+    @include bg-image('no-result');
+    background-size: formatVal(86,rem) formatVal(90,rem);
+  }
+  .no-result-text{
+    margin-top: formatVal(30,rem);
+    font-size: $font-size-medium;
+    color: $color-text-d;
+  }
+}
