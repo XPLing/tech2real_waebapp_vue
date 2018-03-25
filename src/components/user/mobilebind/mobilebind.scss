@@ -1,5 +1,9 @@
-.g-login {
+.g-mobilebind {
     @include pall1(15, 15, 0, 15);
+    display: block;
+    .protocol {
+        color: $color-text;
+    }
     .form {
         .verify, .tipinfo {
             display: none;
@@ -28,9 +32,9 @@
                     @include pall2(15, 0);
                     @include fs(16);
                     .icon {
-                        margin-right: formatVal(10, rem);
-                        @include fs(20);
-                        color: $color-text-wcc;
+                        width: 5em;
+                        margin-right: 0;
+                        @include fs(14);
                     }
                     .tipinfo {
                         position: absolute;

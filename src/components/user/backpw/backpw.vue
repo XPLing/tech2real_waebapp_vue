@@ -1,17 +1,8 @@
 <template>
-  <div class="g-register">
+  <div class="g-backpw">
       <form class="form">
-          <input type="hidden" id="userGuid">
           <p class="verify error"></p>
-          <ul class="form-main form-hook step-item user-hook active">
-              <li class="input-item">
-                  <div class="main">
-                      <i class="icon">昵&nbsp;&nbsp;&nbsp;&nbsp;称</i>
-                      <input class="input" type="text" placeholder="请输入昵称" data-key="nickname">
-                      <i class="fa fa-exclamation-circle tipinfo"></i>
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
+          <ul class="form-main form-hook active">
               <li class="input-item">
                   <div class="main">
                       <i class="icon">手机号</i>
@@ -20,10 +11,21 @@
                   </div>
                   <p class="c-tip error"></p>
               </li>
+              <li class="input-item verify-code">
+                  <div class="main">
+                      <i class="icon">验证码</i>
+                      <input class="input" type="text" placeholder="请输入验证码" data-key="verifycode">
+                      <span class="tipinfo send-hook">
+                                    <em>发送信息</em>
+                                </span>
+                  </div>
+                  <p class="c-tip error"></p>
+              </li>
               <li class="input-item">
                   <div class="main">
                       <i class="icon">设置密码</i>
                       <input class="input" type="password" placeholder="输入6-16位密码" data-key="pw">
+                      <i class="fa fa-exclamation-circle tipinfo"></i>
                   </div>
                   <p class="c-tip error"></p>
               </li>
@@ -36,23 +38,11 @@
                   <p class="c-tip error"></p>
               </li>
           </ul>
-          <ul class="form-main form-hook step-item verifycode-hook">
-              <li class="input-item verify-code">
-                  <div class="main">
-                      <i class="icon">验证码</i>
-                      <input class="input" type="text" placeholder="请输入验证码" data-key="verifycode">
-                      <span class="tipinfo send-hook">
-                                    <em>发送信息</em>
-                                </span>
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
-          </ul>
           <div class="btnbox">
-              <button type="button" class="submit submit-hook" data-type="register-next">下一步</button>
+              <button type="button" class="submit submit-hook">重置密码</button>
           </div>
       </form>
-      <p class="c-tip t-c">点击注册表示您同意<a class="protocol" href="https://m.tech2real.com/html/license/license.html?product_guid=a5c72d76-16dc-4bb6-b6af-f2e562b1839b">用户协议</a></p>
+      <p class="c-tip t-r"><a href="login.html">返回登录</a></p>
   </div>
 </template>
 
@@ -75,6 +65,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "./register";
+  @import "./backpw";
 
 </style>

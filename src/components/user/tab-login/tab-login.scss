@@ -1,0 +1,37 @@
+.g-tab-login {
+    position: relative;
+    height: auto;
+    padding: formatVal(10, rem) formatVal(10, rem) 0;
+    background-color: $color-theme;
+    box-shadow: none;
+    .tag {
+        text-align: center;
+        display: flex;
+        .item {
+            flex: 1;
+            position: relative;
+            color: #fff;
+            @include fs(14);
+            @include lh(15);
+            &.active{
+                .icon {
+                    &:before {
+                        display: inline-block;
+                    }
+                }
+            }
+            .icon {
+                font-size: 1.8em;
+                line-height: 0.4;
+                &:before {
+                    display: none;
+                    position: absolute;
+                    bottom: -1px;
+                    left: 0;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+

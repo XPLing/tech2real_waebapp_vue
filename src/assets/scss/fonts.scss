@@ -1,44 +1,90 @@
 @font-face {
   font-family: 'c-icon';
-  src:  url('../fonts/c-icon.eot?65lg7x');
-  src:  url('../fonts/c-icon.eot?65lg7x#iefix') format('embedded-opentype'),
-  url('../fonts/c-icon.ttf?65lg7x') format('truetype'),
-  url('../fonts/c-icon.woff?65lg7x') format('woff'),
-  url('../fonts/c-icon.svg?65lg7x#c-icon') format('svg');
+    src:  url('../fonts/c-icon.eot?uiskc0');
+    src:  url('../fonts/c-icon.eot?uiskc0#iefix') format('embedded-opentype'),
+    url('../fonts/c-icon.ttf?uiskc0') format('truetype'),
+    url('../fonts/c-icon.woff?uiskc0') format('woff'),
+    url('../fonts/c-icon.svg?uiskc0#c-icon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 [class^="c-icon-"], [class*=" c-icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'c-icon' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'c-icon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
 
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.c-icon-search:before {
-  content: "\e905";
+.c-icon-tencent-weibo:before {
+    content: "\e900";
+}
+.c-icon-weibo:before {
+    content: "\e901";
+}
+.c-icon-wechat:before {
+    content: "\e902";
+}
+.c-icon-weixin:before {
+    content: "\e902";
+}
+.c-icon-qq:before {
+    content: "\e903";
+}
+.c-icon-angle-down:before {
+    content: "\e904";
+}
+.c-icon-angle-up:before {
+    content: "\e905";
+}
+.c-icon-angle-right:before {
+    content: "\e906";
+}
+.c-icon-angle-left:before {
+    content: "\e907";
 }
 .c-icon-activity:before {
-  content: "\e900";
+    content: "\e908";
 }
 .c-icon-community:before {
-  content: "\e901";
+    content: "\e909";
 }
 .c-icon-info:before {
-  content: "\e902";
+    content: "\e90a";
 }
 .c-icon-me:before {
-  content: "\e903";
+    content: "\e90b";
 }
 .c-icon-train:before {
-  content: "\e904";
+    content: "\e90c";
 }
+.c-icon-pw:before {
+    content: "\e90d";
+}
+.c-icon-mobile:before {
+    content: "\e90e";
+}
+.c-icon-nav:before {
+    content: "\e90f";
+}
+.c-icon-logo:before {
+    content: "\1f590";
+}
+.c-icon-film:before {
+    content: "\e913";
+}
+.c-icon-play2:before {
+    content: "\ea15";
+}
+.c-icon-pause:before {
+    content: "\ea16";
+}
+

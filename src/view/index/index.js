@@ -7,11 +7,13 @@ import router from 'router';
 import 'assets/scss/common.scss';
 import 'font-awesome/scss/font-awesome.scss';
 import fastclick from 'fastclick';
+import {VeeValidate, Veeconfig} from 'assets/js/validate';
 
 fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟
 
 Vue.config.productionTip = false;
 
+Vue.use(VeeValidate, Veeconfig);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
