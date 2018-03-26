@@ -114,7 +114,7 @@
   }
 }
 
-@mixin bg-image($url, $type) {
+@mixin bg-image($url, $type:false) {
   @if $type {
     background: url($url + "@2x.png") no-repeat;
     background-size: $type;

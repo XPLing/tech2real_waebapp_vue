@@ -24,9 +24,20 @@
     text-align: center !important;
     vertical-align: middle !important;
 }
+/* 情景样式 */
+
+.text-danger{
+  color: $color-sub-theme;
+}
+.has-error{
+  input{
+    border: 1px solid $color-text-error;
+  }
+}
+/* 组件 */
 .c-tip {
     font-size: 12px;
-    padding: 10px;
+    padding: 10px 0;
 }
 .c-media {
     .c-media-item {

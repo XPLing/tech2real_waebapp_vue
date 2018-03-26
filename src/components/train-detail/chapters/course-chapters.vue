@@ -18,12 +18,16 @@
           </ul>
         </div>
       </div>
+      <div v-show="!courseChapters.length">
+        <no-result :title="noResult"></no-result>
+      </div>
     </scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll';
+  import NoResult from 'base/no-result/no-result';
   import { commonVariable, ERR_OK } from 'api/config';
   import { getUserGuid, getProductGuid } from 'assets/js/common';
   export default {
@@ -42,6 +46,7 @@
       };
     },
     created () {
+      this.noResult = '暂无课程~~';
       this._getCourseID();
     },
     computed: {
@@ -75,7 +80,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      NoResult
     }
   };
 </script>

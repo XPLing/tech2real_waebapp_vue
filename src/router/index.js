@@ -16,7 +16,7 @@ import Register from 'components/user/register/register'
 import BackPW from 'components/user/backpw/backpw'
 import MobileBind from 'components/user/mobilebind/mobilebind'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     linkActiveClass: 'active',

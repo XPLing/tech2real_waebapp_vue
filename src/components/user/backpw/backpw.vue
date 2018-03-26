@@ -66,5 +66,4 @@
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
   @import "./backpw";
-
 </style>

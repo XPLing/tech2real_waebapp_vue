@@ -1,71 +1,103 @@
 <template>
   <div class="g-register">
-      <form class="form">
-          <input type="hidden" id="userGuid">
-          <p class="verify error"></p>
-          <ul class="form-main form-hook step-item user-hook active">
-              <li class="input-item">
-                  <div class="main">
-                      <i class="icon">昵&nbsp;&nbsp;&nbsp;&nbsp;称</i>
-                      <input class="input" type="text" placeholder="请输入昵称" data-key="nickname">
-                      <i class="fa fa-exclamation-circle tipinfo"></i>
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
-              <li class="input-item">
-                  <div class="main">
-                      <i class="icon">手机号</i>
-                      <input class="input" type="text" placeholder="请输入手机号" data-key="mobile">
-                      <i class="fa fa-exclamation-circle tipinfo"></i>
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
-              <li class="input-item">
-                  <div class="main">
-                      <i class="icon">设置密码</i>
-                      <input class="input" type="password" placeholder="输入6-16位密码" data-key="pw">
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
-              <li class="input-item">
-                  <div class="main">
-                      <i class="icon">确认密码</i>
-                      <input class="input" type="password" placeholder="确认密码" data-key="confirm-pw">
-                      <i class="fa fa-exclamation-circle tipinfo"></i>
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
-          </ul>
-          <ul class="form-main form-hook step-item verifycode-hook">
-              <li class="input-item verify-code">
-                  <div class="main">
-                      <i class="icon">验证码</i>
-                      <input class="input" type="text" placeholder="请输入验证码" data-key="verifycode">
-                      <span class="tipinfo send-hook">
+    <form class="form" data-vv-scope="registerFirst">
+      <input type="hidden" id="userGuid">
+      <p class="verify error"></p>
+      <ul class="form-main form-hook step-item user-hook active">
+        <li class="input-item">
+          <div class="main">
+            <i class="icon">昵&nbsp;&nbsp;&nbsp;&nbsp;称</i>
+            <input type="text" placeholder="请输入昵称" name="nickname"
+                   v-validate="'required|nickname'"
+                   :class="{'input': true, 'has-error': errors.has('registerFirst.nickname') }">
+            <i class="fa fa-exclamation-circle tipinfo"></i>
+          </div>
+          <div v-show="errors.has('registerFirst.nickname')" class="c-tip error">
+            <i class="icon fa fa-warning text-danger"></i>
+            <span class="meg text-danger">{{ errors.first('registerFirst.nickname')}}</span>
+          </div>
+        </li>
+        <li class="input-item" :class="{'has-error': errors.has('registerFirst.phone') }">
+          <div class="main">
+            <i class="icon">手机号</i>
+            <input name="phone" v-validate:phone="'required|phone'"
+                   :class="{'input': true, 'has-error': errors.has('registerFirst.phone') }" type="text"
+                   placeholder="请输入手机号">
+          </div>
+          <div v-show="errors.has('registerFirst.phone')" class="c-tip error">
+            <i class="icon fa fa-warning text-danger"></i>
+            <span class="meg text-danger">{{ errors.first('registerFirst.phone')}}</span>
+          </div>
+        </li>
+        <li class="input-item">
+          <div class="main">
+            <i class="icon">设置密码</i>
+            <input name="password" type="password" placeholder="输入6-16位密码"
+                   v-validate="{rules:{required: true,pw:true}}" v-model="password"
+                   :class="{'input': true, 'has-error': errors.has('registerFirst.password')}">
+          </div>
+          <div v-show="errors.has('registerFirst.password')" class="c-tip error">
+            <i class="icon fa fa-warning text-danger"></i>
+            <span class="meg text-danger">{{ errors.first('registerFirst.password')}}</span>
+          </div>
+        </li>
+        <li class="input-item">
+          <div class="main">
+            <i class="icon">确认密码</i>
+            <input type="password" placeholder="确认密码" name="confirmPW"
+                   v-validate="'required|confirmed:password'"
+                   :class="{'input': true, 'has-error': errors.has('registerFirst.confirmPW')}">
+            <i class="fa fa-exclamation-circle tipinfo"></i>
+          </div>
+          <div v-show="errors.has('registerFirst.confirmPW')" class="c-tip error">
+            <i class="icon fa fa-warning text-danger"></i>
+            <span class="meg text-danger">{{ errors.first('registerFirst.confirmPW')}}</span>
+          </div>
+        </li>
+      </ul>
+      <ul class="form-main form-hook step-item verifycode-hook">
+        <li class="input-item verify-code">
+          <div class="main">
+            <i class="icon">验证码</i>
+            <input class="input" type="text" placeholder="请输入验证码" data-key="verifycode">
+            <span class="tipinfo send-hook">
                                     <em>发送信息</em>
                                 </span>
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
-          </ul>
-          <div class="btnbox">
-              <button type="button" class="submit submit-hook" data-type="register-next">下一步</button>
           </div>
-      </form>
-      <p class="c-tip t-c">点击注册表示您同意<a class="protocol" href="https://m.tech2real.com/html/license/license.html?product_guid=a5c72d76-16dc-4bb6-b6af-f2e562b1839b">用户协议</a></p>
+          <p class="c-tip error"></p>
+        </li>
+      </ul>
+      <div class="btnbox">
+        <button type="button" class="submit submit-hook" data-type="register-next">下一步</button>
+      </div>
+    </form>
+    <p class="c-tip t-c">点击注册表示您同意<a class="protocol"
+                                     href="https://m.tech2real.com/html/license/license.html?product_guid=a5c72d76-16dc-4bb6-b6af-f2e562b1839b">用户协议</a>
+    </p>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
   import { commonVariable, ERR_OK } from 'api/config';
+  import { Validator } from 'vee-validate';
+
+//  const dictionary = {
+//    zh_CN: {
+//      messages: {
+//        confirmed: () => '两次密码输入不一致!!!'
+//      }
+//    }
+//  };
+//  Validator.updateDictionary(dictionary);
   export default {
-    data(){
+    data () {
       return {
-        pageTitle: "登录"
-      }
+        pageTitle: '登录',
+        password: ''
+      };
     },
-    mounted(){
+    mounted () {
     },
     components: {
       HeaderTitle

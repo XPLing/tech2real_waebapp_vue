@@ -17,6 +17,6 @@
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
-  @import "~asstes/scss/compile";
+  @import "~assets/scss/compile";
   @import "noResult";
 </style>
