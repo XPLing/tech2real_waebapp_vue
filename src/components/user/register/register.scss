@@ -2,7 +2,7 @@
   @include pall1(15, 15, 0, 15);
   display: block;
   .protocol {
-    color: $color-text;
+    color: $color-text-link;
   }
   .form {
     .verify, .tipinfo {

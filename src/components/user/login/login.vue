@@ -6,8 +6,8 @@
         <li class="input-item" :class="{'has-error': errors.has('login.phone') }">
           <div class="main">
             <i class="icon c-icon-mobile"></i>
-            <input name="phone" v-model="phone" v-validate:phone="'required|phone'" data-vv-as="手机号"
-                   :class="{'input': true, 'has-error': errors.has('login.phone') }" type="text"
+            <input class="needsclick" name="phone" v-model="phone" v-validate:phone="'required|phone'" data-vv-as="手机号"
+                   :class="{'input': true}" type="text"
                    placeholder="手机号">
           </div>
           <div v-show="errors.has('login.phone')" class="c-tip error">
@@ -15,11 +15,11 @@
             }}</span>
           </div>
         </li>
-        <li class="input-item">
+        <li class="input-item" :class="{'has-error': errors.has('login.password') }">
           <div class="main">
             <i class="icon c-icon-pw"></i>
-            <input name="password" v-validate="'required|pw'" data-key="pw"
-                   :class="{'input': true, 'has-error': errors.has('login.password') }" type="password"
+            <input class="needsclick" name="password" v-model="password" v-validate="'required|pw'" data-key="pw"
+                   :class="{'input': true}" type="password"
                    placeholder="密码">
           </div>
           <div v-show="errors.has('login.password')" class="c-tip error">
@@ -29,7 +29,7 @@
         </li>
       </ul>
       <div class="btnbox">
-        <button type="button" class="submit submit-hook needsclick"  @click="validateForm('login')">登录</button>
+        <button type="button" class="submit submit-hook needsclick" @click="validateForm('login')">登录</button>
       </div>
     </form>
     <p class="forget-pw"><a href="find_back_pw.html">忘记密码？</a></p>
@@ -57,25 +57,37 @@
 <script type="text/ecmascript-6">
   import { commonVariable, ERR_OK } from 'api/config';
   import { Validator } from 'vee-validate';
+  import { webLoginByPhone } from 'api/login';
 
   export default {
     data () {
       return {
-        phone: ''
+        phone: '',
+        password: ''
       };
     },
     mounted () {
 
     },
     methods: {
-      validateForm (scope) {
-        console.log(scope);
-        this.$validator.validateAll(scope).then((res) => {
+      _login () {
+        var data = {
+          mobile: this.phone.trim(),
+          password: this.password.trim()
+        };
+        webLoginByPhone(data).then((res) => {
           console.log(res);
-          console.log('Form Submitted!');
-        }, (erro) => {
-          console.log('Form erro!');
         });
+      },
+      validateForm (scope) {
+        this.$validator.validateAll(scope).then((res) => {
+          this._login();
+        }, (erro) => {
+          console.log(erro);
+        });
+      },
+      formSubmitSuccess () {
+
       }
     },
     components: {}

@@ -1,48 +1,70 @@
 <template>
   <div class="g-mobilebind">
-      <form class="form">
-          <p class="verify error"></p>
-          <ul class="form-main form-hook active">
-              <li class="input-item verify-code">
-                  <div class="main">
-                      <i class="icon">验证码</i>
-                      <input class="input" type="text" placeholder="请输入验证码"  data-key="verifycode">
-                      <span class="tipinfo send-hook">
-                                    <em>发送信息</em>
-                                </span>
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
-              <li class="input-item">
-                  <div class="main">
-                      <i class="icon">手机号</i>
-                      <input class="input" type="text" placeholder="请输入手机号"  data-key="mobile">
-                      <i class="fa fa-exclamation-circle tipinfo"></i>
-                  </div>
-                  <p class="c-tip error"></p>
-              </li>
-          </ul>
-          <div class="c-shadow-local active" id="msgLocal">
-              <p class="item msg"></p>
+    <form class="form" data-vv-scope="mobilebind">
+      <p class="verify error"></p>
+      <ul class="form-main form-hook active">
+        <li class="input-item verify-code" :class="{'has-error': errors.has('mobilebind.verifycode') }">
+          <div class="main">
+            <i class="icon">验证码</i>
+            <input class="input" v-validate="'required'" type="text" placeholder="请输入验证码" name="verifycode"
+                   :class="{'input': true}">
+            <span class="tipinfo send-hook">
+                <em>发送信息</em>
+            </span>
           </div>
-          <div class="btnbox">
-              <button type="button" class="submit submit-hook">绑定</button>
+          <div v-show="errors.has('mobilebind.verifycode')" class="c-tip error">
+            <i class="icon fa fa-warning text-danger"></i><span class="meg text-danger">{{ errors.first('mobilebind.verifycode')
+            }}</span>
           </div>
-      </form>
-      <p class="c-tip t-r"><a href="/login_page">返回登录</a></p>
+        </li>
+        <li class="input-item" :class="{'has-error': errors.has('mobilebind.phone') }">
+          <div class="main">
+            <i class="icon">手机号</i>
+            <input name="phone" v-validate="'required|phone'"
+                   :class="{'input': true}" type="text"
+                   placeholder="请输入手机号">
+          </div>
+          <div v-show="errors.has('mobilebind.phone')" class="c-tip error">
+            <i class="icon fa fa-warning text-danger"></i><span class="meg text-danger">{{ errors.first('mobilebind.phone')
+            }}</span>
+          </div>
+        </li>
+      </ul>
+      <div class="c-shadow-local active" id="msgLocal">
+        <p class="item msg"></p>
+      </div>
+      <div class="btnbox">
+        <button type="button" class="submit submit-hook" @click="validateForm('mobilebind')">绑定</button>
+      </div>
+    </form>
+    <p class="c-tip t-r">
+      <router-link tag="a" to="/user/login">返回登录</router-link>
+    </p>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
   import { commonVariable, ERR_OK } from 'api/config';
+  import { Validator } from 'vee-validate';
+
   export default {
-    data(){
+    data () {
       return {
-        pageTitle: "登录"
-      }
+        pageTitle: '登录'
+      };
     },
-    mounted(){
+    mounted () {
+    },
+    methods: {
+      validateForm (scope) {
+        this.$validator.validateAll(scope).then((res) => {
+          console.log(res);
+          console.log('Form Submitted!');
+        }, (erro) => {
+          console.log('Form erro!');
+        });
+      }
     },
     components: {
       HeaderTitle

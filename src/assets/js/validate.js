@@ -7,17 +7,17 @@ import {verifyMsg} from './vaildateConfig';
 
 Validator.addLocale(zh);
 
-var zhReset = Object.assign({}, zh, {
-  messages: {
-    required: (field) => '请输入' + field
-  },
-  attributes: {
-    email: '邮箱',
-    password: '密码',
-    phone: '手机号',
-    confirmPW: '确认密码'
-  }
-});
+// var zhReset = Object.assign({}, zh, {
+//   messages: {
+//     required: (field) => '请输入' + field
+//   },
+//   attributes: {
+//     email: '邮箱',
+//     password: '密码',
+//     phone: '手机号',
+//     confirmPW: '确认密码'
+//   }
+// });
 
 const Veeconfig = {
   locale: 'zh_CN',
@@ -37,7 +37,8 @@ const dictionary = {
       password: '密码',
       phone: '手机号',
       nickname: '昵称',
-      confirmPW: '密码'
+      confirmPW: '密码',
+      verifycode: '验证码'
     }
   }
 };

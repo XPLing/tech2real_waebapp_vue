@@ -7,7 +7,6 @@ var axios = require('axios');
 var config = require('../../config');
 apiRouter.get('/getCourseDetail', function (req, res) {
   var url = `${config.dev.apiproxy}/getCourseDetail`;
-  console.log(req);
   axios({
     method: 'post',
     url: url,
@@ -15,6 +14,19 @@ apiRouter.get('/getCourseDetail', function (req, res) {
       'Content-Type': 'application/json;charset=UTF-8'
     },
     data: req.query
+  }).then((response) => {
+  }).then((response) => {
+    res.json(response.data);
+  }).catch((e) => {
+    console.log(e);
+  });
+});
+apiRouter.get('/webLoginByPhone', function (req, res) {
+  var url = `${config.dev.apiproxy}/webLoginByPhone`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
   }).then((response) => {
     res.json(response.data);
   }).catch((e) => {

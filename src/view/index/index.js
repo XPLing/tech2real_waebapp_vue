@@ -8,9 +8,7 @@ import 'assets/scss/common.scss';
 import 'font-awesome/scss/font-awesome.scss';
 import fastclick from 'fastclick';
 import {VeeValidate, Veeconfig} from 'assets/js/validate';
-// import VeeValidate, { Validator } from 'vee-validate';
-// import zh from 'vee-validate/dist/locale/zh_CN';
-// import VueI18n from 'vue-i18n';
+import store from 'store';
 
 fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟
 
@@ -24,6 +22,7 @@ Vue.use(VeeValidate, Veeconfig);
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 });
 

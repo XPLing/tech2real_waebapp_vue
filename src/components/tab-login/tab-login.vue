@@ -1,12 +1,8 @@
 <template>
   <div class="g-tab-login">
     <div class="tag">
-        <router-link class="item" to="/user/login">
-            <p>登录</p>
-            <i class="icon fa fa-caret-up"></i>
-        </router-link>
-        <router-link class="item" to="/user/register">
-            <p>注册</p>
+        <router-link v-for="(item,index) in tabList" :key="index" class="item" :to="item.path">
+            <p>{{item.name}}</p>
             <i class="icon fa fa-caret-up"></i>
         </router-link>
     </div>
@@ -27,6 +23,12 @@
       hasSearch: {
         type: Boolean,
         default: false
+      },
+      tabList: {
+        type: Array,
+        default(){
+          return []
+        }
       }
     },
     data () {

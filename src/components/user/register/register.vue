@@ -4,7 +4,7 @@
       <input type="hidden" id="userGuid">
       <p class="verify error"></p>
       <ul class="form-main form-hook step-item user-hook active">
-        <li class="input-item">
+        <li class="input-item" :class="{'has-error': errors.has('registerFirst.nickname')}">
           <div class="main">
             <i class="icon">昵&nbsp;&nbsp;&nbsp;&nbsp;称</i>
             <input type="text" placeholder="请输入昵称" name="nickname"
@@ -29,7 +29,7 @@
             <span class="meg text-danger">{{ errors.first('registerFirst.phone')}}</span>
           </div>
         </li>
-        <li class="input-item">
+        <li class="input-item" :class="{'has-error': errors.has('registerFirst.password')}">
           <div class="main">
             <i class="icon">设置密码</i>
             <input name="password" type="password" placeholder="输入6-16位密码"
@@ -41,7 +41,7 @@
             <span class="meg text-danger">{{ errors.first('registerFirst.password')}}</span>
           </div>
         </li>
-        <li class="input-item">
+        <li class="input-item" :class="{'has-error': errors.has('registerFirst.confirmPW')}">
           <div class="main">
             <i class="icon">确认密码</i>
             <input type="password" placeholder="确认密码" name="confirmPW"
@@ -56,15 +56,19 @@
         </li>
       </ul>
       <ul class="form-main form-hook step-item verifycode-hook">
-        <li class="input-item verify-code">
+        <li class="input-item verify-code" :class="{'has-error': errors.has('verifycode') }">
           <div class="main">
             <i class="icon">验证码</i>
-            <input class="input" type="text" placeholder="请输入验证码" data-key="verifycode">
+            <input class="input" v-validate="'required'" type="text" placeholder="请输入验证码" name="verifycode"
+                   :class="{'input': true}">
             <span class="tipinfo send-hook">
-                                    <em>发送信息</em>
-                                </span>
+                <em>发送信息</em>
+            </span>
           </div>
-          <p class="c-tip error"></p>
+          <div v-show="errors.has('verifycode')" class="c-tip error">
+            <i class="icon fa fa-warning text-danger"></i><span class="meg text-danger">{{ errors.first('verifycode')
+            }}</span>
+          </div>
         </li>
       </ul>
       <div class="btnbox">
@@ -82,22 +86,31 @@
   import { commonVariable, ERR_OK } from 'api/config';
   import { Validator } from 'vee-validate';
 
-//  const dictionary = {
-//    zh_CN: {
-//      messages: {
-//        confirmed: () => '两次密码输入不一致!!!'
-//      }
-//    }
-//  };
-//  Validator.updateDictionary(dictionary);
+  //  const dictionary = {
+  //    zh_CN: {
+  //      messages: {
+  //        confirmed: () => '两次密码输入不一致!!!'
+  //      }
+  //    }
+  //  };
+  //  Validator.updateDictionary(dictionary);
   export default {
     data () {
       return {
-        pageTitle: '登录',
         password: ''
       };
     },
     mounted () {
+    },
+    methods: {
+      validateForm (scope) {
+        this.$validator.validateAll(scope).then((res) => {
+          console.log(res);
+          console.log('Form Submitted!');
+        }, (erro) => {
+          console.log('Form erro!');
+        });
+      }
     },
     components: {
       HeaderTitle
