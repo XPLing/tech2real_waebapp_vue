@@ -22,7 +22,7 @@ apiRouter.get('/getCourseDetail', function (req, res) {
   });
 });
 apiRouter.get('/webLoginByPhone', function (req, res) {
-  var url = `${config.dev.apiproxy}/webLoginByPhone`;
+  var url = `${config.dev.apiproxy_open}/webLoginByPhone`;
   axios({
     method: 'get',
     url: url,

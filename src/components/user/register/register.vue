@@ -20,7 +20,7 @@
         <li class="input-item" :class="{'has-error': errors.has('registerFirst.phone') }">
           <div class="main">
             <i class="icon">手机号</i>
-            <input name="phone" v-validate:phone="'required|phone'"
+            <input name="phone" v-validate="'required|phone'"
                    :class="{'input': true, 'has-error': errors.has('registerFirst.phone') }" type="text"
                    placeholder="请输入手机号">
           </div>
@@ -97,7 +97,8 @@
   export default {
     data () {
       return {
-        password: ''
+        password: '',
+        phone: ''
       };
     },
     mounted () {
