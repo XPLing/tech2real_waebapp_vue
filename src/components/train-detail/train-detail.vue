@@ -38,7 +38,7 @@
   import TrainDetailTab from 'components/train-detail-tab/train-detail-tab';
   import { getCourseData } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
-  import { getUserGuid, setUserGuid, getProductGuid } from 'assets/js/common';
+  import { mapGetters, mapMutations } from 'vuex';
 
   const LOGINTIP = '请先登录!';
   const JOINTIP = '是否加入课程开始学习?';
@@ -56,21 +56,26 @@
         coverUrl: null,
         appliedState: null,
         isPause: true,
-        isCanplay: false,
-        userGuid: getUserGuid(),
-        productGuid: getProductGuid()
+        isCanplay: false
       };
     },
     computed: {
       confirmTxt () {
         return this.userGuid ? JOINTIP : LOGINTIP;
-      }
+      },
+      ...mapGetters([
+        'userInfo',
+        'productGuid',
+        'userGuid'
+      ])
     },
     created () {
       this._getCourseID();
       this._getCourseData();
+      console.log(this.userGuid);
     },
     methods: {
+
       _getCourseID () {
         this.courseID = this.$route.params.id;
       },
@@ -123,8 +128,6 @@
           this.$router.push({
             path: '/user/login'
           });
-          setUserGuid('873441c5-be2c-4d90-a4cc-b05c184b99cf');
-          this.userGuid = getUserGuid();
         }
       },
       cancel () {

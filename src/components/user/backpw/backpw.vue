@@ -45,7 +45,7 @@
           <div class="main">
             <i class="icon">确认密码</i>
             <input type="password" placeholder="确认密码" name="confirmPW"
-                   v-validate="'required|confirmed:password'"
+                   v-validate="'required|confirmed:backpw.password'"
                    :class="{'input': true, 'has-error': errors.has('confirmPW')}">
             <i class="fa fa-exclamation-circle tipinfo"></i>
           </div>
@@ -72,6 +72,7 @@
   export default {
     data () {
       return {
+        'password': ''
       };
     },
     mounted () {

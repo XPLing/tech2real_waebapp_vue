@@ -41,8 +41,7 @@
   import Scroll from 'base/scroll/scroll';
   import { getCourseIntro } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
-  import { getUserGuid, getProductGuid } from 'assets/js/common';
-
+  import { mapGetters, mapMutations } from 'vuex';
   export default {
     props: {
       courseData: {
@@ -55,9 +54,7 @@
         id: null,
         refreshDelay: 20,
         probeType: 2,
-        listenScroll: true,
-        userGuid: getUserGuid(),
-        productGuid: getProductGuid()
+        listenScroll: true
       };
     },
     created () {
@@ -66,6 +63,11 @@
     mounted () {
     },
     computed: {
+      ...mapGetters([
+        'userInfo',
+        'productGuid',
+        'userGuid'
+      ]),
       courseIntro () {
         return this.courseData && this.courseData.courseResult.result;
       }

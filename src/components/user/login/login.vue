@@ -32,7 +32,9 @@
         <button type="button" class="submit submit-hook needsclick" @click="validateForm('login')">登录</button>
       </div>
     </form>
-    <p class="forget-pw"><a href="find_back_pw.html">忘记密码？</a></p>
+    <p class="forget-pw">
+      <router-link tag="a" to="/user/backpw">忘记密码？</router-link>
+    </p>
     <div class="vendor">
       <div class="titlebox">
         <span class="line"></span>
@@ -58,18 +60,24 @@
   import { commonVariable, ERR_OK } from 'api/config';
   import { Validator } from 'vee-validate';
   import { webLoginByPhone } from 'api/login';
+  import { mapState, mapMutations } from 'vuex';
 
   export default {
     data () {
       return {
         phone: '',
-        password: ''
+        password: '',
+        userInfo: null
       };
     },
     mounted () {
 
     },
     methods: {
+      ...mapMutations({
+        recordUserinfo: 'RECORD_USERINFO',
+        setUserguid: 'SET_USERGUID'
+      }),
       _login () {
         var data = {
           mobile: this.phone.trim(),
@@ -77,11 +85,21 @@
         };
         webLoginByPhone(data).then((res) => {
           console.log(res);
+          if (res.code == ERR_OK) {
+            this.recordUserinfo({
+              logined: true,
+              id: '873441c5-be2c-4d90-a4cc-b05c184b99cf'
+            });
+            this.setUserguid();
+            this.$router.back();
+          }
         });
       },
       validateForm (scope) {
         this.$validator.validateAll(scope).then((res) => {
-          this._login();
+          if (res) {
+            this._login();
+          }
         }, (erro) => {
           console.log(erro);
         });

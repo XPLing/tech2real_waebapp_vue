@@ -11,8 +11,24 @@
 
 <script>
   import Tab from 'components/tab/tab';
+  import { getUserGuid, setUserGuid, getProductGuid } from 'assets/js/common';
+  import { mapMutations } from 'vuex';
   export default {
     name: 'App',
+    data(){
+      return {}
+    },
+    created(){
+      this.setUserGuid();
+    },
+    activated(){
+      console.log('activated');
+    },
+    methods: {
+      ...mapMutations({
+        setUserGuid: 'SET_USERGUID'
+      })
+    },
     components: {
       'g-tab': Tab
     }

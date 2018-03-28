@@ -56,7 +56,7 @@
         </li>
       </ul>
       <ul class="form-main form-hook step-item verifycode-hook">
-        <li class="input-item verify-code" :class="{'has-error': errors.has('verifycode') }">
+        <li class="input-item verify-code" :class="{'has-error': errors.has('registerFirst.verifycode') }">
           <div class="main">
             <i class="icon">验证码</i>
             <input class="input" v-validate="'required'" type="text" placeholder="请输入验证码" name="verifycode"
@@ -65,14 +65,17 @@
                 <em>发送信息</em>
             </span>
           </div>
-          <div v-show="errors.has('verifycode')" class="c-tip error">
-            <i class="icon fa fa-warning text-danger"></i><span class="meg text-danger">{{ errors.first('verifycode')
+          <div v-show="errors.has('registerFirst.verifycode')" class="c-tip error">
+            <i class="icon fa fa-warning text-danger"></i><span
+            class="meg text-danger">{{ errors.first('registerFirst.verifycode')
             }}</span>
           </div>
         </li>
       </ul>
       <div class="btnbox">
-        <button type="button" class="submit submit-hook" data-type="register-next">下一步</button>
+        <button type="button" class="submit submit-hook needsclick" data-type="register-next"
+                @click="validateForm('registerFirst')">下一步
+        </button>
       </div>
     </form>
     <p class="c-tip t-c">点击注册表示您同意<a class="protocol"
@@ -85,6 +88,7 @@
   import HeaderTitle from 'components/header-title/header-title';
   import { commonVariable, ERR_OK } from 'api/config';
   import { Validator } from 'vee-validate';
+
 
   //  const dictionary = {
   //    zh_CN: {

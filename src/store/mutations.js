@@ -1,4 +1,5 @@
 import * as types from './mutations-types';
+import { setUserGuid, getUserGuid, getProductGuid } from 'assets/js/common';
 
 const mutations = {
   // Vuex 中的 mutation 非常类似于事件：
@@ -7,8 +8,12 @@ const mutations = {
   [types.SET_COURSE] (state, course) {
     state.course = course;
   },
-  [types.SET_USER] (state, info) {
-    state.user = [...state.user, info];
+  [types.RECORD_USERINFO] (state, info) {
+    state.user = Object.assign({}, state.user, info);
+    setUserGuid(info.id);
+  },
+  [types.SET_USERGUID] (state) {
+    state.userGuid = getUserGuid();
   }
 };
 

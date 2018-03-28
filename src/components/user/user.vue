@@ -62,9 +62,11 @@
       };
     },
     beforeRouteUpdate (to, from, next) {
-      console.log(to);
       var currentPath = to.fullPath;
       this.setTabList(currentPath);
+      next();
+    },
+    beforeRouteLeave (to, from, next) {
       next();
     },
     created () {

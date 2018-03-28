@@ -1,9 +1,13 @@
 import {commonVariable} from 'api/config';
+import {setCookie, getCookie, removeCookie} from 'assets/js/cookie';
 export function setUserGuid(val){
-  commonVariable.userGuid = val;
+  setCookie('userGuid', val);
 }
 export function getUserGuid(){
-  return commonVariable.userGuid;
+  return getCookie('userGuid');
+}
+export function removeUserGuid(){
+  return getCookie('userGuid');
 }
 export function setProductGuid(val){
   commonVariable.productGuid = val;

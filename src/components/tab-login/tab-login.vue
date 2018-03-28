@@ -1,7 +1,7 @@
 <template>
   <div class="g-tab-login">
     <div class="tag">
-        <router-link v-for="(item,index) in tabList" :key="index" class="item" :to="item.path">
+        <router-link v-for="(item,index) in tabList" :key="index" class="item" :to="item.path" replace>
             <p>{{item.name}}</p>
             <i class="icon fa fa-caret-up"></i>
         </router-link>

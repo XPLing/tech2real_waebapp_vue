@@ -12,20 +12,24 @@ export function setCookie (key, value, time) {
     if (time) {
       var Days = time || 7; // 默认保留7小时
       var exp = new Date();
-      localStorage[key] = JSON.stringify({
+      window.localStorage[key] = JSON.stringify({
         value,
         expires: exp.getTime() + time * 60 * 60 * 1000
       });
     } else {
-      localStorage[key] = JSON.stringify({value});
+      window.localStorage[key] = JSON.stringify({value});
     }
 
   }
 }
 
 export function getCookie (key) {
-  let o = JSON.parse(localStorage[key]);
-  if (!o || o.expires < Date.now()) {
+  let o = window.localStorage[key];
+  if (!o) {
+    return null;
+  }
+  o = JSON.parse(o);
+  if (o.expires < new Date().getTime()) {
     return null;
   } else {
     return o.value;
@@ -33,10 +37,10 @@ export function getCookie (key) {
 }
 
 export function removeCookie (key) {
-  let o = JSON.parse(localStorage[key]);
+  let o = JSON.parse(window.localStorage[key]);
   if (!o) {
     return false;
   } else {
-    localStorage.removeItem(key);
+    window.localStorage.removeItem(key);
   }
 }

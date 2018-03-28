@@ -15,7 +15,6 @@ apiRouter.get('/getCourseDetail', function (req, res) {
     },
     data: req.query
   }).then((response) => {
-  }).then((response) => {
     res.json(response.data);
   }).catch((e) => {
     console.log(e);
