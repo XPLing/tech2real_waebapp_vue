@@ -6,13 +6,13 @@
   }
   .form {
     .verify, .tipinfo {
-      display: none;
+      // display: none;
     }
     .step-item {
-      display: none;
-      &.active {
-        display: block;
-      }
+      // display: none;
+      //&.active {
+      //  display: block;
+      //}
     }
     .form-main {
       padding: 0 10px;
