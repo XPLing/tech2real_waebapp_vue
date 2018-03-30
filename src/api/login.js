@@ -42,3 +42,14 @@ export function webLoginByPhone (params) {
     return Promise.resolve(res.data);
   });
 }
+export function registerByPhone (params) {
+  var url = debug ? 'open/registerByPhone' : '/registerByPhone';
+  const data = Object.assign({}, params);
+  return axios({
+    url: url,
+    method: 'get',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  });
+}

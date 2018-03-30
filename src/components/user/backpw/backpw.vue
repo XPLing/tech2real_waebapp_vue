@@ -1,5 +1,5 @@
 <template>
-  <div class="g-backpw">
+  <div class="user-form g-backpw">
     <form class="form" data-vv-scope="backpw">
       <p class="verify error"></p>
       <ul class="form-main form-hook active">
@@ -95,5 +95,6 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
+  @import "../form";
   @import "./backpw";
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="g-login">
+  <div class="g-login user-form">
     <form class="form" data-vv-scope="login">
       <p class="verify error"></p>
       <ul class="form-main form-hook">
@@ -114,6 +114,7 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
+  @import "../form";
   @import "./login";
 
 </style>

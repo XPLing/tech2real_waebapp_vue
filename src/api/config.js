@@ -22,3 +22,4 @@ export let removePending = (config, obj) => {
 };
 
 export const ERR_OK = 200;
+export const ERR_OK_STR = 'ok';

@@ -1,5 +1,5 @@
 <template>
-  <div class="g-register">
+  <div class="g-register user-form">
     <form class="form" data-vv-scope="registerFirst">
       <input type="hidden" id="userGuid">
       <p class="verify error"></p>
@@ -61,23 +61,24 @@
             <i class="icon">验证码</i>
             <input class="input" type="text" placeholder="请输入验证码" name="verifycode" key="verifycode"
                    v-validate="'required'" v-model="verifycode" :class="{'input': true}">
-            <span class="tipinfo send-hook">
-                <em>发送信息</em>
-            </span>
           </div>
           <div v-show="errors.has('registerFirst.verifycode')" class="c-tip error">
             <i class="icon fa fa-exclamation-circle text-danger"></i><span
-            class="meg text-danger">{{ errors.first('registerFirst.verifycode')
-            }}</span>
+            class="meg text-danger">{{ errors.first('registerFirst.verifycode')}}</span>
           </div>
         </li>
       </ul>
+      <!--<div v-show="errors.has('registerFirst.totalMsg')" class="c-shadow-local">
+        <p class="msg">{{ errors.first('registerFirst.totalMsg')}}</p>
+      </div>-->
+      <form-tip-error :tip-name="'registerFirst.totalMsg'"></form-tip-error>
       <div class="btnbox">
         <button type="button" class="submit submit-hook needsclick" data-type="register-next"
                 @click="validateForm('registerFirst')">下一步
         </button>
       </div>
     </form>
+    <confirm :isDialog="true" :text="operateTip" ref="confirm" @confirm="confirm"></confirm>
     <p class="c-tip t-c">点击注册表示您同意<a class="protocol"
                                      href="https://m.tech2real.com/html/license/license.html?product_guid=a5c72d76-16dc-4bb6-b6af-f2e562b1839b">用户协议</a>
     </p>
@@ -86,9 +87,14 @@
 
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
-  import { commonVariable, ERR_OK } from 'api/config';
-  import { Validator } from 'vee-validate';
+  import { commonVariable, ERR_OK, ERR_OK_STR } from 'api/config';
+  import { registerByPhone } from 'api/login';
+  import FormTipError from 'base/form-tip-error/form-tip-error';
+  import Confirm from 'base/confirm/confirm';
+  import { Validator, ErrorBag } from 'vee-validate';
+  import { mapGetters } from 'vuex';
 
+  const validateErrorBag = new ErrorBag();
   //  const dictionary = {
   //    zh_CN: {
   //      messages: {
@@ -104,32 +110,66 @@
         verifycode: '',
         nickname: '',
         phone: '',
-        passsFirst: false
+        passsFirst: false,
+        operateTip: '',
+        formName: 'registerFirst'
       };
     },
-    mounted () {
+    computed: {
+      ...mapGetters([
+        'productGuid'
+      ])
     },
     methods: {
+      confirm () {
+        if (!this.passsFirst) {
+          this.passsFirst = true;
+        } else {
+          this.$router.push('/user/login');
+        }
+      },
       validateForm (scope) {
         this.$validator.validateAll(scope).then((res) => {
-          console.log(res);
           if (res) {
-            this.passsFirst = true;
-            console.log('Form Submitted!');
+            this._registerByPhone().then((res) => {
+              var result = res.results;
+              if (res.status === ERR_OK_STR) {
+                this.operateTip = result.message;
+                this.$refs.confirm.show();
+              } else {
+                this.errors.clear(this.formName);
+                this.errors.add('totalMsg', result.message, undefined, 'registerFirst');
+                setTimeout(() => {
+                  this.errors.clear(this.formName);
+                }, 2000);
+              }
+
+            });
           }
         }, (erro) => {
           console.log('Form erro!');
         });
+      },
+      _registerByPhone () {
+        return registerByPhone({
+          product_guid: this.productGuid,
+          phone: this.phone,
+          password: this.password,
+          nickname: this.nickname
+        });
       }
     },
     components: {
-      HeaderTitle
+      HeaderTitle,
+      FormTipError,
+      Confirm
     }
   };
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
+  @import "../form";
   @import "./register";
 
 </style>

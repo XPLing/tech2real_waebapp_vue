@@ -34,28 +34,28 @@
         default: false
       }
     },
-    data() {
+    data () {
       return {
         showFlag: false
-      }
+      };
     },
     methods: {
-      show() {
-        this.showFlag = true
+      show () {
+        this.showFlag = true;
       },
-      hide() {
-        this.showFlag = false
+      hide () {
+        this.showFlag = false;
       },
-      cancel() {
-        this.hide()
-        this.$emit('cancel')
+      cancel () {
+        this.hide();
+        this.$emit('cancel');
       },
-      confirm() {
-        this.hide()
-        this.$emit('confirm')
+      confirm () {
+        this.hide();
+        this.$emit('confirm');
       }
     }
-  }
+  };
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">

@@ -35,6 +35,6 @@
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
-  @import "~assets/stylus/variable";
+  @import "~assets/scss/compile";
   @import "toptip";
 </style>
