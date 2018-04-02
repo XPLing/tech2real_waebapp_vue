@@ -29,7 +29,7 @@
   import Scroll from 'base/scroll/scroll';
   import NoResult from 'base/no-result/no-result';
   import { commonVariable, ERR_OK } from 'api/config';
-  import { getUserGuid, getProductGuid } from 'assets/js/common';
+  import { getUserGuid, getProductGuid } from 'assets/js/util';
   export default {
     props: {
       courseData: {

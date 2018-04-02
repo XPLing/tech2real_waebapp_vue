@@ -1,5 +1,5 @@
 import * as types from './mutations-types';
-import { setUserGuid, getUserGuid, getProductGuid } from 'assets/js/common';
+import { setUserGuid, getUserGuid, getProductGuid } from 'assets/js/util';
 
 const mutations = {
   // Vuex 中的 mutation 非常类似于事件：

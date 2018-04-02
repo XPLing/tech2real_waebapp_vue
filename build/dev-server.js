@@ -21,8 +21,8 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser;
 var proxyTable = config.dev.proxyTable;
 
 var app = express();
-var apiRouter = require('../src/api/axios');
-var apiRouter_open = require('../src/api/axios_open');
+var apiRouter = require('../src/api/axios_api');
+// var apiRouter_open = require('../src/api/axios_open');
 app.use('/api',apiRouter);
 // app.use('/open',apiRouter_open);
 var compiler = webpack(webpackConfig);

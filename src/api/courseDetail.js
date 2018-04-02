@@ -19,5 +19,7 @@ export function getCourseData (params) {
     data: JSON.stringify(data)
   }).then((res) => {
     return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
   });
 }

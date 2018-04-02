@@ -74,7 +74,7 @@
       <form-tip-error :tip-name="'registerFirst.totalMsg'"></form-tip-error>
       <div class="btnbox">
         <button type="button" class="submit submit-hook needsclick" data-type="register-next"
-                @click="validateForm('registerFirst')">下一步
+                @click="validateForm('registerFirst')" :class="{'disable':isActiving}">{{btnText}}
         </button>
       </div>
     </form>
@@ -88,7 +88,8 @@
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
   import { commonVariable, ERR_OK, ERR_OK_STR } from 'api/config';
-  import { registerByPhone } from 'api/login';
+  import * as util from 'assets/js/util';
+  import { registerByPhone, authRegisterByPhone } from 'api/login';
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import Confirm from 'base/confirm/confirm';
   import { Validator, ErrorBag } from 'vee-validate';
@@ -112,7 +113,9 @@
         phone: '',
         passsFirst: false,
         operateTip: '',
-        formName: 'registerFirst'
+        formName: 'registerFirst',
+        isActiving: false,
+        btnText: '下一步'
       };
     },
     computed: {
@@ -124,31 +127,63 @@
       confirm () {
         if (!this.passsFirst) {
           this.passsFirst = true;
+          this.changeSubmitBtn(false, '注册');
         } else {
-          this.$router.push('/user/login');
+          this.changeSubmitBtn(false);
+          this.$router.replace('/user/login');
         }
       },
       validateForm (scope) {
         this.$validator.validateAll(scope).then((res) => {
           if (res) {
-            this._registerByPhone().then((res) => {
+            this.changeSubmitBtn(true);
+            let type = '_registerByPhone', getUserGuid = true;
+            if (this.passsFirst) {
+              type = '_authRegisterByPhone';
+              getUserGuid = false;
+            }
+            this[type]().then((res) => {
               var result = res.results;
               if (res.status === ERR_OK_STR) {
                 this.operateTip = result.message;
+                if (getUserGuid) {
+                  this.userGuid = result.user.guid;
+                }
                 this.$refs.confirm.show();
               } else {
-                this.errors.clear(this.formName);
-                this.errors.add('totalMsg', result.message, undefined, 'registerFirst');
-                setTimeout(() => {
-                  this.errors.clear(this.formName);
-                }, 2000);
+                this.changeSubmitBtn(false);
+                util.formErrorMsg({
+                  errorObj: this.errors,
+                  name: 'totalMsg',
+                  message: result.message,
+                  rule: undefined,
+                  scope: this.formName,
+                  interval: 2000
+                });
               }
-
+            }, (error) => {
+              console.log(error);
+              util.formErrorMsg({
+                errorObj: this.errors,
+                name: 'totalMsg',
+                message: '请求出错，请联系管理员！',
+                rule: undefined,
+                scope: this.formName,
+                interval: 2000
+              });
             });
           }
         }, (erro) => {
           console.log('Form erro!');
         });
+      },
+      changeSubmitBtn (flag, text) {
+        if (flag !== null) {
+          this.isActiving = flag;
+        }
+        if (text) {
+          this.btnText = text;
+        }
       },
       _registerByPhone () {
         return registerByPhone({
@@ -156,6 +191,13 @@
           phone: this.phone,
           password: this.password,
           nickname: this.nickname
+        });
+      },
+      _authRegisterByPhone () {
+        return authRegisterByPhone({
+          product_guid: this.productGuid,
+          auth_code: this.verifycode,
+          user_guid: this.userGuid
         });
       }
     },

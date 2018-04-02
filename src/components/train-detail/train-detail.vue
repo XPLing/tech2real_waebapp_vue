@@ -86,10 +86,12 @@
           userGuid: this.userGuid
         };
         getCourseData(param).then((res) => {
-          this.courseData = res;
-          this.videoUrl = res.chapterResult.result.length > 0 ? res.chapterResult.result[0].chapters[0].videoUrl : null;
-          this.coverUrl = res.courseResult.result.coverUrl;
-          this.appliedState = res.courseResult.result.appliedState;
+          if (res.code === ERR_OK) {
+            this.courseData = res;
+            this.videoUrl = res.chapterResult.result.length > 0 ? res.chapterResult.result[0].chapters[0].videoUrl : null;
+            this.coverUrl = res.courseResult.result.coverUrl;
+            this.appliedState = res.courseResult.result.appliedState;
+          }
         });
       },
       setDatas (key, val, index, dataName) {

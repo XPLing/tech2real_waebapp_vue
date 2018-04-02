@@ -1,4 +1,4 @@
-import axios from 'axios';
+var axios = require('axios');
 let pending = []; //  声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let CancelToken = axios.CancelToken;
 let removePending = (config, obj) => {
@@ -81,4 +81,4 @@ axios.interceptors.response.use(res => {
   }); // 返回一个空对象，主要是防止控制台报错
 });
 
-export default axios;
+module.exports = axios;

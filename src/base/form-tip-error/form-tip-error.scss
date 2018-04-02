@@ -1,13 +1,16 @@
 .form-tip{
   @include fs(14);
   color: $color-text-error;
-  padding: 10px 0;
+  p{
+    padding: 10px 0 0;
+  }
   text-align: center;
   &.fade-enter-active, &.fade-leave-active{
-    transition: all 0.3s;
+    transition: all .3s;
   }
   &.fade-enter, &.fade-leave-to{
     opacity: 0;
+    transition: all 0s;
   }
   &.drop-enter-active, &.drop-leave-active{
     transition: all 0.3s;

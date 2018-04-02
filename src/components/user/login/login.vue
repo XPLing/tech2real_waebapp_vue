@@ -28,8 +28,11 @@
           </div>
         </li>
       </ul>
+      <form-tip-error :tip-name="'login.totalMsg'"></form-tip-error>
       <div class="btnbox">
-        <button type="button" class="submit submit-hook needsclick" @click="validateForm('login')">登录</button>
+        <button type="button" class="submit submit-hook needsclick" :class="{'disable':isActiving}"
+                @click="validateForm('login')">{{btnText}}
+        </button>
       </div>
     </form>
     <p class="forget-pw">
@@ -61,13 +64,17 @@
   import { Validator } from 'vee-validate';
   import { webLoginByPhone } from 'api/login';
   import { mapState, mapMutations } from 'vuex';
-
+  import FormTipError from 'base/form-tip-error/form-tip-error';
+  import * as util from 'assets/js/util';
   export default {
     data () {
       return {
         phone: '',
         password: '',
-        userInfo: null
+        userInfo: null,
+        isActiving: false,
+        btnText: '登录',
+        formName: 'login'
       };
     },
     mounted () {
@@ -79,20 +86,34 @@
         setUserguid: 'SET_USERGUID'
       }),
       _login () {
+        this.changeSubmitBtn(true, '登录中...');
         var data = {
           mobile: this.phone.trim(),
           password: this.password.trim()
         };
         webLoginByPhone(data).then((res) => {
-          console.log(res);
           if (res.code == ERR_OK) {
+            this.changeSubmitBtn(false, '登录');
             this.recordUserinfo({
               logined: true,
               id: '873441c5-be2c-4d90-a4cc-b05c184b99cf'
             });
             this.setUserguid();
             this.$router.back();
+          } else {
+            this.changeSubmitBtn(false, '登录');
+            util.formErrorMsg({
+              errorObj: this.errors,
+              name: 'totalMsg',
+              message: res.message,
+              rule: undefined,
+              scope: this.formName,
+              interval: 2000
+            });
           }
+        }, (error) => {
+          this.changeSubmitBtn(false, '登录');
+          console.log(error);
         });
       },
       validateForm (scope) {
@@ -104,11 +125,18 @@
           console.log(erro);
         });
       },
-      formSubmitSuccess () {
-
+      changeSubmitBtn (flag, text) {
+        if (flag !== null) {
+          this.isActiving = flag;
+        }
+        if (text) {
+          this.btnText = text;
+        }
       }
     },
-    components: {}
+    components: {
+      FormTipError
+    }
   };
 </script>
 
