@@ -1,0 +1,8 @@
+.g-send-msg{
+  position: absolute;
+  right: 0;
+  z-index: 10;
+  @include fs(12);
+  bottom: formatVal(15, rem);
+  color: $color-text-wcc;
+}

@@ -31,6 +31,7 @@ apiRouter.post('/getCourseDetail', jsonParser, function (req, res) {
     });
   });
 });
+
 apiRouter.get('/webLoginByPhone', function (req, res) {
   var url = `${config.dev.apiproxy_open}/webLoginByPhone`;
   axios({
@@ -46,6 +47,7 @@ apiRouter.get('/webLoginByPhone', function (req, res) {
     });
   });
 });
+
 apiRouter.get('/registerByPhone', function (req, res) {
   var url = `${config.dev.apiproxy_open}/registerByPhone`;
   axios({
@@ -66,8 +68,122 @@ apiRouter.get('/registerByPhone', function (req, res) {
     });
   });
 });
+
 apiRouter.get('/authRegisterByPhone', function (req, res) {
   var url = `${config.dev.apiproxy_open}/authRegisterByPhone`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json({
+      code: e.response.status,
+      message: e.message
+    });
+  });
+});
+
+apiRouter.get('/boundMobileVerify', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/boundMobileVerify`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json({
+      code: e.response.status,
+      message: e.message
+    });
+  });
+});
+
+apiRouter.get('/webRegisterAndBoundMobileByThirdPartUid', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/webRegisterAndBoundMobileByThirdPartUid`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json({
+      code: e.response.status,
+      message: e.message
+    });
+  });
+});
+
+apiRouter.get('/webBoundMobileByThirdPartUid', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/webBoundMobileByThirdPartUid`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json({
+      code: e.response.status,
+      message: e.message
+    });
+  });
+});
+apiRouter.get('/getResetPwdAuthCode', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/getResetPwdAuthCode`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json({
+      code: e.response.status,
+      message: e.message
+    });
+  });
+});
+apiRouter.get('/resetPwdByAuthCode', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/resetPwdByAuthCode`;
   axios({
     method: 'get',
     url: url,

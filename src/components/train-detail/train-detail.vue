@@ -28,6 +28,9 @@
         <button class="btn" @click="join">加入学习</button>
       </div>
       <confirm ref="confirmsWrapper" :text="confirmTxt" @cancel="cancel" @confirm="confirm"></confirm>
+      <top-tip ref="toptip" :delay="10000">
+          <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
+      </top-tip>
     </div>
   </transition>
 </template>
@@ -39,6 +42,7 @@
   import { getCourseData } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
   import { mapGetters, mapMutations } from 'vuex';
+  import TopTip from 'base/top-tip/top-tip';
 
   const LOGINTIP = '请先登录!';
   const JOINTIP = '是否加入课程开始学习?';
@@ -56,7 +60,8 @@
         coverUrl: null,
         appliedState: null,
         isPause: true,
-        isCanplay: false
+        isCanplay: false,
+        toptipTxt: ''
       };
     },
     computed: {
@@ -72,7 +77,6 @@
     created () {
       this._getCourseID();
       this._getCourseData();
-      console.log(this.userGuid);
     },
     methods: {
 
@@ -86,12 +90,19 @@
           userGuid: this.userGuid
         };
         getCourseData(param).then((res) => {
-          if (res.code === ERR_OK) {
+          if (res.chapterResult || res.courseResult) {
             this.courseData = res;
+          }
+          if (res.chapterResult.code == ERR_OK) {
             this.videoUrl = res.chapterResult.result.length > 0 ? res.chapterResult.result[0].chapters[0].videoUrl : null;
+          }
+          if (res.courseResult.code == ERR_OK) {
             this.coverUrl = res.courseResult.result.coverUrl;
             this.appliedState = res.courseResult.result.appliedState;
           }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
         });
       },
       setDatas (key, val, index, dataName) {
@@ -143,7 +154,8 @@
     components: {
       HeaderTitle,
       TrainDetailTab,
-      Confirm
+      Confirm,
+      TopTip
     },
     watch: {
       videoUrl () {

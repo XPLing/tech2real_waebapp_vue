@@ -75,6 +75,8 @@ axios.interceptors.response.use(res => {
       default:
     }
   }
+  console.log(err.response.status);
+  console.log(err.message);
   return Promise.reject({
     code: err.response.status,
     message: err.message

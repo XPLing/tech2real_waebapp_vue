@@ -46,7 +46,7 @@
       </div>
       <div class="btnbox row third-party-hook">
         <p class="wechat">
-          <i class="fa fa-weixin" data-type="wechat"></i>
+          <i class="fa fa-weixin needsclick" data-type="wechat" @click="thirdPartLogin('qq')"></i>
         </p>
         <p class="qq">
           <i class="fa fa-qq" data-type="qq" id="QQLoginBtn"></i>
@@ -113,8 +113,22 @@
           }
         }, (error) => {
           this.changeSubmitBtn(false, '登录');
-          console.log(error);
+          util.formErrorMsg({
+            errorObj: this.errors,
+            name: 'totalMsg',
+            message: error.message,
+            rule: undefined,
+            scope: this.formName,
+            interval: 2000
+          });
         });
+      },
+      thirdPartLogin(type){
+        switch (type){
+          case 'qq':
+
+              break;
+        }
       },
       validateForm (scope) {
         this.$validator.validateAll(scope).then((res) => {

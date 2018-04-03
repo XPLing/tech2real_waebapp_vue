@@ -34,7 +34,7 @@
   }
 </script>
 
-<style scoped lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
   @import "toptip";
 </style>

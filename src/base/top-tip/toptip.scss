@@ -2,8 +2,14 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 500;
-  background: $color-dialog-background;
+  z-index: 1000;
+  @include fs(16);
+  background: $whiteColor;
+  .error{
+    padding: 5px;
+    color: $color-text-error;
+    background-color: $color-background-error;
+  }
   &.drop-enter-active, &.drop-leave-active{
     transition: all 0.3s;
   }
