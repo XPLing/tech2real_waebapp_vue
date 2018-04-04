@@ -11,7 +11,6 @@
 
 <script>
   import Tab from 'components/tab/tab';
-  import { getUserGuid, setUserGuid, getProductGuid } from 'assets/js/util';
   import { mapMutations } from 'vuex';
   export default {
     name: 'App',

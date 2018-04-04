@@ -87,7 +87,7 @@
 
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
-  import { commonVariable, ERR_OK, ERR_OK_STR } from 'api/config';
+  import { ERR_OK, ERR_OK_STR } from 'api/config';
   import * as util from 'assets/js/util';
   import { registerByPhone, authRegisterByPhone } from 'api/login';
   import FormTipError from 'base/form-tip-error/form-tip-error';

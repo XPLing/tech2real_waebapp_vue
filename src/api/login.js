@@ -4,7 +4,9 @@
 import jsonp from 'assets/js/jsonp';
 import { commonParams, options, removePending } from './config';
 import axios from 'api/axios';
+
 const debug = process.env.NODE_ENV !== 'production';
+
 export function webLoginByPhone (params) {
   var url = debug ? 'open/webLoginByPhone' : '/webLoginByPhone';
   const data = Object.assign({}, commonParams, params);
@@ -63,7 +65,7 @@ export function boundMobileVerify (params) {
 
 export function webBoundMobileByThirdPartUid (params) {
   var url = debug ? 'open/webBoundMobileByThirdPartUid' : '/webBoundMobileByThirdPartUid';
-  const data = Object.assign({}, params);
+  const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
     method: 'get',
@@ -77,7 +79,7 @@ export function webBoundMobileByThirdPartUid (params) {
 
 export function webRegisterAndBoundMobileByThirdPartUid (params) {
   var url = debug ? 'open/webRegisterAndBoundMobileByThirdPartUid' : '/webRegisterAndBoundMobileByThirdPartUid';
-  const data = Object.assign({}, params);
+  const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
     method: 'get',
@@ -105,6 +107,20 @@ export function getResetPwdAuthCode (params) {
 
 export function resetPwdByAuthCode (params) {
   var url = debug ? 'open/resetPwdByAuthCode' : '/resetPwdByAuthCode';
+  const data = Object.assign({}, params);
+  return axios({
+    url: url,
+    method: 'get',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (error) => {
+    return Promise.reject(error);
+  });
+}
+
+export function webLoginByThirdPartCode (params) {
+  var url = debug ? 'open/webLoginByThirdPartCode' : '/webLoginByThirdPartCode';
   const data = Object.assign({}, params);
   return axios({
     url: url,

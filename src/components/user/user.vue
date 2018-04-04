@@ -11,7 +11,7 @@
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
   import TabLogin from 'components/tab-login/tab-login';
-  import { commonVariable, ERR_OK } from 'api/config';
+  import { ERR_OK } from 'api/config';
 
   const LOGINNAME = '登录';
   const REGISTERNAME = '注册';

@@ -12,26 +12,32 @@
       delay: {
         type: Number,
         default: 2000
+      },
+      isAutoHide: {
+        type: Boolean,
+        default: true
       }
     },
-    data() {
+    data () {
       return {
         showFlag: false
-      }
+      };
     },
     methods: {
-      show() {
-        this.showFlag = true
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          this.hide()
-        }, this.delay)
+      show () {
+        this.showFlag = true;
+        clearTimeout(this.timer);
+        if (this.isAutoHide) {
+          this.timer = setTimeout(() => {
+            this.hide();
+          }, this.delay);
+        }
       },
-      hide() {
-        this.showFlag = false
+      hide () {
+        this.showFlag = false;
       }
     }
-  }
+  };
 </script>
 
 <style lang="scss" rel="stylesheet/scss">

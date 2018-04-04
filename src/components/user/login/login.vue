@@ -46,13 +46,13 @@
       </div>
       <div class="btnbox row third-party-hook">
         <p class="wechat">
-          <i class="fa fa-weixin needsclick" data-type="wechat" @click="thirdPartLogin('qq')"></i>
+          <i class="fa fa-weixin needsclick" data-type="wechat" @click="thirdPartLogin('wechat')"></i>
         </p>
         <p class="qq">
-          <i class="fa fa-qq" data-type="qq" id="QQLoginBtn"></i>
+          <i class="fa fa-qq" data-type="qq" id="QQLoginBtn" @click="thirdPartLogin('qq')"></i>
         </p>
         <p class="weibo">
-          <i class="fa fa-weibo" data-type="weibo"></i>
+          <i class="fa fa-weibo" data-type="weibo" @click="thirdPartLogin('sina')"></i>
         </p>
       </div>
     </div>
@@ -60,12 +60,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { commonVariable, ERR_OK } from 'api/config';
+  import { thirdParty, ERR_OK } from 'api/config';
   import { Validator } from 'vee-validate';
   import { webLoginByPhone } from 'api/login';
   import { mapState, mapMutations } from 'vuex';
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import * as util from 'assets/js/util';
+
   export default {
     data () {
       return {
@@ -123,12 +124,41 @@
           });
         });
       },
-      thirdPartLogin(type){
-        switch (type){
-          case 'qq':
-
-              break;
+      thirdPartLogin (type) {
+        var url = '', uri = '', href = '';
+        var uriKey = 'uri', appIdKey = 'appId', currentUrl = window.location.href;
+        if (/test.dev./.test(currentUrl)) {
+          uriKey = 'devUri';
+          appIdKey = 'devAppId';
         }
+        switch (type) {
+          case 'wechat':
+            url = thirdParty.wechat.url;
+            uri = encodeURIComponent(thirdParty.wechat[uriKey] + '?thridparty=weixin');
+            if (util.browser.mobile) {
+              url = thirdParty.wechat.webUrl;
+            }
+            href = url + '?appid=' + thirdParty.wechat[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=snsapi_login&state=' + util.uuid(8, 16) + '#wechat_redirect';
+            break;
+          case 'qq':
+            url = thirdParty.qq.url;
+            uri = encodeURIComponent(thirdParty.qq[uriKey] + '?thridparty=qq');
+            href = url + '?client_id=' + thirdParty.qq[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=get_user_info&state=' + util.uuid(8, 16);
+            /*  if (util.browser.mobile) {
+                url = thirdParty.qq.webUrl;
+                href = url + "?client_id=" + thirdParty.qq[appIdKey] + "&redirect_uri=" + uri + "display=mobile&response_type=code&scope=get_user_info&state=" + util.uuid(8, 16);
+            } */
+            break;
+          case 'sina':
+            url = thirdParty.weibo.url;
+            uri = encodeURIComponent(thirdParty.weibo[uriKey] + '?thridparty=sina');
+            if (util.browser.mobile) {
+              url = thirdParty.weibo.webUrl;
+            }
+            href = url + '?client_id=' + thirdParty.weibo[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=all&state=' + util.uuid(8, 16);
+            break;
+        }
+        window.location.replace(href);
       },
       validateForm (scope) {
         this.$validator.validateAll(scope).then((res) => {

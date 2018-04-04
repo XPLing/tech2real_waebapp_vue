@@ -28,8 +28,8 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll';
   import NoResult from 'base/no-result/no-result';
-  import { commonVariable, ERR_OK } from 'api/config';
-  import { getUserGuid, getProductGuid } from 'assets/js/util';
+  import { ERR_OK } from 'api/config';
+  import { mapGetters } from 'vuex';
   export default {
     props: {
       courseData: {
@@ -40,9 +40,7 @@
     data () {
       return {
         id: 0,
-        isSetData: false,
-        userGuid: getUserGuid(),
-        productGuid: getProductGuid()
+        isSetData: false
       };
     },
     created () {
@@ -50,6 +48,10 @@
       this._getCourseID();
     },
     computed: {
+      ...mapGetters([
+        'productGuid',
+        'userGuid'
+      ]),
       courseChapters () {
         var chapters = [];
         if (this.courseData) {

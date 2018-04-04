@@ -204,5 +204,27 @@ apiRouter.get('/resetPwdByAuthCode', function (req, res) {
     });
   });
 });
+apiRouter.get('/webLoginByThirdPartCode', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/webLoginByThirdPartCode`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json({
+      code: e.response.status,
+      message: e.message
+    });
+  });
+});
 
 module.exports = apiRouter;

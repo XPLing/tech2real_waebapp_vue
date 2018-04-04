@@ -14,6 +14,12 @@ const mutations = {
   },
   [types.SET_USERGUID] (state) {
     state.userGuid = getUserGuid();
+  },
+  [types.RECORD_THRIDPARTY] (state, val) {
+    state.thridParty = val;
+  },
+  [types.RECORD_THRIDPARTYINFO] (state, val) {
+    state.thridPartyInfo = val;
   }
 };
 

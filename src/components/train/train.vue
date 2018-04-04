@@ -10,7 +10,7 @@
 
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
-  import { commonVariable, ERR_OK } from 'api/config';
+  import { ERR_OK } from 'api/config';
   export default {
     data(){
       return {
