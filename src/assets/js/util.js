@@ -114,6 +114,18 @@ export function removeUserGuid () {
   return removeCookie('userGuid');
 }
 
+export function setBeforeLoginPage (val) {
+  setCookie('beforeLoginPage', val);
+}
+
+export function getBeforeLoginPage () {
+  return getCookie('beforeLoginPage');
+}
+
+export function removeBeforeLoginPage () {
+  return removeCookie('beforeLoginPage');
+}
+
 export function hasClass (el, className) {
   let reg = new RegExp('(^|\\s)' + className + '(\\s|$)');
   return reg.test(el.className);

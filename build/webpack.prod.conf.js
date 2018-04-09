@@ -18,6 +18,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       extract: true
     })
   },
+  // '#cheap-module-eval-source-map'
+  //  config.build.productionSourceMap ? '#source-map' : false
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
@@ -31,7 +33,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
+        warnings: false,
       },
       sourceMap: true
     }),

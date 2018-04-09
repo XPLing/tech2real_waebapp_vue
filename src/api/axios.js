@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 let pending = []; //  声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let CancelToken = axios.CancelToken;
 let removePending = (config, obj) => {
@@ -75,12 +76,13 @@ axios.interceptors.response.use(res => {
       default:
     }
   }
-  console.log(err.response.status);
+  console.log(err.response);
   console.log(err.message);
   return Promise.reject({
-    code: err.response.status,
+    code: err.response ? err.response.status : err.response,
     message: err.message
   }); // 返回一个空对象，主要是防止控制台报错
+
 });
 
 export default axios;

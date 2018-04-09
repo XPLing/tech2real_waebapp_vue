@@ -2,13 +2,13 @@
  * Created by XPL on 2018/3/20.
  */
 import jsonp from 'assets/js/jsonp';
-import { commonParams, options, removePending } from './config';
+import { commonParams, options, removePending, REQUEST_PREFIX } from './config';
 import axios from 'api/axios';
 
 const debug = process.env.NODE_ENV !== 'production';
 
 export function webLoginByPhone (params) {
-  var url = debug ? 'open/webLoginByPhone' : '/webLoginByPhone';
+  var url = debug ? 'open/webLoginByPhone' : `${REQUEST_PREFIX}/webLoginByPhone`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -22,7 +22,7 @@ export function webLoginByPhone (params) {
 }
 
 export function registerByPhone (params) {
-  var url = debug ? 'open/registerByPhone' : '/registerByPhone';
+  var url = debug ? 'open/registerByPhone' : `${REQUEST_PREFIX}/registerByPhone`;
   const data = Object.assign({}, params);
   return axios({
     url: url,
@@ -36,7 +36,7 @@ export function registerByPhone (params) {
 }
 
 export function authRegisterByPhone (params) {
-  var url = debug ? 'open/authRegisterByPhone' : '/authRegisterByPhone';
+  var url = debug ? 'open/authRegisterByPhone' : `${REQUEST_PREFIX}/authRegisterByPhone`;
   const data = Object.assign({}, params);
   return axios({
     url: url,
@@ -50,7 +50,7 @@ export function authRegisterByPhone (params) {
 }
 
 export function boundMobileVerify (params) {
-  var url = debug ? 'open/boundMobileVerify' : '/boundMobileVerify';
+  var url = debug ? 'open/boundMobileVerify' : `${REQUEST_PREFIX}/boundMobileVerify`;
   const data = Object.assign({}, params);
   return axios({
     url: url,
@@ -64,7 +64,7 @@ export function boundMobileVerify (params) {
 }
 
 export function webBoundMobileByThirdPartUid (params) {
-  var url = debug ? 'open/webBoundMobileByThirdPartUid' : '/webBoundMobileByThirdPartUid';
+  var url = debug ? 'open/webBoundMobileByThirdPartUid' : `${REQUEST_PREFIX}/webBoundMobileByThirdPartUid`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -78,7 +78,7 @@ export function webBoundMobileByThirdPartUid (params) {
 }
 
 export function webRegisterAndBoundMobileByThirdPartUid (params) {
-  var url = debug ? 'open/webRegisterAndBoundMobileByThirdPartUid' : '/webRegisterAndBoundMobileByThirdPartUid';
+  var url = debug ? 'open/webRegisterAndBoundMobileByThirdPartUid' : `${REQUEST_PREFIX}/webRegisterAndBoundMobileByThirdPartUid`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -92,7 +92,7 @@ export function webRegisterAndBoundMobileByThirdPartUid (params) {
 }
 
 export function getResetPwdAuthCode (params) {
-  var url = debug ? 'open/getResetPwdAuthCode' : '/getResetPwdAuthCode';
+  var url = debug ? 'open/getResetPwdAuthCode' : `${REQUEST_PREFIX}/getResetPwdAuthCode`;
   const data = Object.assign({}, params);
   return axios({
     url: url,
@@ -106,7 +106,7 @@ export function getResetPwdAuthCode (params) {
 }
 
 export function resetPwdByAuthCode (params) {
-  var url = debug ? 'open/resetPwdByAuthCode' : '/resetPwdByAuthCode';
+  var url = debug ? 'open/resetPwdByAuthCode' : `${REQUEST_PREFIX}/resetPwdByAuthCode`;
   const data = Object.assign({}, params);
   return axios({
     url: url,
@@ -120,7 +120,7 @@ export function resetPwdByAuthCode (params) {
 }
 
 export function webLoginByThirdPartCode (params) {
-  var url = debug ? 'open/webLoginByThirdPartCode' : '/webLoginByThirdPartCode';
+  var url = debug ? 'open/webLoginByThirdPartCode' : `${REQUEST_PREFIX}/webLoginByThirdPartCode`;
   const data = Object.assign({}, params);
   return axios({
     url: url,

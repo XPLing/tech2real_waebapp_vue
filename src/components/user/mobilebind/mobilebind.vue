@@ -5,7 +5,6 @@
         <span v-html="toptipTxt"></span>
         <router-link v-show="loginError" to="/user/login" tag="a" replace>请重新登录！</router-link>
       </p>
-
     </top-tip>
     <form class="form" data-vv-scope="mobilebind">
       <p class="verify error"></p>
@@ -45,7 +44,7 @@
             <i class="icon">验证码</i>
             <input class="input" v-model="verifycode" v-validate="'required'" type="text" placeholder="请输入验证码"
                    name="verifycode">
-            <send-msg @startsend="startSend" ref="sendMsg"></send-msg>
+            <send-msg @startsend="startSend" ref="sendMsgRegister"></send-msg>
           </div>
           <div v-show="errors.has('mobilebind.verifycode')" class="c-tip error">
             <i class="icon fa fa-warning text-danger"></i><span
@@ -132,18 +131,23 @@
     },
     created () {
       this.thirdPartVerify();
+      this.regiterFinish = false;
     },
     computed: {
       ...mapGetters([
         'productGuid',
         'thirdParty',
-        'thirdPartyInfo'
+        'thirdPartyInfo',
+        'beforeLoginPage'
       ])
     },
     methods: {
       ...mapMutations({
-        recordThirdParty: 'RECORD_THRIDPARTY',
-        recordThirdPartyInfo: 'RECORD_THRIDPARTYINFO'
+        recordThirdParty: 'RECORD_THIRDPARTY',
+        recordThirdPartyInfo: 'RECORD_THIRDPARTYINFO',
+        recordUserinfo: 'RECORD_USERINFO',
+        setUserguid: 'SET_USERGUID',
+        updataUserGuid: 'UPDATA_USERGUID'
       }),
       startSend () {
         this.$validator.validate('backpw.phone', this.phone).then((result) => {
@@ -151,9 +155,13 @@
             this._getResetPwdAuthCode().then((response) => {
               var res = response;
               if (res.code == ERR_OK) {
+                var dom = 'sendMsg';
+                if (!this.isLogined) {
+                  dom = 'sendMsgRegister';
+                }
                 this.operateTip = res.message;
                 this.$refs.confirm.show();
-                this.$refs.sendMsg.send();
+                this.$refs[dom].send();
               } else {
                 util.formErrorMsg({
                   errorObj: this.errors,
@@ -178,7 +186,7 @@
         });
       },
       confirm () {
-        if (!this.isLogined) {
+        if (!this.isLogined && this.regiterFinish) {
           this.$router.replace('/user/login');
         }
       },
@@ -188,22 +196,28 @@
             this.changeSubmitBtn(true);
             if (!this.passsFirst) {
               this._boundMobileVerify().then((resp) => {
+                this.passsFirst = true;
                 this.changeSubmitBtn(false);
-                if (resp.code == ERR_OK) {
-                  this.passsFirst = true;
-                  if (resp.result != -1) {
-                    this.isLogined = true;
+                this.$nextTick(() => {
+                  if (resp.code == ERR_OK) {
+                    this.operateTip = resp.message;
+                    this.$refs.confirm.show();
+                    this.$refs.sendMsgRegister.send();
+                    if (resp.result != -1) {
+                      this.isLogined = true;
+                    }
+                  } else {
+                    util.formErrorMsg({
+                      errorObj: this.errors,
+                      name: 'totalMsg',
+                      message: resp.message,
+                      rule: undefined,
+                      scope: this.formName,
+                      interval: 2000
+                    });
                   }
-                } else {
-                  util.formErrorMsg({
-                    errorObj: this.errors,
-                    name: 'totalMsg',
-                    message: resp.message,
-                    rule: undefined,
-                    scope: this.formName,
-                    interval: 2000
-                  });
-                }
+                });
+
               }, error => {
                 this.changeSubmitBtn(false);
                 util.formErrorMsg({
@@ -220,6 +234,7 @@
                 this.changeSubmitBtn(false);
                 if (resp.code == ERR_OK) {
                   this.operateTip = resp.message;
+                  this.regiterFinish = true;
                   this.$refs.confirm.show();
                 } else {
                   util.formErrorMsg({
@@ -246,7 +261,11 @@
               this._webBoundMobileByThirdPartUid().then((resp) => {
                 this.changeSubmitBtn(false);
                 if (resp.code == ERR_OK) {
-                  this.$router.go(-2);
+                  var userGuid = '873441c5-be2c-4d90-a4cc-b05c184b99cf';
+                  this.updataUserGuid(userGuid);
+                  this.$router.push({
+                    path: util.getBeforeLoginPage()
+                  });
                 } else {
                   util.formErrorMsg({
                     errorObj: this.errors,
@@ -282,17 +301,23 @@
           this.btnText = text;
         }
       },
-      thirdPartVerify: function () {
+      thirdPartVerify () {
         this._webLoginByThirdPartCode().then((res) => {
-          if (res.code == ERR_OK) {
+          if (res.code == ERR_OK || res.code == 201) {
             this.recordThirdPartyInfo(res.result);
+            if (res.code == 201) {
+              if (util.getbrowserType === 1) {
+                util.cookieOperate.setWechatOpenID(false);
+              }
+              return;
+            }
             if (util.getbrowserType === 1) {
-              util.cookieOperate.setWechatOpenID('webChatOpenID', true);
+              util.cookieOperate.setWechatOpenID(true);
             }
-            if (res.code === 201) {
-              return false;
-            }
-            this.$router.go(-2);
+            util.setUserGuid('873441c5-be2c-4d90-a4cc-b05c184b99cf');
+            this.$router.push({
+              path: this.beforeLoginPage
+            });
           } else {
             this.$nextTick(() => {
               this.toptipTxt = res.message;
@@ -315,14 +340,17 @@
         });
       },
       _boundMobileVerify () {
-        boundMobileVerify({
+//        return Promise.resolve({
+//          code: 200, message: '验证码已发送', result: -1
+//        });
+        return boundMobileVerify({
           product_guid: this.productGuid,
           mobile: this.phone,
           third_party: this.thirdParty
         });
       },
       _webBoundMobileByThirdPartUid () {
-        webBoundMobileByThirdPartUid({
+        return webBoundMobileByThirdPartUid({
           mobile: this.phone,
           uid: this.thirdPartyInfo.uid,
           thirdParty: this.thirdParty,
@@ -333,14 +361,35 @@
       _webRegisterAndBoundMobileByThirdPartUid () {
         return webRegisterAndBoundMobileByThirdPartUid({
           mobile: this.phone,
-          uid: this.thirdPartyInfo.uid,
+          uid: this.thirdPartyInfo.unionid,
           thirdParty: this.thirdParty,
           nickname: this.thirdPartyInfo.nickname,
           faceHash: this.thirdPartyInfo.faceHash,
-          code: this.verifycode
+          code: this.verifycode,
+          password: this.password
         });
       },
       _webLoginByThirdPartCode () {
+//        this.recordThirdParty('weixin');
+//        return Promise.resolve({
+//          'code': '200',
+//          'message': '微信未绑定账号，跳转至绑定界面',
+//          'result': {
+//            'country': 'GI',
+//            'unionid': 'oEnVnwpEB20jhlYQBNCP8B8L9hes',
+//            'province': '',
+//            'city': '',
+//            'openid': 'oalmz0SINMKcyLeN_MXT56v_xCnw',
+//            'sex': 0,
+//            'nickname': '槑',
+//            'headimgurl': 'http://thirdwx.qlogo.cn/mmopen/vi_32/uOBOz3lgzh1gXQudxx2vQsRnPU8K1ctj14SImvsROCBRBjU09qK1jvVKREonRuo707xnkcD9zgm9KZud8xuQhw/132',
+//            'language': 'zh_CN',
+//            'privilege': [],
+//            'faceHash': 'Fhfn6hH83dOtYZz9PGQ2-F0mZHli'
+//          },
+//          'success': true
+//        });
+
         var url = decodeURIComponent(window.location.hash);
         if (url.indexOf('?') < 0) {
           this.$nextTick(() => {
@@ -353,12 +402,12 @@
         }
         url = url.split('?')[1];
         var thirdparty = util.getUrlParameter('thridparty', url, '&');
-        this.recordThirdParty(thirdparty);
         var code = util.getUrlParameter('code', url, '&');
         var param = {};
         param.productGuid = this.productGuid;
         param.thirdParty = thirdparty;
         param.code = code;
+        this.recordThirdParty(thirdparty);
         if (thirdparty == 'qq') {
           param.redirectUri = thirdParty.qq.uri;
         } else if (thirdparty == 'sina') {

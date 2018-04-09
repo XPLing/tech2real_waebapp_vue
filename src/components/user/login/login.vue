@@ -63,7 +63,7 @@
   import { thirdParty, ERR_OK } from 'api/config';
   import { Validator } from 'vee-validate';
   import { webLoginByPhone } from 'api/login';
-  import { mapState, mapMutations } from 'vuex';
+  import { mapMutations, mapGetters } from 'vuex';
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import * as util from 'assets/js/util';
 
@@ -81,10 +81,16 @@
     mounted () {
 
     },
+    computed: {
+      ...mapGetters([
+        'beforeLoginPage'
+      ])
+    },
     methods: {
       ...mapMutations({
         recordUserinfo: 'RECORD_USERINFO',
-        setUserguid: 'SET_USERGUID'
+        setUserguid: 'SET_USERGUID',
+        updataUserGuid: 'UPDATA_USERGUID'
       }),
       _login () {
         this.changeSubmitBtn(true, '登录中...');
@@ -95,12 +101,14 @@
         webLoginByPhone(data).then((res) => {
           if (res.code == ERR_OK) {
             this.changeSubmitBtn(false, '登录');
+            var userGuid = '873441c5-be2c-4d90-a4cc-b05c184b99cf';
             this.recordUserinfo({
-              logined: true,
-              id: '873441c5-be2c-4d90-a4cc-b05c184b99cf'
+              logined: true
             });
-            this.setUserguid();
-            this.$router.back();
+            this.updataUserGuid(userGuid);
+            this.$router.push({
+              path: this.beforeLoginPage
+            });
           } else {
             this.changeSubmitBtn(false, '登录');
             util.formErrorMsg({
@@ -127,7 +135,7 @@
       thirdPartLogin (type) {
         var url = '', uri = '', href = '';
         var uriKey = 'uri', appIdKey = 'appId', currentUrl = window.location.href;
-        if (/test.dev./.test(currentUrl)) {
+        if (/open.dev./.test(currentUrl)) {
           uriKey = 'devUri';
           appIdKey = 'devAppId';
         }

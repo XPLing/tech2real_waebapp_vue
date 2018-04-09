@@ -10,16 +10,22 @@ const mutations = {
   },
   [types.RECORD_USERINFO] (state, info) {
     state.user = Object.assign({}, state.user, info);
-    setUserGuid(info.id);
   },
-  [types.SET_USERGUID] (state) {
-    state.userGuid = getUserGuid();
+  [types.SET_USERGUID] (state, val) {
+    state.userGuid = val;
   },
-  [types.RECORD_THRIDPARTY] (state, val) {
-    state.thridParty = val;
+  [types.UPDATA_USERGUID] (state, val) {
+    setUserGuid(val);
+    state.userGuid = val;
   },
-  [types.RECORD_THRIDPARTYINFO] (state, val) {
-    state.thridPartyInfo = val;
+  [types.RECORD_THIRDPARTY] (state, val) {
+    state.thirdParty = val;
+  },
+  [types.RECORD_THIRDPARTYINFO] (state, val) {
+    state.thirdPartyInfo = val;
+  },
+  [types.SET_BEFORELOGINPAGE] (state, val) {
+    state.beforeLoginPage = val;
   }
 };
 

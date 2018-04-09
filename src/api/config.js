@@ -19,6 +19,7 @@ export let removePending = (config, obj) => {
 
 export const ERR_OK = 200;
 export const ERR_OK_STR = 'ok';
+export const REQUEST_PREFIX = '';
 
 export let thirdParty = {
   wechat: {
@@ -27,9 +28,9 @@ export let thirdParty = {
     reUrl: "https://api.weixin.qq.com/sns/oauth2/refresh_token",
     webReUrl: "https://api.weixin.qq.com/sns/oauth2/refresh_token",
     appId: "wxef3355d78cfc7a3d",
-    devAppId: "wxa6b9e9095db32224",
-    devUri: "http://test.dev.tech2real.com/#/user/mobilebind",
-    uri: "http://open.tech2real.com/#/user/mobilebind"
+    devAppId: "wxef3355d78cfc7a3d", // "wxa6b9e9095db32224"
+    devUri: "http://open.dev.tech2real.com/open-web/#/user/mobilebind",
+    uri: "http://open.tech2real.com/open-web/#/user/mobilebind"
   },
   qq: {
     url: "https://graph.qq.com/oauth2.0/authorize",
@@ -38,8 +39,8 @@ export let thirdParty = {
     webReUrl: "https://api.weixin.qq.com/sns/oauth2/refresh_token",
     devAppId: "101367357",
     appId: "101367357",
-    devUri: "http://open.dev.tech2real.com/mobilebind",
-    uri: "http://open.tech2real.com/mobilebind"
+    devUri: "http://open.dev.tech2real.com/open-web/#/user/mobilebind",
+    uri: "http://open.tech2real.com/open-web/#/user/mobilebind"
   },
   weibo: {
     url: "https://api.weibo.com/oauth2/authorize",
@@ -48,7 +49,7 @@ export let thirdParty = {
     webReUrl: "https://api.weixin.qq.com/sns/oauth2/refresh_token",
     devAppId: "182034898",
     appId: "182034898",
-    devUri: "http://open.dev.tech2real.com/mobilebind",
-    uri: "http://open.tech2real.com/mobilebind"
+    devUri: "http://open.dev.tech2real.com/open-web/#/user/mobilebind",
+    uri: "http://open.tech2real.com/open-web/#/user/mobilebind"
   }
 }

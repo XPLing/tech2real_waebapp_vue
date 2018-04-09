@@ -41,8 +41,9 @@
   import TrainDetailTab from 'components/train-detail-tab/train-detail-tab';
   import { getCourseData } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
-  import { mapGetters, mapMutations } from 'vuex';
+  import { mapGetters } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
+  import * as util from 'assets/js/util';
 
   const LOGINTIP = '请先登录!';
   const JOINTIP = '是否加入课程开始学习?';
@@ -79,7 +80,6 @@
       this._getCourseData();
     },
     methods: {
-
       _getCourseID () {
         this.courseID = this.$route.params.id;
       },
@@ -138,6 +138,7 @@
         if (this.confirmTxt === JOINTIP) {
           this.appliedState = 1;
         } else {
+          util.setBeforeLoginPage(this.$route.fullPath);
           this.$router.push({
             path: '/user/login'
           });

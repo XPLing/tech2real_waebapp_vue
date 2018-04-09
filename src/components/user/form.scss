@@ -22,6 +22,11 @@
             display: block;
             @include fs(12);
           }
+          .main{
+            input{
+              flex: 0 1 auto;
+            }
+          }
         }
         &.has-error {
           .main {
@@ -73,7 +78,7 @@
             &:-ms-input-placeholder {
               color: $color-text-wcc;
             }
-            max-width: formatVal(215, rem);
+            // max-width: formatVal(215, rem);
             color: $color-text-b3d;
           }
         }
