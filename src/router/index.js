@@ -25,6 +25,7 @@ const Train = resolve => {
   });
 };
 const TrainDetail = r => require.ensure([], () => r(require('components/train-detail/train-detail')), 'trainDetail');
+const CourseApplyResult = () => import(/* webpackChunkName: "courseApplyResult" */ 'components/courseApplyResult/courseApplyResult');
 const TrainDetailIntro = r => require.ensure([], () => r(require('components/train-detail/intro/course-intro')), 'trainDetailIntro');
 const TrainDetailChapters = r => require.ensure([], () => r(require('components/train-detail/chapters/course-chapters')), 'trainDetailChapters');
 const TrainDetailEvaluate = r => require.ensure([], () => r(require('components/train-detail/evaluate/course-evaluate')), 'trainDetailEvaluate');
@@ -63,6 +64,10 @@ export default new Router({
             {
               path: '',
               redirect: 'intro'
+            },
+            {
+              path: 'applyresult',
+              component: CourseApplyResult
             },
             {
               path: 'intro',

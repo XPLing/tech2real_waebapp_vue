@@ -16,15 +16,14 @@
       <nav class="g-nav-wrapper">
         <TrainDetailTab></TrainDetailTab>
       </nav>
-      <div class="g-main" :class="{'joined':this.appliedState>0}">
+      <div class="g-main">
         <keep-alive>
-          <router-view :product-guid="productGuid" :user-guid="userGuid" :course-data="courseData"
+          <router-view :applied-state="appliedState" :course-data="courseData"
                        @setdata="setDatas" @changevideo="changeVideo"></router-view>
         </keep-alive>
       </div>
-      <div class="g-join" v-if="courseData && this.appliedState<=0">
-        <span
-          class="price">{{courseData.courseResult.result.price == 0 ? "免费" : courseData.courseResult.result.price}}</span>
+      <div class="g-join" v-if="courseData && (!userGuid ||this.appliedState<=0)">
+        <span class="price">{{courseData.courseResult.result.price == 0 ? "免费" : courseData.courseResult.result.price}}</span>
         <button class="btn" @click="join">加入学习</button>
       </div>
       <confirm ref="confirmsWrapper" :text="confirmTxt" @cancel="cancel" @confirm="confirm"></confirm>
@@ -136,7 +135,10 @@
       },
       confirm () {
         if (this.confirmTxt === JOINTIP) {
-          this.appliedState = 1;
+          // this.appliedState = 1;
+          this.$router.push({
+            path: `/train/${this.courseID}/applyresult`
+          });
         } else {
           util.setBeforeLoginPage(this.$route.fullPath);
           this.$router.push({

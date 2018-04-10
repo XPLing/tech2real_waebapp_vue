@@ -1,9 +1,16 @@
 <template>
-  <div class="g-course-intro"></div>
+  <div class="g-course-intro" :class="{'joined':this.appliedState>0}"></div>
 </template>
 
 <script type="text/ecmascript-6">
-    export default {};
+    export default {
+      props: {
+        appliedState: {
+          type: Number,
+          default: 0
+        }
+      }
+    };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

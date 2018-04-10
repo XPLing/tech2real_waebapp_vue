@@ -40,52 +40,52 @@
     padding: 10px 0;
 }
 .c-media {
-    .c-media-item {
-        position: relative;
-        display: flex;
-        .avatar {
-            img {
-                @include w(180);
-                @include h(135);
-            }
-        }
-        .desc {
-            flex: 1;
-            .title {
-                @include fs(28);
-                //font-weight: bold;
-            }
-            .info {
-              &.float{
-                position: absolute;
-                bottom: 0;
-              }
-              @include fs(18);
-              color: $tipColor;
-              span {
-                & + span {
-                  margin-left: 15px;
-                }
-                display: inline-block;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              }
-            }
-            .float-chunk {
-                position: absolute;
-                bottom: 0;
-                @include fs(18);
-                color: $tipColor;
-                span {
-                    & + span {
-                        margin-left: 15px;
-                    }
-                    display: inline-block;
-                }
-            }
-        }
+  position: relative;
+  display: flex;
+  .avatar,.media-left,.media-right {
+    @include w(180);
+    @include h(135);
+    img {
+      @include w(180);
+      @include h(135);
     }
+  }
+  .desc,.media-body {
+    flex: 1;
+    .title {
+      @include fs(16);
+      //font-weight: bold;
+    }
+    .info {
+      &.float{
+        position: absolute;
+        bottom: 0;
+      }
+      @include fs(14);
+      color: $tipColor;
+      span {
+        & + span {
+          margin-left: 15px;
+        }
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    .float-chunk {
+      position: absolute;
+      bottom: 0;
+      @include fs(14);
+      color: $tipColor;
+      span {
+        & + span {
+          margin-left: 15px;
+        }
+        display: inline-block;
+      }
+    }
+  }
 }
 
 .c-shadow{

@@ -1,5 +1,5 @@
 <template>
-  <div class="g-course-intro">
+  <div class="g-course-intro" :class="{'joined':this.appliedState>0}">
     <scroll :data="courseIntro" :refreshDelay="refreshDelay" ref="scroll" @scroll="descImage" :probeType="probeType"
             :listenScroll="listenScroll">
       <div class="g-scroll-continer">
@@ -11,9 +11,9 @@
         <div class="section detail-info" v-if="courseIntro">
           <div class="detail-info-item teacher">
             <h2 class="title">讲师</h2>
-            <ul class="c-media">
+            <ul>
               <li class="list">
-                <a href="javascript:void(0);" class="c-media-item">
+                <a href="javascript:void(0);" class="c-media">
                   <div class="avatar">
                     <img :src="courseIntro.teachers[0].faceUrl">
                   </div>
@@ -47,6 +47,10 @@
       courseData: {
         type: Object,
         default: null
+      },
+      appliedState: {
+        type: Number,
+        default: 0
       }
     },
     data () {

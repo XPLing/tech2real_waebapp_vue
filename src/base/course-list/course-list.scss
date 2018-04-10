@@ -1,0 +1,28 @@
+.g-course-list{
+    .c-media{
+      .media-left{
+        margin-right: formatVal(15,rem);
+        @include w(117);
+        @include h(68);
+        img {
+          @include w(117);
+          @include h(68);
+        }
+      }
+      .media-body{
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+        .info{
+          .price {
+            &.red {
+              color: $color-text-stress-r;
+            }
+            &.green {
+              color: $color-text-stress-g;
+            }
+          }
+        }
+      }
+    }
+}

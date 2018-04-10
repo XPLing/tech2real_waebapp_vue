@@ -18,15 +18,12 @@
       return {}
     },
     created(){
-      this.setUserGuid();
+
     },
     activated(){
       console.log('activated');
     },
     methods: {
-      ...mapMutations({
-        setUserGuid: 'SET_USERGUID'
-      })
     },
     components: {
       'g-tab': Tab

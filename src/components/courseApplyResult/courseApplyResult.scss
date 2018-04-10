@@ -1,0 +1,55 @@
+.g-course-apply-result {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: $color-text-b45;
+  background: $color-shadow-nav;
+  .g-main-wrapper {
+    position: fixed;
+    top: formatVal(40, rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    .course-base {
+      padding: formatVal(20, rem) formatVal(15, rem);
+      border-bottom: formatVal(10, rem) solid $color-border-split;
+      background-color: $color-theme;
+      .price, .intro {
+        background-color: $whiteColor;
+
+      }
+      .price {
+        padding: formatVal(10, rem);
+      }
+      .intro {
+        padding: formatVal(15, rem) formatVal(10, rem);
+      }
+    }
+    .course-detail{
+      background-color: $whiteColor;
+      padding: formatVal(15, rem);
+      p+p{
+        padding-top: formatVal(10,rem);
+        border-top: 1px solid $color-border-input;
+      }
+      .title{
+        @include fs(16);
+        padding-bottom: formatVal(10,rem);
+      }
+      .time{
+        @include fs(14);
+      }
+    }
+  }
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translate3d(100%, 0, 0);
+}

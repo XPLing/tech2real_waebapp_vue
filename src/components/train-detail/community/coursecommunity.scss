@@ -1,4 +1,14 @@
 .g-train-detail {
-
+  position: fixed;
+  z-index: 4;
+  top: formatVal(289,rem);
+  bottom: formatVal(50,rem);
+  left: 0;
+  right: 0;
+  color: $color-text-b45;
+  background: $color-shadow-nav;
+  &.joined{
+    bottom: 0;
+  }
 }
 

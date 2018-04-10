@@ -6,6 +6,9 @@
         <router-link v-show="loginError" to="/user/login" tag="a" replace>请重新登录！</router-link>
       </p>
     </top-tip>
+    <p class="avatar" v-if="thirdPartyInfo && thirdPartyInfo.headimgurl">
+      <img :src="thirdPartyInfo.headimgurl" :alt="thirdPartyInfo.nickname">
+    </p>
     <form class="form" data-vv-scope="mobilebind">
       <p class="verify error"></p>
       <ul class="form-main form-hook" v-if="!passsFirst">
@@ -217,7 +220,6 @@
                     });
                   }
                 });
-
               }, error => {
                 this.changeSubmitBtn(false);
                 util.formErrorMsg({
@@ -352,7 +354,7 @@
       _webBoundMobileByThirdPartUid () {
         return webBoundMobileByThirdPartUid({
           mobile: this.phone,
-          uid: this.thirdPartyInfo.uid,
+          uid: this.thirdPartyInfo.unionid,
           thirdParty: this.thirdParty,
           nickname: this.thirdPartyInfo.nickname,
           code: this.verifycode

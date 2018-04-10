@@ -1,5 +1,5 @@
 <template>
-  <div class="g-course-chapters">
+  <div class="g-course-chapters" :class="{'joined':this.appliedState>0}">
     <scroll :data="courseData" ref="scroll">
       <div class="chapters g-scroll-continer">
         <div class="chapter-item" :class="{ 'active': chapters.isCollapsed}" v-if="courseChapters.length>0"
@@ -35,6 +35,10 @@
       courseData: {
         type: Object,
         default: null
+      },
+      appliedState: {
+        type: Number,
+        default: 0
       }
     },
     data () {
