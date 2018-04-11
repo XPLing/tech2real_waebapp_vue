@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import {routerPrefix} from 'assets/js/util';
+import { routerPrefix } from 'assets/js/util';
 // import Info from 'components/info/info';
 // import Train from 'components/train/train';
 // import TrainDetail from 'components/train-detail/train-detail';
@@ -19,11 +19,11 @@ import {routerPrefix} from 'assets/js/util';
 
 const Info = () => import(/* webpackChunkName: "info" */ 'components/info/info');
 const Train = resolve => {
-  // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
-  // （代码分块）
-  require.ensure([], () => {
-    resolve(require('components/train/train'));
-  });
+    // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
+    // （代码分块）
+    require.ensure([], () => {
+        resolve(require('components/train/train'));
+    });
 };
 const TrainDetail = r => require.ensure([], () => r(require('components/train-detail/train-detail')), 'trainDetail');
 const CourseApplyResult = () => import(/* webpackChunkName: "courseApplyResult" */ 'components/courseApplyResult/courseApplyResult');
@@ -40,102 +40,102 @@ const Register = r => require.ensure([], () => r(require('components/user/regist
 const BackPW = r => require.ensure([], () => r(require('components/user/backpw/backpw')), 'backPW');
 const MobileBind = r => require.ensure([], () => r(require('components/user/mobilebind/mobilebind')), 'mobileBind');
 
-
 Vue.use(Router);
 export default new Router({
-  linkActiveClass: 'active',
-  mode: 'history',
-  routes: [
-    {
-      path: '/',
-      redirect: routerPrefix + '/info'
-    },
-    {
-      path: routerPrefix + '/',
-      redirect: routerPrefix + '/info'
-    },
-    {
-      path: routerPrefix + '/info',
-      component: Info
-    },
-    {
-      path: routerPrefix + '/train',
-      component: Train,
-      children: [
+    linkActiveClass: 'active',
+    mode: 'history',
+    base: '/ope-web',
+    routes: [
         {
-          path: ':id',
-          component: TrainDetail,
-          children: [
-            {
-              path: '',
-              redirect: 'intro'
-            },
-            {
-              path: 'applyresult',
-              component: CourseApplyResult
-            },
-            {
-              path: 'intro',
-              component: TrainDetailIntro
-            },
-            {
-              path: 'evaluate',
-              component: TrainDetailEvaluate
-            },
-            {
-              path: 'community',
-              component: TrainDetailCommunity
-            },
-            {
-              path: 'chapters',
-              component: TrainDetailChapters
-            }
-          ]
-        }
-      ]
-    },
-    {
-      path: routerPrefix + '/community',
-      component: Community
-    },
-    {
-      path: routerPrefix + '/activity',
-      component: Activity
-    },
-    {
-      path: routerPrefix + '/me',
-      component: Me
-    },
-    {
-      path: routerPrefix + '/user',
-      component: User,
-      children: [
-        {
-          path: '',
-          redirect: 'login'
+            path: '/',
+            redirect: routerPrefix + '/info'
         },
         {
-          path: 'login',
-          component: Login
+            path: routerPrefix + '/',
+            redirect: routerPrefix + '/info'
         },
         {
-          path: 'register',
-          component: Register
+            path: routerPrefix + '/info',
+            component: Info
         },
         {
-          path: 'mobilebind',
-          component: MobileBind
+            path: routerPrefix + '/train',
+            component: Train,
+            children: [
+                {
+                    path: ':id',
+                    component: TrainDetail,
+                    children: [
+                        {
+                            path: '',
+                            redirect: 'intro'
+                        },
+                        {
+                            path: 'applyresult',
+                            component: CourseApplyResult
+                        },
+                        {
+                            path: 'intro',
+                            component: TrainDetailIntro
+                        },
+                        {
+                            path: 'evaluate',
+                            component: TrainDetailEvaluate
+                        },
+                        {
+                            path: 'community',
+                            component: TrainDetailCommunity
+                        },
+                        {
+                            path: 'chapters',
+                            component: TrainDetailChapters
+                        }
+                    ]
+                }
+            ]
         },
         {
-          path: 'backpw',
-          component: BackPW
-        }
+            path: routerPrefix + '/community',
+            component: Community
+        },
+        {
+            path: routerPrefix + '/activity',
+            component: Activity
+        },
+        {
+            path: routerPrefix + '/me',
+            component: Me
+        },
+        {
+            path: routerPrefix + '/user',
+            component: User,
+            children: [
+                {
+                    path: '',
+                    redirect: 'login'
+                },
+                {
+                    path: 'login',
+                    component: Login
+                },
+                {
+                    path: 'register',
+                    component: Register
+                },
+                {
+                    path: 'mobilebind',
+                    component: MobileBind
+                },
+                {
+                    path: 'backpw',
+                    component: BackPW
+                }
 
-      ]
-    },
-    {
-      path: '*',
-      redirect: routerPrefix + '/info'
-    }
-  ]
+            ]
+        },
+        {
+            path: '*',
+            redirect: routerPrefix + '/info'
+        }
+    ]
 });
