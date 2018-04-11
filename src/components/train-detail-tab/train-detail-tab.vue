@@ -1,25 +1,27 @@
 <template>
   <div class="g-train-detail-tab">
-    <router-link tag="li" class="tab-item" :to="{path:'/train/'+ courseID +'/intro'}" replace>
+    <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/intro'}" replace>
       <span class="tab-link">课程</span>
     </router-link>
-    <router-link tag="li" class="tab-item" :to="{path:'/train/'+ courseID +'/chapters'}" replace>
+    <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/chapters'}" replace>
       <span class="tab-link">章节</span>
     </router-link>
-    <router-link tag="li" class="tab-item" :to="{path:'/train/'+ courseID +'/evaluate'}" replace>
+    <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/evaluate'}" replace>
       <span class="tab-link">评价</span>
     </router-link>
-    <router-link tag="li" class="tab-item" :to="{path:'/train/'+ courseID +'/community'}" replace>
+    <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/community'}" replace>
       <span class="tab-link">交流</span>
     </router-link>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import { routerPrefix } from 'assets/js/util';
   export default {
     data(){
       return {
-        courseID: 0
+        courseID: 0,
+        routerPrefix
       }
     },
     created(){

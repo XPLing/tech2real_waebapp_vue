@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import {routerPrefix} from 'assets/js/util';
 // import Info from 'components/info/info';
 // import Train from 'components/train/train';
 // import TrainDetail from 'components/train-detail/train-detail';
@@ -41,20 +42,24 @@ const MobileBind = r => require.ensure([], () => r(require('components/user/mobi
 
 
 Vue.use(Router);
-
 export default new Router({
   linkActiveClass: 'active',
+  mode: 'history',
   routes: [
     {
       path: '/',
-      redirect: '/info'
+      redirect: routerPrefix + '/info'
     },
     {
-      path: '/info',
+      path: routerPrefix + '/',
+      redirect: routerPrefix + '/info'
+    },
+    {
+      path: routerPrefix + '/info',
       component: Info
     },
     {
-      path: '/train',
+      path: routerPrefix + '/train',
       component: Train,
       children: [
         {
@@ -90,19 +95,19 @@ export default new Router({
       ]
     },
     {
-      path: '/community',
+      path: routerPrefix + '/community',
       component: Community
     },
     {
-      path: '/activity',
+      path: routerPrefix + '/activity',
       component: Activity
     },
     {
-      path: '/me',
+      path: routerPrefix + '/me',
       component: Me
     },
     {
-      path: '/user',
+      path: routerPrefix + '/user',
       component: User,
       children: [
         {
@@ -127,6 +132,10 @@ export default new Router({
         }
 
       ]
+    },
+    {
+      path: '*',
+      redirect: routerPrefix + '/info'
     }
   ]
 });

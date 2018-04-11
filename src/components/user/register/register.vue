@@ -115,7 +115,8 @@
         operateTip: '',
         formName: 'registerFirst',
         isActiving: false,
-        btnText: '下一步'
+        btnText: '下一步',
+        routerPrefix: util.routerPrefix
       };
     },
     computed: {
@@ -130,7 +131,7 @@
           this.changeSubmitBtn(false, '注册');
         } else {
           this.changeSubmitBtn(false);
-          this.$router.replace('/user/login');
+          this.$router.replace(this.routerPrefix + '/user/login');
         }
       },
       validateForm (scope) {

@@ -1,6 +1,8 @@
 import { commonVariable } from 'api/config';
 import { setCookie, getCookie, removeCookie } from 'assets/js/cookie';
 
+export const routerPrefix = '';
+
 export let browser = {
   versions: (function () {
     var u = navigator.userAgent, app = navigator.appVersion;

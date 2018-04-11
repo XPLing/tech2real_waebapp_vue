@@ -23,12 +23,13 @@
         </keep-alive>
       </div>
       <div class="g-join" v-if="courseData && (!userGuid ||this.appliedState<=0)">
-        <span class="price">{{courseData.courseResult.result.price == 0 ? "免费" : courseData.courseResult.result.price}}</span>
+        <span
+          class="price">{{courseData.courseResult.result.price == 0 ? "免费" : courseData.courseResult.result.price}}</span>
         <button class="btn" @click="join">加入学习</button>
       </div>
       <confirm ref="confirmsWrapper" :text="confirmTxt" @cancel="cancel" @confirm="confirm"></confirm>
       <top-tip ref="toptip" :delay="10000">
-          <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
+        <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
     </div>
   </transition>
@@ -40,7 +41,7 @@
   import TrainDetailTab from 'components/train-detail-tab/train-detail-tab';
   import { getCourseData } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import * as util from 'assets/js/util';
 
@@ -61,7 +62,8 @@
         appliedState: null,
         isPause: true,
         isCanplay: false,
-        toptipTxt: ''
+        toptipTxt: '',
+        routerPrefix: util.routerPrefix
       };
     },
     computed: {
@@ -79,6 +81,9 @@
       this._getCourseData();
     },
     methods: {
+      ...mapMutations({
+        updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
+      }),
       _getCourseID () {
         this.courseID = this.$route.params.id;
       },
@@ -137,12 +142,12 @@
         if (this.confirmTxt === JOINTIP) {
           // this.appliedState = 1;
           this.$router.push({
-            path: `/train/${this.courseID}/applyresult`
+            path: `${this.routerPrefix}/train/${this.courseID}/applyresult`
           });
         } else {
-          util.setBeforeLoginPage(this.$route.fullPath);
+          this.updataBeforeLoginPage(this.$route.fullPath);
           this.$router.push({
-            path: '/user/login'
+            path: this.routerPrefix + '/user/login'
           });
         }
       },

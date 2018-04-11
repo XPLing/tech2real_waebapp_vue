@@ -61,7 +61,7 @@
     </form>
     <confirm :isDialog="true" :text="operateTip" ref="confirm" @confirm="confirm"></confirm>
     <p class="c-tip t-r">
-      <router-link tag="a" to="/user/login">返回登录</router-link>
+      <router-link tag="a" :to="{path: routerPrefix + '/user/login'}">返回登录</router-link>
     </p>
   </div>
 </template>
@@ -86,7 +86,8 @@
         phone: '',
         verifycode: '',
         isActiving: false,
-        confirmType: ''
+        confirmType: '',
+        routerPrefix: util.routerPrefix
       };
     },
     computed: {

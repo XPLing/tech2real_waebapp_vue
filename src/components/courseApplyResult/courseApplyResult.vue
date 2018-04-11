@@ -17,7 +17,7 @@
             </div>
             <div class="course-detail">
               <p class="title">详细信息</p>
-              <p class="time">2017-10-12</p>
+              <p class="time">{{ new Date().getTime() | formatDate('yyyy-MM-dd')}}</p>
             </div>
 
 
@@ -32,7 +32,7 @@
   import HeaderTitle from 'components/header-title/header-title';
   import CourseList from 'base/course-list/course-list';
   import Scroll from 'base/scroll/scroll';
-
+  import * as util from 'assets/js/util';
   export default {
     props: {
       courseData: {
@@ -43,7 +43,8 @@
     data () {
       return {
         pageTitle: '报名详情',
-        hasBack: true
+        hasBack: true,
+        routerPrefix: util.routerPrefix
       };
     },
     computed: {
@@ -58,7 +59,7 @@
     methods: {
       selectCourse (courseID) {
         this.$router.push({
-          path: `/train/${courseID}`
+          path: `${this.routerPrefix}/train/${courseID}`
         });
       }
     },

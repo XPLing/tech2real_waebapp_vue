@@ -7,8 +7,9 @@ import router from 'router';
 import 'assets/scss/common.scss';
 import 'font-awesome/scss/font-awesome.scss';
 import fastclick from 'fastclick';
-import {VeeValidate, Veeconfig} from 'assets/js/validate';
+import { VeeValidate, Veeconfig } from 'assets/js/validate';
 import store from 'store';
+import * as filters from 'assets/js/filters';
 
 fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟
 
@@ -16,7 +17,10 @@ Vue.config.productionTip = false;
 
 Vue.use(VeeValidate, Veeconfig);
 
-
+// 注册全局过滤器
+Object.keys(filters).forEach((key) => {
+  Vue.filter(key, filters[key]);
+});
 
 /* eslint-disable no-new */
 new Vue({

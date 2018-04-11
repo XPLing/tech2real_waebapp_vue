@@ -3,12 +3,15 @@
     <top-tip ref="toptip" :is-auto-hide="topTipAutoHide">
       <p class="error" v-show="toptipTxt">
         <span v-html="toptipTxt"></span>
-        <router-link v-show="loginError" to="/user/login" tag="a" replace>请重新登录！</router-link>
+        <router-link v-show="loginError" :to="{path: routerPrefix + '/user/login'}" tag="a" replace>请重新登录！</router-link>
       </p>
     </top-tip>
-    <p class="avatar" v-if="thirdPartyInfo && thirdPartyInfo.headimgurl">
-      <img :src="thirdPartyInfo.headimgurl" :alt="thirdPartyInfo.nickname">
-    </p>
+    <div class="base-info" v-if="thirdPartyInfo && thirdPartyInfo.headimgurl">
+      <p class="avatar">
+        <img :src="thirdPartyInfo.headimgurl" :alt="thirdPartyInfo.nickname">
+      </p>
+      <p class="name">{{thirdPartyInfo.nickname}}</p>
+    </div>
     <form class="form" data-vv-scope="mobilebind">
       <p class="verify error"></p>
       <ul class="form-main form-hook" v-if="!passsFirst">
@@ -26,7 +29,7 @@
           </div>
         </li>
       </ul>
-      <ul class="form-main form-hook step-item" v-if="passsFirst && isLogined">
+      <ul class="form-main form-hook step-item" v-if="passsFirst && isRegistered">
         <li class="input-item verify-code" :class="{'has-error': errors.has('mobilebind.verifycode') }">
           <div class="main">
             <i class="icon">验证码</i>
@@ -41,7 +44,7 @@
           </div>
         </li>
       </ul>
-      <ul class="form-main form-hook step-item" v-if="passsFirst && !isLogined">
+      <ul class="form-main form-hook step-item" v-if="passsFirst && !isRegistered">
         <li class="input-item verify-code" :class="{'has-error': errors.has('mobilebind.verifycode') }">
           <div class="main">
             <i class="icon">验证码</i>
@@ -90,7 +93,7 @@
     </form>
     <confirm :isDialog="true" :text="operateTip" ref="confirm" @confirm="confirm"></confirm>
     <p class="c-tip t-r">
-      <router-link tag="a" to="/user/login">返回登录</router-link>
+      <router-link tag="a" :to="{path: routerPrefix + '/user/login'}">返回登录</router-link>
     </p>
   </div>
 </template>
@@ -121,13 +124,14 @@
         btnText: '下一步',
         passsFirst: false,
         operateTip: '',
-        isLogined: false,
+        isRegistered: false,
         phone: '',
         verifycode: '',
         password: '',
         toptipTxt: '',
         loginError: false,
-        topTipAutoHide: false
+        topTipAutoHide: false,
+        routerPrefix: util.routerPrefix
       };
     },
     mounted () {
@@ -159,7 +163,7 @@
               var res = response;
               if (res.code == ERR_OK) {
                 var dom = 'sendMsg';
-                if (!this.isLogined) {
+                if (!this.isRegistered) {
                   dom = 'sendMsgRegister';
                 }
                 this.operateTip = res.message;
@@ -189,7 +193,7 @@
         });
       },
       confirm () {
-        if (!this.isLogined && this.regiterFinish) {
+        if (!this.isRegistered && this.regiterFinish) {
           this.$router.replace('/user/login');
         }
       },
@@ -207,7 +211,7 @@
                     this.$refs.confirm.show();
                     this.$refs.sendMsgRegister.send();
                     if (resp.result != -1) {
-                      this.isLogined = true;
+                      this.isRegistered = true;
                     }
                   } else {
                     util.formErrorMsg({
@@ -231,7 +235,7 @@
                   interval: 2000
                 });
               });
-            } else if (this.passsFirst && !this.isLogined) {
+            } else if (this.passsFirst && !this.isRegistered) {
               this._webRegisterAndBoundMobileByThirdPartUid().then((resp) => {
                 this.changeSubmitBtn(false);
                 if (resp.code == ERR_OK) {
@@ -259,11 +263,11 @@
                   interval: 2000
                 });
               });
-            } else if (this.passsFirst && this.isLogined) {
+            } else if (this.passsFirst && this.isRegistered) {
               this._webBoundMobileByThirdPartUid().then((resp) => {
                 this.changeSubmitBtn(false);
                 if (resp.code == ERR_OK) {
-                  var userGuid = '873441c5-be2c-4d90-a4cc-b05c184b99cf';
+                  var userGuid = res.result.guid;
                   this.updataUserGuid(userGuid);
                   this.$router.push({
                     path: util.getBeforeLoginPage()
@@ -304,7 +308,7 @@
         }
       },
       thirdPartVerify () {
-        this._webLoginByThirdPartCode().then((res) => {
+        return this._webLoginByThirdPartCode().then((res) => {
           if (res.code == ERR_OK || res.code == 201) {
             this.recordThirdPartyInfo(res.result);
             if (res.code == 201) {
@@ -316,23 +320,26 @@
             if (util.getbrowserType === 1) {
               util.cookieOperate.setWechatOpenID(true);
             }
-            util.setUserGuid('873441c5-be2c-4d90-a4cc-b05c184b99cf');
-            this.$router.push({
-              path: this.beforeLoginPage
-            });
+            this.updataUserGuid(res.result.guid);
+            return Promise.resolve(res, this.beforeLoginPage);
+//            this.$router.push({
+//              path: this.beforeLoginPage
+//            });
           } else {
-            this.$nextTick(() => {
-              this.toptipTxt = res.message;
-              this.loginError = true;
-              this.$refs.toptip.show();
-            });
+            return Promise.reject(res);
+//            this.$nextTick(() => {
+//              this.toptipTxt = res.message;
+//              this.loginError = true;
+//              this.$refs.toptip.show();
+//            });
           }
         }, error => {
-          this.$nextTick(() => {
-            this.topTipAutoHide = true;
-            this.toptipTxt = error.message;
-            this.$refs.toptip.show();
-          });
+          return Promise.reject(error);
+//          this.$nextTick(() => {
+//            this.topTipAutoHide = true;
+//            this.toptipTxt = error.message;
+//            this.$refs.toptip.show();
+//          });
         });
       },
       _getResetPwdAuthCode () {
@@ -392,8 +399,8 @@
 //          'success': true
 //        });
 
-        var url = decodeURIComponent(window.location.hash);
-        if (url.indexOf('?') < 0) {
+        var url = decodeURIComponent(window.location.search);
+        if (!url) {
           this.$nextTick(() => {
             this.loginError = true;
             this.$refs.toptip.show();

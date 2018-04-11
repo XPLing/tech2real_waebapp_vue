@@ -36,7 +36,7 @@
       </div>
     </form>
     <p class="forget-pw">
-      <router-link tag="a" to="/user/backpw">忘记密码？</router-link>
+      <router-link tag="a" :to="{path: routerPrefix + '/user/backpw'}">忘记密码？</router-link>
     </p>
     <div class="vendor">
       <div class="titlebox">
@@ -75,7 +75,8 @@
         userInfo: null,
         isActiving: false,
         btnText: '登录',
-        formName: 'login'
+        formName: 'login',
+        routerPrefix: util.routerPrefix
       };
     },
     mounted () {
@@ -101,10 +102,8 @@
         webLoginByPhone(data).then((res) => {
           if (res.code == ERR_OK) {
             this.changeSubmitBtn(false, '登录');
-            var userGuid = '873441c5-be2c-4d90-a4cc-b05c184b99cf';
-            this.recordUserinfo({
-              logined: true
-            });
+            var userGuid = res.result.guid;
+            this.recordUserinfo(res.result);
             this.updataUserGuid(userGuid);
             this.$router.push({
               path: this.beforeLoginPage
