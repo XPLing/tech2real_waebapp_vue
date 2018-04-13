@@ -17,15 +17,40 @@
       padding: formatVal(20, rem) formatVal(15, rem);
       border-bottom: formatVal(10, rem) solid $color-border-split;
       background-color: $color-theme;
+
       .price, .intro {
         background-color: $whiteColor;
-
+      }
+      .header-bg{
+        height: 15px;
+        margin-left: -6px;
+        margin-right: -6px;
+        @include bg-image('bg-header');
+        background-size: 100% 100%;
       }
       .price {
-        padding: formatVal(10, rem);
+        padding: formatVal(10, rem) formatVal(15, rem);
+        @include fs(16);
+        color: $color-theme;
+        text-align: center;
+        @include bg-image('bg-price');
+        background-size: 100%;
+        background-position: left bottom;
+        .fa{
+          @include fs(20);
+          margin-right: 3px;
+        }
+        i,span{
+          @extend %lineElem_middle;
+        }
+
       }
       .intro {
-        padding: formatVal(15, rem) formatVal(10, rem);
+        padding: formatVal(15, rem);
+        @include bg-image('bg-intro');
+        background-size: 100%;
+        background-position: left top;
+        border-radius: 0 0 5px 5px;
       }
     }
     .course-detail{

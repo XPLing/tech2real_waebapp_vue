@@ -10,6 +10,7 @@ var queryString = require('querystring');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 const jsonParser = bodyParser.json();
 
+/* 课程详情 */
 apiRouter.post('/getCourseDetail', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/getCourseDetail`;
   axios({
@@ -25,13 +26,25 @@ apiRouter.post('/getCourseDetail', jsonParser, function (req, res) {
     res.json(response.data);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
+  });
+});
+apiRouter.post('/applyCourse', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/applyCourse`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
   });
 });
 
+
+/* 登录注册 */
 apiRouter.get('/webLoginByPhone', function (req, res) {
   var url = `${config.dev.apiproxy_open}/webLoginByPhone`;
   axios({
@@ -41,10 +54,8 @@ apiRouter.get('/webLoginByPhone', function (req, res) {
   }).then((response) => {
     res.json(response.data);
   }, (e) => {
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    console.log(e);
+    res.json(e);
   });
 });
 
@@ -62,10 +73,7 @@ apiRouter.get('/registerByPhone', function (req, res) {
     res.json(response.data);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
   });
 });
 
@@ -85,10 +93,7 @@ apiRouter.get('/authRegisterByPhone', function (req, res) {
     res.json(error);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
   });
 });
 
@@ -108,10 +113,7 @@ apiRouter.get('/boundMobileVerify', function (req, res) {
     res.json(error);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
   });
 });
 
@@ -131,10 +133,7 @@ apiRouter.get('/webRegisterAndBoundMobileByThirdPartUid', function (req, res) {
     res.json(error);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
   });
 });
 
@@ -154,10 +153,7 @@ apiRouter.get('/webBoundMobileByThirdPartUid', function (req, res) {
     res.json(error);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
   });
 });
 apiRouter.get('/getResetPwdAuthCode', function (req, res) {
@@ -176,10 +172,7 @@ apiRouter.get('/getResetPwdAuthCode', function (req, res) {
     res.json(error);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
   });
 });
 apiRouter.get('/resetPwdByAuthCode', function (req, res) {
@@ -198,10 +191,7 @@ apiRouter.get('/resetPwdByAuthCode', function (req, res) {
     res.json(error);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
   });
 });
 apiRouter.get('/webLoginByThirdPartCode', function (req, res) {
@@ -220,10 +210,7 @@ apiRouter.get('/webLoginByThirdPartCode', function (req, res) {
     res.json(error);
   }, (e) => {
     console.log(e);
-    res.json({
-      code: e.response.status,
-      message: e.message
-    });
+    res.json(e);
   });
 });
 

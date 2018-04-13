@@ -123,9 +123,11 @@
       background-size: $type;
     }
   } @else {
-    background: url($url + "@2x.png") no-repeat;
+    background-image: url($url + "@2x.png");
+    background-repeat: no-repeat;
     @media screen and (-webkit-device-pixel-ratio: 3), screen and (min-device-pixel-ratio: 3) {
-      background: url($url + "@3x.png") no-repeat;
+      background-image: url($url + "@3x.png");
+      background-repeat: no-repeat;
     }
   }
 

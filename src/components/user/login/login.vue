@@ -91,7 +91,7 @@
       ...mapMutations({
         recordUserinfo: 'RECORD_USERINFO',
         setUserguid: 'SET_USERGUID',
-        updataUserGuid: 'UPDATA_USERGUID'
+        loginIn: 'LOGIN_IN'
       }),
       _login () {
         this.changeSubmitBtn(true, '登录中...');
@@ -104,7 +104,7 @@
             this.changeSubmitBtn(false, '登录');
             var userGuid = res.result.guid;
             this.recordUserinfo(res.result);
-            this.updataUserGuid(userGuid);
+            this.loginIn(userGuid);
             this.$router.push({
               path: this.beforeLoginPage
             });
@@ -142,7 +142,7 @@
           case 'wechat':
             url = thirdParty.wechat.url;
             uri = encodeURIComponent(thirdParty.wechat[uriKey] + '?thridparty=weixin');
-            if (util.browser.mobile) {
+            if (util.browser.versions.mobile) {
               url = thirdParty.wechat.webUrl;
             }
             href = url + '?appid=' + thirdParty.wechat[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=snsapi_login&state=' + util.uuid(8, 16) + '#wechat_redirect';
@@ -159,7 +159,7 @@
           case 'sina':
             url = thirdParty.weibo.url;
             uri = encodeURIComponent(thirdParty.weibo[uriKey] + '?thridparty=sina');
-            if (util.browser.mobile) {
+            if (util.browser.versions.mobile) {
               url = thirdParty.weibo.webUrl;
             }
             href = url + '?client_id=' + thirdParty.weibo[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=all&state=' + util.uuid(8, 16);

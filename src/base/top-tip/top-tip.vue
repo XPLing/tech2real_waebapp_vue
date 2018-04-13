@@ -24,13 +24,13 @@
       };
     },
     methods: {
-      show () {
+      show (delay) {
         this.showFlag = true;
         clearTimeout(this.timer);
         if (this.isAutoHide) {
           this.timer = setTimeout(() => {
             this.hide();
-          }, this.delay);
+          }, delay || this.delay);
         }
       },
       hide () {

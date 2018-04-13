@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import Router from 'vue-router';
-import { routerPrefix } from 'assets/js/util';
+import VueRouter from 'vue-router';
+import { routerPrefix, getUserGuid } from 'assets/js/util';
 // import Info from 'components/info/info';
 // import Train from 'components/train/train';
 // import TrainDetail from 'components/train-detail/train-detail';
@@ -18,124 +18,158 @@ import { routerPrefix } from 'assets/js/util';
 // import MobileBind from 'components/user/mobilebind/mobilebind';
 
 const Info = () => import(/* webpackChunkName: "info" */ 'components/info/info');
-const Train = resolve => {
-    // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
-    // （代码分块）
-    require.ensure([], () => {
-        resolve(require('components/train/train'));
-    });
-};
-const TrainDetail = r => require.ensure([], () => r(require('components/train-detail/train-detail')), 'trainDetail');
+const Train = () => import(/* webpackChunkName: "train" */ 'components/train/train');
+const TrainDetail = () => import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail');
+// const Train = resolve => {
+//   // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
+//   // （代码分块）
+//   require.ensure([], () => {
+//     resolve(require('components/train/train'));
+//   });
+// };
+// const TrainDetail = r => require.ensure([], () => r(require('components/train-detail/train-detail')), 'trainDetail');
 const CourseApplyResult = () => import(/* webpackChunkName: "courseApplyResult" */ 'components/courseApplyResult/courseApplyResult');
-const TrainDetailIntro = r => require.ensure([], () => r(require('components/train-detail/intro/course-intro')), 'trainDetailIntro');
-const TrainDetailChapters = r => require.ensure([], () => r(require('components/train-detail/chapters/course-chapters')), 'trainDetailChapters');
-const TrainDetailEvaluate = r => require.ensure([], () => r(require('components/train-detail/evaluate/course-evaluate')), 'trainDetailEvaluate');
-const TrainDetailCommunity = r => require.ensure([], () => r(require('components/train-detail/community/course-community')), 'trainDetailCommunity');
-const Community = r => require.ensure([], () => r(require('components/community/community')), 'community');
-const Activity = r => require.ensure([], () => r(require('components/activity/activity')), 'activity');
-const Me = r => require.ensure([], () => r(require('components/me/me')), 'me');
-const Login = r => require.ensure([], () => r(require('components/user/login/login')), 'login');
-const User = r => require.ensure([], () => r(require('components/user/user')), 'user');
-const Register = r => require.ensure([], () => r(require('components/user/register/register')), 'register');
-const BackPW = r => require.ensure([], () => r(require('components/user/backpw/backpw')), 'backPW');
-const MobileBind = r => require.ensure([], () => r(require('components/user/mobilebind/mobilebind')), 'mobileBind');
+const CourseApplyInfoCollect = () => import(/* webpackChunkName: "courseApplyInfoCollect" */ 'components/courseApplyInfoCollect/courseApplyInfoCollect');
+const CourseApplyPay = () => import(/* webpackChunkName: "courseApplyPay" */ 'components/courseApplyPay/courseApplyPay');
+const TrainDetailIntro = () => import(/* webpackChunkName: "trainDetailIntro" */ 'components/train-detail/intro/course-intro');
+const TrainDetailChapters = () => import(/* webpackChunkName: "trainDetailChapters" */ 'components/train-detail/chapters/course-chapters');
+const TrainDetailEvaluate = () => import(/* webpackChunkName: "trainDetailEvaluate" */ 'components/train-detail/evaluate/course-evaluate');
+const TrainDetailCommunity = () => import(/* webpackChunkName: "trainDetailCommunity" */ 'components/train-detail/community/course-community');
+const Community = () => import(/* webpackChunkName: "community" */ 'components/community/community');
+const Activity = () => import(/* webpackChunkName: "activity" */ 'components/activity/activity');
+const Me = () => import(/* webpackChunkName: "me" */ 'components/me/me');
+const Login = () => import(/* webpackChunkName: "login" */ 'components/user/login/login');
+const User = () => import(/* webpackChunkName: "user" */ 'components/user/user');
+const Register = () => import(/* webpackChunkName: "register" */ 'components/user/register/register');
+const BackPW = () => import(/* webpackChunkName: "backPW" */ 'components/user/backpw/backpw');
+const MobileBind = () => import(/* webpackChunkName: "mobileBind" */ 'components/user/mobilebind/mobilebind');
 
-Vue.use(Router);
-export default new Router({
-    linkActiveClass: 'active',
-    mode: 'history',
-    base: '/ope-web',
-    routes: [
+Vue.use(VueRouter);
+const Router = new VueRouter({
+  linkActiveClass: 'active',
+  mode: 'history',
+  base: '/m-web',
+  routes: [
+    {
+      path: '/',
+      redirect: routerPrefix + '/info'
+    },
+    {
+      path: routerPrefix + '/',
+      redirect: routerPrefix + '/info'
+    },
+    {
+      path: routerPrefix + '/info',
+      component: Info
+    },
+    {
+      path: routerPrefix + '/train',
+      component: Train,
+      children: [
         {
-            path: '/',
-            redirect: routerPrefix + '/info'
-        },
-        {
-            path: routerPrefix + '/',
-            redirect: routerPrefix + '/info'
-        },
-        {
-            path: routerPrefix + '/info',
-            component: Info
-        },
-        {
-            path: routerPrefix + '/train',
-            component: Train,
-            children: [
-                {
-                    path: ':id',
-                    component: TrainDetail,
-                    children: [
-                        {
-                            path: '',
-                            redirect: 'intro'
-                        },
-                        {
-                            path: 'applyresult',
-                            component: CourseApplyResult
-                        },
-                        {
-                            path: 'intro',
-                            component: TrainDetailIntro
-                        },
-                        {
-                            path: 'evaluate',
-                            component: TrainDetailEvaluate
-                        },
-                        {
-                            path: 'community',
-                            component: TrainDetailCommunity
-                        },
-                        {
-                            path: 'chapters',
-                            component: TrainDetailChapters
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            path: routerPrefix + '/community',
-            component: Community
-        },
-        {
-            path: routerPrefix + '/activity',
-            component: Activity
-        },
-        {
-            path: routerPrefix + '/me',
-            component: Me
-        },
-        {
-            path: routerPrefix + '/user',
-            component: User,
-            children: [
-                {
-                    path: '',
-                    redirect: 'login'
-                },
-                {
-                    path: 'login',
-                    component: Login
-                },
-                {
-                    path: 'register',
-                    component: Register
-                },
-                {
-                    path: 'mobilebind',
-                    component: MobileBind
-                },
-                {
-                    path: 'backpw',
-                    component: BackPW
-                }
-
-            ]
-        },
-        {
-            path: '*',
-            redirect: routerPrefix + '/info'
+          path: ':id',
+          component: TrainDetail,
+          meta: {
+            requireLogin: true
+          },
+          children: [
+            {
+              path: '',
+              redirect: 'intro'
+            },
+            {
+              path: 'applyresult',
+              component: CourseApplyResult
+            },
+            {
+              path: 'applyinfocollect',
+              component: CourseApplyInfoCollect
+            },
+            {
+              path: 'applypay',
+              component: CourseApplyPay
+            },
+            {
+              path: 'intro',
+              component: TrainDetailIntro
+            },
+            {
+              path: 'evaluate',
+              component: TrainDetailEvaluate
+            },
+            {
+              path: 'community',
+              component: TrainDetailCommunity
+            },
+            {
+              path: 'chapters',
+              component: TrainDetailChapters
+            }
+          ]
         }
-    ]
+      ]
+    },
+    {
+      path: routerPrefix + '/community',
+      component: Community
+    },
+    {
+      path: routerPrefix + '/activity',
+      component: Activity
+    },
+    {
+      path: routerPrefix + '/me',
+      component: Me
+    },
+    {
+      path: routerPrefix + '/user',
+      component: User,
+      children: [
+        {
+          path: '',
+          redirect: 'login'
+        },
+        {
+          path: 'login',
+          component: Login
+        },
+        {
+          path: 'register',
+          component: Register
+        },
+        {
+          path: 'mobilebind',
+          component: MobileBind
+        },
+        {
+          path: 'backpw',
+          component: BackPW
+        }
+
+      ]
+    },
+    {
+      path: '*',
+      redirect: routerPrefix + '/info'
+    }
+  ]
 });
+Router.beforeEach((to, form, next) => {
+  // console.log(Router.app.$options.store.state.userGuid);
+  // console.log(to.matched);
+  // let isLogin = Router.app.$options.store.state.userGuid;
+  // if (to.matched.some((record) => record.meta.requireLogin)) {
+  //   if (!isLogin) {
+  //     next();
+  //     Router.push({
+  //       path: '/user/login'
+  //     });
+  //     // next();
+  //   } else {
+  //     next();
+  //   }
+  // }
+  next();
+});
+
+export default Router;

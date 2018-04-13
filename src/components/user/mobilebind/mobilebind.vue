@@ -6,12 +6,15 @@
         <router-link v-show="loginError" :to="{path: routerPrefix + '/user/login'}" tag="a" replace>请重新登录！</router-link>
       </p>
     </top-tip>
-    <div class="base-info" v-if="thirdPartyInfo && thirdPartyInfo.headimgurl">
-      <p class="avatar">
-        <img :src="thirdPartyInfo.headimgurl" :alt="thirdPartyInfo.nickname">
-      </p>
-      <p class="name">{{thirdPartyInfo.nickname}}</p>
-    </div>
+    <transition name="fade">
+      <div class="base-info" v-if="thirdPartyInfo && thirdPartyInfo.userAvatar">
+        <p class="avatar">
+          <img :src="thirdPartyInfo.userAvatar" :alt="thirdPartyInfo.nickname">
+        </p>
+        <p class="name">{{thirdPartyInfo.nickname}}</p>
+      </div>
+    </transition>
+
     <form class="form" data-vv-scope="mobilebind">
       <p class="verify error"></p>
       <ul class="form-main form-hook" v-if="!passsFirst">
@@ -154,7 +157,7 @@
         recordThirdPartyInfo: 'RECORD_THIRDPARTYINFO',
         recordUserinfo: 'RECORD_USERINFO',
         setUserguid: 'SET_USERGUID',
-        updataUserGuid: 'UPDATA_USERGUID'
+        loginIn: 'LOGIN_IN'
       }),
       startSend () {
         this.$validator.validate('backpw.phone', this.phone).then((result) => {
@@ -267,8 +270,8 @@
               this._webBoundMobileByThirdPartUid().then((resp) => {
                 this.changeSubmitBtn(false);
                 if (resp.code == ERR_OK) {
-                  var userGuid = res.result.guid;
-                  this.updataUserGuid(userGuid);
+                  var userGuid = resp.result.guid;
+                  this.loginIn(userGuid);
                   this.$router.push({
                     path: util.getBeforeLoginPage()
                   });
@@ -310,7 +313,10 @@
       thirdPartVerify () {
         return this._webLoginByThirdPartCode().then((res) => {
           if (res.code == ERR_OK || res.code == 201) {
-            this.recordThirdPartyInfo(res.result);
+            var userInfo = Object.assign({}, res.result, {
+              userAvatar: res.result.headimgurl || res.result.figureurl_qq_2
+            });
+            this.recordThirdPartyInfo(userInfo);
             if (res.code == 201) {
               if (util.getbrowserType === 1) {
                 util.cookieOperate.setWechatOpenID(false);
@@ -320,26 +326,23 @@
             if (util.getbrowserType === 1) {
               util.cookieOperate.setWechatOpenID(true);
             }
-            this.updataUserGuid(res.result.guid);
-            return Promise.resolve(res, this.beforeLoginPage);
-//            this.$router.push({
-//              path: this.beforeLoginPage
-//            });
+            this.loginIn(res.result.guid);
+            this.$router.push({
+              path: this.beforeLoginPage
+            });
           } else {
-            return Promise.reject(res);
-//            this.$nextTick(() => {
-//              this.toptipTxt = res.message;
-//              this.loginError = true;
-//              this.$refs.toptip.show();
-//            });
+            this.$nextTick(() => {
+              this.toptipTxt = res.message;
+              this.loginError = true;
+              this.$refs.toptip.show();
+            });
           }
         }, error => {
-          return Promise.reject(error);
-//          this.$nextTick(() => {
-//            this.topTipAutoHide = true;
-//            this.toptipTxt = error.message;
-//            this.$refs.toptip.show();
-//          });
+          this.$nextTick(() => {
+            this.topTipAutoHide = true;
+            this.toptipTxt = error.message;
+            this.$refs.toptip.show();
+          });
         });
       },
       _getResetPwdAuthCode () {

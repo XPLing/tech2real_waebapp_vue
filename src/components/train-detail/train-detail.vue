@@ -18,28 +18,30 @@
       </nav>
       <div class="g-main">
         <keep-alive>
-          <router-view :applied-state="appliedState" :course-data="courseData"
+          <router-view :applied-state="appliedState" :course-data="courseData" :apply-result="applyResult"
                        @setdata="setDatas" @changevideo="changeVideo"></router-view>
         </keep-alive>
       </div>
       <div class="g-join" v-if="courseData && (!userGuid ||this.appliedState<=0)">
         <span
           class="price">{{courseData.courseResult.result.price == 0 ? "免费" : courseData.courseResult.result.price}}</span>
-        <button class="btn" @click="join">加入学习</button>
+        <button class="btn" @click="operate">{{courseStateStr}}</button>
       </div>
       <confirm ref="confirmsWrapper" :text="confirmTxt" @cancel="cancel" @confirm="confirm"></confirm>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
+      <loading ref="loading"></loading>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
+  import Loading from 'base/loading/loading';
   import Confirm from 'base/confirm/confirm';
   import TrainDetailTab from 'components/train-detail-tab/train-detail-tab';
-  import { getCourseData } from 'api/courseDetail';
+  import { getCourseData, applyCourse } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -47,6 +49,27 @@
 
   const LOGINTIP = '请先登录!';
   const JOINTIP = '是否加入课程开始学习?';
+  const APPLYTIP = {
+    LOGINTIP: '请先登录!',
+    STATE_APPLY: '是否加入课程开始学习?',
+    STATE_BY_COURSE_DETAIL: '课程详情',
+    STATE_APPLY_GO_ON: '继续报名',
+    STATE_PAY: '立即支付',
+    STATE_END: '课程结束',
+    STATE_SELL_OUT: '课程售罄',
+    STATE_PREPARTING: '准备中'
+  };
+  const COURSESTATECONFIG = {
+    STATE_APPLY: '加入学习',
+    STATE_BY_COURSE_DETAIL: '课程详情',
+    STATE_APPLY_GO_ON: '继续报名',
+    STATE_PAY: '立即支付',
+    STATE_END: '课程结束',
+    STATE_SELL_OUT: '课程售罄',
+    STATE_PREPARTING: '准备中'
+  };
+  const COURSESTATESTR = [COURSESTATECONFIG.STATE_APPLY, COURSESTATECONFIG.STATE_BY_COURSE_DETAIL, COURSESTATECONFIG.STATE_APPLY_GO_ON,
+    COURSESTATECONFIG.STATE_PAY, COURSESTATECONFIG.STATE_END, COURSESTATECONFIG.STATE_SELL_OUT, COURSESTATECONFIG.STATE_PREPARTING];
 
   export default {
     props: {},
@@ -63,12 +86,23 @@
         isPause: true,
         isCanplay: false,
         toptipTxt: '',
-        routerPrefix: util.routerPrefix
+        routerPrefix: util.routerPrefix,
+        courseStateStr: '加入学习',
+        courseState: 0,
+        applyResult: null
       };
     },
     computed: {
       confirmTxt () {
-        return this.userGuid ? JOINTIP : LOGINTIP;
+        if (!this.userGuid) {
+          return APPLYTIP.LOGINTIP;
+        } else {
+          for (var key in COURSESTATECONFIG) {
+            if (this.courseStateStr == COURSESTATECONFIG[key]) {
+              return APPLYTIP[key];
+            }
+          }
+        }
       },
       ...mapGetters([
         'userInfo',
@@ -76,9 +110,27 @@
         'userGuid'
       ])
     },
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        var $this = vm;
+        vm._getCourseData($this);
+        return true;
+      });
+    },
+    beforeRouteUpdate (to, from, next) {
+      let list = ['applyresult'];
+      for (var i = 0, len = list.length; i < len; i++) {
+        var reg = list[i];
+        if (from.path.indexOf(reg)) {
+          this._getCourseData();
+          break;
+        }
+      }
+      next();
+    },
     created () {
       this._getCourseID();
-      this._getCourseData();
+      // this._getCourseData();
     },
     methods: {
       ...mapMutations({
@@ -87,27 +139,59 @@
       _getCourseID () {
         this.courseID = this.$route.params.id;
       },
-      _getCourseData () {
+      _getCourseData ($this) {
+        $this = $this || this;
         var param = {
-          id: this.courseID,
-          productGuid: this.productGuid,
-          userGuid: this.userGuid
+          id: $this.courseID,
+          productGuid: $this.productGuid,
+          userGuid: $this.userGuid
         };
         getCourseData(param).then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              $this.toptipTxt = res.message;
+              $this.$refs.toptip.show();
+              return;
+            }
+          }
           if (res.chapterResult || res.courseResult) {
-            this.courseData = res;
+            $this.courseData = res;
           }
           if (res.chapterResult.code == ERR_OK) {
-            this.videoUrl = res.chapterResult.result.length > 0 ? res.chapterResult.result[0].chapters[0].videoUrl : null;
+            $this.videoUrl = res.chapterResult.result.length > 0 ? res.chapterResult.result[0].chapters[0].videoUrl : null;
           }
           if (res.courseResult.code == ERR_OK) {
-            this.coverUrl = res.courseResult.result.coverUrl;
-            this.appliedState = res.courseResult.result.appliedState;
+            let courseResultData = res.courseResult;
+            $this.coverUrl = courseResultData.result.coverUrl;
+            $this.appliedState = courseResultData.result.appliedState;
+            $this.courseState = courseResultData.result.status;
+            switch ($this.courseState) {
+              case 1:
+                $this.courseStateStr = COURSESTATESTR[6];
+                break;
+              case 3:
+                $this.courseStateStr = COURSESTATESTR[4];
+                break;
+              default:
+                if (courseResultData.result.applyTotalCount != 0 && (courseResultData.result.applyTotalCount == courseResultData.result.applyCount)) {
+                  $this.courseStateStr = COURSESTATESTR[5];
+                } else {
+                  $this.courseStateStr = COURSESTATESTR[$this.appliedState];
+                }
+                break;
+            }
           }
         }, erro => {
-          this.toptipTxt = erro.message;
-          this.$refs.toptip.show();
+          $this.toptipTxt = erro.message;
+          $this.$refs.toptip.show();
         });
+      },
+      _applyCourse () {
+        let params = {
+          id: this.courseID,
+          userGuid: this.userGuid
+        };
+        return applyCourse(params);
       },
       setDatas (key, val, index, dataName) {
         this.$set(this.courseData.chapterResult.result[index], key, val);
@@ -135,20 +219,55 @@
       Vpause () {
         this.$refs.video.pause();
       },
-      join () {
+      operate () {
+        if (this.courseStateStr == COURSESTATECONFIG.STATE_APPLY || this.courseStateStr == COURSESTATECONFIG.STATE_APPLY_GO_ON) {
+          if (this.courseData.courseResult.result.needInfo) {
+            this.$router.push({
+              path: `${this.routerPrefix}/train/${this.courseID}/applyinfocollect`
+            });
+          } else {
+            this.$refs.confirmsWrapper.show();
+          }
+        }
         this.$refs.confirmsWrapper.show();
+
       },
       confirm () {
-        if (this.confirmTxt === JOINTIP) {
-          // this.appliedState = 1;
-          this.$router.push({
-            path: `${this.routerPrefix}/train/${this.courseID}/applyresult`
-          });
-        } else {
+        if (!this.userGuid) {
           this.updataBeforeLoginPage(this.$route.fullPath);
           this.$router.push({
             path: this.routerPrefix + '/user/login'
           });
+          return false;
+        }
+        if (this.courseStateStr == COURSESTATECONFIG.STATE_APPLY || this.courseStateStr == COURSESTATECONFIG.STATE_APPLY_GO_ON) {
+          if (this.courseData.courseResult.result.needInfo) {
+            this.$router.push({
+              path: `${this.routerPrefix}/train/${this.courseID}/applyinfocollect`
+            });
+          } else {
+            this.$refs.loading.show();
+            this._applyCourse().then((res) => {
+              this.$refs.loading.hide();
+              if (res.code == ERR_OK) {
+                this.applyResult = res.result;
+                this.$router.push({
+                  path: `${this.routerPrefix}/train/${this.courseID}/applyresult`
+                });
+              } else if (res.code == '201') {
+                this.$router.push({
+                  path: `${this.routerPrefix}/train/${this.courseID}/applypay`
+                });
+              } else {
+                this.toptipTxt = res.message;
+                this.$refs.toptip.show();
+              }
+            }, erro => {
+              this.$refs.loading.hide();
+              this.toptipTxt = erro.message;
+              this.$refs.toptip.show();
+            });
+          }
         }
       },
       cancel () {
@@ -163,7 +282,8 @@
       HeaderTitle,
       TrainDetailTab,
       Confirm,
-      TopTip
+      TopTip,
+      Loading
     },
     watch: {
       videoUrl () {

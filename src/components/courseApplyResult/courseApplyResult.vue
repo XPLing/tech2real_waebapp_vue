@@ -4,12 +4,15 @@
       <header class="g-header">
         <HeaderTitle :title="pageTitle" :has-back="hasBack"></HeaderTitle>
       </header>
-      <div class="g-main-wrapper">
-        <scroll :data="courseData" ref="scroll">
+      <div class="g-main-wrapper" v-if="applyResult">
+        <scroll :data="applyResult" ref="scroll">
           <div class="g-scroll-continer">
             <div class="course-base">
               <p class="header-bg"></p>
-              <div class="price"></div>
+              <div class="price">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                <span>课程价格￥{{(applyResult.course.price).toFixed(2)}}</span>
+              </div>
               <div class="intro">
                 <course-list :course-list="courseList" v-if="courseList.length>0"
                              @selectcourse="selectCourse"></course-list>
@@ -35,7 +38,7 @@
   import * as util from 'assets/js/util';
   export default {
     props: {
-      courseData: {
+      applyResult: {
         type: Object,
         default: null
       }
@@ -50,17 +53,15 @@
     computed: {
       courseList () {
         var list = [];
-        if (this.courseData) {
-          list.push(this.courseData.courseResult.result);
+        if (this.applyResult) {
+          list.push(this.applyResult.course);
         }
         return list;
       }
     },
     methods: {
       selectCourse (courseID) {
-        this.$router.push({
-          path: `${this.routerPrefix}/train/${courseID}`
-        });
+        this.$router.back();
       }
     },
     components: {

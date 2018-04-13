@@ -74,10 +74,14 @@ axios.interceptors.response.use(res => {
 
       default:
     }
+    return Promise.reject({
+      code: err.response.status,
+      message: err.message
+    });
   }
   return Promise.reject({
-    code: err.response.status,
-    message: err.message
+    code: 500,
+    message: err.message || '请求出错！'
   }); // 返回一个空对象，主要是防止控制台报错
 });
 
