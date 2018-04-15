@@ -43,133 +43,45 @@ const User = () => import(/* webpackChunkName: "user" */ 'components/user/user')
 const Register = () => import(/* webpackChunkName: "register" */ 'components/user/register/register');
 const BackPW = () => import(/* webpackChunkName: "backPW" */ 'components/user/backpw/backpw');
 const MobileBind = () => import(/* webpackChunkName: "mobileBind" */ 'components/user/mobilebind/mobilebind');
+const TestC = () => import(/* webpackChunkName: "testC" */ 'components/testC/me');
 
 Vue.use(VueRouter);
 const Router = new VueRouter({
-  linkActiveClass: 'active',
-  mode: 'history',
-  base: '/m-web/',
-  routes: [
-    {
-      path: '/',
-      redirect: routerPrefix + '/info'
-    },
-    {
-      path: routerPrefix + '/',
-      redirect: routerPrefix + '/info'
-    },
-    {
-      path: routerPrefix + '/info',
-      component: Info
-    },
-    {
-      path: routerPrefix + '/train',
-      component: Train,
-      children: [
+    linkActiveClass: 'active',
+    mode: 'history',
+    routes: [
         {
-          path: ':id',
-          component: TrainDetail,
-          meta: {
-            requireLogin: true
-          },
-          children: [
-            {
-              path: '',
-              redirect: 'intro'
-            },
-            {
-              path: 'applyresult',
-              component: CourseApplyResult
-            },
-            {
-              path: 'applyinfocollect',
-              component: CourseApplyInfoCollect
-            },
-            {
-              path: 'applypay',
-              component: CourseApplyPay
-            },
-            {
-              path: 'intro',
-              component: TrainDetailIntro
-            },
-            {
-              path: 'evaluate',
-              component: TrainDetailEvaluate
-            },
-            {
-              path: 'community',
-              component: TrainDetailCommunity
-            },
-            {
-              path: 'chapters',
-              component: TrainDetailChapters
-            }
-          ]
+            path: routerPrefix + '/info',
+            component: TestC,
+            children: [
+                {
+                    path: 'info-detail',
+                    component: TestC
+                }
+            ]
+        },
+        {
+            path: '*',
+            redirect: routerPrefix + '/info'
         }
-      ]
-    },
-    {
-      path: routerPrefix + '/community',
-      component: Community
-    },
-    {
-      path: routerPrefix + '/activity',
-      component: Activity
-    },
-    {
-      path: routerPrefix + '/me',
-      component: Me
-    },
-    {
-      path: routerPrefix + '/user',
-      component: User,
-      children: [
-        {
-          path: '',
-          redirect: 'login'
-        },
-        {
-          path: 'login',
-          component: Login
-        },
-        {
-          path: 'register',
-          component: Register
-        },
-        {
-          path: 'mobilebind',
-          component: MobileBind
-        },
-        {
-          path: 'backpw',
-          component: BackPW
-        }
-
-      ]
-    },
-    {
-      path: '*',
-      redirect: routerPrefix + '/info'
-    }
-  ]
+    ]
 });
 Router.beforeEach((to, form, next) => {
-  // console.log(Router.app.$options.store.state.userGuid);
-  // console.log(to.matched);
-  // let isLogin = Router.app.$options.store.state.userGuid;
-  // if (to.matched.some((record) => record.meta.requireLogin)) {
-  //   if (!isLogin) {
-  //     next();
-  //     Router.push({
-  //       path: '/user/login'
-  //     });
-  //     // next();
-  //   } else {
-  //     next();
-  //   }
-  // }
-  next();
+    // console.log(Router.app.$options.store.state.userGuid);
+    // console.log(to.matched);
+    // let isLogin = Router.app.$options.store.state.userGuid;
+    // if (to.matched.some((record) => record.meta.requireLogin)) {
+    //   if (!isLogin) {
+    //     next();
+    //     Router.push({
+    //       path: '/user/login'
+    //     });
+    //     // next();
+    //   } else {
+    //     next();
+    //   }
+    // }
+    next();
 });
 
 export default Router;

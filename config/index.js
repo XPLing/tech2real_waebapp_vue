@@ -25,6 +25,7 @@ module.exports = {
     env: require('./dev.env'),
     port: 8080,
     autoOpenBrowser: true,
+    assetsRoot: path.resolve(__dirname, '../output'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     apiproxy: 'http://localhost:8181',
