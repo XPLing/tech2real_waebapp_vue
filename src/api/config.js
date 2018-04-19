@@ -21,6 +21,7 @@ export const ERR_OK = 200;
 export const ERR_OK_STR = 'ok';
 export const REQUEST_PREFIX = '';
 
+
 export let thirdParty = {
   wechat: {
     url: "https://open.weixin.qq.com/connect/qrconnect",

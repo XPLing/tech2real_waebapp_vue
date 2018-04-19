@@ -1,0 +1,26 @@
+.g-bottom-btn{
+  position: fixed;
+  z-index: 5;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  @include h(50);
+  @include fs(16);
+  box-shadow: 0 -1px 3px $color-shadow-nav;
+  text-align: center;
+  .price, .btn {
+    @include lh(50);
+    height: 100%;
+  }
+  .price {
+    flex: 1;
+    color: $color-theme;
+    background-color: $whiteColor;
+  }
+  .btn {
+    width: 35%;
+    color: $whiteColor;
+    background-color: $color-theme;
+  }
+}

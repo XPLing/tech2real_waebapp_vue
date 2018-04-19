@@ -1,5 +1,5 @@
 import * as types from './mutations-types';
-import { setUserGuid, getUserGuid, removeUserGuid, getProductGuid, setBeforeLoginPage } from 'assets/js/util';
+import * as util from 'assets/js/util';
 
 const mutations = {
   // Vuex 中的 mutation 非常类似于事件：
@@ -15,19 +15,19 @@ const mutations = {
     state.userGuid = val;
   },
   [types.UPDATA_USERGUID] (state, val) {
-    setUserGuid(val);
+    util.cookieOperate.setUserGuid(val);
     state.userGuid = val;
   },
   [types.LOGIN_IN] (state, val) {
-    setUserGuid(val);
+    util.cookieOperate.setUserGuid(val);
     state.userGuid = val;
   },
   [types.LOGIN_OUT] (state) {
-    removeUserGuid();
+    util.cookieOperate.removeUserGuid();
     state.userGuid = null;
   },
   [types.UPDATA_BEFORELOGINPAGE] (state, val) {
-    setBeforeLoginPage(val);
+    util.cookieOperate.setBeforeLoginPage(val);
     state.beforeLoginPage = val;
   },
   [types.RECORD_THIRDPARTY] (state, val) {

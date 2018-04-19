@@ -22,8 +22,6 @@
               <p class="title">详细信息</p>
               <p class="time">{{ new Date().getTime() | formatDate('yyyy-MM-dd')}}</p>
             </div>
-
-
           </div>
         </scroll>
       </div>

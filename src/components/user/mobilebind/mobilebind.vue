@@ -273,7 +273,7 @@
                   var userGuid = resp.result.guid;
                   this.loginIn(userGuid);
                   this.$router.push({
-                    path: util.getBeforeLoginPage()
+                    path: util.cookieOperate.getBeforeLoginPage()
                   });
                 } else {
                   util.formErrorMsg({

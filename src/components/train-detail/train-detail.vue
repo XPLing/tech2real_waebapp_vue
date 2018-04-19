@@ -41,7 +41,7 @@
   import Loading from 'base/loading/loading';
   import Confirm from 'base/confirm/confirm';
   import TrainDetailTab from 'components/train-detail-tab/train-detail-tab';
-  import { getCourseData, applyCourse } from 'api/courseDetail';
+  import { getCourseData, applyCourse, getUnpaidCourseApply } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -193,6 +193,14 @@
         };
         return applyCourse(params);
       },
+      _getUnpaidCourseApply () {
+        let params = {
+          courseId: this.courseID,
+          productGuid: this.productGuid,
+          userGuid: this.userGuid
+        };
+        return getUnpaidCourseApply(params);
+      },
       setDatas (key, val, index, dataName) {
         this.$set(this.courseData.chapterResult.result[index], key, val);
       },
@@ -259,15 +267,29 @@
                   path: `${this.routerPrefix}/train/${this.courseID}/applypay`
                 });
               } else {
-                this.toptipTxt = res.message;
-                this.$refs.toptip.show();
+                util.common.request.tipMsg(this, res);
               }
             }, erro => {
               this.$refs.loading.hide();
-              this.toptipTxt = erro.message;
-              this.$refs.toptip.show();
+              util.common.request.tipMsg(this, erro);
             });
           }
+        } else if (this.courseStateStr == COURSESTATECONFIG.STATE_PAY) {
+          this.$refs.loading.show();
+          this._getUnpaidCourseApply().then((res) => {
+            this.$refs.loading.hide();
+            if (res.code == ERR_OK) {
+              this.applyResult = res.result;
+              this.$router.push({
+                path: `${this.routerPrefix}/train/${this.courseID}/applypay`
+              });
+            } else {
+              util.common.request.tipMsg(this, res);
+            }
+          }, error => {
+            this.$refs.loading.hide();
+            util.common.request.tipMsg(this, error);
+          });
         }
       },
       cancel () {

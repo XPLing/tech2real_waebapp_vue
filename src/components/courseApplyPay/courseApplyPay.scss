@@ -5,15 +5,91 @@
   bottom: 0;
   left: 0;
   right: 0;
-  color: $color-text-b45;
+  color: $color-gray;
   background: $color-shadow-nav;
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .chunk{
+    background-color: $whiteColor;
+    margin-bottom: formatVal(20,rem);
+    &>.title{
+      @include fs(14);
+      @include h(44);
+      @include lh(44);
+      padding: 0 formatVal(14,rem);
+      border-bottom: 1px solid $color-border-nav;
+    }
+  }
+
+  .info-wrapper{
+
+  }
+  .pay-wrapper{
+    .c-form{
+      .c-form-group{
+        .input-item {
+          position: relative;
+          padding: formatVal(14, rem) 0;
+          & + .input-item {
+            border-top: 1px solid $color-border-nav;
+          }
+          .float-input {
+            position: absolute;
+            opacity: 0;
+          }
+          .label {
+            display: flex;
+            align-items: center;
+            .title-wrapper {
+              display: flex;
+              flex: 1;
+              .icon {
+                @include fs(32);
+                flex: 0 0 formatVal(32, rem);
+                &.c-icon-wepay {
+                  color: $color-webchat;
+                }
+                &.c-icon-alipay {
+                  color: $color-alipay;
+                }
+              }
+              .desc {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                justify-content: space-between;
+                margin-left: formatVal(14, rem);
+                .name {
+                  @include fs(15);
+                  color: $color-text-b45;
+                }
+                .tip-info {
+                  @include fs(12);
+                  color: $color-gray-99;
+                }
+              }
+            }
+            .btn {
+              @include fs(24);
+              @include lh(24);
+              flex: 0 0 formatVal(24, rem);
+            }
+          }
+
+        }
+      }
+      .c-msg {
+        @include fs(12);
+        padding: formatVal(10, rem);
+      }
+    }
+
+  }
 
 }
 
-.slide-enter-active, .slide-leave-active {
-  transition: all .3s;
-}
-
-.slide-enter, .slide-leave-to {
-  transform: translate3d(100%, 0, 0);
-}

@@ -101,31 +101,115 @@ export let cookieOperate = {
   },
   setWechatOpenID: function(val){
     setCookie('WechatOpenID', val);
+  },
+  setBeforeLoginPage: function (val) {
+    setCookie('beforeLoginPage', val);
+  },
+  getBeforeLoginPage: function() {
+    return getCookie('beforeLoginPage');
+  },
+  removeBeforeLoginPage: function (){
+    return removeCookie('beforeLoginPage');
   }
 }
 
-export function setUserGuid (val) {
-  setCookie('userGuid', val);
-}
+export let common = {
+  hasClass(el, className) {
+    let reg = new RegExp('(^|\\s)' + className + '(\\s|$)');
+    return reg.test(el.className);
+  },
+  addClass (el, className) {
+    if (hasClass(el, className)) {
+      return;
+    }
+    let newClass = el.className.split(' ');
+    newClass.push(className);
+    el.className = newClass.join(' ');
+  },
+  getData (el, name, val) {
+    const prefix = 'data-';
+    const attributeName = prefix + name;
+    if (val) {
+      return el.setAttribute(attributeName, val);
+    }
+    return el.getAttribute(attributeName);
+  },
+  getbrowserType () {
+    if (browser.versions.mobile) {
+      var ua = navigator.userAgent.toLowerCase();// 获取判断用的对象
+      if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        if (browser.versions.android) {
+          return 1.1;
+        } else if (browser.versions.ios) {
+          return 1.2;
+        }
+        return 1;
+      }
+      if (browser.versions.ios) {
+        return 2;
+      }
+      if (browser.versions.android) {
+        //  是否在安卓浏览器打开
+        return 3;
+      }
+    } else {
+      //  是否在桌面浏览器打开
+      if (browser.versions.trident) {
+        return 4;
+      }
+      return 0;
+    }
+  },
+  uuid (len, radix) {
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    var uuid = [], i;
+    radix = radix || chars.length;
+    if (len) {
+      // Compact form
+      for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+    } else {
+      // rfc4122, version 4 form
+      var r;
 
-export function getUserGuid () {
-  return getCookie('userGuid');
-}
+      // rfc4122 requires these characters
+      uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+      uuid[14] = '4';
 
-export function removeUserGuid () {
-  return removeCookie('userGuid');
-}
+      // Fill in random data.  At i==19 set the high bits of clock sequence as
+      // per rfc4122, sec. 4.1.5
+      for (i = 0; i < 36; i++) {
+        if (!uuid[i]) {
+          r = 0 | Math.random() * 16;
+          uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+        }
+      }
+    }
 
-export function setBeforeLoginPage (val) {
-  setCookie('beforeLoginPage', val);
-}
-
-export function getBeforeLoginPage () {
-  return getCookie('beforeLoginPage');
-}
-
-export function removeBeforeLoginPage () {
-  return removeCookie('beforeLoginPage');
+    return uuid.join('');
+  },
+  getUrlParameter (sParam, sPageURL, split) {
+    var sURLVariables = sPageURL.split(split);
+    for (var i = 0; i < sURLVariables.length; i++) {
+      var sParameterName = sURLVariables[i].split('=');
+      if (sParameterName[0] == sParam) {
+        return sParameterName[1];
+      }
+    }
+    return '';
+  },
+  formErrorMsg ({errorObj, name, message, rule, scope, interval}) {
+    errorObj.clear(scope);
+    errorObj.add(name, message, rule, scope);
+    setTimeout(() => {
+      errorObj.clear(scope);
+    }, interval);
+  },
+  request: {
+    tipMsg($this, data){
+      $this.toptipTxt = data.message;
+      $this.$refs.toptip.show();
+    }
+  }
 }
 
 export function hasClass (el, className) {
