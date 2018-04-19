@@ -1,9 +1,11 @@
 var utils = require('./utils');
 var webpack = require('webpack');
+var path = require('path');
 var config = require('../config');
 var merge = require('webpack-merge');
 var baseWebpackConfig = require('./webpack.base.conf');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 // add hot-reload related code to entry chunks
@@ -12,6 +14,11 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 });
 
 module.exports = merge(baseWebpackConfig, {
+    output: {
+        path: config.dev.assetsRoot,
+        filename: utils.assetsPath('js/[name].js'),
+        chunkFilename: utils.assetsPath('js/[id].js')
+    },
     module: {
         // rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
         rules: utils.styleLoaders({
@@ -37,6 +44,13 @@ module.exports = merge(baseWebpackConfig, {
          template: 'index.html',
          inject: true
          }),*/
-        new FriendlyErrorsPlugin()
+        new FriendlyErrorsPlugin(),
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, '../static'),
+                to: config.dev.assetsSubDirectory,
+                ignore: ['.*']
+            }
+        ])
     ].concat(utils.htmlPlugins())
 });

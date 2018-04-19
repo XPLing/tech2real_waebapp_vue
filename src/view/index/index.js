@@ -10,7 +10,7 @@ import fastclick from 'fastclick';
 import { VeeValidate, Veeconfig } from 'assets/js/validate';
 import store from 'store';
 import * as filters from 'assets/js/filters';
-
+import BB from 'components/testB/me';
 fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟
 
 Vue.config.productionTip = false;
@@ -19,15 +19,21 @@ Vue.use(VeeValidate, Veeconfig);
 
 // 注册全局过滤器
 Object.keys(filters).forEach((key) => {
-  Vue.filter(key, filters[key]);
+    Vue.filter(key, filters[key]);
 });
+
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
+    // components: {
+    //     // <v-b> 将只在父组件模板中可用 这里把vue根实例挂载到index.html的#app
+    //     // 所以此组件只能在index.html id为app里面使用
+    //     'v-b': BB
+    // }
 });
 
 // 也可以使用$mount挂载根实例
