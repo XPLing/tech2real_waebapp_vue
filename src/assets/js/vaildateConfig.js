@@ -75,3 +75,14 @@ export const validateAttributes = {
         verifycode: '验证码'
     }
 };
+
+export const validateCustom = {
+    zh_CN: {
+      payWay: {
+        required: field => '请勾选' + field
+      },
+      protocol: {
+        required: field => '请勾选' + field
+      }
+    }
+};

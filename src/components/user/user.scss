@@ -6,6 +6,12 @@
   top: 0;
   bottom: 0;
   background-color: $whiteColor;
+  @media screen and(min-width: 768px){
+    width: 100%;
+    max-width: 375px;
+    margin: 0 auto;
+    box-shadow: 0 0 10px $color-transparency-black-1;
+  }
   .g-header{
 
   }

@@ -14,13 +14,15 @@
             </div>
           </div>
         </div>
-        <div class="chunk pay-wrapper">
-          <h1 class="title">支付方式</h1>
-          <form class="c-form" data-vv-scope="pay">
+        <form class="c-form" data-vv-scope="pay">
+          <div class="chunk pay-wrapper">
+            <h1 class="title">支付方式</h1>
+
             <div class="c-form-group">
               <div class="input-item">
-                <input class="float-input" type="radio" name="payWay" id="wePay" value="wepay" v-validate="'required|in:wepay,alipay'">
-                <label class="label" for="wePay">
+                <input class="float-input" v-model="payWay" type="radio" name="payWay" id="wepay" value="wepay"
+                       v-validate="'required|in:wepay,alipay'">
+                <label class="label" for="wepay">
                   <div class="title-wrapper">
                     <i class="icon c-icon-wepay"></i>
                     <div class="desc">
@@ -29,13 +31,13 @@
                     </div>
                   </div>
                   <p class="btn">
-                    <i class="icon c-icon-circle-o"></i>
+                    <i class="icon " :class="payWay==='wepay'?['c-icon-check-circle','active']:'c-icon-circle-o'"></i>
                   </p>
                 </label>
               </div>
               <div class="input-item">
-                <input class="float-input" type="radio" name="payWay" id="aliPay" value="alipay">
-                <label class="label" for="aliPay">
+                <input class="float-input" type="radio" v-model="payWay" name="payWay" id="alipay" value="alipay">
+                <label class="label" for="alipay">
                   <div class="title-wrapper">
                     <i class="icon c-icon-alipay"></i>
                     <div class="desc">
@@ -44,7 +46,7 @@
                     </div>
                   </div>
                   <p class="btn">
-                    <i class="icon c-icon-circle-o"></i>
+                    <i class="icon" :class="payWay==='alipay'?['c-icon-check-circle','active']:'c-icon-circle-o'"></i>
                   </p>
                 </label>
               </div>
@@ -54,8 +56,33 @@
               </div>
             </div>
 
-          </form>
-        </div>
+          </div>
+          <div class="chunk protocol">
+            <div class="c-form-group">
+              <div class="input-item">
+                <input class="float-input" type="checkbox" v-model="protocol" name="protocol" id="protocol"
+                       value="protocol" v-validate="'required'">
+
+                <label class="label" for="protocol">
+                  <div class="c-media">
+                    <div class="avatar">
+                      <i class="icon"
+                         :class="protocol?['c-icon-check-circle','active']:'c-icon-circle-o'"></i>
+                    </div>
+                    <div class="desc">
+                      我已确认课程日期或课程时间！课程一经支付成功，恕不办理退款。票据仅提供普通增值税发票
+                    </div>
+                  </div>
+                </label>
+              </div>
+              <div v-show="errors.has('pay.protocol')" class="c-msg">
+                <i class="icon fa fa-exclamation-circle text-danger"></i>
+                <span class="meg text-danger">{{ errors.first('pay.protocol')}}</span>
+              </div>
+            </div>
+          </div>
+        </form>
+
         <form-tip-error :tip-name="'pay.totalMsg'"></form-tip-error>
       </scroll>
       <bottom-btn :price="0" :btnstr="'立即支付'" @confirm="toPay"></bottom-btn>
@@ -72,6 +99,7 @@
   import BottomBtn from 'base/bottom-btn/bottom-btn';
   import * as util from 'assets/js/util';
   import { Validator, ErrorBag } from 'vee-validate';
+
   export default {
     props: {
       applyResult: {
@@ -84,8 +112,31 @@
         pageTitle: '购买课程',
         hasBack: true,
         routerPrefix: util.routerPrefix,
-        fornName: 'pay'
+        fornName: 'pay',
+        payWay: '',
+        protocol: true
       };
+    },
+    created () {
+      this.errors.update({
+        field: 'payWay',
+        msg: 'Newsletter Email is required',
+        rule: 'required',
+        scope: 'pay'
+      });
+      this.$validator.localize({
+        zh_CN: {
+          attributes: {
+            payWay: '支付方式',
+            protocol: '支付须知'
+          }
+//          custom: {
+//            payWay: {
+//              required: field => '请勾选' + field
+//            }
+//          }
+        }
+      });
     },
     computed: {
       courseList () {
@@ -109,7 +160,7 @@
       selectCourse (courseID) {
         this.$router.back();
       },
-      toPay(){
+      toPay () {
         this.validateForm(this.fornName);
       }
     },
@@ -126,5 +177,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
+  @import "~assets/scss/propertype";
   @import "courseApplyPay";
 </style>

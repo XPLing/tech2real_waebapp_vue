@@ -3,7 +3,7 @@
  */
 import VeeValidate, { Validator } from 'vee-validate';
 import zh from 'vee-validate/dist/locale/zh_CN';
-import { validateRules, validateAttributes } from './vaildateConfig';
+import { validateRules, validateAttributes, validateCustom } from './vaildateConfig';
 
 const Veeconfig = {
     locale: 'zh_CN',
@@ -13,7 +13,6 @@ Validator.localize('zh_CN', zh);
 
 Object.keys(validateRules).forEach((key) => {
     validateRules[key].validate && Validator.extend(key, validateRules[key].validate);
-
     // merge the validator messages
     Object.keys(validateRules[key].messages).forEach(locale => {
 
@@ -31,6 +30,14 @@ Object.keys(validateAttributes).forEach((key) => {
     Validator.localize({
         [key]: {
             attributes: validateAttributes[key]
+        }
+    });
+});
+
+Object.keys(validateCustom).forEach((key) => {
+    Validator.localize({
+        [key]: {
+            custom: validateCustom[key]
         }
     });
 });

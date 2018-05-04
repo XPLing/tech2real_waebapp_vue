@@ -173,7 +173,7 @@
                 this.$refs.confirm.show();
                 this.$refs[dom].send();
               } else {
-                util.formErrorMsg({
+                util.common.formErrorMsg({
                   errorObj: this.errors,
                   name: 'totalMsg',
                   message: res.message,
@@ -183,7 +183,7 @@
                 });
               }
             }, error => {
-              util.formErrorMsg({
+              util.common.formErrorMsg({
                 errorObj: this.errors,
                 name: 'totalMsg',
                 message: error.message,

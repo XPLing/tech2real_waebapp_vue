@@ -1,0 +1,150 @@
+.g-info-collect {
+
+  input {
+    color: $color-highlight-background;
+    &[type="text"]:disabled {
+      background-color: transparent;
+    }
+  }
+  .tip {
+    @include fs(14);
+    color: $color-gray-A1;
+  }
+  .info-group {
+    &.text {
+      & + .text {
+        margin-top: formatVal(10, rem);
+      }
+    }
+    .title {
+      color: $color-gray-B2;
+      @include fs(16);
+      @at-root #{&},.tip {
+        padding: formatVal(11, rem) formatVal(13, rem);
+      }
+
+    }
+    .input-item {
+      display: flex;
+      @include fs(16);
+      padding:  0 formatVal(12, rem);
+      background-color: $whiteColor;
+      &.text {
+        @include h(45);
+        @include lh(45);
+      }
+      & + .input-item {
+        margin-top: formatVal(10, rem);
+      }
+      &.choice {
+        display: block;
+        position: relative;
+        padding-left: formatVal(14, rem);
+        & + .input-item {
+          margin-top: 0;
+          &:after {
+            content: '';
+            position: absolute;
+            left: formatVal(14, rem);
+            right: 0;
+            top: 0;
+            height: 0;
+            border-top: 1px solid $color-border-nav;
+          }
+
+        }
+        .float-input {
+          position: absolute;
+          opacity: 0;
+        }
+        .label {
+          display: flex;
+          align-items: center;
+          padding: formatVal(14, rem) 0;
+          .cont {
+            display: flex;
+            flex: 1;
+          }
+          .btn {
+            @include fs(24);
+            @include lh(0);
+            flex: 0 0 formatVal(24, rem);
+            margin-right: formatVal(14, rem);
+            .active {
+              color: $color-theme;
+            }
+            .icon{
+              @include fs(22);
+            }
+          }
+          .c-media {
+            align-items: center;
+            .avatar {
+              @include w(16);
+              @include h(16);
+              @include lh(0);
+              flex: 0 0 formatVal(16, rem);
+              margin-right: formatVal(10, rem);
+              .icon {
+                @include fs(16);
+                &.active {
+                  color: $color-theme;
+                }
+              }
+            }
+            .desc {
+              line-height: 1;
+              @include fs(14);
+            }
+          }
+        }
+      }
+      .name {
+        color: $color-gray-99;
+        margin-right: formatVal(10, rem);
+      }
+      .cont {
+        flex: 1;
+        input, textarea {
+          width: 100%;
+          border: none;
+          outline: none;
+          @include fs(16);
+        }
+        textarea {
+          resize: none;
+          height: 6em;
+        }
+      }
+      &>.icon{
+        @include lh(45);
+      }
+    }
+    .c-tip {
+      padding-left: formatVal(10, rem);
+    }
+  }
+
+}
+
+@keyframes loading-fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes loading-zoom {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+

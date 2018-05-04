@@ -3,13 +3,21 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: all .3s;
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
   .g-nav{
     position: fixed;
     z-index: 100;
     left: 0;
     bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
     height: formatVal(50,rem);
+    @media screen and(min-width: 768px){
+      left: 50%;
+      width: 100%;
+      max-width: 375px;
+      transform: translate3d(-50%,0,0);
+    }
   }
 }

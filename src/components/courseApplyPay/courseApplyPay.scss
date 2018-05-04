@@ -30,65 +30,119 @@
 
   }
   .pay-wrapper{
-    .c-form{
-      .c-form-group{
-        .input-item {
-          position: relative;
-          padding: formatVal(14, rem) 0;
-          & + .input-item {
-            border-top: 1px solid $color-border-nav;
-          }
-          .float-input {
-            position: absolute;
-            opacity: 0;
-          }
-          .label {
+    .c-form-group{
+      .input-item {
+        .label {
+          .title-wrapper {
             display: flex;
-            align-items: center;
-            .title-wrapper {
+            flex: 1;
+            .icon {
+              @include fs(32);
+              flex: 0 0 formatVal(32, rem);
+
+              &.c-icon-wepay {
+                color: $color-webchat;
+              }
+              &.c-icon-alipay {
+                color: $color-alipay;
+              }
+            }
+            .desc {
               display: flex;
               flex: 1;
-              .icon {
-                @include fs(32);
-                flex: 0 0 formatVal(32, rem);
-                &.c-icon-wepay {
-                  color: $color-webchat;
-                }
-                &.c-icon-alipay {
-                  color: $color-alipay;
-                }
+              flex-direction: column;
+              justify-content: space-between;
+              margin-left: formatVal(14, rem);
+              .name {
+                @include fs(15);
+                color: $color-text-b45;
               }
-              .desc {
-                display: flex;
-                flex: 1;
-                flex-direction: column;
-                justify-content: space-between;
-                margin-left: formatVal(14, rem);
-                .name {
-                  @include fs(15);
-                  color: $color-text-b45;
-                }
-                .tip-info {
-                  @include fs(12);
-                  color: $color-gray-99;
-                }
+              .tip-info {
+                @include fs(12);
+                color: $color-gray-99;
               }
-            }
-            .btn {
-              @include fs(24);
-              @include lh(24);
-              flex: 0 0 formatVal(24, rem);
             }
           }
-
+          .btn {
+            @include fs(24);
+            @include lh(24);
+            flex: 0 0 formatVal(24, rem);
+            margin-right: formatVal(14,rem);
+            .active{
+              color: $color-theme;
+            }
+          }
         }
-      }
-      .c-msg {
-        @include fs(12);
-        padding: formatVal(10, rem);
       }
     }
 
+  }
+  .c-form{
+    .c-form-group{
+      .input-item {
+        position: relative;
+        padding-left: formatVal(14, rem);
+        & + .input-item {
+          &:after{
+            content: '';
+            position: absolute;
+            left: formatVal(14,rem);
+            right: 0;
+            top: 0;
+            height: 0;
+            border-top: 1px solid $color-border-nav;
+          }
+
+        }
+        .float-input {
+          position: absolute;
+          opacity: 0;
+        }
+        .label {
+          display: flex;
+          align-items: center;
+          padding: formatVal(14, rem) 0;
+          .title-wrapper {
+            display: flex;
+            flex: 1;
+          }
+          .btn {
+            @include fs(24);
+            @include lh(24);
+            flex: 0 0 formatVal(24, rem);
+            margin-right: formatVal(14,rem);
+            .active{
+              color: $color-theme;
+            }
+          }
+          .c-media{
+            align-items: center;
+            .avatar{
+              @include w(16);
+              @include h(16);
+              @include lh(0);
+              flex: 0 0 formatVal(16,rem);
+              margin-right: formatVal(10,rem);
+              .icon{
+                @include fs(16);
+                &.active{
+                  color: $color-theme;
+                }
+              }
+            }
+            .desc{
+              line-height: 1;
+              @include fs(14);
+            }
+          }
+        }
+
+      }
+    }
+    .c-msg {
+      @include fs(12);
+      padding: formatVal(10, rem);
+    }
   }
 
 }

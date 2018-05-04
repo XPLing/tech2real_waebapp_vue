@@ -19,7 +19,7 @@
       <div class="g-main">
         <keep-alive>
           <router-view :applied-state="appliedState" :course-data="courseData" :apply-result="applyResult"
-                       @setdata="setDatas" @changevideo="changeVideo"></router-view>
+                       @setdata="setDatas" @changevideo="changeVideo" @changeapplyres="changeApplyResult"></router-view>
         </keep-alive>
       </div>
       <div class="g-join" v-if="courseData && (!userGuid ||this.appliedState<=0)">
@@ -121,7 +121,7 @@
       let list = ['applyresult'];
       for (var i = 0, len = list.length; i < len; i++) {
         var reg = list[i];
-        if (from.path.indexOf(reg)) {
+        if (from.path.indexOf(reg) > -1) {
           this._getCourseData();
           break;
         }
@@ -189,7 +189,8 @@
       _applyCourse () {
         let params = {
           id: this.courseID,
-          userGuid: this.userGuid
+          userGuid: this.userGuid,
+          productGuid: this.productGuid
         };
         return applyCourse(params);
       },
@@ -210,6 +211,9 @@
         }
         this.isCanplay = false;
         this.videoUrl = url;
+      },
+      changeApplyResult(res){
+        this.applyResult = res;
       },
       Vclick () {
         if (this.appliedState <= 0) {
@@ -250,6 +254,7 @@
         }
         if (this.courseStateStr == COURSESTATECONFIG.STATE_APPLY || this.courseStateStr == COURSESTATECONFIG.STATE_APPLY_GO_ON) {
           if (this.courseData.courseResult.result.needInfo) {
+            this.applyResult = this.courseData.courseResult;
             this.$router.push({
               path: `${this.routerPrefix}/train/${this.courseID}/applyinfocollect`
             });
@@ -257,8 +262,8 @@
             this.$refs.loading.show();
             this._applyCourse().then((res) => {
               this.$refs.loading.hide();
+              this.applyResult = res.result;
               if (res.code == ERR_OK) {
-                this.applyResult = res.result;
                 this.$router.push({
                   path: `${this.routerPrefix}/train/${this.courseID}/applyresult`
                 });

@@ -10,7 +10,6 @@ import fastclick from 'fastclick';
 import { VeeValidate, Veeconfig } from 'assets/js/validate';
 import store from 'store';
 import * as filters from 'assets/js/filters';
-import BB from 'components/testB/me';
 fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟
 
 Vue.config.productionTip = false;
