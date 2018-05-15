@@ -156,7 +156,8 @@ const Router = new VueRouter({
 });
 Router.beforeEach((to, form, next) => {
   // console.log(Router.app.$options.store.state.userGuid);
-  // console.log(to.matched);
+   console.log(to.matched);
+   console.log(Router.app.$options.store.state);
   // let isLogin = Router.app.$options.store.state.userGuid;
   // if (to.matched.some((record) => record.meta.requireLogin)) {
   //   if (!isLogin) {

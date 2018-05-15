@@ -4,6 +4,7 @@
  *
  * */
 export function imgOnload (imgs, vm, flag, singerLoadFn, allLoadFn) {
+  var loaded = [];
   for (var i = 0, len = imgs.length; i < len; i++) {
     var img = imgs[i], src = img.src;
     var imgObj = new Image();
@@ -15,9 +16,15 @@ export function imgOnload (imgs, vm, flag, singerLoadFn, allLoadFn) {
           me[flag] = true;
           allLoadFn && allLoadFn();
         }
+        loaded.push(i);
         imgObj = null;
       };
+      imgObj.onerror = function () {
+        loaded.push(i);
+        imgObj = null;
+      };
+      imgObj.src = src;
     })(i, imgObj);
-    imgObj.src = src;
   }
+  return loaded;
 }

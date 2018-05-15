@@ -51,6 +51,6 @@ export let thirdParty = {
     devAppId: "182034898",
     appId: "182034898",
     devUri: "http://open.dev.tech2real.com/m-web/user/mobilebind",
-    uri: "http://open.tech2real.com/m-web/user/mobilebind"
+    uri: "http://open.dev.tech2real.com/m-web/user/mobilebind"
   }
 }

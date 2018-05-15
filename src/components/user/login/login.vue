@@ -46,7 +46,8 @@
       </div>
       <div class="btnbox row third-party-hook">
         <p class="wechat">
-          <i class="fa fa-weixin needsclick" data-type="wechat" @click="thirdPartLogin('wechat')"></i>
+          <i class="fa fa-weixin needsclick" data-type="wechat" @click="thirdPartLogin('wechat')"
+             ref="thirdPartyWechat"></i>
         </p>
         <p class="qq">
           <i class="fa fa-qq" data-type="qq" id="QQLoginBtn" @click="thirdPartLogin('qq')"></i>
@@ -80,7 +81,15 @@
       };
     },
     mounted () {
-
+      setTimeout(() => {
+        var browser = util.common.getbrowserType();
+        var isWechat = browser >= 1 && browser < 2;
+        if (isWechat) {
+          if (util.cookieOperate.getWeChatOpenGuid()) {
+            this.$refs.thirdPartyWechat.click();
+          }
+        }
+      }, 20);
     },
     computed: {
       ...mapGetters([
@@ -162,10 +171,10 @@
             if (util.browser.versions.mobile) {
               url = thirdParty.weibo.webUrl;
             }
-            href = url + '?client_id=' + thirdParty.weibo[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=all&state=' + util.uuid(8, 16);
+            href = url + '?client_id=' + thirdParty.weibo[appIdKey] + '&response_type=code&scope=all&state=' + util.uuid(8, 16) + '&redirect_uri=' + uri;
             break;
         }
-        window.location.replace(href);
+        window.location.href = href;
       },
       validateForm (scope) {
         this.$validator.validateAll(scope).then((res) => {

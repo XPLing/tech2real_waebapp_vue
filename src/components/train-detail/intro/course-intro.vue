@@ -42,6 +42,7 @@
   import { getCourseIntro } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
   import { mapGetters, mapMutations } from 'vuex';
+
   export default {
     props: {
       courseData: {
@@ -58,13 +59,24 @@
         id: null,
         refreshDelay: 20,
         probeType: 2,
-        listenScroll: true
+        listenScroll: true,
+        introImgs: [],
+        loadedImgs: []
       };
     },
     created () {
       this._getCourseID();
     },
     mounted () {
+      this.$nextTick(() => {
+        if (this.$refs.desc) {
+          this.introImgs = [];
+          var nodelist = this.$refs.desc.querySelectorAll('img');
+          for (var i = 0, len = nodelist.length; i < len; i++) {
+            this.introImgs.push(nodelist[i]);
+          }
+        }
+      });
     },
     computed: {
       ...mapGetters([
@@ -74,24 +86,46 @@
       ]),
       courseIntro () {
         return this.courseData && this.courseData.courseResult.result;
+      },
+      loadingImgs () {
+        if (this.loadedImgs.length > 0) {
+          for (var i = 0, len = this.loadedImgs.length; i < len; i++) {
+            var item = this.loadedImgs[i];
+            console.log(this.introImgs);
+            this.introImgs.splice(item, 1);
+          }
+        }
+        return this.introImgs;
       }
     },
-    watch: {},
+    watch: {
+      courseIntro () {
+        this.$nextTick(() => {
+          this.introImgs = [];
+          var nodelist = this.$refs.desc.querySelectorAll('img');
+          for (var i = 0, len = nodelist.length; i < len; i++) {
+            this.introImgs.push(nodelist[i]);
+          }
+        });
+      }
+    },
     methods: {
       _getCourseID () {
         this.id = this.$route.params.id;
       },
       descImage () {
-        if (!this.descImageLoaded) {
-          var imgs = this.$refs.desc.querySelectorAll('img');
+        if (this.loadingImgs.length > 0) {
+          var imgs = this.loadingImgs;
           if (imgs.length < 0) {
             return;
           }
-          imgOnload(imgs, this, 'descImageLoaded', () => {
+          this.loadedImgs = imgOnload(imgs, this, 'descImageLoaded', () => {
             this.$refs.scroll.refresh();
           }, () => {
             this.$refs.scroll.scroll.off('scroll');
           });
+        } else {
+          this.$refs.scroll.scroll.off('scroll');
         }
       }
     },

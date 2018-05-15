@@ -30,6 +30,7 @@
   import NoResult from 'base/no-result/no-result';
   import { ERR_OK } from 'api/config';
   import { mapGetters } from 'vuex';
+
   export default {
     props: {
       courseData: {
@@ -44,7 +45,8 @@
     data () {
       return {
         id: 0,
-        isSetData: false
+        isSetData: false,
+        chapters: []
       };
     },
     created () {
@@ -57,21 +59,20 @@
         'userGuid'
       ]),
       courseChapters () {
-        var chapters = [];
         if (this.courseData) {
           if (!this.isSetData) {
             this.isSetData = true;
-            chapters = this.courseData.chapterResult.result;
-            var len = chapters.length;
+            this.chapters = this.courseData.chapterResult.result;
+            var len = this.chapters.length;
             if (len > 0) {
               for (var i = 0; i < len; i++) {
-                var chapter = chapters[i];
+                var chapter = this.chapters[i];
                 this.$emit('setdata', 'isCollapsed', true, i, 'chapterResult');
               }
             }
           }
         }
-        return chapters;
+        return this.chapters;
       }
     },
     methods: {

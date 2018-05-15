@@ -1,5 +1,12 @@
 import { commonVariable } from 'api/config';
-import { setCookie, getCookie, removeCookie } from 'assets/js/cookie';
+import {
+  setCookie,
+  getCookie,
+  removeCookie,
+  setCookieSession,
+  getCookieSession,
+  removeCookieSession
+} from 'assets/js/cookie';
 
 export const routerPrefix = '';
 
@@ -90,31 +97,40 @@ export function getUrlParameter (sParam, sPageURL, split) {
 }
 
 export let cookieOperate = {
-  setUserGuid: function(val){
+  setUserGuid: function (val) {
     setCookie('userGuid', val);
   },
-  getUserGuid: function(){
+  getUserGuid: function () {
     return getCookie('userGuid');
   },
-  removeUserGuid: function(){
+  removeUserGuid: function () {
     return removeCookie('userGuid');
   },
-  setWechatOpenID: function(val){
+  setWechatOpenID: function (val) {
     setCookie('WechatOpenID', val);
   },
   setBeforeLoginPage: function (val) {
-    setCookie('beforeLoginPage', val);
+    setCookieSession('beforeLoginPage', val);
   },
-  getBeforeLoginPage: function() {
-    return getCookie('beforeLoginPage');
+  getBeforeLoginPage: function () {
+    return getCookieSession('beforeLoginPage');
   },
-  removeBeforeLoginPage: function (){
-    return removeCookie('beforeLoginPage');
+  removeBeforeLoginPage: function () {
+    return removeCookieSession('beforeLoginPage');
+  },
+  setWeChatOpenGuid: function (val) {
+    setCookie('WeChatOpen', val);
+  },
+  getWeChatOpenGuid: function () {
+    return getCookie('WeChatOpen');
+  },
+  removeWeChatOpenGuid: function () {
+    return removeCookie('WeChatOpen');
   }
-}
+};
 
 export let common = {
-  hasClass(el, className) {
+  hasClass (el, className) {
     let reg = new RegExp('(^|\\s)' + className + '(\\s|$)');
     return reg.test(el.className);
   },
@@ -205,12 +221,12 @@ export let common = {
     }, interval);
   },
   request: {
-    tipMsg($this, data){
+    tipMsg ($this, data) {
       $this.toptipTxt = data.message;
       $this.$refs.toptip.show();
     }
   }
-}
+};
 
 export function hasClass (el, className) {
   let reg = new RegExp('(^|\\s)' + className + '(\\s|$)');

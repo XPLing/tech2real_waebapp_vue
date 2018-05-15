@@ -313,6 +313,9 @@
       Loading
     },
     watch: {
+      courseData(){
+        console.log('change courseData');
+      },
       videoUrl () {
         setTimeout(() => {
           this.$refs.video.addEventListener('canplay', () => {

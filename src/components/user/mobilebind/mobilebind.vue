@@ -275,6 +275,7 @@
                   this.$router.push({
                     path: util.cookieOperate.getBeforeLoginPage()
                   });
+
                 } else {
                   util.formErrorMsg({
                     errorObj: this.errors,
@@ -317,19 +318,22 @@
               userAvatar: res.result.headimgurl || res.result.figureurl_qq_2
             });
             this.recordThirdPartyInfo(userInfo);
+            var browser = util.common.getbrowserType();
+            var isWechat = browser >= 1 && browser < 2;
             if (res.code == 201) {
-              if (util.getbrowserType === 1) {
-                util.cookieOperate.setWechatOpenID(false);
+              if (isWechat) {
+                util.cookieOperate.setWeChatOpenGuid(false);
               }
               return;
             }
-            if (util.getbrowserType === 1) {
-              util.cookieOperate.setWechatOpenID(true);
+            if (isWechat) {
+              util.cookieOperate.setWeChatOpenGuid(true);
             }
             this.loginIn(res.result.guid);
             this.$router.push({
               path: this.beforeLoginPage
             });
+
           } else {
             this.$nextTick(() => {
               this.toptipTxt = res.message;

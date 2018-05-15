@@ -20,7 +20,7 @@
             </div>
             <div class="course-detail">
               <p class="title">详细信息</p>
-              <p class="time">{{ new Date().getTime() | formatDate('yyyy-MM-dd')}}</p>
+              <p class="time">{{ applyResult.order.initiateTime | formatDate('yyyy-MM-dd')}}</p>
             </div>
           </div>
         </scroll>
