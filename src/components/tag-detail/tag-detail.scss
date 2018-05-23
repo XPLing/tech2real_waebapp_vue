@@ -1,0 +1,114 @@
+$color-red: #FF5F7A;
+$color-green: #7ED321;
+.g-tag-detail {
+  position: fixed;
+  z-index: 11;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @include fs(14);
+  color: $color-text-b45;
+  background-color: $whiteColor;
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-swiper /deep/ .swiper-pagination-bullet-active {
+    background: $color-theme;
+  }
+  .g-header{
+
+  }
+  .g-main{
+    position: fixed;
+    z-index: 11;
+    top: formatVal(40,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .g-intro{
+    padding: formatVal(15,rem) formatVal(12,rem);
+    border-bottom: formatVal(15,rem) solid $color-border-split;
+    .title{
+      margin-bottom: formatVal(8,rem);
+      @include fs(20);
+      color: $color-text-211;
+    }
+    .brief{
+      line-height: 1.4;
+      pre{
+        white-space: normal;
+        word-break: break-all;
+        font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
+      }
+    }
+  }
+  .g-course{
+    padding: formatVal(18,rem) formatVal(14,rem);
+    .titlebox{
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: formatVal(15,rem);
+      &.red{
+        .icon{
+          span{
+            background-color: $color-red;
+          }
+        }
+      }
+      &.green{
+        .icon{
+          span{
+            background-color: $color-green;
+          }
+        }
+      }
+      .icon{
+        display: flex;
+        span{
+          display: inline-block;
+          &+span{
+            margin-left: formatVal(3,rem);
+          }
+          &.big{
+            @include w(7);
+            @include h(7);
+          }
+          &.small{
+            @include w(3);
+            @include h(3);
+          }
+        }
+      }
+      .title{
+        @include fs(16);
+        margin: 0 formatVal(10,rem);
+        color: $color-text-tip-b9a;
+      }
+      .more{
+        position: absolute;
+        top: formatVal(4,rem);
+        right: 0;
+        @include fs(12);
+        color: $color-text-tip-ac;
+      }
+    }
+    .list /deep/ .c-course-list-item{
+      &+.c-course-list-item{
+        margin-top: formatVal(15,rem);
+      }
+    }
+    .request-result{
+      padding: formatVal(10,rem) 0;
+      @include fs(12);
+      color: $color-text-tip-b9a;
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,93 @@
+$color-red: #FF5F7A;
+$color-green: #7ED321;
+.g-tag-list {
+  position: fixed;
+  z-index: 11;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @include fs(14);
+  color: $color-text-b45;
+  background-color: $color-border-split;
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-swiper /deep/ .swiper-pagination-bullet-active {
+    background: $color-theme;
+  }
+  .g-header{
+
+  }
+  .g-main{
+    position: fixed;
+    z-index: 11;
+    top: formatVal(40,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .g-tag{
+    background-color: $whiteColor;
+    .course-list{
+      .course-item{
+        position: relative;
+        padding: formatVal(15,rem) formatVal(15,rem);
+        &+.course-item{
+          &:before{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: formatVal(20,rem);
+            right: 0;
+            border-top: 1px solid $color-border-split;
+          }
+        }
+        .title{
+          padding-left: formatVal(5,rem);
+          margin-bottom: formatVal(10,rem);
+          @include fs(16);
+          color: $color-text-211;
+        }
+        .tag-list{
+          display: flex;
+          // justify-content: space-between;
+          flex-flow: wrap;
+          .tag-item{
+            flex: 0 0 auto;
+            margin: formatVal(5,rem);
+            background-color: $color-bg-tag;
+            border-radius: 5px;
+            a{
+              display: block;
+              padding: formatVal(15,rem) formatVal(25,rem);
+            }
+
+          }
+        }
+      }
+    }
+  }
+  .feedback{
+    padding: formatVal(15,rem) 0 formatVal(20,rem);
+    text-align: center;
+    .txt{
+      margin-bottom: formatVal(10,rem);
+      color: $color-text-211;
+    }
+    .btn{
+      display: block;
+      margin: 0 auto;
+      @include w(85);
+      @include h(32);
+      @include lh(32);
+      color: $color-theme;
+      border: 1px solid $color-theme;
+      border-radius: 5px;
+    }
+  }
+
+}

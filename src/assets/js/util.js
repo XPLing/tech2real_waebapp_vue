@@ -8,6 +8,23 @@ import {
   removeCookieSession
 } from 'assets/js/cookie';
 
+let elementStyle = document.createElement('div').style;
+let vendor = (() => {
+  let transformNames = {
+    webkit: 'webkitTransform',
+    Moz: 'MozTransform',
+    O: 'OTransform',
+    ms: 'msTransform',
+    standard: 'transform'
+  };
+  for (let key in transformNames) {
+    if (elementStyle[transformNames[key]] !== undefined) {
+      return key;
+    }
+  }
+  return false;
+})();
+
 export const routerPrefix = '';
 
 export let browser = {
@@ -105,6 +122,15 @@ export let cookieOperate = {
   },
   removeUserGuid: function () {
     return removeCookie('userGuid');
+  },
+  setUserInfo: function (val) {
+    setCookie('UserInfo', val);
+  },
+  getUserInfo: function () {
+    return getCookie('UserInfo');
+  },
+  removeUserInfo: function () {
+    return removeCookie('UserInfo');
   },
   setWechatOpenID: function (val) {
     setCookie('WechatOpenID', val);
@@ -225,6 +251,20 @@ export let common = {
       $this.toptipTxt = data.message;
       $this.$refs.toptip.show();
     }
+  },
+  calculateWH (num) {
+    var windowW = parseInt(window.outerWidth || window.innerWidth || window.screen.width);
+    windowW = windowW > 750 ? 750 / 10 : windowW / 10;
+    return num / globalVariable.originWidth * windowW;
+  },
+  cssPrefix (style) {
+    if (vendor === false) {
+      return false;
+    }
+    if (vendor === 'standard') {
+      return style;
+    }
+    return vendor + style.charAt(0).toUpperCase() + style.substr(1);
   }
 };
 

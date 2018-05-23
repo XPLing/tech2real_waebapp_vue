@@ -18,8 +18,11 @@ import { routerPrefix, getUserGuid } from 'assets/js/util';
 // import MobileBind from 'components/user/mobilebind/mobilebind';
 
 const Info = () => import(/* webpackChunkName: "info" */ 'components/info/info');
-const Train = () => import(/* webpackChunkName: "train" */ 'components/train/train');
+const Train = () => import(/* webpackChunkName: "train" */ 'components/study/study');
 const TrainDetail = () => import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail');
+const TeacherDetail = () => import(/* webpackChunkName: "teacherDetail" */ 'components/teacher-detail/teacher-detail');
+const TagDetail = () => import(/* webpackChunkName: "tagDetail" */ 'components/tag-detail/tag-detail');
+const TagList = () => import(/* webpackChunkName: "tagList" */ 'components/taglist/taglist');
 // const Train = resolve => {
 //   // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
 //   // （代码分块）
@@ -43,6 +46,7 @@ const User = () => import(/* webpackChunkName: "user" */ 'components/user/user')
 const Register = () => import(/* webpackChunkName: "register" */ 'components/user/register/register');
 const BackPW = () => import(/* webpackChunkName: "backPW" */ 'components/user/backpw/backpw');
 const MobileBind = () => import(/* webpackChunkName: "mobileBind" */ 'components/user/mobilebind/mobilebind');
+const FeedBack = () => import(/* webpackChunkName: "feedback" */ 'components/feedback/feedback');
 
 Vue.use(VueRouter);
 const Router = new VueRouter({
@@ -59,6 +63,10 @@ const Router = new VueRouter({
       redirect: routerPrefix + '/info'
     },
     {
+      path: routerPrefix + '/feedback',
+      component: FeedBack
+    },
+    {
       path: routerPrefix + '/info',
       component: Info
     },
@@ -67,7 +75,7 @@ const Router = new VueRouter({
       component: Train,
       children: [
         {
-          path: ':id',
+          path: ':id(\\d+)',
           component: TrainDetail,
           meta: {
             requireLogin: true
@@ -106,6 +114,18 @@ const Router = new VueRouter({
               component: TrainDetailChapters
             }
           ]
+        },
+        {
+          path: 'teacherdetail/:id',
+          component: TeacherDetail
+        },
+        {
+          path: 'tagdetail/:id',
+          component: TagDetail
+        },
+        {
+          path: 'taglist',
+          component: TagList
         }
       ]
     },
@@ -156,8 +176,8 @@ const Router = new VueRouter({
 });
 Router.beforeEach((to, form, next) => {
   // console.log(Router.app.$options.store.state.userGuid);
-   console.log(to.matched);
-   console.log(Router.app.$options.store.state);
+  //  console.log(to.matched);
+  //  console.log(Router.app.$options.store.state);
   // let isLogin = Router.app.$options.store.state.userGuid;
   // if (to.matched.some((record) => record.meta.requireLogin)) {
   //   if (!isLogin) {

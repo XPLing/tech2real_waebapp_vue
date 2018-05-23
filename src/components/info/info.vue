@@ -1,6 +1,5 @@
 <template>
     <div class="g-recommend">
-
         <input type="radio" name="select" value="a" @click="switching('v-a')">A
         <input type="radio" name="select" value="b" @click="switching('v-b')">B
         <transition name="fade" mode="out-in">

@@ -1,11 +1,151 @@
+$color-red: #FF5F7A;
+$color-green: #7ED321;
 .g-train {
   position: fixed;
   z-index: 101;
   left: 0;
   right: 0;
-  top: 0;
+  top: formatVal(40,rem);
   bottom: formatVal(50,rem);
+  .g-swiper /deep/ .swiper-pagination-bullet-active {
+    background: $color-theme;
+  }
   .g-header{
 
+  }
+  .g-banner{
+    .g-swiper{
+      img{
+        width: 100%;
+        height: formatVal(124,rem);
+      }
+    }
+  }
+  .g-tagList{
+    padding: formatVal(18,rem) formatVal(14,rem);
+    .list{
+      display: flex;
+      justify-content: space-between;
+      flex-flow: wrap;
+      .item{
+        flex: 0 0 25%;
+        text-align: center;
+        margin: formatVal(8,rem) 0;
+        a{
+          display: block;
+        }
+        .icon{
+          font-size: 0;
+          margin-bottom: formatVal(6,rem);
+          img{
+            @include w(35);
+            @include h(35);
+            border-radius: 50%;
+          }
+        }
+        .name{
+          color: $color-text-b45;
+          @include fs(12);
+        }
+      }
+    }
+  }
+  .g-recommend{
+    padding: formatVal(18,rem) formatVal(14,rem);
+    .titlebox{
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: formatVal(15,rem);
+      &.red{
+        .icon{
+          span{
+            background-color: $color-red;
+          }
+        }
+      }
+      &.green{
+        .icon{
+          span{
+            background-color: $color-green;
+          }
+        }
+      }
+      .icon{
+        display: flex;
+        span{
+          display: inline-block;
+          &+span{
+            margin-left: formatVal(3,rem);
+          }
+          &.big{
+            @include w(7);
+            @include h(7);
+          }
+          &.small{
+            @include w(3);
+            @include h(3);
+          }
+        }
+      }
+      .title{
+        @include fs(16);
+        margin: 0 formatVal(10,rem);
+        color: $color-text-tip-b9a;
+      }
+      .more{
+        position: absolute;
+        top: formatVal(4,rem);
+        right: 0;
+        @include fs(12);
+        color: $color-text-tip-ac;
+      }
+    }
+    &.teachers{
+      background-color: $color-border-split;
+      .list{
+        .swiper-item{
+          padding: formatVal(3,rem);
+        }
+        .item{
+          padding: formatVal(10,rem) formatVal(15,rem);
+          box-shadow: 0 0 10px $color-transparency-black-1;
+          text-align: center;
+          background-color: $whiteColor;
+          border-radius: 5px;
+          @include fs(12);
+          .avatar{
+            font-size: 0;
+            img {
+              @include w(50);
+              @include h(50);
+              border-radius: 50%;
+            }
+          }
+          .name{
+            margin: formatVal(8,rem) 0 formatVal(5,rem);
+            color: $color-text-b45;
+          }
+          .pos{
+            @extend %ellipsis;
+            color: $tipColor;
+          }
+        }
+      }
+    }
+    &.course{
+      .list /deep/ .c-course-list-item{
+        &+.c-course-list-item{
+          margin-top: formatVal(15,rem);
+        }
+      }
+      .request-result{
+        padding: formatVal(10,rem) 0;
+        @include fs(12);
+        color: $color-text-tip-b9a;
+        text-align: center;
+      }
+    }
   }
 }

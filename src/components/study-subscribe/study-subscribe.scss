@@ -1,0 +1,8 @@
+.g-subscribe{
+  position: fixed;
+  z-index: 101;
+  left: 0;
+  right: 0;
+  top: formatVal(40,rem);
+  bottom: formatVal(50,rem);
+}

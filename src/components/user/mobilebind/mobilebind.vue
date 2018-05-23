@@ -272,6 +272,7 @@
                 if (resp.code == ERR_OK) {
                   var userGuid = resp.result.guid;
                   this.loginIn(userGuid);
+                  this.recordUserinfo(res.result);
                   this.$router.push({
                     path: util.cookieOperate.getBeforeLoginPage()
                   });
@@ -318,6 +319,7 @@
               userAvatar: res.result.headimgurl || res.result.figureurl_qq_2
             });
             this.recordThirdPartyInfo(userInfo);
+            this.recordUserinfo(userInfo);
             var browser = util.common.getbrowserType();
             var isWechat = browser >= 1 && browser < 2;
             if (res.code == 201) {
@@ -330,6 +332,7 @@
               util.cookieOperate.setWeChatOpenGuid(true);
             }
             this.loginIn(res.result.guid);
+            this.recordUserinfo(res.result);
             this.$router.push({
               path: this.beforeLoginPage
             });

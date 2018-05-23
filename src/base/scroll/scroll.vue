@@ -6,7 +6,9 @@
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
+  import * as util from 'assets/js/util';
 
+  const NAV_HEIGHT = util.common.calculateWH(60);
   export default {
     props: {
       click: {
@@ -18,12 +20,16 @@
         default: 1
       },
       data: {
-        type: Object,
+        type: [Object, Array],
         default: null
       },
       refreshDelay: {
         type: Number,
         default: 20
+      },
+      pullup: {
+        type: Boolean,
+        default: false
       },
       listenScroll: {
         type: Boolean,
@@ -41,15 +47,36 @@
         if (!this.$refs.wrapper) {
           return;
         }
-        this.scroll = new BScroll(this.$refs.wrapper, {
+        var defaultOpts = {
           probeType: this.probeType,
           click: this.click
-        });
+        };
+        var scrollOpts = {};
+        if (this.pullup) {
+          scrollOpts = Object.assign({}, defaultOpts, {
+            pullUpLoad: {
+              threshold: 60
+            }
+          })
+        }
+        this.scroll = new BScroll(this.$refs.wrapper, scrollOpts);
         if (this.listenScroll) {
           let me = this;
           this.scroll.on('scroll', (pos) => {
-            me.$emit('scroll', pos)
-          })
+            me.$emit('scroll', pos);
+          });
+        }
+        if (this.pullup) {
+//          this.scroll.on('scrollEnd', () => {
+//            console.log(this.scroll.y);
+//            console.log(this.scroll.maxScrollY);
+//            if (this.scroll.y <= (this.scroll.maxScrollY)) {
+//              this.$emit('scrollToEnd');
+//            }
+//          });
+          this.scroll.on('pullingUp', () => {
+            this.$emit('pullingUp');
+          });
         }
       },
       enable () {
@@ -61,6 +88,16 @@
       refresh () {
         if (this.scroll) {
           this.scroll.refresh();
+        }
+      },
+      finishPullUp () {
+        if (this.scroll) {
+          this.scroll.finishPullUp();
+        }
+      },
+      closePullUp () {
+        if (this.scroll) {
+          this.scroll.closePullUp();
         }
       }
     },
@@ -77,7 +114,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  .g-scroll-wrapper{
+
+  .g-scroll-wrapper {
     height: 100%;
     overflow: hidden;
   }

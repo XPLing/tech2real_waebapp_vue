@@ -29,6 +29,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     apiproxy: 'http://localhost:8181',
+    apiproxyhost: 'localhost:8181',
     apiproxy_open: 'http://localhost:8080/open',
     proxyTable: {
       // '/api': {

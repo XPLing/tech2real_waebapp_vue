@@ -6,12 +6,12 @@
     <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/chapters'}" replace>
       <span class="tab-link">章节</span>
     </router-link>
-    <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/evaluate'}" replace>
-      <span class="tab-link">评价</span>
-    </router-link>
-    <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/community'}" replace>
-      <span class="tab-link">交流</span>
-    </router-link>
+    <!--<router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/evaluate'}" replace>-->
+      <!--<span class="tab-link">评价</span>-->
+    <!--</router-link>-->
+    <!--<router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/community'}" replace>-->
+      <!--<span class="tab-link">交流</span>-->
+    <!--</router-link>-->
   </div>
 </template>
 

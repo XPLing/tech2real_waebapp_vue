@@ -9,7 +9,9 @@ const mutations = {
     state.course = course;
   },
   [types.RECORD_USERINFO] (state, info) {
-    state.user = Object.assign({}, state.user, info);
+    var userInfo = Object.assign({}, state.userInfo, info);
+    state.userInfo = userInfo;
+    util.cookieOperate.setUserInfo(userInfo);
   },
   [types.SET_USERGUID] (state, val) {
     state.userGuid = val;

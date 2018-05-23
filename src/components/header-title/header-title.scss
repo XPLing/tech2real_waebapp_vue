@@ -19,4 +19,8 @@
       right: formatVal(15,rem);
     }
   }
+  .operate{
+    @extend .fa;
+    @include fs(16);
+  }
 }

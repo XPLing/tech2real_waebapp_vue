@@ -1,0 +1,33 @@
+.g-study {
+  position: fixed;
+  z-index: 101;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: formatVal(50,rem);
+
+}
+
+.slide-enter-active {
+  animation: slide 0.3s;
+}
+.slide-leave-active {
+  animation: slide 0.3s reverse;
+}
+
+@keyframes slide{
+  0%{
+    transform: translate3d(100%, 0, 0);
+  }
+  100%{
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes slide-reverse{
+  0%{
+    transform: translate3d(100%, 0, 0);
+  }
+  100%{
+    transform: translate3d(-100%, 0, 0);
+  }
+}
