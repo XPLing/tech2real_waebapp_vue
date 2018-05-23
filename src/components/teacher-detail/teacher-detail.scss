@@ -37,7 +37,7 @@ $color-green: #7ED321;
   .g-main{
     position: fixed;
     z-index: 11;
-    top: formatVal(147,rem);
+    top: formatVal(127,rem);
     bottom: 0;
     left: 0;
     right: 0;
@@ -58,6 +58,8 @@ $color-green: #7ED321;
         @include w(80);
         @include h(80);
         border-radius: 50%;
+        transition: all .2s;
+        transform-origin: 0 0;
       }
     }
     .detail{

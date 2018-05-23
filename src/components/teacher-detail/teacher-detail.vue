@@ -9,9 +9,9 @@
           </p>
         </div>
       </header>
-      <div class="teacher-info" v-if="teacherIntro">
+      <div class="teacher-info" ref="teacherIntro" v-if="teacherIntro">
         <div class="avatar">
-          <img :src="teacherIntro.faceUrl">
+          <img :src="teacherIntro.faceUrl" ref="avatar">
         </div>
         <div class="detail">
           <p class="name">{{teacherIntro.realName}}</p>
@@ -214,8 +214,11 @@
         if (newmainTop > BIGHEADER_HEIGHT + MAIN_TOPTOLERANCE) {
           newmainTop = BIGHEADER_HEIGHT + MAIN_TOPTOLERANCE;
         }
+        var percent = (newBigHeaderH - NAV_HEIGHT) / this.minY;
+
         bigHeaderDom.style.height = `${newBigHeaderH}px`;
         mainDom.style.top = `${newmainTop}px`;
+        this.$refs.avatar.style[transform] = `scale(${percent})`;
       },
       teacherIntro () {
         this.$nextTick(() => {
