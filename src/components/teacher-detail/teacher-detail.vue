@@ -1,9 +1,9 @@
 <template>
   <transition name="slide">
     <div class="g-teacher-detail">
-      <header class="g-header">
-        <HeaderTitle v-if="hideTeacher" :title="pageTitle" :has-back="true"></HeaderTitle>
-        <div class="big-header" ref="bigHeader">
+      <header class="g-header" ref="header">
+        <HeaderTitle v-show="hideTeacher" :title="pageTitle" :has-back="true"></HeaderTitle>
+        <div v-show="!hideTeacher" class="big-header" ref="bigHeader">
           <p class="icon">
             <i class="fa fa-angle-left left" @click="back" aria-hidden="true"></i>
           </p>
@@ -11,19 +11,19 @@
       </header>
       <div class="teacher-info" ref="teacherIntro" v-if="teacherIntro">
         <div class="avatar">
-          <img :src="teacherIntro.faceUrl" ref="avatar">
+          <img :src="teacherIntro.faceUrl||defaultAvatar" ref="avatar">
         </div>
         <div class="detail">
           <p class="name">{{teacherIntro.realName}}</p>
           <p class="career">{{teacherIntro.career}}</p>
         </div>
       </div>
+      <div class="bg-layer" ref="bgLayer"></div>
       <div class="g-main" ref="main">
-        <scroll ref="scroll" :pullup="true" :data="courseList" @scrollToEnd="requestCourses" :probeType="probeType"
+        <scroll ref="scroll" :pullup="true" :data="courseList" :probeType="probeType"
                 :listenScroll="listenScroll"
                 @pullingUp="requestCourses" @scroll="scrollHandle">
           <div>
-
             <div class="g-intro" v-if="teacherIntro">
               <div class="item">
                 <p class="title">工业应用</p>
@@ -39,13 +39,16 @@
               </div>
             </div>
             <div class="g-course course" v-if="courseList && courseList.length>0">
+              <div class="titlebox">
+                <p class="title">导师课程</p>
+              </div>
               <ul class="list">
                 <course-item :course="item" v-for="(item, index) in courseList" :key="index"
                              @selectcourse="selectcourse"></course-item>
               </ul>
               <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : loadingMore}}</p>
             </div>
-            <div v-else>
+            <div class="no-result-wrapper" v-else>
               <no-result :title="noResult"></no-result>
             </div>
           </div>
@@ -95,7 +98,8 @@
         hideTeacher: false,
         probeType: 3,
         listenScroll: true,
-        scrollY: 0
+        scrollY: 0,
+        defaultAvatar: require('assets/image/defaultAvatar.png')
       };
     },
     computed: {
@@ -192,33 +196,42 @@
     },
     watch: {
       scrollY (newVal) {
-        if (newVal < -this.minY) {
-          return;
-        }
         var bigHeaderDom = this.$refs.bigHeader;
-        var mainDom = this.$refs.main;
-        var mainTop = mainDom.offsetTop;
+        var bgLayerDom = this.$refs.bgLayer;
         var bigHeaderH = bigHeaderDom.offsetHeight;
         var newBigHeaderH = bigHeaderH + newVal;
-        var newmainTop = mainTop + newVal;
-        if (newBigHeaderH < NAV_HEIGHT) {
-          newBigHeaderH = NAV_HEIGHT;
-        }
-        if (newBigHeaderH > BIGHEADER_HEIGHT) {
-          newBigHeaderH = BIGHEADER_HEIGHT;
-        }
-        console.log(newmainTop);
-        if (newmainTop < NAV_HEIGHT) {
-          newmainTop = NAV_HEIGHT;
-        }
-        if (newmainTop > BIGHEADER_HEIGHT + MAIN_TOPTOLERANCE) {
-          newmainTop = BIGHEADER_HEIGHT + MAIN_TOPTOLERANCE;
-        }
+        var newmainTop = newVal;
+        var mainDom = this.$refs.main;
+
+        console.log(newVal);
         var percent = (newBigHeaderH - NAV_HEIGHT) / this.minY;
 
-        bigHeaderDom.style.height = `${newBigHeaderH}px`;
-        mainDom.style.top = `${newmainTop}px`;
-        this.$refs.avatar.style[transform] = `scale(${percent})`;
+        console.log(newBigHeaderH);
+        console.log(NAV_HEIGHT);
+        console.log(percent);
+        console.log(-this.minY);
+        if (newVal < -this.minY) {
+          newmainTop = -this.minY;
+          percent = 0;
+          this.$refs.header.style.zIndex = 20;
+          this.hideTeacher = true;
+        } else {
+          this.hideTeacher = false;
+          this.$refs.header.style.zIndex = 9;
+        }
+        if (newVal >= 0) {
+          mainDom.style.top = `${BIGHEADER_HEIGHT + MAIN_TOPTOLERANCE}px`;
+          newmainTop = 0;
+        } else {
+          mainDom.style.top = `${BIGHEADER_HEIGHT}px`;
+        }
+        if (percent > 1) {
+          percent = 1;
+        }
+        bgLayerDom.style[transform] = `translate3d(0,${newmainTop}px,0)`;
+        this.$refs.teacherIntro.style.opacity = percent;
+        this.$refs.teacherIntro.style[transform] = `scale(${percent}) translate3d(0,${newmainTop}px,0)`;
+
       },
       teacherIntro () {
         this.$nextTick(() => {

@@ -8,8 +8,8 @@
         <!--</header>-->
         <div class="g-banner">
           <swiper :options="swiperOPts" class="g-swiper">
-            <swiper-slide v-for="(item, index) in bannerList" :key="index">
-              <img :src="item.pictureUrl">
+            <swiper-slide v-for="(item, index) in bannerList" :key="index" >
+              <img :src="item.coverUrl" @click="selectBanner(item,index)">
             </swiper-slide>
             <div class="swiper-pagination swiper-pagination-banner" slot="pagination"></div>
           </swiper>
@@ -39,14 +39,14 @@
             <p class="icon left"><span class="small"></span><span class="big"></span></p>
             <p class="title">名师推荐</p>
             <p class="icon right"><span class="big"></span><span class="small"></span></p>
-            <router-link class="more" :to="{path: routerPrefix + '/train/67'}">更多名师</router-link>
+            <router-link class="more" :to="{path: '/train/teacherlist'}">更多名师</router-link>
           </div>
           <div class="list">
             <swiper :options="swiperOPtsCourse" class="g-swiper">
               <swiper-slide class="swiper-item" v-for="(item, index) in teacherList" :key="index">
                 <div class="item" @click="selectTeacher(item)">
                   <p class="avatar">
-                    <img :src="item.faceUrl">
+                    <img v-lazy="item.faceUrl">
                   </p>
                   <p class="name">{{item.nickname}}</p>
                   <p class="pos">{{item.career}}</p>
@@ -62,7 +62,8 @@
             <p class="icon right"><span class="big"></span><span class="small"></span></p>
           </div>
           <ul class="list">
-            <course-item :course="item" v-for="(item, index) in courseList" :key="index" @selectcourse="selectcourse"></course-item>
+            <course-item :course="item" v-for="(item, index) in courseList" :key="index"
+                         @selectcourse="selectcourse"></course-item>
           </ul>
           <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
         </div>
@@ -82,7 +83,12 @@
   import HeaderTitle from 'components/header-title/header-title';
   import { ERR_OK } from 'api/config';
   import * as util from 'assets/js/util';
-  import { getTrainHomeContainer, listRecommendTeachers, listBanners, listRecommendCourses } from 'api/train';
+  import {
+    getTrainHomeContainer,
+    listRecommendTeachers,
+    listBannersByLocationType,
+    listRecommendCourses
+  } from 'api/train';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import Loading from 'base/loading/loading';
@@ -137,7 +143,7 @@
       ])
     },
     created () {
-      this._listBanners().then((res) => {
+      this._listBannersByLocationType().then((res) => {
         if (res.code) {
           if (res.code != ERR_OK) {
             this.toptipTxt = res.message;
@@ -181,6 +187,31 @@
     mounted () {
     },
     methods: {
+      selectBanner (item, index) {
+        console.log(item);
+        var type = item.type;
+        var url = '';
+        switch (type) {
+          case 1:
+            url = `/info/detail/${item.id}`;
+            break;
+          case 2:
+            url = `/activity/detail/${item.id}`;
+            break;
+          case 3:
+            url = `/train/detail/${item.id}`;
+            break;
+          case 4:
+            window.location.href = JSON.parse(item.params).url;
+            return;
+          case 5:
+            url = `/train/${item.id}`;
+            break;
+        }
+        this.$router.push({
+          path: url
+        });
+      },
       selectTeacher (teacher) {
         this.$router.push({
           path: `/train/teacherdetail/${teacher.id}`
@@ -240,11 +271,13 @@
         };
         return listRecommendTeachers(param);
       },
-      _listBanners () {
+      _listBannersByLocationType () {
         var param = {
-          productGuid: this.productGuid
+          productGuid: this.productGuid,
+          type: 2,
+          userGuid: this.userGuid
         };
-        return listBanners(param);
+        return listBannersByLocationType(param);
       },
       _listRecommendCourses (page) {
         var param = {

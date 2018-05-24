@@ -10,11 +10,19 @@ $color-green: #7ED321;
   .g-swiper /deep/ .swiper-pagination-bullet-active {
     background: $color-theme;
   }
+  .g-swiper /deep/ .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{
+    line-height: 0;
+    bottom: formatVal(20,rem);
+  }
   .g-header{
 
   }
   .g-banner{
     .g-swiper{
+      a{
+        display: block;
+        font-size: 0;
+      }
       img{
         width: 100%;
         height: formatVal(124,rem);

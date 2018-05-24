@@ -8,7 +8,7 @@
         <scroll ref="scroll" class="tag-detail-content" :data="tagList">
           <div>
             <div class="g-tag">
-              <ul class="course-list">
+              <ul class="course-list" v-if="tagList && tagList.length>0">
                 <li class="course-item" v-for="(item, index) in tagList" :key="index">
                   <p class="title">{{item.title}}</p>
                   <ul class="tag-list">
@@ -63,6 +63,10 @@
         coursePage: 1,
         noResult: '暂无课程~~'
       };
+    },
+    beforeRouteLeave (to, from, next) {
+      console.log(to);
+      next();
     },
     computed: {
       ...mapGetters([

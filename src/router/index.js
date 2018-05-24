@@ -21,6 +21,7 @@ const Info = () => import(/* webpackChunkName: "info" */ 'components/info/info')
 const Train = () => import(/* webpackChunkName: "train" */ 'components/study/study');
 const TrainDetail = () => import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail');
 const TeacherDetail = () => import(/* webpackChunkName: "teacherDetail" */ 'components/teacher-detail/teacher-detail');
+const TeacherList = () => import(/* webpackChunkName: "teacherList" */ 'components/teacherlist/teacherlist');
 const TagDetail = () => import(/* webpackChunkName: "tagDetail" */ 'components/tag-detail/tag-detail');
 const TagList = () => import(/* webpackChunkName: "tagList" */ 'components/taglist/taglist');
 // const Train = resolve => {
@@ -118,6 +119,10 @@ const Router = new VueRouter({
         {
           path: 'teacherdetail/:id',
           component: TeacherDetail
+        },
+        {
+          path: 'teacherlist',
+          component: TeacherList
         },
         {
           path: 'tagdetail/:id',

@@ -49,7 +49,8 @@
         }
         var defaultOpts = {
           probeType: this.probeType,
-          click: this.click
+          click: this.click,
+          tap: true
         };
         var scrollOpts = {};
         if (this.pullup) {

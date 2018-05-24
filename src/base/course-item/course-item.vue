@@ -1,7 +1,11 @@
 <template>
   <li class="c-course-list-item c-media" @click.stop="selectItem(course)">
     <div class="media-left">
-      <img :src="course.coverUrl" alt="">
+      <img v-lazy="{
+          src: course.coverUrl,
+          error: lazy.error,
+          loading: lazy.loading
+        }" alt="">
     </div>
     <div class="media-body">
       <p class="title">{{course.title}}</p>
@@ -19,6 +23,17 @@
         type: Object,
         default: null
       }
+    },
+    data () {
+      return {
+        lazy: {
+          src: this.course.coverUrl,
+          error: require('./course-loading.jpg'),
+          loading: require('./course-loading.jpg')
+        }
+      };
+    },
+    created () {
     },
     methods: {
       selectItem (course) {

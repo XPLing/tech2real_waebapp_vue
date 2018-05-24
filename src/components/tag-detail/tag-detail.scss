@@ -1,5 +1,6 @@
 $color-red: #FF5F7A;
 $color-green: #7ED321;
+$color-brief: #7D858E;
 .g-tag-detail {
   position: fixed;
   z-index: 11;
@@ -41,6 +42,7 @@ $color-green: #7ED321;
     .brief{
       line-height: 1.4;
       pre{
+        color: $color-brief;
         white-space: normal;
         word-break: break-all;
         font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;

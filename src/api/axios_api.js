@@ -84,8 +84,8 @@ apiRouter.post('/listRecommendTeachers', jsonParser, function (req, res) {
     res.json(e);
   });
 });
-apiRouter.post('/listBanners', jsonParser, function (req, res) {
-  var url = `${config.dev.apiproxy}/listBanners`;
+apiRouter.post('/listBannersByLocationType', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listBannersByLocationType`;
   axios({
     method: 'post',
     url: url,

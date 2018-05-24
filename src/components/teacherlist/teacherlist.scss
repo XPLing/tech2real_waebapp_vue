@@ -1,0 +1,109 @@
+$color-text-career: #585653;
+$color-text-name: #201E1B;
+$color-text-intro: #999;
+.g-tag-list {
+  position: fixed;
+  z-index: 11;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @include fs(14);
+  color: $color-text-b45;
+  background-color: $color-border-split;
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-swiper /deep/ .swiper-pagination-bullet-active {
+    background: $color-theme;
+  }
+  .g-header{
+
+  }
+  .g-main{
+    position: fixed;
+    z-index: 11;
+    top: formatVal(40,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .g-teacher{
+    background-color: $whiteColor;
+    .teacher-list{
+      .teacher-item{
+        a{
+          padding: formatVal(15,rem) formatVal(15,rem) formatVal(20,rem);
+          display: flex;
+        }
+        &+.teacher-item{
+          &:before{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: formatVal(20,rem);
+            right: 0;
+            border-top: 1px solid $color-border-split;
+          }
+        }
+        .avatar{
+          flex: 0 0 formatVal(50,rem);
+          margin-right: formatVal(15,rem);
+          font-size: 0;
+          img{
+            @include w(50);
+            @include h(50);
+            border-radius: 50%;
+          }
+        }
+        .detail{
+          word-break: break-all;
+          p+p{
+            margin-top: formatVal(5,rem);
+          }
+          .name{
+            @include fs(18);
+            color: $color-text-name;
+          }
+          .career{
+            @include fs(16);
+            color: $color-text-career;
+          }
+          .intro{
+            @include fs(14);
+            color: $color-text-intro;
+          }
+        }
+
+      }
+    }
+    .request-result{
+      padding: formatVal(10,rem) 0;
+      @include fs(12);
+      color: $color-text-tip-b9a;
+      text-align: center;
+    }
+  }
+  .feedback{
+    padding: formatVal(15,rem) 0 formatVal(20,rem);
+    text-align: center;
+    .txt{
+      margin-bottom: formatVal(10,rem);
+      color: $color-text-211;
+    }
+    .btn{
+      display: block;
+      margin: 0 auto;
+      @include w(85);
+      @include h(32);
+      @include lh(32);
+      color: $color-theme;
+      border: 1px solid $color-theme;
+      border-radius: 5px;
+    }
+  }
+
+}

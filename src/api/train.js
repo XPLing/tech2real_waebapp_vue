@@ -55,8 +55,8 @@ export function listRecommendTeachers (params) {
     return Promise.reject(err);
   });
 }
-export function listBanners (params) {
-  var url = debug ? '/api/listBanners' : `/listBanners`;
+export function listBannersByLocationType (params) {
+  var url = debug ? '/api/listBannersByLocationType' : `/listBannersByLocationType`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
