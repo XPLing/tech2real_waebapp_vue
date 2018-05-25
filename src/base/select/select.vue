@@ -1,18 +1,21 @@
 <template>
-  <transition name="drop-down">
-    <div class="g-select-box" v-show="showFlag">
-      <scroll :data="{selectData}" ref="scroll" >
-        <div class="g-select-wrapper">
-          <ul class="g-form-select" v-show="showFlag">
-            <li class="item" :class="{'on': index==currentSelect}" v-for="(item, index) in selectData" :key="item.id" @click.stop="selectItem(item,index)">
-              {{item.title}}
-            </li>
-          </ul>
-        </div>
-      </scroll>
-    </div>
-
-  </transition>
+  <div class="g-select" v-show="showFlag">
+    <div class="mask" @click.stop="clickMask"></div>
+    <transition name="drop-down">
+      <div class="g-select-box" v-show="showFlag">
+        <scroll :data="{selectData}" ref="scroll">
+          <div class="g-select-wrapper">
+            <ul class="g-form-select" v-show="showFlag">
+              <li class="item" :class="{'on': index==currentSelect}" v-for="(item, index) in selectData" :key="index"
+                  @click.stop="selectItem(item,index)">
+                {{item.title}}
+              </li>
+            </ul>
+          </div>
+        </scroll>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -21,7 +24,7 @@
   export default {
     props: {
       selectData: {
-        type: Array,
+        type: [Array, Object],
         default () {
           return [
             {
@@ -56,9 +59,13 @@
       hide () {
         this.showFlag = false;
       },
-      selectItem(item, index){
+      selectItem (item, index) {
         this.$emit('select', item, index);
         this.hide();
+      },
+      clickMask(){
+        this.hide();
+        this.$emit('clickMask');
       }
     },
     components: {

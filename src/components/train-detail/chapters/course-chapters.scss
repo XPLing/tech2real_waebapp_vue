@@ -14,6 +14,21 @@
     border-bottom: formatVal(20,rem) solid $color-shadow-nav;
     background-color: $whiteColor;
   }
+  .g-package{
+    background-color: #fff;
+    margin: formatVal(10,rem) 0;
+
+    line-height: 0;
+    .form-body{
+      line-height: 1em;
+      @extend %ellipsis;
+    }
+    .form-right{
+      .icon{
+        @include fs(20);
+      }
+    }
+  }
   .chapters {
     .chapter-item {
       &.active {

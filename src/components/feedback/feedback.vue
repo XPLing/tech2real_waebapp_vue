@@ -13,6 +13,7 @@
           </div>
         </scroll>
       </div>
+      <confirm ref="confirmsWrapper" :text="confirmTxt" @cancel="cancel" @confirm="confirm"></confirm>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -28,10 +29,12 @@
   import { addFeedback } from 'api/feedback';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
+  import Confirm from 'base/confirm/confirm';
 
   export default {
     data () {
       return {
+        confirmTxt: '请先登录!',
         toptipTxt: '',
         pageTitle: '意见反馈',
         feedbackCont: ''
@@ -50,8 +53,19 @@
     mounted () {
     },
     methods: {
+      confirm () {
+        this.$router.push({
+          path: '/user/login'
+        });
+      },
+      cancel () {
+
+      },
       send () {
         if (!this.feedbackCont.trim() || !this.userGuid || !this.userInfo || !this.userInfo.mobile) {
+          if (!this.userGuid) {
+            this.$refs.confirmsWrapper.show();
+          }
           return false;
         }
         this._addFeedback().then((res) => {
@@ -93,7 +107,8 @@
     components: {
       HeaderTitle,
       TopTip,
-      Scroll
+      Scroll,
+      Confirm
     }
   };
 </script>

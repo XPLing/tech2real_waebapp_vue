@@ -8,6 +8,8 @@
   import BScroll from 'better-scroll';
   import * as util from 'assets/js/util';
 
+  const DIRECTION_H = 'horizontal';
+  const DIRECTION_V = 'vertical';
   const NAV_HEIGHT = util.common.calculateWH(60);
   export default {
     props: {
@@ -34,6 +36,10 @@
       listenScroll: {
         type: Boolean,
         default: false
+      },
+      direction: {
+        type: String,
+        default: DIRECTION_V
       }
 
     },
@@ -50,17 +56,16 @@
         var defaultOpts = {
           probeType: this.probeType,
           click: this.click,
-          tap: true
+          eventPassthrough: this.direction === DIRECTION_V ? DIRECTION_H : DIRECTION_V
         };
-        var scrollOpts = {};
         if (this.pullup) {
-          scrollOpts = Object.assign({}, defaultOpts, {
+          defaultOpts = Object.assign({}, defaultOpts, {
             pullUpLoad: {
               threshold: 60
             }
-          })
+          });
         }
-        this.scroll = new BScroll(this.$refs.wrapper, scrollOpts);
+        this.scroll = new BScroll(this.$refs.wrapper, defaultOpts);
         if (this.listenScroll) {
           let me = this;
           this.scroll.on('scroll', (pos) => {

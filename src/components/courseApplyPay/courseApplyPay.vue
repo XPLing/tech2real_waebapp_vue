@@ -17,7 +17,6 @@
         <form class="c-form" data-vv-scope="pay">
           <div class="chunk pay-wrapper">
             <h1 class="title">支付方式</h1>
-
             <div class="c-form-group">
               <div class="input-item">
                 <input class="float-input" v-model="payWay" type="radio" name="payWay" id="wepay" value="wepay"
@@ -82,7 +81,6 @@
             </div>
           </div>
         </form>
-
         <form-tip-error :tip-name="'pay.totalMsg'"></form-tip-error>
       </scroll>
       <bottom-btn :price="0" :btnstr="'立即支付'" @confirm="toPay"></bottom-btn>

@@ -1,6 +1,6 @@
 <template>
   <div class="g-train">
-    <scroll ref="scroll" class="train-content" :pullup="true" :data="bannerList" @scrollToEnd="requestCourses"
+    <scroll ref="scroll" class="train-content" :pullup="true" :data="bannerList"
             @pullingUp="requestCourses">
       <div>
         <!--<header class="g-header">-->
@@ -9,7 +9,7 @@
         <div class="g-banner">
           <swiper :options="swiperOPts" class="g-swiper">
             <swiper-slide v-for="(item, index) in bannerList" :key="index" >
-              <img :src="item.coverUrl" @click="selectBanner(item,index)">
+              <img :src="item.coverUrl">
             </swiper-slide>
             <div class="swiper-pagination swiper-pagination-banner" slot="pagination"></div>
           </swiper>

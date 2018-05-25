@@ -19,10 +19,11 @@
       <div class="g-main">
         <keep-alive>
           <router-view :applied-state="appliedState" :course-data="courseData" :apply-result="applyResult"
-                       @setdata="setDatas" @changevideo="changeVideo" @changeapplyres="changeApplyResult"></router-view>
+                       @setdata="setDatas" @changevideo="changeVideo" @changeapplyres="changeApplyResult"
+                       ref="view"></router-view>
         </keep-alive>
       </div>
-      <div class="g-join" v-if="courseData && (!userGuid ||this.appliedState<=0)">
+      <div class="g-join" ref="join" v-if="courseData && (!userGuid ||this.appliedState<=0)">
         <span
           class="price">{{courseData.courseResult.result.price == 0 ? "免费" : courseData.courseResult.result.price}}</span>
         <button class="btn" @click="operate">{{courseStateStr}}</button>
@@ -32,6 +33,7 @@
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
       <loading ref="loading"></loading>
+      <g-mask @clickMask="clickMask" ref="mask"></g-mask>
     </div>
   </transition>
 </template>
@@ -46,6 +48,8 @@
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import * as util from 'assets/js/util';
+  import communication from 'assets/js/communication';
+  import Mask from 'base/mask/mask';
 
   const LOGINTIP = '请先登录!';
   const JOINTIP = '是否加入课程开始学习?';
@@ -129,13 +133,41 @@
       next();
     },
     created () {
+      console.log(11);
       this._getCourseID();
+      communication.$off();
+      communication.$on('showGlobalMask', (vm) => {
+        console.log(this.$refs);
+        if (vm.$refs.join) {
+          vm.$refs.join.style.zIndex = 1;
+        }
+        vm.$refs.mask.show();
+      });
+      communication.$on('hideGlobalMask', (vm) => {
+        if (vm.$refs.join) {
+          vm.$refs.join.style.zIndex = 5;
+        }
+        vm.$refs.mask.hide();
+      });
+
       // this._getCourseData();
     },
     methods: {
       ...mapMutations({
         updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
       }),
+      clickMask () {
+        communication.$emit('clickMask', this.$refs.view);
+      },
+      showMask () {
+        if (!this.$refs.mask) {
+          return;
+        }
+        this.$refs.mask.show();
+      },
+      hideMask () {
+        this.$refs.mask.hide();
+      },
       _getCourseID () {
         this.courseID = this.$route.params.id;
       },
@@ -212,7 +244,7 @@
         this.isCanplay = false;
         this.videoUrl = url;
       },
-      changeApplyResult(res){
+      changeApplyResult (res) {
         this.applyResult = res;
       },
       Vclick () {
@@ -310,7 +342,8 @@
       TrainDetailTab,
       Confirm,
       TopTip,
-      Loading
+      Loading,
+      'g-mask': Mask
     },
     watch: {
       videoUrl () {

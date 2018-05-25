@@ -12,18 +12,19 @@
 <script>
   import Tab from 'components/tab/tab';
   import { mapMutations } from 'vuex';
+
   export default {
     name: 'App',
-    data(){
-      return {}
+    data () {
+      return {};
     },
-    created(){
-
+    created () {
     },
-    activated(){
+    activated () {
       console.log('activated');
     },
     methods: {
+
     },
     components: {
       'g-tab': Tab

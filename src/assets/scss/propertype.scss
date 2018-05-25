@@ -98,7 +98,27 @@
     }
   }
 }
+.c-form-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: formatVal(12,rem) formatVal(15,rem);
+  @include fs(16);
+  color: $color-text-b45;
+  .form-left,.form-right{
+    flex: 0 0 auto;
+  }
+  .form-left{
+    margin-right: formatVal(20,rem);
+  }
+  .form-body{
+    flex: 1;
+  }
+  .form-right{
 
+    margin-left: formatVal(5,rem);
+  }
+}
 .c-shadow {
   position: fixed;
   z-index: 101;

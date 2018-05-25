@@ -5,14 +5,14 @@
         <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
       </header>
       <div class="g-main">
-        <scroll ref="scroll" class="tag-detail-content" :data="tagList">
+        <scroll ref="scroll" class="tag-detail-content" :data="tagList" :probeType="2">
           <div>
             <div class="g-tag">
               <ul class="course-list" v-if="tagList && tagList.length>0">
                 <li class="course-item" v-for="(item, index) in tagList" :key="index">
                   <p class="title">{{item.title}}</p>
                   <ul class="tag-list">
-                    <li class="tag-item" v-for="(titem, tindex) in item.tagList" :key="tindex">
+                    <li class="tag-item needsclick" v-for="(titem, tindex) in item.tagList" :key="tindex">
                       <router-link :to="{path: `/train/tagdetail/${titem.id}`}">
                         {{titem.name}}
                       </router-link>
@@ -63,6 +63,10 @@
         coursePage: 1,
         noResult: '暂无课程~~'
       };
+    },
+    beforeRouteLeave (to, from, next) {
+      console.log(to);
+      next();
     },
     computed: {
       ...mapGetters([

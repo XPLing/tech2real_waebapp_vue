@@ -1,6 +1,13 @@
 <template>
   <div class="g-course-chapters" :class="{'joined':this.appliedState>0}">
     <scroll :data="courseData" ref="scroll">
+      <div class="g-package c-form-item" ref="package" @click.stop="showSelect">
+        <p class="form-left">课程</p>
+        <p class="form-body">{{currentPackage}}</p>
+        <p class="form-right">
+          <i class="icon c-icon-angle-right"></i>
+        </p>
+      </div>
       <div class="chapters g-scroll-continer">
         <div class="chapter-item" :class="{ 'active': chapters.isCollapsed}" v-if="courseChapters.length>0"
              v-for="(chapters,index) in courseChapters" :key="index">
@@ -18,6 +25,11 @@
           </ul>
         </div>
       </div>
+
+      <div class="g-select-box">
+        <g-select :select-data="selectOpts" :current-select="currentSelect" ref="select"
+                  @select="selectItem" @clickMask="clickMask"></g-select>
+      </div>
       <div v-show="!courseChapters.length">
         <no-result :title="noResult"></no-result>
       </div>
@@ -30,6 +42,8 @@
   import NoResult from 'base/no-result/no-result';
   import { ERR_OK } from 'api/config';
   import { mapGetters } from 'vuex';
+  import Select from 'base/select/select';
+  import communication from 'assets/js/communication';
 
   export default {
     props: {
@@ -46,10 +60,30 @@
       return {
         id: 0,
         isSetData: false,
-        chapters: []
+        selectOpts: [
+          {
+            'title': '课程1'
+          },
+          {
+            'title': '课程2'
+          },
+          {
+            'title': '课程3'
+          },
+          {
+            'title': '课程4'
+          }
+        ],
+        currentSelect: -1,
+        chapters: [],
+        currentPackage: '注册供应商质量经理课程经理课程程经理课程程经理课程'
       };
     },
     created () {
+      communication.$on('clickMask', (vm) => {
+        vm.$refs.select.hide();
+        communication.$emit('hideGlobalMask', this.$parent);
+      });
       this.noResult = '暂无课程~~';
       this._getCourseID();
     },
@@ -76,6 +110,18 @@
       }
     },
     methods: {
+      clickMask () {
+        communication.$emit('hideGlobalMask', this.$parent);
+      },
+      showSelect () {
+        communication.$emit('showGlobalMask', this.$parent);
+        this.$refs.select.show();
+      },
+      selectItem (item, index) {
+        this.currentSelect = index;
+        this.currentPackage = item.title;
+        communication.$emit('hideGlobalMask', this.$parent);
+      },
       _getCourseID () {
         this.id = this.$route.params.id;
       },
@@ -88,7 +134,8 @@
     },
     components: {
       Scroll,
-      NoResult
+      NoResult,
+      'g-select': Select
     }
   };
 </script>
@@ -96,5 +143,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
+  @import "~assets/scss/propertype";
   @import "./course-chapters";
 </style>
