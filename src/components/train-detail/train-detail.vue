@@ -34,6 +34,12 @@
       </top-tip>
       <loading ref="loading"></loading>
       <g-mask @clickMask="clickMask" ref="mask"></g-mask>
+      <g-select :title="selectTitle" @selectListItem="selectListItem" class="g-select-wrapper">
+        <div class="price">
+          <p class="real">￥4080.00</p>
+          <p class="original">原价：<span>¥ 5828.00</span></p>
+        </div>
+      </g-select>
     </div>
   </transition>
 </template>
@@ -50,6 +56,7 @@
   import * as util from 'assets/js/util';
   import communication from 'assets/js/communication';
   import Mask from 'base/mask/mask';
+  import GSelect from 'base/select2/select2';
 
   const LOGINTIP = '请先登录!';
   const JOINTIP = '是否加入课程开始学习?';
@@ -93,7 +100,8 @@
         routerPrefix: util.routerPrefix,
         courseStateStr: '加入学习',
         courseState: 0,
-        applyResult: null
+        applyResult: null,
+        selectTitle: '套餐'
       };
     },
     computed: {
@@ -133,11 +141,9 @@
       next();
     },
     created () {
-      console.log(11);
       this._getCourseID();
       communication.$off();
       communication.$on('showGlobalMask', (vm) => {
-        console.log(this.$refs);
         if (vm.$refs.join) {
           vm.$refs.join.style.zIndex = 1;
         }
@@ -153,6 +159,9 @@
       // this._getCourseData();
     },
     methods: {
+      selectListItem(info){
+        console.log(info);
+      },
       ...mapMutations({
         updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
       }),
@@ -343,7 +352,8 @@
       Confirm,
       TopTip,
       Loading,
-      'g-mask': Mask
+      'g-mask': Mask,
+      GSelect
     },
     watch: {
       videoUrl () {

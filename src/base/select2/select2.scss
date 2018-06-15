@@ -1,0 +1,74 @@
+.g-select{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 998;
+  @include h(310);
+  .mask{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 2;
+    background-color: $color-transparency-black-3;
+  }
+  .g-select-box{
+    position: relative;
+    padding: 0 formatVal(15,rem);
+    z-index: 3;
+    height: 100%;
+    background-color: $whiteColor;
+    .title{
+      padding: formatVal(15,rem) 0;
+      @include fs(18);
+      color: $color-text-33;
+      text-align: center;
+    }
+    .g-select-wrapper{
+      @include h(150);
+    }
+    .btn{
+      position: absolute;
+      left: 0;
+      right: 0;
+      // bottom: 0;
+      @include h(50);
+      @include lh(50);
+      @include fs(16);
+      color: $whiteColor;
+      text-align: center;
+      background-color: $color-theme;
+    }
+    &.drop-down-enter-active, &.drop-down-leave-active {
+      transition: all .3s;
+    }
+    &.drop-down-enter, &.drop-down-leave-to {
+      transform: translate3d(0, 100%, 0);
+    }
+  }
+}
+
+
+
+@keyframes confirm-fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes confirm-zoom {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

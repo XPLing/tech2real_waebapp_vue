@@ -1,0 +1,175 @@
+.g-info-detail {
+  position: fixed;
+  z-index: 101;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-gray-F6;
+  @include fs(14);
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-main{
+    position: fixed;
+    z-index: 10;
+    top: formatVal(40,rem);
+    bottom: formatVal(50,rem);
+    left: 0;
+    right: 0;
+    .g-title{
+      padding: formatVal(20,rem) formatVal(15,rem);
+      .title{
+        @include fs(24);
+        color: $color-text-b3d;
+      }
+      .subtitle{
+        margin-top: formatVal(15,rem);
+        color: $color-gray-99;
+      }
+    }
+    .g-article-cont{
+      padding: formatVal(20,rem) formatVal(15,rem);
+      background-color: $whiteColor;
+      /deep/ *{
+        max-width: 100% !important;
+      }
+    }
+    .community{
+      padding: formatVal(20,rem) formatVal(7,rem);
+      .community-cont{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: formatVal(15,rem) formatVal(10,rem);
+        background-color: $whiteColor;
+        .avatar{
+          flex: 0 0 formatVal(58,rem);
+          @include h(58);
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+          }
+        }
+        .desc{
+          flex: 1;
+          margin: 0 formatVal(15,rem) 0 formatVal(8,rem);
+          .title{
+            margin-bottom: formatVal(8,rem);
+            @include fs(16);
+            color: $color-text-66;
+            font-weight: bold;
+          }
+          .intro{
+            @include fs(12);
+            color: $color-gray-99;
+          }
+        }
+        .btn{
+          flex: 0 0 formatVal(75,rem);
+          a{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @include h(25);
+            color: $color-theme;
+            @include fs(12);
+            border: 1px solid $color-theme;
+            border-radius: 20px;
+            .icon{
+              @include fs(18);
+              margin-right: formatVal(8,rem);
+            }
+          }
+        }
+      }
+    }
+    .comment{
+      padding: formatVal(14,rem);
+      background-color: $whiteColor;
+      margin-bottom: formatVal(20,rem);
+      .title{
+        display: flex;
+        margin-bottom: formatVal(10,rem);
+        .icon{
+          @include fs(18);
+          margin-right: formatVal(10,rem);
+          color: #FF3B53;
+        }
+        span{
+          color: $color-gray-99;
+        }
+      }
+      .btn{
+        margin-top: formatVal(20,rem);
+        display: block;
+        width: 100%;
+        @include h(35);
+        @include lh(35);
+        color: $whiteColor;
+        background-color: $color-theme;
+        text-align: center;
+      }
+    }
+    .recommend{
+      padding: formatVal(14,rem);
+      background-color: $whiteColor;
+      border-bottom: formatVal(20,rem) solid $color-gray-F6;
+      .title{
+        display: flex;
+        .icon{
+          margin-right: formatVal(10,rem);
+          @include fs(18);
+          color: #3085E9;
+        }
+        span{
+          color: $color-gray-99;
+        }
+      }
+    }
+  }
+  .control-bar{
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    @include h(50);
+    text-align: center;
+    background-color: $whiteColor;
+    box-shadow: 0 -2px 1px $color-shadow-nav;
+    p{
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      color: #43484D;
+      .num{
+        color: $whiteColor;
+        @include fs(12);
+        @include w(14);
+        @include h(14);
+        @include lh(14);
+        text-align: center;
+      }
+      .icon{
+        @include fs(16);
+        margin-bottom: formatVal(5,rem);
+        &.active{
+          color: $color-theme;
+        }
+      }
+      .name{
+        line-height: 1;
+        @include fs(12);
+      }
+    }
+  }
+}

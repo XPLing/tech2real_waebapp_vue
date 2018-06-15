@@ -1,0 +1,29 @@
+.fixed-right-btn{
+  position: fixed;
+  z-index: 100;
+  right: 10px;
+  bottom: formatVal(60,rem);
+  &.fade-enter, &.fade-leave-to {
+    opacity: 0;
+  }
+  &.fade-enter-active,&.fade-leave-active{
+    transition: all .3s ease;
+  }
+  .btn-item{
+    display: block;
+    @include w(40);
+    @include h(40);
+    @include lh(40);
+    color: #fff;
+    text-align: center;
+    background-color: rgba(0,0,0,0.7);
+    border-radius: 50%;
+    &.sign-up{
+      font-size: 12px;
+    }
+    &+.btn-item{
+      margin-top: formatVal(20,rem);
+    }
+  }
+
+}

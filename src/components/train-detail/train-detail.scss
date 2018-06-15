@@ -83,5 +83,21 @@
       background-color: $color-theme;
     }
   }
+  .g-select-wrapper{
+    .price{
+      margin-bottom: formatVal(20,rem);
+      .real{
+        @include fs(18);
+        color: $color-text-price-red;
+      }
+      .original{
+        @include fs(12);
+        color: $color-gray-7B;
+        span{
+          text-decoration: line-through;
+        }
+      }
+    }
+  }
 }
 

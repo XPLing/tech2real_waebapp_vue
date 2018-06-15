@@ -35,6 +35,14 @@ function padLeftZero (str) {
   return ('00' + str).substr(str.length);
 }
 
+function ellipsis (str, limit) {
+  if (str.length > limit) {
+    str = `${str.substr(0, limit)}...`;
+  }
+  return str;
+}
+
 export {
-  formatDate
+  formatDate,
+  ellipsis
 };

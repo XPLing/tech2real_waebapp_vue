@@ -13,7 +13,8 @@ import * as filters from 'assets/js/filters';
 import VueLazyload from 'vue-lazyload'
 
 Vue.use(VueLazyload, {
-  loading: require('assets/image/defaultAvatar.png')
+  loading: require('assets/image/defaultAvatar.png'),
+  error: require('assets/image/defaultAvatar.png')
 })
 
 fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟

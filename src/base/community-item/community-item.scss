@@ -1,0 +1,68 @@
+.c-community-list-item.c-media{
+  position: relative;
+  padding: formatVal(12,rem) 0;
+  color: $color-text-40;
+  &:before{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: formatVal(36,rem);
+    right: formatVal(-14,rem);
+    border-bottom: 1px solid $color-gray-F6;
+  }
+  .media-left{
+    margin-right: formatVal(15,rem);
+    @include w(36);
+    @include h(36);
+    img {
+      display: block;
+      @include w(36);
+      @include h(36);
+      border-radius: 50%;
+    }
+  }
+  .media-body{
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    .cont{
+      @include fs(14);
+      margin: formatVal(10,rem) 0;
+      color: $color-text-40;
+    }
+    .info{
+      @include fs(14);
+      .name{
+        color: $color-text-40;
+        margin-right: formatVal(5,rem);
+      }
+
+    }
+    .operate{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .time{
+        @include fs(12);
+        color: $color-text-wcc;
+      }
+      .tool{
+        display: flex;
+        align-items: baseline;
+        .item{
+          color: $color-gray-99;
+          @include fs(12);
+          &+.item{
+            margin-left: formatVal(10,rem);
+          }
+          .icon{
+            margin-right: formatVal(5,rem);
+            &.active{
+              color: $color-theme;
+            }
+          }
+        }
+      }
+    }
+  }
+}

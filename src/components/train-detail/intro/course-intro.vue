@@ -119,10 +119,13 @@
           if (imgs.length < 0) {
             return;
           }
-          this.loadedImgs = imgOnload(imgs, this, 'descImageLoaded', () => {
+          imgOnload(imgs, this, 'descImageLoaded').then((res) => {
+            this.loadedImgs = res.loaded;
             this.$refs.scroll.refresh();
-          }, () => {
-            this.$refs.scroll.scroll.off('scroll');
+            if (res.index === imgs.length - 1) {
+              this.descImageLoaded = true;
+              this.$refs.scroll.scroll.off('scroll');
+            }
           });
         } else {
           this.$refs.scroll.scroll.off('scroll');

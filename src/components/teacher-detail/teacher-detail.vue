@@ -203,13 +203,7 @@
         var newmainTop = newVal;
         var mainDom = this.$refs.main;
 
-        console.log(newVal);
         var percent = (newBigHeaderH - NAV_HEIGHT) / this.minY;
-
-        console.log(newBigHeaderH);
-        console.log(NAV_HEIGHT);
-        console.log(percent);
-        console.log(-this.minY);
         if (newVal < -this.minY) {
           newmainTop = -this.minY;
           percent = 0;

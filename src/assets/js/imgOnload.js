@@ -4,27 +4,36 @@
  *
  * */
 export function imgOnload (imgs, vm, flag, singerLoadFn, allLoadFn) {
-  var loaded = [];
-  for (var i = 0, len = imgs.length; i < len; i++) {
-    var img = imgs[i], src = img.src;
-    var imgObj = new Image();
-    var me = vm;
-    (function (i, imgObj) {
-      imgObj.onload = function () {
-        singerLoadFn && singerLoadFn();
-        if (i === len - 1) {
-          me[flag] = true;
-          allLoadFn && allLoadFn();
-        }
-        loaded.push(i);
-        imgObj = null;
-      };
-      imgObj.onerror = function () {
-        loaded.push(i);
-        imgObj = null;
-      };
-      imgObj.src = src;
-    })(i, imgObj);
-  }
-  return loaded;
+  return new Promise(function (resolve, reject) {
+    var loaded = [];
+    for (var i = 0, len = imgs.length; i < len; i++) {
+      var img = imgs[i], src = img.src;
+      var imgObj = new Image();
+      var me = vm;
+      (function (i, imgObj) {
+        imgObj.onload = function () {
+          // singerLoadFn && singerLoadFn();
+          // if (i === len - 1) {
+          //   me[flag] = true;
+          //   allLoadFn && allLoadFn();
+          // }
+          loaded.push(i);
+          imgObj = null;
+          resolve({
+            index: i,
+            loaded: loaded
+          });
+        };
+        imgObj.onerror = function () {
+          loaded.push(i);
+          imgObj = null;
+          reject(i, loaded);
+        };
+        imgObj.src = src;
+      })(i, imgObj);
+    }
+    // console.log(loaded);
+    // return loaded;
+  });
+
 }

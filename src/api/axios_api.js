@@ -10,6 +10,100 @@ var queryString = require('querystring');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 const jsonParser = bodyParser.json();
 
+/* 培训 */
+apiRouter.post('/listNewsCategories', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listNewsCategories`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listNewsArticlesByCategory', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listNewsArticlesByCategory`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listCommentsByTargetId', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listCommentsByTargetId`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/getArticleById', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/getArticleById`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/getClubByClubGuid', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/getClubByClubGuid`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/listRecommendArticles', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/listRecommendArticles`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 /* 意见反馈 */
 apiRouter.post('/addFeedback', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/addFeedback`;

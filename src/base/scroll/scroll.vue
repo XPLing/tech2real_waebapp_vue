@@ -105,6 +105,11 @@
         if (this.scroll) {
           this.scroll.closePullUp();
         }
+      },
+      scrollTo (x, y, time, easing) {
+        if (this.scroll) {
+          this.scroll.scrollTo(x, y, time, easing);
+        }
       }
     },
     watch: {

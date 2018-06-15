@@ -6,7 +6,7 @@
         <!--<header class="g-header">-->
         <!--<HeaderTitle :title="pageTitle"></HeaderTitle>-->
         <!--</header>-->
-        <div class="g-banner">
+        <div class="g-banner" v-if="bannerList">
           <swiper :options="swiperOPts" class="g-swiper">
             <swiper-slide v-for="(item, index) in bannerList" :key="index" >
               <img :src="item.coverUrl">
@@ -103,6 +103,7 @@
         pageTitle: '培训',
         routerPrefix: util.routerPrefix,
         swiperOPts: {
+          slideToClickedSlide: true,
           loop: true,
           autoplay: {
             delay: 5000,

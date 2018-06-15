@@ -18,6 +18,7 @@ import { routerPrefix, getUserGuid } from 'assets/js/util';
 // import MobileBind from 'components/user/mobilebind/mobilebind';
 
 const Info = () => import(/* webpackChunkName: "info" */ 'components/info/info');
+const InfoDetail = () => import(/* webpackChunkName: "infoDetail" */ 'components/info/detail/infoDetail');
 const Train = () => import(/* webpackChunkName: "train" */ 'components/study/study');
 const TrainDetail = () => import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail');
 const TeacherDetail = () => import(/* webpackChunkName: "teacherDetail" */ 'components/teacher-detail/teacher-detail');
@@ -69,7 +70,19 @@ const Router = new VueRouter({
     },
     {
       path: routerPrefix + '/info',
-      component: Info
+      component: Info,
+      children: [
+        {
+          path: 'infodetail',
+          component: InfoDetail,
+          children: [
+            {
+              path: ':id(\\d+)',
+              component: InfoDetail
+            }
+          ]
+        }
+      ]
     },
     {
       path: routerPrefix + '/train',
