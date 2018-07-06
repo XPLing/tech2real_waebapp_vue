@@ -11,18 +11,17 @@
         <div class="section detail-info" v-if="courseIntro">
           <div class="detail-info-item teacher">
             <h2 class="title">讲师</h2>
-            <ul>
-              <li class="list">
-                <a href="javascript:void(0);" class="c-media">
+            <ul class="teacher-list">
+              <li class="item" v-for="(item,index) in courseIntro.teachers" :key="index">
+                <router-link :to="{path:`/train/teacherdetail/${item.id}`}" class="c-media">
                   <div class="avatar">
-                    <img :src="courseIntro.teachers[0].faceUrl">
+                    <img :src="item.faceUrl">
                   </div>
                   <div class="desc">
-                    <p class="title">{{courseIntro.teacherNames}}</p>
-                    <p class="info career">{{courseIntro.teachers[0].career}}</p>
-                    <p class="info" v-html="courseIntro.teachers[0].brief"></p>
+                    <p class="title">{{item.realName}}</p>
+                    <p class="info career">{{item.career}}</p>
                   </div>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -85,7 +84,7 @@
         'userGuid'
       ]),
       courseIntro () {
-        return this.courseData && this.courseData.courseResult.result;
+        return this.courseData;
       },
       loadingImgs () {
         if (this.loadedImgs.length > 0) {

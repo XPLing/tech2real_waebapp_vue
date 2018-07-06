@@ -1,0 +1,29 @@
+.c-club-list-item.c-media{
+  padding: formatVal(10,rem);
+  justify-content: space-between;
+  &+.c-club-list-item{
+    border-top: 1px solid $color-border-split;
+  }
+  .media-left{
+    margin-right: formatVal(15,rem);
+    @include w(70);
+    @include h(70);
+    img {
+      @include w(70);
+      @include h(70);
+    }
+  }
+  .media-body{
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    .title{
+      @include fs(14);
+      color: $color-text-211;
+    }
+    .brief{
+      @include fs(12);
+      color: $color-text-tip-645;
+    }
+  }
+}

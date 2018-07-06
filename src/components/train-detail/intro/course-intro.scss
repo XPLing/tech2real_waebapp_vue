@@ -53,6 +53,12 @@
           margin-bottom: formatVal(20, rem);
           @include fs(16);
         }
+        &.teacher .teacher-list{
+          display: flex;
+          .item{
+            flex: 1;
+          }
+        }
       }
 
       .desc {
@@ -62,6 +68,7 @@
         }
       }
       .c-media {
+        justify-content: flex-start;
         .avatar {
           margin-right: formatVal(15, rem);
           @include w(36);
@@ -75,15 +82,17 @@
         .desc {
           padding-top: 0;
           .title {
-            @include fs(17);
-            line-height: 0.8;
+            color: $color-text-40;
+            @include fs(16);
+            margin-bottom: formatVal(5,rem);
           }
           .info {
             max-width: 100%;
             margin-top: 5px;
+            color: $color-gray-99;
             &.career {
               @include fs(14);
-              color: $color-text-b7e;
+
             }
           }
         }

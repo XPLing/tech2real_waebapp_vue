@@ -1,3 +1,177 @@
-.g-recommend {
+$color-red: #FF5F7A;
+$color-green: #7ED321;
+.g-activity {
+  .g-swiper /deep/ .swiper-pagination-bullet-active {
+    background: $color-theme;
+  }
+  .g-swiper /deep/ .swiper-pagination {
+    position: static;
+  }
+  .g-swiper /deep/ .swiper-pagination-bullets {
+    line-height: 0;
+  }
+  .g-main{
+    position: fixed;
+    z-index: 101;
+    left: 0;
+    right: 0;
+    top: formatVal(40,rem);
+    bottom: formatVal(50,rem);
+    .g-banner{
+      .cover{
+        font-size: 0;
+        img{
+          width: 100%;
+          @include h(200);
+        }
+      }
+      .detail{
+        line-height: 1.5;
+        padding: formatVal(10,rem);
+        .title{
+          margin-bottom: formatVal(5,rem);
+          @include fs(16);
+          color: $color-text-211;
+        }
+        .brief{
+          @include fs(14);
+          color: $tipColor;
+        }
+      }
+    }
+    .g-recommend{
+      padding-bottom: formatVal(20,rem);
+      .titlebox{
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: formatVal(15,rem) 0;
+        background-color: $color-border-split;
+        &.red{
+          .icon{
+            span{
+              background-color: $color-red;
+            }
+          }
+        }
+        &.org{
+          .icon{
+            span{
+              background-color: $color-theme;
+            }
+          }
+        }
+        &.green{
+          .icon{
+            span{
+              background-color: $color-green;
+            }
+          }
+        }
+        .icon{
+          display: flex;
+          span{
+            display: inline-block;
+            &+span{
+              margin-left: formatVal(3,rem);
+            }
+            &.big{
+              @include w(7);
+              @include h(7);
+            }
+            &.small{
+              @include w(3);
+              @include h(3);
+            }
+          }
+        }
+        .title{
+          @include fs(16);
+          margin: 0 formatVal(10,rem);
+          color: $color-text-tip-b9a;
+        }
+        .more{
+          position: absolute;
 
+          right: formatVal(8,rem);
+          @include fs(12);
+          color: $color-text-tip-ac;
+        }
+      }
+      &.cont{
+        .cont-swiper /deep/ .c-info-list-item{
+          &+.c-info-list-item{
+            border-top: formatVal(10,rem) solid $color-border-split;
+          }
+        }
+      }
+    }
+    .g-ad{
+      position: relative;
+      a{
+        display: block;
+      }
+      img{
+        display: block;
+        width: 100%;
+      }
+      .float-layer{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        .main{
+          display: flex;
+          justify-content: space-between;
+          align-content: center;
+          padding: formatVal(10,rem) formatVal(10,rem) 0 formatVal(20,rem);
+          height: 100%;
+          color: #553F16;
+          .item{
+            display: flex;
+            flex-direction: column;
+            &.info{
+              justify-content: center;
+              .title{
+                @include fs(20);
+                margin-bottom: formatVal(10,rem);
+              }
+              .subtitle{
+                @include fs(16);
+              }
+            }
+            &.control{
+              justify-content: space-between;
+              .tag{
+                @include fs(12);
+                color: #A8864F;
+                text-align: right;
+              }
+              .btn{
+                @include fs(14);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s ease;
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s;
+}
+.slide-enter, .slide-leave-to {
+  transform: translate3d(100%, 0, 0);
 }

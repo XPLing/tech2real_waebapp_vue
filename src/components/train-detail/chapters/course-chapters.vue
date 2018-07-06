@@ -1,6 +1,6 @@
 <template>
   <div class="g-course-chapters" :class="{'joined':this.appliedState>0}">
-    <scroll :data="courseData" ref="scroll">
+    <scroll :data="chapterData" ref="scroll">
       <div class="g-package c-form-item" ref="package" @click.stop="showSelect">
         <p class="form-left">课程</p>
         <p class="form-body">{{currentPackage}}</p>
@@ -18,7 +18,7 @@
           <ul class="course-list">
             <li class="course-item" v-for="chapter in chapters.chapters" :key="chapter.id">
               <a href="javascript:void(0);" :data-url="chapter.videoUrl"
-                 @click.stop="changeVideo(chapter.videoUrl,$event)">
+                 @click.stop="changeVideo(chapter,$event)">
                 <i class="fa fa-caret-square-o-right"></i><em>{{chapter.title}}</em>
               </a>
             </li>
@@ -47,8 +47,8 @@
 
   export default {
     props: {
-      courseData: {
-        type: Object,
+      chapterData: {
+        type: [Object, Array],
         default: null
       },
       appliedState: {
@@ -93,10 +93,10 @@
         'userGuid'
       ]),
       courseChapters () {
-        if (this.courseData) {
+        if (this.chapterData) {
           if (!this.isSetData) {
             this.isSetData = true;
-            this.chapters = this.courseData.chapterResult.result;
+            this.chapters = this.chapterData;
             var len = this.chapters.length;
             if (len > 0) {
               for (var i = 0; i < len; i++) {

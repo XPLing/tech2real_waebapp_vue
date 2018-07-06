@@ -8,7 +8,7 @@
     bottom: 0;
     left: formatVal(36,rem);
     right: formatVal(-14,rem);
-    border-bottom: 1px solid $color-gray-F6;
+    border-bottom: 1px solid $color-gray-e9;
   }
   .media-left{
     margin-right: formatVal(15,rem);
@@ -29,6 +29,8 @@
       @include fs(14);
       margin: formatVal(10,rem) 0;
       color: $color-text-40;
+      word-break: break-all;
+      word-wrap: break-word;
     }
     .info{
       @include fs(14);

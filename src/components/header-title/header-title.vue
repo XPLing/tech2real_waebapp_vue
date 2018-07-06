@@ -1,7 +1,7 @@
 <template>
   <div class="g-header-title">
     <i v-if="hasBack" class="fa fa-angle-left left" @click="back" aria-hidden="true"></i>
-    <span>{{title}}</span>
+    <span class="title">{{title}}</span>
     <i v-if="hasSearch" class="fa c-icon-search right" aria-hidden="true"></i>
     <i v-if="hasOperate" class="operate right" @click="operateHandle">{{operateStr}}</i>
   </div>

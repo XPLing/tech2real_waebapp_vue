@@ -19,6 +19,9 @@ import { routerPrefix, getUserGuid } from 'assets/js/util';
 
 const Info = () => import(/* webpackChunkName: "info" */ 'components/info/info');
 const InfoDetail = () => import(/* webpackChunkName: "infoDetail" */ 'components/info/detail/infoDetail');
+const InfoDetailComment = () => import(/* webpackChunkName: "infoDetailComment" */ 'components/info/detail/comment/comment');
+const InfoDetailCommentItem = () => import(/* webpackChunkName: "InfoDetailCommentItem" */ 'components/info/detail/comment-item/comment-item');
+const InfoDetailCommentForm = () => import(/* webpackChunkName: "InfoDetailCommentForm" */ 'components/info/detail/commentForm/commentForm');
 const Train = () => import(/* webpackChunkName: "train" */ 'components/study/study');
 const TrainDetail = () => import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail');
 const TeacherDetail = () => import(/* webpackChunkName: "teacherDetail" */ 'components/teacher-detail/teacher-detail');
@@ -36,12 +39,21 @@ const TagList = () => import(/* webpackChunkName: "tagList" */ 'components/tagli
 const CourseApplyResult = () => import(/* webpackChunkName: "courseApplyResult" */ 'components/courseApplyResult/courseApplyResult');
 const CourseApplyInfoCollect = () => import(/* webpackChunkName: "courseApplyInfoCollect" */ 'components/courseApplyInfoCollect/courseApplyInfoCollect');
 const CourseApplyPay = () => import(/* webpackChunkName: "courseApplyPay" */ 'components/courseApplyPay/courseApplyPay');
+const ApplyResult = () => import(/* webpackChunkName: "ApplyResult" */ 'components/courseApplyResult/courseApplyResult');
+const ApplyInfoCollect = () => import(/* webpackChunkName: "ApplyInfoCollect" */ 'components/courseApplyInfoCollect/courseApplyInfoCollect');
+const ApplyPay = () => import(/* webpackChunkName: "ApplyPay" */ 'components/courseApplyPay/courseApplyPay');
 const TrainDetailIntro = () => import(/* webpackChunkName: "trainDetailIntro" */ 'components/train-detail/intro/course-intro');
 const TrainDetailChapters = () => import(/* webpackChunkName: "trainDetailChapters" */ 'components/train-detail/chapters/course-chapters');
 const TrainDetailEvaluate = () => import(/* webpackChunkName: "trainDetailEvaluate" */ 'components/train-detail/evaluate/course-evaluate');
 const TrainDetailCommunity = () => import(/* webpackChunkName: "trainDetailCommunity" */ 'components/train-detail/community/course-community');
 const Community = () => import(/* webpackChunkName: "community" */ 'components/community/community');
 const Activity = () => import(/* webpackChunkName: "activity" */ 'components/activity/activity');
+const ActivityList = () => import(/* webpackChunkName: "ActivityList" */ 'components/activity/list/activityList');
+const ActivityDetail = () => import(/* webpackChunkName: "ActivityDetail" */ 'components/activity/detail/activityDetail');
+const ActivityDetailComment = () => import(/* webpackChunkName: "ActivityDetailComment" */ 'components/activity/detail/comment/comment');
+const ActivityDetailCommentItem = () => import(/* webpackChunkName: "ActivityDetailCommentItem" */ 'components/activity/detail/comment-item/comment-item');
+const ActivityDetailCommentForm = () => import(/* webpackChunkName: "ActivityDetailCommentForm" */ 'components/activity/detail/commentForm/commentForm');
+const TicketList = () => import(/* webpackChunkName: "TicketList" */ 'components/activity/detail/ticket/ticketList');
 const Me = () => import(/* webpackChunkName: "me" */ 'components/me/me');
 const Login = () => import(/* webpackChunkName: "login" */ 'components/user/login/login');
 const User = () => import(/* webpackChunkName: "user" */ 'components/user/user');
@@ -73,12 +85,31 @@ const Router = new VueRouter({
       component: Info,
       children: [
         {
-          path: 'infodetail',
+          path: 'infodetail/:articleId(\\d+)',
           component: InfoDetail,
+          name: 'infoDetail',
           children: [
             {
-              path: ':id(\\d+)',
-              component: InfoDetail
+              path: 'commentlist',
+              component: InfoDetailComment,
+              children: [
+                {
+                  path: ':commentId(\\d+)',
+                  component: InfoDetailCommentItem,
+                  children: [
+                    {
+                      path: 'commentform',
+                      component: InfoDetailCommentForm,
+                      props: true
+                    }
+                  ]
+                },
+                {
+                  path: 'commentform',
+                  component: InfoDetailCommentForm,
+                  props: true
+                }
+              ]
             }
           ]
         }
@@ -153,7 +184,47 @@ const Router = new VueRouter({
     },
     {
       path: routerPrefix + '/activity',
-      component: Activity
+      component: Activity,
+      children: [
+        {
+          path: 'list',
+          component: ActivityList,
+          children: [
+            {
+              path: 'detail/:id(\\d+)',
+              component: ActivityDetail,
+              children: [
+                {
+                  path: 'commentlist',
+                  component: ActivityDetailComment,
+                  children: [
+                    {
+                      path: ':commentId(\\d+)',
+                      component: ActivityDetailCommentItem,
+                      children: [
+                        {
+                          path: 'commentform',
+                          component: ActivityDetailCommentForm,
+                          props: true
+                        }
+                      ]
+                    },
+                    {
+                      path: 'commentform',
+                      component: ActivityDetailCommentForm,
+                      props: true
+                    }
+                  ]
+                },
+                {
+                  path: 'ticketList',
+                  component: TicketList
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       path: routerPrefix + '/me',
@@ -162,11 +233,9 @@ const Router = new VueRouter({
     {
       path: routerPrefix + '/user',
       component: User,
+      redirect: 'login',
+      name: 'user',
       children: [
-        {
-          path: '',
-          redirect: 'login'
-        },
         {
           path: 'login',
           component: Login
@@ -185,6 +254,18 @@ const Router = new VueRouter({
         }
 
       ]
+    },
+    {
+      path: '/applyresult',
+      component: ApplyResult
+    },
+    {
+      path: '/applyinfocollect',
+      component: ApplyInfoCollect
+    },
+    {
+      path: '/applypay',
+      component: ApplyPay
     },
     {
       path: '*',

@@ -47,7 +47,7 @@
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
     <back-top ref="backTop" @backTop="backTop"></back-top>
-    <router-view></router-view>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
@@ -73,11 +73,17 @@
   const transform = util.common.cssPrefix('transform');
 
   export default {
+    provide () {
+      return {
+        reload: this.reload
+      };
+    },
     data () {
       return {
         toptipTxt: '',
         pageTitle: '资讯',
         currView: 'v-a',
+        isRouterAlive: true,
         swiperOPts: {
           loop: true,
           autoplay: {
@@ -149,6 +155,12 @@
       ])
     },
     methods: {
+      reload () {
+        this.isRouterAlive = false;
+        this.$nextTick(() => {
+          this.isRouterAlive = true;
+        });
+      },
       selectInfo (info) {
         var url = `/info/infodetail/${info.id}`;
         this.$router.push({

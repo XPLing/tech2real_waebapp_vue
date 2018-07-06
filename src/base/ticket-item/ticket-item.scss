@@ -1,0 +1,52 @@
+.c-data-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  border-radius: 20px;
+  background-color: $whiteColor;
+  overflow: hidden;
+  &+.c-data-item{
+    margin-top: formatVal(20,rem);
+  }
+  .left{
+    flex: 1;
+    p{
+      padding: formatVal(10,rem) formatVal(13,rem);
+    }
+    .top{
+      @include fs(16);
+      color: $color-text-33;
+      border-bottom: 1px solid $color-border-nav;
+      .price{
+        display: inline-block;
+        margin-right: formatVal(5,rem);
+        @include fs(18);
+        color: $color-theme;
+        .unit{
+          display: inline-block;
+          @include fs(14);
+          color: $color-gray-99;
+          vertical-align: bottom;
+        }
+      }
+    }
+    .bottom{
+      @include fs(14);
+      color: $color-text-66;
+    }
+  }
+  .right{
+    flex: 0 0 formatVal(68,rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 formatVal(15,rem);
+    @include fs(16);
+    color: $whiteColor;
+    background-color: $color-theme;
+    &.disable{
+      color: $color-gray-99;
+      background-color: $color-border-nav;
+    }
+  }
+}

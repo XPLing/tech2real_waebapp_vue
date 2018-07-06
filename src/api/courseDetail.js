@@ -7,8 +7,24 @@ import axios from 'axios';
 
 const debug = process.env.NODE_ENV !== 'production';
 
-export function getCourseData (params) {
-  var url = debug ? '/api/getCourseDetail' : `${REQUEST_PREFIX}/getCourseDetail`;
+export function getCourseById (params) {
+  var url = debug ? '/api/getCourseById' : `${REQUEST_PREFIX}/getCourseById`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+export function listChaptersByCourseId (params) {
+  var url = debug ? '/api/listChaptersByCourseId' : `${REQUEST_PREFIX}/listChaptersByCourseId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -53,5 +69,19 @@ export function getUnpaidCourseApply (params) {
     return Promise.resolve(res.data);
   }, (err) => {
     return Promise.reject(err);
+  });
+}
+
+export function listCourseValidityPeriodByCourseId (params) {
+  var url = debug ? '/api/listCourseValidityPeriodByCourseId' : `${REQUEST_PREFIX}/listCourseValidityPeriodByCourseId`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'get',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (error) => {
+    return Promise.reject(error);
   });
 }

@@ -5,7 +5,7 @@
           src: course.coverUrl,
           error: lazy.error,
           loading: lazy.loading
-        }" alt="">
+        }" />
     </div>
     <div class="media-body">
       <p class="title">{{course.title}}</p>

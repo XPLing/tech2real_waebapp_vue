@@ -65,6 +65,179 @@ apiRouter.post('/listCommentsByTargetId', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+apiRouter.post('/getCommentById', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getCommentById`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listRepliesByCommentId', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listRepliesByCommentId`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/getCommentById', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getCommentById`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/addCommentV2', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/addCommentV2`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/addCommentReply', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/addCommentReply`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/likeCommentV2', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/likeCommentV2`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/favoriteArticle', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/favoriteArticle`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/unfavoriteArticle', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/unfavoriteArticle`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/likeArticle', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/likeArticle`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/unlikeArticle', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/unlikeArticle`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/viewArticle', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/viewArticle`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 apiRouter.get('/getArticleById', function (req, res) {
   var url = `${config.dev.apiproxy_open}/getArticleById`;
   axios({
@@ -104,6 +277,20 @@ apiRouter.get('/listRecommendArticles', function (req, res) {
     res.json(e);
   });
 });
+apiRouter.get('/listCourseValidityPeriodByCourseId', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/listCourseValidityPeriodByCourseId`;
+  axios({
+    method: 'get',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
 /* 意见反馈 */
 apiRouter.post('/addFeedback', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/addFeedback`;
@@ -322,9 +509,28 @@ apiRouter.post('/listTeachers', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+
 /* 课程详情 */
-apiRouter.post('/getCourseDetail', jsonParser, function (req, res) {
-  var url = `${config.dev.apiproxy}/getCourseDetail`;
+apiRouter.post('/getCourseById', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy_open}/getCourseById`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listChaptersByCourseId', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listChaptersByCourseId`;
   axios({
     method: 'post',
     url: url,
@@ -354,6 +560,7 @@ apiRouter.post('/applyCourse', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+
 
 
 /* 登录注册 */
@@ -525,5 +732,140 @@ apiRouter.get('/webLoginByThirdPartCode', function (req, res) {
     res.json(e);
   });
 });
+
+/* 活动 */
+apiRouter.get('/listDiscoverArticles', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/listDiscoverArticles`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/listDiscoverContent', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/listDiscoverContent`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/listDiscoverClubs', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/listDiscoverClubs`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.get('/listDiscoverActivities', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/listDiscoverActivities`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listActivities', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listActivities`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/getActivityById', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getActivityById`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
+/* 门票 */
+apiRouter.post('/listTickets', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listTickets`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
+/* 报名 */
+apiRouter.post('/listInfoCollectionsByGuid', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listActivities`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
 
 module.exports = apiRouter;

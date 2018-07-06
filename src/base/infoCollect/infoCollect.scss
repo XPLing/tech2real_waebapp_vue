@@ -1,10 +1,22 @@
 .g-info-collect {
-
+  ::-webkit-input-placeholder {
+    color: $color-text-wcc;
+  }
+  :-moz-placeholder {
+    color: $color-text-wcc;
+  }
+  ::-moz-placeholder {
+    color: $color-text-wcc;
+  }
+  :-ms-input-placeholder {
+    color: $color-text-wcc;
+  }
   input {
     color: $color-highlight-background;
     &[type="text"]:disabled {
       background-color: transparent;
     }
+
   }
   .tip {
     @include fs(14);

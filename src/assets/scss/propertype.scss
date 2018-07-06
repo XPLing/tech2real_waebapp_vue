@@ -549,3 +549,18 @@
     }
   }
 }
+
+.c-toast{
+  @include fs(14);
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.error{
+    color: $color-text-error;
+  }
+  &.w200{
+    width: 200px;
+    height: 100px;
+  }
+}

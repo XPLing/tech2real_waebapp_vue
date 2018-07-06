@@ -4,12 +4,15 @@
  * @param {[type]} value [键值]
  * @param {[type]} time  [保存的时间（小时）]
  */
+// import jsBase64 from 'js-base64';
 
+// var Base64 = jsBase64.Base64;
 export function setCookie (key, value, time) {
   if (!value) {
     removeCookie(key);
   } else {
     if (time) {
+      // value = Base64.encode(value);
       var Days = time || 7; // 默认保留7小时
       var exp = new Date();
       window.localStorage[key] = JSON.stringify({
@@ -28,6 +31,7 @@ export function getCookie (key) {
   if (!o) {
     return null;
   }
+  // o = Base64.decode(o);
   o = JSON.parse(o);
   if (o.expires < new Date().getTime()) {
     return null;
@@ -38,6 +42,7 @@ export function getCookie (key) {
 
 export function removeCookie (key) {
   let o = JSON.parse(window.localStorage[key]);
+  // o = Base64.decode(o);
   if (!o) {
     return false;
   } else {
@@ -49,6 +54,7 @@ export function setCookieSession (key, value, time) {
   if (!value) {
     removeCookie(key);
   } else {
+    // value = Base64.encode(value);
     if (time) {
       var Days = time || 7; // 默认保留7小时
       var exp = new Date();
@@ -68,6 +74,7 @@ export function getCookieSession (key) {
   if (!o) {
     return null;
   }
+  // o = Base64.decode(o);
   o = JSON.parse(o);
   if (o.expires < new Date().getTime()) {
     return null;
@@ -81,6 +88,7 @@ export function removeCookieSession (key) {
   if (!o) {
     return false;
   } else {
+    // o = Base64.decode(o);
     window.sessionStorage.removeItem(key);
   }
 }

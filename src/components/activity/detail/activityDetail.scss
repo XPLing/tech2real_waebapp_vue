@@ -1,0 +1,150 @@
+.g-activity-detail {
+  position: fixed;
+  z-index: 102;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-gray-F6;
+  @include fs(14);
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-main{
+    position: fixed;
+    z-index: 10;
+    top: formatVal(40,rem);
+    bottom: formatVal(50,rem);
+    left: 0;
+    right: 0;
+    .scroll-box{
+      background-color: $whiteColor;
+    }
+    .g-banner{
+      font-size: 0;
+      border-bottom: formatVal(10,rem) solid $color-shadow-nav;
+      img{
+        width: 100%;
+      }
+      .intro{
+        padding: formatVal(10,rem) formatVal(8,rem);
+        @include fs(12);
+        .title{
+          margin-bottom: formatVal(10,rem);
+          @include fs(16);
+          color: $color-text-40;
+        }
+        .sub-info{
+          color: $color-gray-99;
+        }
+      }
+    }
+    .info-base{
+      >.item{
+        @include fs(14);
+        border-bottom: formatVal(10,rem) solid $color-shadow-nav;
+        >p{
+          display: flex;
+          justify-content: space-between;
+          align-content: center;
+          padding: formatVal(8,rem);
+          &+p {
+            border-top: 1px solid $color-shadow-nav;
+          }
+          >.name{
+            color: $color-gray-99;
+          }
+          >.cont{
+            text-align: right;
+            color: $color-text-40;
+          }
+        }
+
+      }
+
+    }
+    .info-detail{
+      padding: formatVal(8,rem);
+      .title{
+        border-left: formatVal(5,rem) solid $color-theme;
+        padding-left: formatVal(10,rem);
+        margin-bottom: formatVal(10,rem);
+        color: $color-text-40;
+        line-height: 2;
+      }
+      .brief{
+        *{
+          max-width: 100%!important;
+        }
+      }
+    }
+  }
+  .bottom-btn{
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    @include h(50);
+    display: flex;
+    justify-content: space-between;
+    background-color: $whiteColor;
+    box-shadow: 0 -2px 1px $color-shadow-nav;
+    .btn{
+      @include w(150);
+      @include lh(50);
+      color: $whiteColor;
+      @include fs(14);
+      text-align: center;
+      background-color: $color-theme;
+      &.disable{
+        color: $color-gray-99;
+        background-color: $color-border-split;
+      }
+    }
+    .control-bar{
+      flex: 1;
+      padding: 0 formatVal(15,rem);
+      display: flex;
+      align-items: center;
+      text-align: center;
+      p{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        color: #43484D;
+        .num{
+          color: $whiteColor;
+          @include fs(12);
+          @include w(14);
+          @include h(14);
+          @include lh(14);
+          text-align: center;
+        }
+        .icon{
+          @include fs(16);
+          margin-bottom: formatVal(5,rem);
+          &.active{
+            color: $color-theme;
+          }
+        }
+        .name{
+          line-height: 1;
+          @include fs(12);
+        }
+      }
+    }
+  }
+
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s ease;
+}

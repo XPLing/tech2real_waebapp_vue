@@ -4,28 +4,34 @@
       <header class="g-header">
         <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack"></HeaderTitle>
       </header>
-      <div class="g-video">
-        <div v-if="videoUrl" class="video-wrapper">
-          <video controls :src="videoUrl" ref="video"></video>
-          <p class="video-mask" v-show="isPause" @click.stop="Vclick">
-            <i class="fa" :class="{'fa-spin fa-circle-o-notch': !isCanplay,'fa-play-circle':isCanplay}"></i>
-          </p>
+      <div class="g-video" v-if="courseData">
+        <div v-if="chapterData">
+          <div v-if="videoUrl" class="video-wrapper">
+            <video controls :src="videoUrl" ref="video"></video>
+            <p class="video-mask" v-show="isPause" @click.stop="Vclick">
+              <i class="fa" :class="{'fa-spin fa-circle-o-notch': !isCanplay,'fa-play-circle':isCanplay}"></i>
+            </p>
+          </div>
+          <a class="file-link" v-else target="_blank" :href="fileUrl">
+            <img :src="coverUrl">
+          </a>
         </div>
-        <img v-if="courseData && courseData.chapterResult.result.length <= 0" :src="coverUrl">
+        <img v-else :src="coverUrl">
       </div>
       <nav class="g-nav-wrapper">
         <TrainDetailTab></TrainDetailTab>
       </nav>
       <div class="g-main">
         <keep-alive>
-          <router-view :applied-state="appliedState" :course-data="courseData" :apply-result="applyResult"
+          <router-view :applied-state="appliedState" :course-data="courseData" :chapter-data="chapterData"
+                       :apply-result="applyResult"
                        @setdata="setDatas" @changevideo="changeVideo" @changeapplyres="changeApplyResult"
                        ref="view"></router-view>
         </keep-alive>
       </div>
       <div class="g-join" ref="join" v-if="courseData && (!userGuid ||this.appliedState<=0)">
         <span
-          class="price">{{courseData.courseResult.result.price == 0 ? "免费" : courseData.courseResult.result.price}}</span>
+          class="price">{{courseData.price == 0 ? "免费" : courseData.price}}</span>
         <button class="btn" @click="operate">{{courseStateStr}}</button>
       </div>
       <confirm ref="confirmsWrapper" :text="confirmTxt" @cancel="cancel" @confirm="confirm"></confirm>
@@ -34,7 +40,8 @@
       </top-tip>
       <loading ref="loading"></loading>
       <g-mask @clickMask="clickMask" ref="mask"></g-mask>
-      <g-select :title="selectTitle" @selectListItem="selectListItem" class="g-select-wrapper">
+      <g-select :title="selectTitle" :select-data="listCourseValidityPeriod" @selectConfirm="selectPeriodItem"
+                class="g-select-wrapper" ref="selectPeriod">
         <div class="price">
           <p class="real">￥4080.00</p>
           <p class="original">原价：<span>¥ 5828.00</span></p>
@@ -49,7 +56,13 @@
   import Loading from 'base/loading/loading';
   import Confirm from 'base/confirm/confirm';
   import TrainDetailTab from 'components/train-detail-tab/train-detail-tab';
-  import { getCourseData, applyCourse, getUnpaidCourseApply } from 'api/courseDetail';
+  import {
+    getCourseById,
+    listChaptersByCourseId,
+    listCourseValidityPeriodByCourseId,
+    applyCourse,
+    getUnpaidCourseApply
+  } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -91,8 +104,10 @@
         hasSearch: false,
         hasBack: true,
         courseData: null,
+        chapterData: null,
         videoUrl: null,
         coverUrl: null,
+        fileUrl: null,
         appliedState: null,
         isPause: true,
         isCanplay: false,
@@ -101,7 +116,8 @@
         courseStateStr: '加入学习',
         courseState: 0,
         applyResult: null,
-        selectTitle: '套餐'
+        selectTitle: '套餐',
+        listCourseValidityPeriod: null
       };
     },
     computed: {
@@ -125,7 +141,7 @@
     beforeRouteEnter (to, from, next) {
       next((vm) => {
         var $this = vm;
-        vm._getCourseData($this);
+        vm.getCourseData($this);
         return true;
       });
     },
@@ -134,7 +150,7 @@
       for (var i = 0, len = list.length; i < len; i++) {
         var reg = list[i];
         if (from.path.indexOf(reg) > -1) {
-          this._getCourseData();
+          this.getCourseData();
           break;
         }
       }
@@ -142,6 +158,19 @@
     },
     created () {
       this._getCourseID();
+      this._listCourseValidityPeriodByCourseId().then((res) => {
+        if (res.code) {
+          if (res.code != ERR_OK) {
+            this.toptipTxt = res.message;
+            this.$refs.toptip.show();
+            return;
+          }
+          this.listCourseValidityPeriod = res.result;
+        }
+      }, erro => {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      });
       communication.$off();
       communication.$on('showGlobalMask', (vm) => {
         if (vm.$refs.join) {
@@ -156,11 +185,22 @@
         vm.$refs.mask.hide();
       });
 
-      // this._getCourseData();
+      // this.getCourseData();
     },
     methods: {
-      selectListItem(info){
-        console.log(info);
+      selectPeriodItem (data) {
+        this.courseData.courseValidityPeriod = data;
+//        if (this.courseStateStr == COURSESTATECONFIG.STATE_APPLY || this.courseStateStr == COURSESTATECONFIG.STATE_APPLY_GO_ON) {
+//          if (this.courseData.needInfo) {
+//            this.$router.push({
+//              path: `${this.routerPrefix}/train/${this.courseID}/applyinfocollect`
+//            });
+//            return;
+//          } else {
+//            this.$refs.confirmsWrapper.show();
+//          }
+//        }
+        this.$refs.confirmsWrapper.show();
       },
       ...mapMutations({
         updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
@@ -177,35 +217,32 @@
       hideMask () {
         this.$refs.mask.hide();
       },
+      getCourseData ($this) {
+        $this = $this || this;
+        $this._getCourseById($this);
+        $this._listChaptersByCourseId($this);
+      },
       _getCourseID () {
         this.courseID = this.$route.params.id;
       },
-      _getCourseData ($this) {
-        $this = $this || this;
+      _getCourseById ($this) {
         var param = {
           id: $this.courseID,
           productGuid: $this.productGuid,
           userGuid: $this.userGuid
         };
-        getCourseData(param).then((res) => {
+        getCourseById(param).then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
               $this.toptipTxt = res.message;
               $this.$refs.toptip.show();
               return;
             }
-          }
-          if (res.chapterResult || res.courseResult) {
-            $this.courseData = res;
-          }
-          if (res.chapterResult.code == ERR_OK) {
-            $this.videoUrl = res.chapterResult.result.length > 0 ? res.chapterResult.result[0].chapters[0].videoUrl : null;
-          }
-          if (res.courseResult.code == ERR_OK) {
-            let courseResultData = res.courseResult;
-            $this.coverUrl = courseResultData.result.coverUrl;
-            $this.appliedState = courseResultData.result.appliedState;
-            $this.courseState = courseResultData.result.status;
+            let courseResultData = res.result;
+            $this.courseData = courseResultData;
+            $this.coverUrl = courseResultData.coverUrl;
+            $this.appliedState = courseResultData.appliedState;
+            $this.courseState = courseResultData.status;
             switch ($this.courseState) {
               case 1:
                 $this.courseStateStr = COURSESTATESTR[6];
@@ -214,13 +251,14 @@
                 $this.courseStateStr = COURSESTATESTR[4];
                 break;
               default:
-                if (courseResultData.result.applyTotalCount != 0 && (courseResultData.result.applyTotalCount == courseResultData.result.applyCount)) {
+                if (courseResultData.applyTotalCount != 0 && (courseResultData.applyTotalCount == courseResultData.applyCount)) {
                   $this.courseStateStr = COURSESTATESTR[5];
                 } else {
                   $this.courseStateStr = COURSESTATESTR[$this.appliedState];
                 }
                 break;
             }
+
           }
         }, erro => {
           $this.toptipTxt = erro.message;
@@ -231,9 +269,45 @@
         let params = {
           id: this.courseID,
           userGuid: this.userGuid,
-          productGuid: this.productGuid
+          productGuid: this.productGuid,
+          courseValidityPeriodId: this.courseData.courseValidityPeriod.item.id
         };
         return applyCourse(params);
+      },
+      _listCourseValidityPeriodByCourseId () {
+        let params = {
+          courseId: this.courseID,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid
+        };
+        return listCourseValidityPeriodByCourseId(params);
+      },
+      _listChaptersByCourseId ($this) {
+        let params = {
+          id: this.courseID,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid
+        };
+        listChaptersByCourseId(params).then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            if (res.result.length > 0) {
+              $this.chapterData = res.result;
+              if (res.result[0].type !== 2) {
+                $this.fileUrl = res.result[0].fileUrl;
+              } else {
+                $this.videoUrl = res.result[0].videoUrl;
+              }
+            }
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
       },
       _getUnpaidCourseApply () {
         let params = {
@@ -244,14 +318,25 @@
         return getUnpaidCourseApply(params);
       },
       setDatas (key, val, index, dataName) {
-        this.$set(this.courseData.chapterResult.result[index], key, val);
+        this.$set(this.chapterData[index], key, val);
       },
-      changeVideo (url) {
-        if (url === this.videoUrl) {
-          return;
+      changeVideo (data) {
+        var vurl = data.videoUrl, type = data.type, furl = data.fileUrl;
+        if (type === 2) {
+          if (vurl === this.videoUrl) {
+            return;
+          }
+          this.isCanplay = false;
+          this.videoUrl = vurl;
+          this.fileUrl = null;
+        } else {
+          if (furl === this.fileUrl) {
+            return;
+          }
+          this.videoUrl = null;
+          this.isCanplay = false;
+          this.fileUrl = furl;
         }
-        this.isCanplay = false;
-        this.videoUrl = url;
       },
       changeApplyResult (res) {
         this.applyResult = res;
@@ -273,17 +358,7 @@
         this.$refs.video.pause();
       },
       operate () {
-        if (this.courseStateStr == COURSESTATECONFIG.STATE_APPLY || this.courseStateStr == COURSESTATECONFIG.STATE_APPLY_GO_ON) {
-          if (this.courseData.courseResult.result.needInfo) {
-            this.$router.push({
-              path: `${this.routerPrefix}/train/${this.courseID}/applyinfocollect`
-            });
-          } else {
-            this.$refs.confirmsWrapper.show();
-          }
-        }
-        this.$refs.confirmsWrapper.show();
-
+        this.$refs.selectPeriod.showFlag = true;
       },
       confirm () {
         if (!this.userGuid) {
@@ -294,10 +369,10 @@
           return false;
         }
         if (this.courseStateStr == COURSESTATECONFIG.STATE_APPLY || this.courseStateStr == COURSESTATECONFIG.STATE_APPLY_GO_ON) {
-          if (this.courseData.courseResult.result.needInfo) {
-            this.applyResult = this.courseData.courseResult;
+          if (this.courseData.needInfo) {
+            this.applyResult = this.courseData;
             this.$router.push({
-              path: `${this.routerPrefix}/train/${this.courseID}/applyinfocollect`
+              path: `/train/${this.courseID}/applyinfocollect`
             });
           } else {
             this.$refs.loading.show();
@@ -356,7 +431,10 @@
       GSelect
     },
     watch: {
-      videoUrl () {
+      videoUrl (newVal) {
+        if (!newVal) {
+          return false;
+        }
         setTimeout(() => {
           this.$refs.video.addEventListener('canplay', () => {
             this.isCanplay = true;

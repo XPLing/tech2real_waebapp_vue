@@ -15,7 +15,7 @@
         <p class="time">{{community.createTime | formatDate('yyyy-MM-dd')}}</p>
         <p class="tool">
           <span class="item comment"><i class="icon c-icon-comment-square"></i>{{community.replyCount}}</span>
-          <span class="item like"><i class="icon c-icon-like"></i>{{community.likeCount}}</span>
+          <span class="item like" @click.stop="like(community)"><i class="icon c-icon-like" :class="{'active': community.isLike==='Y'}"></i>{{community.likeCount}}</span>
         </p>
       </div>
     </div>
@@ -39,6 +39,9 @@
     methods: {
       selectItem (communityItem) {
         this.$emit('selectCommunityItem', communityItem);
+      },
+      like(communityItem){
+        this.$emit('like', communityItem);
       }
     }
   };

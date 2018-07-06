@@ -7,7 +7,7 @@
         <slot></slot>
         <div class="g-select-wrapper">
           <scroll :data="{selectData}" ref="scroll">
-            <g-select-list @selectItem="selectListItem"></g-select-list>
+            <g-select-list @selectItem="selectListItem" :selectData="selectData"></g-select-list>
           </scroll>
         </div>
         <p class="btn" @click="confirm">确定</p>
@@ -88,12 +88,13 @@
         this.showFlag = false;
       },
       confirm(){
-        this.$emit('selectListItem', this.selectInfo);
+        this.$emit('selectConfirm', this.selectInfo);
         this.hide();
       },
       selectListItem (item, index) {
         this.selectInfo.item = item;
         this.selectInfo.index = index;
+        this.$emit('selectListItem', item, index);
       },
       clickMask () {
         this.hide();

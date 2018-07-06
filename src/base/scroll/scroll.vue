@@ -49,6 +49,32 @@
       }, 20);
     },
     methods: {
+      enable () {
+        this.scroll && this.scroll.enable();
+      },
+      disable () {
+        this.scroll && this.scroll.disable();
+      },
+      refresh () {
+        if (this.scroll) {
+          this.scroll.refresh();
+        }
+      },
+      finishPullUp () {
+        if (this.scroll) {
+          this.scroll.finishPullUp();
+        }
+      },
+      closePullUp () {
+        if (this.scroll) {
+          this.scroll.closePullUp();
+        }
+      },
+      scrollTo (x, y, time, easing) {
+        if (this.scroll) {
+          this.scroll.scrollTo(x, y, time, easing);
+        }
+      },
       _initScroll () {
         if (!this.$refs.wrapper) {
           return;
@@ -83,32 +109,6 @@
           this.scroll.on('pullingUp', () => {
             this.$emit('pullingUp');
           });
-        }
-      },
-      enable () {
-        this.scroll && this.scroll.enable();
-      },
-      disable () {
-        this.scroll && this.scroll.disable();
-      },
-      refresh () {
-        if (this.scroll) {
-          this.scroll.refresh();
-        }
-      },
-      finishPullUp () {
-        if (this.scroll) {
-          this.scroll.finishPullUp();
-        }
-      },
-      closePullUp () {
-        if (this.scroll) {
-          this.scroll.closePullUp();
-        }
-      },
-      scrollTo (x, y, time, easing) {
-        if (this.scroll) {
-          this.scroll.scrollTo(x, y, time, easing);
         }
       }
     },

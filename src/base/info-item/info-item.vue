@@ -1,7 +1,7 @@
 <template>
   <li class="c-info-list-item c-media" @click.stop="selectItem(info)">
     <div class="media-body">
-      <p class="title">{{info.listTitle}}</p>
+      <p class="title">{{info.listTitle | ellipsis(28)}}</p>
       <p class="info">
         <span>{{ info.author }}</span>
         <span>{{ new Date(info.createdTime) | formatDate('yyyy-MM-dd')}}</span>

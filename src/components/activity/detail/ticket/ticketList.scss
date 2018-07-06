@@ -1,0 +1,48 @@
+.g-ticket {
+  position: fixed;
+  z-index: 102;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-gray-F6;
+  @include fs(14);
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-main{
+    position: fixed;
+    z-index: 10;
+    top: formatVal(40,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: formatVal(20,rem) formatVal(10,rem);
+    .g-title{
+      padding: formatVal(20,rem) formatVal(15,rem);
+      .title{
+        @include fs(24);
+        color: $color-text-b3d;
+      }
+      .subtitle{
+        margin-top: formatVal(15,rem);
+        color: $color-gray-99;
+      }
+    }
+    .ticket-wrapper{
+
+    }
+    .no-result{
+      margin-top: formatVal(50,rem);
+    }
+    .request-result{
+      padding: formatVal(10,rem) 0;
+      @include fs(12);
+      color: $color-text-tip-b9a;
+      text-align: center;
+    }
+  }
+}

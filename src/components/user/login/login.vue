@@ -80,6 +80,26 @@
         routerPrefix: util.routerPrefix
       };
     },
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        var $this = vm;
+        var toPath = to.fullPath;
+        var fromPath = from.fullPath;
+        var isUser = false;
+        for (var i = 0, len = from.matched.length; i < len; i++) {
+          var item = from.matched[i];
+          var name = item.name;
+          if (name === 'user') {
+            isUser = true;
+            break;
+          }
+        }
+        if (!isUser) {
+          vm.$store.commit('UPDATA_BEFORELOGINPAGE', fromPath);
+        }
+        return true;
+      });
+    },
     mounted () {
       setTimeout(() => {
         var browser = util.common.getbrowserType();

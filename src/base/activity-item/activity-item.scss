@@ -1,0 +1,51 @@
+.c-data-list-item{
+  .cover{
+    font-size: 0;
+    img{
+      width: 100%;
+      @include h(200);
+    }
+  }
+  >.detail{
+    line-height: 1.5;
+    padding: formatVal(10,rem);
+    .title{
+      margin-bottom: formatVal(10,rem);
+      @include fs(16);
+      color: $color-text-211;
+    }
+    .info{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .detail{
+        font-size: 0;
+        color: $color-gray;
+        &.disable{
+          padding: 3px 10px;
+          color: $color-text-40;
+          background-color: $color-shadow-nav;
+          border-radius: 20px;
+          i{
+            @include fs(12);
+          }
+        }
+        i{
+          @include fs(14);
+          display: inline-block;
+          &+i{
+            margin-left: 5px;
+          }
+        }
+      }
+      .price {
+        &.red {
+          color: $color-text-stress-r;
+        }
+        &.green {
+          color: $color-text-stress-g;
+        }
+      }
+    }
+  }
+}

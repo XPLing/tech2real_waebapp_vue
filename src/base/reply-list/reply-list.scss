@@ -1,0 +1,31 @@
+.c-info-list-item.c-media{
+  padding: formatVal(12,rem) 0;
+  .media-left{
+    margin-right: formatVal(15,rem);
+    @include w(109);
+    @include h(85);
+    img {
+      @include w(109);
+      @include h(85);
+    }
+  }
+  .media-body{
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    .title{
+      word-break: break-all;
+      margin-bottom: formatVal(10,rem);
+    }
+    .info{
+      .price {
+        &.red {
+          color: $color-text-stress-r;
+        }
+        &.green {
+          color: $color-text-stress-g;
+        }
+      }
+    }
+  }
+}

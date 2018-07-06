@@ -23,6 +23,7 @@ export function listNewsCategories (params) {
     return Promise.reject(err);
   });
 }
+
 export function listNewsArticlesByCategory (params) {
   var url = debug ? '/api/listNewsArticlesByCategory' : `/listNewsArticlesByCategory`;
   const data = Object.assign({}, commonParams, params);
@@ -39,6 +40,7 @@ export function listNewsArticlesByCategory (params) {
     return Promise.reject(err);
   });
 }
+
 export function listCommentsByTargetId (params) {
   var url = debug ? '/api/listCommentsByTargetId' : `/listCommentsByTargetId`;
   const data = Object.assign({}, commonParams, params);
@@ -55,6 +57,159 @@ export function listCommentsByTargetId (params) {
     return Promise.reject(err);
   });
 }
+
+export function listRepliesByCommentId (params) {
+  var url = debug ? '/api/listRepliesByCommentId' : `/listRepliesByCommentId`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
+export function getCommentById (params) {
+  var url = debug ? '/api/getCommentById' : `/getCommentById`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
+export function addCommentV2 (params) {
+  var url = debug ? '/api/addCommentV2' : `/addCommentV2`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
+export function addCommentReply (params) {
+  var url = debug ? '/api/addCommentReply ' : `/addCommentReply `;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
+export function likeCommentV2 (params) {
+  var url = debug ? '/api/likeCommentV2 ' : `/likeCommentV2 `;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
+
+export function favoriteArticle (params) {
+  var url = debug ? '/api/favoriteArticle' : `${REQUEST_PREFIX}/favoriteArticle`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'get',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (error) => {
+    return Promise.reject(error);
+  });
+}
+export function unfavoriteArticle (params) {
+  var url = debug ? '/api/unfavoriteArticle' : `${REQUEST_PREFIX}/unfavoriteArticle`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'get',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (error) => {
+    return Promise.reject(error);
+  });
+}
+export function likeArticle (params) {
+  var url = debug ? '/api/likeArticle' : `${REQUEST_PREFIX}/likeArticle`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'get',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (error) => {
+    return Promise.reject(error);
+  });
+}
+export function unlikeArticle (params) {
+  var url = debug ? '/api/unlikeArticle' : `${REQUEST_PREFIX}/unlikeArticle`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'get',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (error) => {
+    return Promise.reject(error);
+  });
+}
+export function viewArticle (params) {
+  var url = debug ? '/api/viewArticle' : `${REQUEST_PREFIX}/viewArticle`;
+  const data = Object.assign({}, {}, params);
+  return axios({
+    url: url,
+    method: 'get',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (error) => {
+    return Promise.reject(error);
+  });
+}
+
 export function getArticleById (params) {
   var url = debug ? '/api/getArticleById' : `${REQUEST_PREFIX}/getArticleById`;
   const data = Object.assign({}, commonParams, params);
@@ -68,6 +223,7 @@ export function getArticleById (params) {
     return Promise.reject(error);
   });
 }
+
 export function getClubByClubGuid (params) {
   var url = debug ? '/api/getClubByClubGuid' : `${REQUEST_PREFIX}/getClubByClubGuid`;
   const data = Object.assign({}, {}, params);
@@ -81,6 +237,7 @@ export function getClubByClubGuid (params) {
     return Promise.reject(error);
   });
 }
+
 export function listRecommendArticles (params) {
   var url = debug ? '/api/listRecommendArticles' : `${REQUEST_PREFIX}/listRecommendArticles`;
   const data = Object.assign({}, {}, params);

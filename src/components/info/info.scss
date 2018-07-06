@@ -56,7 +56,7 @@
     }
   }
   .bg-layer{
-    position: absolute;
+    position: fixed;
     height: 100%;
     top: formatVal(284,rem);
     left: 0;

@@ -4,18 +4,16 @@
       <header class="g-header">
         <HeaderTitle :title="pageTitle" :has-back="hasBack"></HeaderTitle>
       </header>
-      <div class="info-collect-wrapper">
-        <scroll :data="applyResult" ref="scroll">
-          <div class="g-scroll-continer" v-if="applyResult">
-            <!--<form class="c-form" data-vv-scope="infoCollect">-->
-            <info-collect @refresh="scrollRefresh" ref="infoCollect" :info-collect-data="applyResult.infoColletions"
-                          @showselect="showSelect"></info-collect>
-            <!--</form>-->
-          </div>
-          <div class="no-result" v-else>
-            <no-result :title="'暂无报名信息~~'"></no-result>
-          </div>
-        </scroll>
+      <div class="info-collect-wrapper" ref="scrollDom">
+        <div class="g-scroll-continer" v-if="applyResult">
+          <!--<form class="c-form" data-vv-scope="infoCollect">-->
+          <info-collect ref="infoCollect" :collect-target-data="applyResult"
+                        @showselect="showSelect" @submitForm="validateForm"></info-collect>
+          <!--</form>-->
+        </div>
+        <div class="no-result" v-else>
+          <no-result :title="'暂无报名信息~~'"></no-result>
+        </div>
       </div>
       <div class="g-select-box">
         <g-select :select-data="selectOpts" :current-select="currentSelect" ref="select"
@@ -25,8 +23,8 @@
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
       <loading ref="loading"></loading>
-      <buttom-btn-full v-if="applyResult && applyResult.length>0" :btnstr="'提交信息'" @bottomconfirm="validateForm()"
-                       ref="buttomBtn"></buttom-btn-full>
+      <!--<buttom-btn-full v-if="applyResult" :btnstr="'提交信息'" @bottomconfirm="validateForm()"-->
+                       <!--ref="buttomBtn"></buttom-btn-full>-->
     </div>
   </transition>
 </template>
@@ -44,10 +42,11 @@
   import { applyCourse } from 'api/courseDetail';
   import { mapGetters, mapMutations } from 'vuex';
   import { ERR_OK } from 'api/config';
+  import { listInfoCollectionsByGuid } from 'api/apply';
   import Loading from 'base/loading/loading';
   import TopTip from 'base/top-tip/top-tip';
   import NoResult from 'base/no-result/no-result';
-
+  import { Toast } from 'mint-ui';
   export default {
     props: {
       applyResult: {
@@ -309,6 +308,14 @@
               this.$refs.loading.hide();
               util.common.request.tipMsg(this, erro);
             });
+          } else {
+            // this.$refs.scroll.scrollTo(0, 0, 300);
+            Toast({
+              message: '信息有误，请检查！',
+              duration: 2000,
+              className: 'c-toast w200'
+            });
+            this.$refs.scrollDom.scrollTop = 0;
           }
         }, (erro) => {
           console.log('Form erro!');
@@ -319,7 +326,8 @@
           id: this.courseID,
           userGuid: this.userGuid,
           productGuid: this.productGuid,
-          infoCollections: infoCollections
+          infoCollections: infoCollections,
+          courseValidityPeriodId: this.applyResult.courseValidityPeriod.item.id
         };
         return applyCourse(params);
       }

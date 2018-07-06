@@ -6,12 +6,15 @@ import App from 'components/index/index';
 import router from 'router';
 import 'assets/scss/common.scss';
 import 'font-awesome/scss/font-awesome.scss';
+import 'mint-ui/lib/style.css';
 import fastclick from 'fastclick';
 import { VeeValidate, Veeconfig } from 'assets/js/validate';
 import store from 'store';
 import * as filters from 'assets/js/filters';
-import VueLazyload from 'vue-lazyload'
+import VueLazyload from 'vue-lazyload';
+import Mint from 'mint-ui';
 
+Vue.use(Mint);
 Vue.use(VueLazyload, {
   loading: require('assets/image/defaultAvatar.png'),
   error: require('assets/image/defaultAvatar.png')

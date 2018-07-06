@@ -7,11 +7,16 @@
   color: $whiteColor;
   text-align: center;
   background-color: $color-theme;
+  .title{
+    max-width: 70%;
+    display: inline-block;
+    @extend %ellipsis;
+  }
   .fa{
     position: absolute;
     z-index: 2;
     @include fs(26);
-    @include lh(40);
+    @include lh(39);
     &.left{
       left: formatVal(15,rem);
     }

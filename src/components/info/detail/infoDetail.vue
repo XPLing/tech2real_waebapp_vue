@@ -32,12 +32,14 @@
                 </p>
               </div>
             </div>
-            <div class="comment">
+            <div class="comment" v-if="communityList && communityList.length>0">
               <p class="title"><i class="icon c-icon-comment-circle"></i><span>最新评论</span></p>
-              <div v-if="communityList">
-                <community-list :community-list="communityList" @selectCommunity="selectCommunity"></community-list>
-              </div>
-              <router-link class="btn" :to="'/'">查看更多评论</router-link>
+              <community-list :community-list="communityList" @selectCommunity="selectCommunity"
+                              @like="like"></community-list>
+              <router-link class="btn"
+                           :to="{path:`/info/infodetail/${this.articleId}/commentlist`, query: {title:`${this.pageTitle}`}}">
+                查看更多评论
+              </router-link>
             </div>
             <div class="recommend">
               <p class="title"><i class="icon c-icon-recommend"></i><span>推荐阅读</span></p>
@@ -51,26 +53,29 @@
         </scroll>
       </div>
       <div class="control-bar">
-        <p>
-          <i class="icon c-icon-heart"></i>
-          <span class="name">喜欢 <i v-if="articleInfo && articleInfo.likeUserCount>0">({{articleInfo.likeUserCount}})</i> </span>
+        <p @click.stop="setFavorite">
+          <i class="icon c-icon-heart" :class="{'active': viewArticle && viewArticle.favoriteFlag === 'Y'}"></i>
+          <span class="name">喜欢 <i v-if="viewArticle && viewArticle.favoriteCount>0">({{viewArticle.favoriteCount}})</i> </span>
         </p>
-        <p>
-          <i class="icon c-icon-star" :class="{'active': articleInfo && articleInfo.isRecommend === 'Y'}"></i>
-          <span class="name">收藏 <i v-if="articleInfo && articleInfo.likeUserCount>0">({{articleInfo.likeUserCount}})</i> </span>
+        <p @click.stop="setLike">
+          <i class="icon c-icon-star" :class="{'active': viewArticle && viewArticle.likeFlag === 'Y'}"></i>
+          <span class="name">收藏 <i v-if="viewArticle && viewArticle.likeCount>0">({{viewArticle.likeCount}})</i> </span>
         </p>
-        <p>
-          <i class="icon c-icon-share"></i>
-          <span class="name">分享 <i v-if="articleInfo && articleInfo.likeUserCount>0">({{articleInfo.likeUserCount}})</i> </span>
-        </p>
-        <p>
+        <!--<p>-->
+        <!--<i class="icon c-icon-share"></i>-->
+        <!--<span class="name">分享</span>-->
+        <!--</p>-->
+        <router-link tag="p"
+                     :to="{path:`/info/infodetail/${this.articleId}/commentlist`, query: {title:`${this.pageTitle}`}}">
           <i class="icon c-icon-comment-square-o"></i>
-          <span class="name">评论 <i v-if="articleInfo && articleInfo.likeUserCount>0">({{articleInfo.likeUserCount}})</i> </span>
-        </p>
+          <span class="name">评论 <i v-if="viewArticle && viewArticle.commentCount>0">({{viewArticle.commentCount}})</i> </span>
+        </router-link>
       </div>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
+      <back-top ref="backTop" @backTop="backTop"></back-top>
+      <router-view @update="updateCommunity"></router-view>
     </div>
   </transition>
 
@@ -87,29 +92,50 @@
   import TopTip from 'base/top-tip/top-tip';
   import Loading from 'base/loading/loading';
   import NoResult from 'base/no-result/no-result';
-  import { getArticleById, getClubByClubGuid, listRecommendArticles, listCommentsByTargetId } from 'api/info';
+  import {
+    getArticleById,
+    getClubByClubGuid,
+    listRecommendArticles,
+    listCommentsByTargetId,
+    likeCommentV2,
+    viewArticle,
+    favoriteArticle,
+    unfavoriteArticle,
+    likeArticle,
+    unlikeArticle
+  } from 'api/info';
   import BackTop from 'base/backtop/backtop';
   import { imgOnload } from 'assets/js/imgOnload';
   import InfoItemLeft from 'base/info-item-left/info-item-left';
   import CommunityList from 'base/community-list/community-list';
 
   export default {
+    inject: ['reload'],
     data () {
       return {
         toptipTxt: '',
         pageTitle: '资讯详情',
         articleInfo: null,
-        probeType: 2,
+        probeType: 3,
         listenScroll: true,
         introImgs: [],
         loadedImgs: [],
         clubInfo: null,
         recommendList: null,
-        communityList: null
+        communityList: null,
+        viewArticle: null,
+        scrollY: 0
       };
     },
+    beforeRouteUpdate (to, from, next) {
+      if (from.name === to.name) {
+        this.reload();
+      }
+      next();
+    },
     created () {
-      this.articleId = this.$route.params.id;
+      this.articleId = this.$route.params.articleId;
+      this.likeFlag = true;
       this._getArticleById().then((res) => {
         if (res.code) {
           if (res.code != ERR_OK) {
@@ -118,6 +144,7 @@
             return;
           }
           this.articleInfo = res.result;
+          this.pageTitle = res.result.listTitle;
           this._getClubByClubGuid().then((res) => {
             if (res.code) {
               if (res.code != ERR_OK) {
@@ -131,19 +158,7 @@
             this.toptipTxt = erro.message;
             this.$refs.toptip.show();
           });
-          this._listCommentsByTargetId().then((res) => {
-            if (res.code) {
-              if (res.code != ERR_OK) {
-                this.toptipTxt = res.message;
-                this.$refs.toptip.show();
-                return;
-              }
-              this.communityList = res.result;
-            }
-          }, erro => {
-            this.toptipTxt = erro.message;
-            this.$refs.toptip.show();
-          });
+          this.getcommunity();
         }
       }, erro => {
         this.toptipTxt = erro.message;
@@ -162,7 +177,19 @@
         this.toptipTxt = erro.message;
         this.$refs.toptip.show();
       });
-
+      this._viewArticle().then((res) => {
+        if (res.code) {
+          if (res.code != ERR_OK) {
+            this.toptipTxt = res.message;
+            this.$refs.toptip.show();
+            return;
+          }
+          this.viewArticle = res.result;
+        }
+      }, erro => {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      });
     },
     computed: {
       loadingImgs () {
@@ -180,13 +207,128 @@
       ])
     },
     methods: {
-      selectCommunity (data) {
+      setLike () {
+        if (this.viewArticle.likeFlag === 'Y') {
+          this._unlikeArticle().then((res) => {
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                this.toptipTxt = res.message;
+                this.$refs.toptip.show();
+                return;
+              }
+              this.viewArticle.likeFlag = 'N';
+              this.viewArticle.likeCount = this.viewArticle.likeCount - 1;
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
 
+        } else {
+          this._likeArticle().then((res) => {
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                this.toptipTxt = res.message;
+                this.$refs.toptip.show();
+                return;
+              }
+              this.viewArticle.likeFlag = 'Y';
+              this.viewArticle.likeCount = this.viewArticle.likeCount + 1;
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+
+        }
+      },
+      setFavorite () {
+        if (this.viewArticle.favoriteFlag === 'Y') {
+          this._unfavoriteArticle().then((res) => {
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                this.toptipTxt = res.message;
+                this.$refs.toptip.show();
+                return;
+              }
+              this.viewArticle.favoriteFlag = 'N';
+              this.viewArticle.favoriteCount = this.viewArticle.favoriteCount - 1;
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+        } else {
+          this._favoriteArticle().then((res) => {
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                this.toptipTxt = res.message;
+                this.$refs.toptip.show();
+                return;
+              }
+              this.viewArticle.favoriteFlag = 'Y';
+              this.viewArticle.favoriteCount = this.viewArticle.favoriteCount + 1;
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+        }
+      },
+      updateCommunity () {
+        this.getcommunity();
+      },
+      getcommunity () {
+        this._listCommentsByTargetId().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            this.communityList = res.result;
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+      },
+      selectCommunity (data) {
+        this.$router.push({
+          path: `/info/infodetail/${this.articleId}/commentlist/${data.id}`,
+          query: {
+            title: `${this.pageTitle}`
+          }
+        });
+      },
+      like (data) {
+        if (data.isLike === 'N' && !data.likeFlag) {
+          data.likeFlag = false;
+          this._likeCommentV2(data.id).then((res) => {
+            data.likeFlag = true;
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                this.toptipTxt = res.message;
+                this.$refs.toptip.show();
+                return false;
+              }
+              data.isLike = 'Y';
+              data.likeCount = data.likeCount + 1;
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+        }
       },
       selectInfo (info) {
-
+        var url = `/info/infodetail/${info.id}`;
+        this.$router.push({
+          path: url
+        });
       },
-      descImage () {
+      descImage (pos) {
+        this.scrollY = pos.y;
         if (this.loadingImgs.length > 0) {
           var imgs = this.loadingImgs;
           if (imgs.length < 0) {
@@ -199,11 +341,11 @@
             });
             if (res.index === imgs.length - 1) {
               this.descImageLoaded = true;
-              this.$refs.scroll.scroll.off('scroll');
+              // this.$refs.scroll.scroll.off('scroll');
             }
           });
         } else {
-          this.$refs.scroll.scroll.off('scroll');
+          // this.$refs.scroll.scroll.off('scroll');
         }
       },
       backTop () {
@@ -235,14 +377,78 @@
       },
       _listCommentsByTargetId () {
         var param = {
+          limitSize: 5,
+          page: 1,
           type: 2,
           userGuid: this.userGuid,
           targetId: this.articleInfo.id
         };
         return listCommentsByTargetId(param);
+      },
+      _likeCommentV2 (id) {
+        var param = {
+          isLike: 'Y',
+          clientType: 1,
+          type: 1,
+          userGuid: this.userGuid,
+          targetId: id
+        };
+        return likeCommentV2(param);
+      },
+      _viewArticle () {
+        var param = {
+          article_id: this.articleId,
+          clientType: 1,
+          product_guid: this.productGuid,
+          user_guid: this.userGuid
+        };
+        return viewArticle(param);
+      },
+      _likeArticle () {
+        var param = {
+          article_id: this.articleId,
+          product_guid: this.productGuid,
+          user_guid: this.userGuid
+        };
+        return likeArticle(param);
+      },
+      _unlikeArticle () {
+        var param = {
+          article_id: this.articleId,
+          product_guid: this.productGuid,
+          user_guid: this.userGuid
+        };
+        return unlikeArticle(param);
+      },
+      _favoriteArticle () {
+        var param = {
+          article_id: this.articleId,
+          product_guid: this.productGuid,
+          user_guid: this.userGuid
+        };
+        return favoriteArticle(param);
+      },
+      _unfavoriteArticle () {
+        var param = {
+          article_id: this.articleId,
+          product_guid: this.productGuid,
+          user_guid: this.userGuid
+        };
+        return unfavoriteArticle(param);
       }
     },
     watch: {
+      scrollY (newVal) {
+        if (newVal < -100) {
+          if (!this.$refs.backTop.backTopShowFlag) {
+            this.$refs.backTop.showIcon();
+          }
+        } else {
+          if (this.$refs.backTop.backTopShowFlag) {
+            this.$refs.backTop.hideIcon();
+          }
+        }
+      },
       articleInfo () {
         this.$nextTick(() => {
           this.introImgs = [];

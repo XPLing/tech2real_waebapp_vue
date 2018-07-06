@@ -2,7 +2,7 @@
   <ul class="g-select-list">
     <li class="item" :class="{'on': index==currentSelect}" v-for="(item, index) in selectData" :key="index"
         @click.stop="selectItem(item,index)">
-      {{item.title}}
+      {{item.discription}}
     </li>
   </ul>
 </template>
@@ -13,46 +13,7 @@
     props: {
       selectData: {
         type: [Array, Object],
-        default () {
-          return [
-            {
-              'id': 408,
-              'settingId': 950,
-              'title': '女',
-              'targetGuid': 'f2993ea2-7e47-4457-8cba-164a9a13274b'
-            },
-            {
-              'id': 409,
-              'settingId': 950,
-              'title': '男',
-              'targetGuid': 'f2993ea2-7e47-4457-8cba-164a9a13274b'
-            },
-            {
-              'id': 408,
-              'settingId': 950,
-              'title': '女',
-              'targetGuid': 'f2993ea2-7e47-4457-8cba-164a9a13274b'
-            },
-            {
-              'id': 409,
-              'settingId': 950,
-              'title': '男',
-              'targetGuid': 'f2993ea2-7e47-4457-8cba-164a9a13274b'
-            },
-            {
-              'id': 408,
-              'settingId': 950,
-              'title': '女',
-              'targetGuid': 'f2993ea2-7e47-4457-8cba-164a9a13274b'
-            },
-            {
-              'id': 409,
-              'settingId': 950,
-              'title': '男',
-              'targetGuid': 'f2993ea2-7e47-4457-8cba-164a9a13274b'
-            }
-          ];
-        }
+        default: null
       },
       defaultSelect: {
         type: Number,
@@ -61,12 +22,15 @@
     },
     data () {
       return {
-        currentSelect: -10
+        currentSelect: 0
       };
     },
     created () {
       if (this.defaultSelect) {
         this.currentSelect = this.defaultSelect;
+      }
+      if (this.selectData) {
+        this.$emit('selectItem', this.selectData[this.currentSelect], 0);
       }
     },
     methods: {
@@ -75,7 +39,12 @@
         this.$emit('selectItem', item, index);
       }
     },
-    components: {}
+    components: {},
+    watch: {
+      selectData(){
+        this.$emit('selectItem', this.selectData[this.currentSelect], 0);
+      }
+    }
   };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <ul class="g-community-list">
     <community-item :community="item" v-for="(item, index) in communityList" :key="index"
-                    @selectCommunityItem="selectCommunity"></community-item>
+                    @selectCommunityItem="selectCommunity" @like="like"></community-item>
   </ul>
 </template>
 
@@ -24,6 +24,9 @@
     methods: {
       selectCommunity (communityItem) {
         this.$emit('selectCommunity', communityItem);
+      },
+      like(communityItem){
+        this.$emit('like', communityItem);
       }
     },
     components: {

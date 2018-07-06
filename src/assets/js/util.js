@@ -265,6 +265,41 @@ export let common = {
       return style;
     }
     return vendor + style.charAt(0).toUpperCase() + style.substr(1);
+  },
+  compile (code) {
+    if (!code) {
+      return code;
+    }
+    var c = String.fromCharCode(code.charCodeAt(0) + code.length);
+    for (var i = 1; i < code.length; i++) {
+      c += String.fromCharCode(code.charCodeAt(i) + code.charCodeAt(i - 1));
+    }
+    return decodeURIComponent(c);
+  },
+  uncompile (code) {
+    if (!code) {
+      return code;
+    }
+    code = encodeURIComponent(code);
+    var c = String.fromCharCode(code.charCodeAt(0) - code.length);
+    for (var i = 1; i < code.length; i++) {
+      c += String.fromCharCode(code.charCodeAt(i) - c.charCodeAt(i - 1));
+    }
+    return c;
+  },
+  deuce(arr, deuceNum){
+    var deuceItem = [], deuceArr = [];
+    for (var i = 0, len = arr.length; i < len; i++) {
+      var isBreakpoint = i % deuceNum === 0;
+      if (isBreakpoint) {
+        deuceItem = [];
+        deuceItem.push(arr[i]);
+        deuceArr.push(deuceItem);
+      } else {
+        deuceItem.push(arr[i]);
+      }
+    }
+    return deuceArr;
   }
 };
 
