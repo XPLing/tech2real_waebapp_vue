@@ -9,8 +9,8 @@
           <div class="chunk info-wrapper">
             <!--<h1 class="title">课程信息</h1>-->
             <div class="info">
-              <course-list :course-list="courseList" v-if="courseList.length>0"
-                           @selectcourse="selectCourse"></course-list>
+              <course-list :course-list="applyTargetList" v-if="applyTargetList.length>0"
+                           @selectcourse="selectApplyTarget"></course-list>
             </div>
           </div>
         </div>
@@ -137,10 +137,10 @@
       });
     },
     computed: {
-      courseList () {
+      applyTargetList () {
         var list = [];
         if (this.applyResult) {
-          list.push(this.applyResult.course);
+          list.push(this.applyResult.ticket);
         }
         return list;
       }
@@ -155,7 +155,7 @@
           console.log('Form erro!');
         });
       },
-      selectCourse (courseID) {
+      selectApplyTarget (data) {
         this.$router.back();
       },
       toPay () {
@@ -176,5 +176,5 @@
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
   @import "~assets/scss/propertype";
-  @import "courseApplyPay";
+  @import "applyPay";
 </style>

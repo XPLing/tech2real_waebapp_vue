@@ -13,6 +13,7 @@
                    v-model="filedName[`info_${item.id}`].value"
                    v-validate="{ required: item.isRequired?true:false, regex: item.pattern?`${item.pattern}`:'' }">
           </div>
+          <i class="request-icon" v-if="item.isRequired===1">*</i>
         </div>
         <div v-show="errors.has('infoCollect.info_'+item.id)" class="c-tip error">
           <i class="icon fa fa-warning text-danger"></i>
@@ -27,6 +28,7 @@
                    v-model="filedName[`info_${item.id}`].value" readonly="readonly"
                    disabled="disabled" v-validate="{ required: item.isRequired?true:false}">
           </div>
+          <i class="request-icon" v-if="item.isRequired===1">*</i>
           <i class="icon fa fa-angle-right"></i>
         </div>
         <div v-show="errors.has('infoCollect.info_'+item.id)" class="c-tip error">
@@ -38,17 +40,27 @@
         <div class="input-item text">
           <div class="name">{{item.title}}</div>
           <div class="cont" @click="openPicker(index)">
-            <datetime-picker ref="picker" type="time" v-model="filedName[`info_${item.id}`].value"></datetime-picker>
+            <input type="text" :name="`info_${item.id}`" :placeholder="item.tips"
+                   :value="filters.formatDate(new Date(''+ filedName[`info_${item.id}`].value +'').getTime(), 'yyyy-MM-dd')"
+                   readonly="readonly"
+                   disabled="disabled" v-validate="{ required: item.isRequired?true:false}">
           </div>
+          <i class="request-icon" v-if="item.isRequired===1">*</i>
           <i class="icon fa fa-angle-right"></i>
         </div>
+        <!-- datetime-picker 不能放置到控制选择器开关的容器里面，否则其this的指向会出错，出现无法关闭的情况 -->
+        <datetime-picker ref="picker" type="date" v-model="filedName[`info_${item.id}`].value"
+                         @confirm="pickerConfirm" @cancel="pickerCancel"></datetime-picker>
         <div v-show="errors.has('infoCollect.info_'+item.id)" class="c-tip error">
           <i class="icon fa fa-warning text-danger"></i>
           <span class="meg text-danger">{{ errors.first('infoCollect.info_' + item.id)}}</span>
         </div>
       </div>
       <div class="info-group" v-for="item in info.textarea" :key="item.id">
-        <p class="title">{{item.title}}</p>
+        <p class="title">
+          {{item.title}}
+          <i class="request-icon" v-if="item.isRequired===1">*</i>
+        </p>
         <div class="input-item">
           <div class="cont">
             <textarea v-model="filedName[`info_${item.id}`].value" :placeholder="item.tips"
@@ -61,7 +73,10 @@
         </div>
       </div>
       <div class="info-group" v-for="item in info.radio" :key="item.id">
-        <p class="title">{{item.title}}</p>
+        <p class="title">
+          {{item.title}}
+          <i class="request-icon" v-if="item.isRequired===1">*</i>
+        </p>
         <div class="input-item choice" v-for="opt in item.items" :key="opt.id">
           <input class="float-input" type="radio" v-model="filedName[`info_${item.id}`].value"
                  :name="`info_${item.id}`"
@@ -79,7 +94,10 @@
         </div>
       </div>
       <div class="info-group" v-for="item in info.checkbox" :key="item.id">
-        <p class="title">{{item.title}}</p>
+        <p class="title">
+          {{item.title}}
+          <i class="request-icon" v-if="item.isRequired===1">*</i>
+        </p>
         <div class="input-item choice" v-for="opt in item.items" :key="opt.id">
           <input class="float-input" type="checkbox" v-model="filedName[`info_${item.id}`].value"
                  :name="`info_${item.id}_${opt.id}`"
@@ -107,16 +125,18 @@
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import ButtomBtnFull from 'base/bottom-btn-full/bottom-btn-full';
   import { DatetimePicker } from 'mint-ui';
+  import * as Filters from 'assets/js/filters';
 
   export default {
     props: {
       collectTargetData: {
-        type: Object,
+        type: Array,
         default: null
       }
     },
     data () {
       return {
+        filters: Filters,
         infoCollectData: [],
         showFlag: false,
         payWay: '',
@@ -133,7 +153,7 @@
     },
     created () {
       if (this.collectTargetData) {
-        this.infoCollectData = this.collectTargetData.infoCollectionSettings;
+        this.infoCollectData = this.collectTargetData;
         if (this.infoCollectData.length > 0) {
           this.initInfo();
         }
@@ -142,8 +162,18 @@
     mounted () {
     },
     methods: {
+      pickerConfirm (data) {
+      },
+      pickerCancel () {
+
+      },
       openPicker (index) {
+        this.currentDataTimePicker = index;
         this.$refs.picker[index].open();
+      },
+      closePicker (index) {
+        console.log(this.$refs.picker[this.currentDataTimePicker]);
+        this.$refs.picker[this.currentDataTimePicker].close();
       },
       showSelect (data) {
         this.$emit('showselect', data);
@@ -169,6 +199,7 @@
             setVal.value = [];
           }
           setVal.id = item.id;
+          setVal.type = item.type;
           setVal.name = item.title;
           this.$set(this.$data.filedName, `info_${item.id}`, setVal);
 
@@ -179,6 +210,7 @@
               }
             }
           };
+
           if (item.type == 5 || item.type == 6) {
             dict.custom = {
               [`info_${item.id}`]: {
@@ -223,13 +255,16 @@
       validateForm () {
         return this.$validator.validateAll('infoCollect');
       },
-      bottomconfirm(){
-        this.$emit('submitForm');
+      bottomconfirm () {
+        this.$emit('submitForm', this.$refs.buttomBtn);
       }
     },
     watch: {
-      infoCollectData (newVal) {
-        // this.initInfo();
+      collectTargetData (newVal) {
+        this.infoCollectData = this.collectTargetData;
+        if (this.infoCollectData.length > 0) {
+          this.initInfo();
+        }
       },
       errors () {
         setTimeout(() => {

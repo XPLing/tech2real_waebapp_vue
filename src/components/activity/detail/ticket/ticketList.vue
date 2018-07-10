@@ -20,10 +20,11 @@
           </div>
         </scroll>
       </div>
-      <router-view></router-view>
+      <router-view :apply-result="articleInfo"></router-view>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
+      <loading ref="loading"></loading>
     </div>
   </transition>
 
@@ -40,6 +41,8 @@
   import TopTip from 'base/top-tip/top-tip';
   import Loading from 'base/loading/loading';
   import NoResult from 'base/no-result/no-result';
+  import { listInfoCollectionsByGuid } from 'api/apply';
+  import { applyActivity } from 'api/activity';
   import { listTickets } from 'api/ticket';
   import BackTop from 'base/backtop/backtop';
   import { imgOnload } from 'assets/js/imgOnload';
@@ -70,6 +73,7 @@
     },
     created () {
       this.id = this.$route.params.id;
+      this.articleInfo = this.activity;
       this.requestTicket();
     },
     computed: {
@@ -80,12 +84,37 @@
     },
     methods: {
       goBuy (data) {
+        this.articleInfo.ticket = data;
+        this.articleInfo.ticket.title = this.activity.title;
         if (this.activity.needInfo) {
-          this.$router.push({
-            path: `/activity/list/detail/${this.id}/commentlist/${data.id}`
+          this.$router.replace({
+            path: `${data.id}/applyinfocollect/${data.targetGuid}`,
+            append: true
+          });
+        } else {
+          this.$refs.loading.show();
+          this._applyActivity(data.id).then((res) => {
+            this.$refs.loading.hide();
+            if (res.code) {
+              if (res.code == ERR_OK) {
+                this.$router.replace({
+                  path: `/activity/list/detail/76/applyresult`
+                });
+              } else if (res.code == '201') {
+                this.$router.replace({
+                  path: `applypay`,
+                  append: true
+                });
+              } else {
+                this.$refs.loading.hide();
+                util.common.request.tipMsg(this, res);
+              }
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
           });
         }
-
       },
       requestTicket () {
         if (this.noMore) {
@@ -126,6 +155,15 @@
       },
       backTop () {
         this.$refs.scroll.scrollTo(0, 0, 300);
+      },
+      _applyActivity (ticketId) {
+        let params = {
+          id: this.id,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid,
+          ticketId: ticketId
+        };
+        return applyActivity(params);
       },
       _listTickets (page) {
         var param = {

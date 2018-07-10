@@ -27,8 +27,10 @@
   .g-tag{
     position: relative;
     z-index: 100;
+    width: 100%;
     @include h(44);
     @include lh(41);
+    overflow-x: hidden;
     background-color: $whiteColor;
     &.active{
       //position: fixed;

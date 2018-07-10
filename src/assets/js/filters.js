@@ -1,4 +1,7 @@
 function formatDate (timeStamp, fmt) {
+  if (!timeStamp) {
+    return '';
+  }
   var time = new Date(timeStamp);
   var y, m, d, h, min, second, result;
   y = time.getFullYear();
@@ -27,7 +30,6 @@ function formatDate (timeStamp, fmt) {
     }
 
   }
-
   return fmt;
 }
 

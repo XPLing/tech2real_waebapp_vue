@@ -39,9 +39,9 @@ const TagList = () => import(/* webpackChunkName: "tagList" */ 'components/tagli
 const CourseApplyResult = () => import(/* webpackChunkName: "courseApplyResult" */ 'components/courseApplyResult/courseApplyResult');
 const CourseApplyInfoCollect = () => import(/* webpackChunkName: "courseApplyInfoCollect" */ 'components/courseApplyInfoCollect/courseApplyInfoCollect');
 const CourseApplyPay = () => import(/* webpackChunkName: "courseApplyPay" */ 'components/courseApplyPay/courseApplyPay');
-const ApplyResult = () => import(/* webpackChunkName: "ApplyResult" */ 'components/courseApplyResult/courseApplyResult');
-const ApplyInfoCollect = () => import(/* webpackChunkName: "ApplyInfoCollect" */ 'components/courseApplyInfoCollect/courseApplyInfoCollect');
-const ApplyPay = () => import(/* webpackChunkName: "ApplyPay" */ 'components/courseApplyPay/courseApplyPay');
+const ApplyResult = () => import(/* webpackChunkName: "ApplyResult" */ 'components/applyResult/applyResult');
+const ApplyInfoCollect = () => import(/* webpackChunkName: "ApplyInfoCollect" */ 'components/applyInfoCollect/applyInfoCollect');
+const ApplyPay = () => import(/* webpackChunkName: "ApplyPay" */ 'components/applyPay/applyPay');
 const TrainDetailIntro = () => import(/* webpackChunkName: "trainDetailIntro" */ 'components/train-detail/intro/course-intro');
 const TrainDetailChapters = () => import(/* webpackChunkName: "trainDetailChapters" */ 'components/train-detail/chapters/course-chapters');
 const TrainDetailEvaluate = () => import(/* webpackChunkName: "trainDetailEvaluate" */ 'components/train-detail/evaluate/course-evaluate');
@@ -135,8 +135,11 @@ const Router = new VueRouter({
               component: CourseApplyResult
             },
             {
-              path: 'applyinfocollect',
-              component: CourseApplyInfoCollect
+              path: 'applyinfocollect/:applyTargetGuid',
+              component: CourseApplyInfoCollect,
+              props: {
+                applyType: 'applyCourse'
+              }
             },
             {
               path: 'applypay',
@@ -193,6 +196,7 @@ const Router = new VueRouter({
             {
               path: 'detail/:id(\\d+)',
               component: ActivityDetail,
+              name: 'activityDetail',
               children: [
                 {
                   path: 'commentlist',
@@ -218,7 +222,28 @@ const Router = new VueRouter({
                 },
                 {
                   path: 'ticketList',
-                  component: TicketList
+                  component: TicketList,
+                  children: [
+                    {
+                      path: 'applyresult',
+                      component: ApplyResult
+                    },
+                    {
+                      path: ':ticketId/applyinfocollect/:applyTargetGuid',
+                      component: ApplyInfoCollect,
+                      props: {
+                        applyType: 'applyActivity'
+                      }
+                    },
+                    {
+                      path: 'applypay',
+                      component: ApplyPay
+                    }
+                  ]
+                },
+                {
+                  path: 'applyresult',
+                  component: ApplyResult
                 }
               ]
             }
@@ -260,7 +285,7 @@ const Router = new VueRouter({
       component: ApplyResult
     },
     {
-      path: '/applyinfocollect',
+      path: '/applyinfocollect/:id(\\d+)',
       component: ApplyInfoCollect
     },
     {

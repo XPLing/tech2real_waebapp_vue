@@ -1,0 +1,125 @@
+.g-apply-result {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: $color-text-b45;
+  background: $color-shadow-nav;
+  .g-main-wrapper {
+    position: fixed;
+    top: formatVal(40, rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    .apply-base {
+      padding: formatVal(20, rem) formatVal(15, rem);
+      background-color: $color-theme;
+      .price, .intro {
+        background-color: $whiteColor;
+      }
+      .header-bg {
+        height: 15px;
+        margin-left: -6px;
+        margin-right: -6px;
+        @include bg-image('bg-header');
+        background-size: 100% 100%;
+      }
+      .price {
+        padding: formatVal(10, rem) formatVal(15, rem);
+        @include fs(16);
+        color: $color-theme;
+        text-align: center;
+        @include bg-image('bg-price');
+        background-size: 100%;
+        background-position: left bottom;
+        .fa {
+          @include fs(20);
+          margin-right: 3px;
+        }
+        i, span {
+          @extend %lineElem_middle;
+        }
+
+      }
+      .intro {
+        padding: formatVal(15, rem);
+        @include bg-image('bg-intro');
+        background-size: 100%;
+        background-position: left top;
+        border-radius: 0 0 5px 5px;
+      }
+    }
+    .apply-tip {
+      margin-top: formatVal(10, rem);
+      padding: formatVal(15, rem) formatVal(10, rem);
+      background-color: $whiteColor;
+      .tip {
+        margin-bottom: formatVal(15, rem);
+        color: #576066;
+        @include fs(14);
+        .item+.item{
+          margin-top: formatVal(10,rem);
+        }
+      }
+      .control {
+        display: flex;
+        justify-content: center;
+        .btn {
+          padding: formatVal(5, rem) formatVal(15, rem);
+          @include fs(14);
+          border-radius: 5px;
+          background-color: transparent;
+          &.cancel {
+            color: #8F8D8A;
+            border: 1px solid #8F8D8A;
+          }
+          &.confirm {
+            color: $whiteColor;
+            background-color: $color-theme;
+          }
+          & + .btn {
+            margin-left: formatVal(10, rem);
+          }
+        }
+
+      }
+    }
+    .apply-detail {
+      margin-top: formatVal(10, rem);
+      padding: 0 formatVal(15, rem);
+      background-color: $whiteColor;
+      .chunk + .chunk {
+        border-top: 1px solid $color-border-input;
+      }
+      .chunk{
+        padding: formatVal(10,rem) 0;
+        &.title {
+          @include fs(16);
+          color: #3A4A55;
+        }
+        &.time{
+          color: #576066;
+          @include fs(14);
+          p+p{
+            margin-top: formatVal(5,rem);
+          }
+        }
+        &.info-collect {
+          color: #8F8D8A;
+          @include fs(12);
+        }
+      }
+
+    }
+  }
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translate3d(100%, 0, 0);
+}

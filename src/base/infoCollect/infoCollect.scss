@@ -29,14 +29,18 @@
       }
     }
     .title {
+      position: relative;
       color: $color-gray-B2;
       @include fs(16);
       @at-root #{&},.tip {
         padding: formatVal(11, rem) formatVal(13, rem);
       }
-
+      .request-icon{
+        top: formatVal(18,rem);
+      }
     }
     .input-item {
+      position: relative;
       display: flex;
       @include fs(16);
       padding:  0 formatVal(12, rem);
@@ -128,15 +132,24 @@
           height: 6em;
         }
       }
+
       &>.icon{
         @include lh(45);
       }
+    }
+    .request-icon{
+      position: absolute;
+      top: formatVal(4,rem);
+      left: formatVal(4,rem);
+      color: $msgErrorColor;
     }
     .c-tip {
       padding-left: formatVal(10, rem);
     }
   }
-
+  /deep/ .g-bottom-btn-full{
+    margin-top: formatVal(10,rem);
+  }
 }
 
 @keyframes loading-fadein {

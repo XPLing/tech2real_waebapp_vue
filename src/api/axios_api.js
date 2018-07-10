@@ -836,6 +836,32 @@ apiRouter.post('/getActivityById', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+apiRouter.post('/applyActivity', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/applyActivity`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/getApplyByActivityId', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getApplyByActivityId`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 
 /* 门票 */
 apiRouter.post('/listTickets', jsonParser, function (req, res) {
@@ -854,7 +880,7 @@ apiRouter.post('/listTickets', jsonParser, function (req, res) {
 
 /* 报名 */
 apiRouter.post('/listInfoCollectionsByGuid', jsonParser, function (req, res) {
-  var url = `${config.dev.apiproxy}/listActivities`;
+  var url = `${config.dev.apiproxy}/listInfoCollectionsByGuid`;
   axios({
     method: 'post',
     url: url,

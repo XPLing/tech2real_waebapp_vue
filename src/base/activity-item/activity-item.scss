@@ -39,6 +39,7 @@
         }
       }
       .price {
+        @include fs(16);
         &.red {
           color: $color-text-stress-r;
         }

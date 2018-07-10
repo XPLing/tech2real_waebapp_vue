@@ -88,6 +88,7 @@
   import ActivityList from 'base/activity-list/activity-list';
 
   export default {
+    inject: ['reload'],
     data () {
       return {
         toptipTxt: '',
@@ -99,6 +100,12 @@
         introImgs: [],
         loadedImgs: []
       };
+    },
+    beforeRouteUpdate (to, from, next) {
+      if (from.name === to.name) {
+        this.reload();
+      }
+      next();
     },
     created () {
       this.id = this.$route.params.id;
@@ -185,11 +192,13 @@
         /* 1、即将开始  2、立即报名  3、门票售罄  4、报名截止  5、已报名  6、待审核  7、未通过  8、待支付  9、被驳回  10、重新报名  11、活动结束 */
         if (this.applyStatus.index === 2 || this.applyStatus.index === 10) {
           this.$router.push({
-            path: `/activity/list/detail/${this.id}/ticketList`
+            path: `/activity/list/detail/${this.id}/ticketList`,
+            append: true
           });
         } else if (this.applyStatus.index === 5 || this.applyStatus.index === 6 || this.applyStatus.index === 7 || this.applyStatus.index === 8 || this.applyStatus.index === 9) {
           this.$router.push({
-            path: `/activity/list/detail/${this.id}/apply_result`
+            path: `applyresult`,
+            append: true
           });
         }
       },

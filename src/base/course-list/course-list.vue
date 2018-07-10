@@ -8,7 +8,7 @@
         <div class="media-body">
           <p class="title">{{course.title}}</p>
           <p class="info"><span class="price"
-                                :class="course.price===0?'green':'red'">{{course.price === 0 ? '免费' : course.price}}</span>
+                                :class="course.price===0?'green':'red'">{{course.price === 0 ? '免费' : `￥${course.price}`}}</span>
           </p>
         </div>
       </li>

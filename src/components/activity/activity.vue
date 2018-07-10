@@ -82,9 +82,7 @@
         </div>
       </scroll>
     </div>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
@@ -106,8 +104,14 @@
   import BackTop from 'base/backtop/backtop';
 
   export default {
+    provide () {
+      return {
+        reload: this.reload
+      };
+    },
     data () {
       return {
+        isRouterAlive: true,
         toptipTxt: '',
         pageTitle: '活动',
         swiperOPts_activity: {
@@ -203,7 +207,14 @@
       });
     },
     methods: {
+      reload () {
+        this.isRouterAlive = false;
+        this.$nextTick(() => {
+          this.isRouterAlive = true;
+        });
+      },
       selectActivity (data) {
+        console.log(data);
         var url = `/activity/list/detail/${data.id}`;
         this.$router.push({
           path: url

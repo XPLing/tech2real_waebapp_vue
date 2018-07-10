@@ -40,6 +40,7 @@
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import Select from 'base/select/select';
   import { applyCourse } from 'api/courseDetail';
+  import { applyActivity } from 'api/activity';
   import { mapGetters, mapMutations } from 'vuex';
   import { ERR_OK } from 'api/config';
   import { listInfoCollectionsByGuid } from 'api/apply';
@@ -53,7 +54,8 @@
       applyResult: {
         type: Object,
         default: null
-      }
+      },
+      applyType: ''
     },
     data () {
       return {
@@ -62,6 +64,7 @@
         routerPrefix: util.routerPrefix,
         isActiving: false,
         applyTargetID: 0,
+        applyTargetGuid: 0,
         selectData: null,
         selectOpts: null,
         selectFlag: false,
@@ -112,6 +115,7 @@
       _getTargetGuid () {
         this.applyTargetID = this.$route.params.id;
         this.applyTargetGuid = this.$route.params.applyTargetGuid;
+        this.ticketId = this.$route.params.ticketId;
       },
       selectCourse (applyTargetID) {
         this.$router.back();
@@ -129,22 +133,28 @@
               newItem.settingId = item.id;
               newItem.value = Object.prototype.toString.call(item.value) == '[object Array]' ? item.value.join('|') : item.value;
               newItem.settingName = item.name;
+              if (item.type == 3) {
+                newItem.value = new Date(newItem.value.toString()).getTime();
+              }
               infoCollect.push(newItem);
             });
             this.$refs.loading.show();
-            this._applyCourse(infoCollect).then((res) => {
+            this[`_${this.applyType}`](infoCollect).then((res) => {
               this.$emit('changeapplyres', res.result);
               submitBtn.changeSubmitBtn(false);
               this.$refs.loading.hide();
+              var baseUrl = this.$route.fullPath.replace(/ticketList.*/, 'ticketList/');
               if (res.code == ERR_OK) {
-                this.$router.replace({
-                  path: `/train/${this.applyTargetID}/applyresult`
+                this.$router.push({
+                  path: `${baseUrl}applyresult`
                 });
               } else if (res.code == '201') {
                 this.$router.push({
-                  path: `/train/${this.applyTargetID}/applypay`
+                  path: `${baseUrl}applypay`
                 });
               } else {
+                submitBtn.changeSubmitBtn(false);
+                this.$refs.loading.hide();
                 util.common.request.tipMsg(this, res);
               }
             }, erro => {
@@ -164,6 +174,16 @@
         }, (erro) => {
           console.log('Form erro!');
         });
+      },
+      _applyActivity (infoCollections) {
+        let params = {
+          id: this.applyTargetID,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid,
+          infoCollections: infoCollections,
+          ticketId: this.ticketId
+        };
+        return applyActivity(params);
       },
       _applyCourse (infoCollections) {
         let params = {
@@ -201,5 +221,5 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "courseApplyInfoCollect";
+  @import "applyInfoCollect";
 </style>

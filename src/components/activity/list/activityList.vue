@@ -21,7 +21,7 @@
         </scroll>
       </div>
       <back-top ref="backTop" @backTop="backTop"></back-top>
-      <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @update="update"></router-view>
+      <router-view v-if="isRouterAlive" :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @update="update"></router-view>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -47,8 +47,14 @@
   import ActivityList from 'base/activity-list/activity-list';
 
   export default {
+    provide () {
+      return {
+        reload: this.reload
+      };
+    },
     data () {
       return {
+        isRouterAlive: true,
         toptipTxt: '',
         pageTitle: '活动列表',
         articleInfo: null,
@@ -75,6 +81,12 @@
       ])
     },
     methods: {
+      reload () {
+        this.isRouterAlive = false;
+        this.$nextTick(() => {
+          this.isRouterAlive = true;
+        });
+      },
       setScrollY(pos){
         this.scrollY = pos.y;
       },

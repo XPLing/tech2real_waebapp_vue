@@ -29,7 +29,7 @@
                        ref="view"></router-view>
         </keep-alive>
       </div>
-      <div class="g-join" ref="join" v-if="courseData && (!userGuid ||this.appliedState<=0)">
+      <div class="g-join" ref="join" v-if="courseData && (!userGuid || this.appliedState!=1)">
         <span
           class="price">{{courseData.price == 0 ? "免费" : courseData.price}}</span>
         <button class="btn" @click="operate">{{courseStateStr}}</button>
@@ -40,11 +40,12 @@
       </top-tip>
       <loading ref="loading"></loading>
       <g-mask @clickMask="clickMask" ref="mask"></g-mask>
-      <g-select :title="selectTitle" :select-data="listCourseValidityPeriod" @selectConfirm="selectPeriodItem"
+      <g-select :title="selectTitle" :select-data="listCourseValidityPeriod" @selectConfirm="selectPeriodConfirm"
+                @selectListItem="selectPeriodItem"
                 class="g-select-wrapper" ref="selectPeriod">
         <div class="price">
-          <p class="real">￥4080.00</p>
-          <p class="original">原价：<span>¥ 5828.00</span></p>
+          <p class="real">￥{{coursePrice}}</p>
+          <p class="original">原价：<span>¥ {{courseOriginalPrice}}</span></p>
         </div>
       </g-select>
     </div>
@@ -117,7 +118,9 @@
         courseState: 0,
         applyResult: null,
         selectTitle: '套餐',
-        listCourseValidityPeriod: null
+        listCourseValidityPeriod: null,
+        coursePrice: '0.00',
+        courseOriginalPrice: '0.00'
       };
     },
     computed: {
@@ -166,6 +169,8 @@
             return;
           }
           this.listCourseValidityPeriod = res.result;
+          this.coursePrice = this.listCourseValidityPeriod[0].priceAfterDiscount;
+          this.courseOriginalPrice = this.listCourseValidityPeriod[0].price;
         }
       }, erro => {
         this.toptipTxt = erro.message;
@@ -188,19 +193,20 @@
       // this.getCourseData();
     },
     methods: {
-      selectPeriodItem (data) {
+      setCourseValidityPeriod (data) {
+        if (!this.courseData) {
+          return;
+        }
         this.courseData.courseValidityPeriod = data;
-//        if (this.courseStateStr == COURSESTATECONFIG.STATE_APPLY || this.courseStateStr == COURSESTATECONFIG.STATE_APPLY_GO_ON) {
-//          if (this.courseData.needInfo) {
-//            this.$router.push({
-//              path: `${this.routerPrefix}/train/${this.courseID}/applyinfocollect`
-//            });
-//            return;
-//          } else {
-//            this.$refs.confirmsWrapper.show();
-//          }
-//        }
+        this.coursePrice = this.courseData.courseValidityPeriod.priceAfterDiscount;
+        this.courseOriginalPrice = this.courseData.courseValidityPeriod.price;
+      },
+      selectPeriodConfirm (data) {
+        this.setCourseValidityPeriod(data);
         this.$refs.confirmsWrapper.show();
+      },
+      selectPeriodItem (data) {
+        this.setCourseValidityPeriod(data);
       },
       ...mapMutations({
         updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
@@ -372,7 +378,7 @@
           if (this.courseData.needInfo) {
             this.applyResult = this.courseData;
             this.$router.push({
-              path: `/train/${this.courseID}/applyinfocollect`
+              path: `/train/${this.courseID}/applyinfocollect/${this.courseData.guid}`
             });
           } else {
             this.$refs.loading.show();
@@ -380,7 +386,7 @@
               this.$refs.loading.hide();
               this.applyResult = res.result;
               if (res.code == ERR_OK) {
-                this.$router.push({
+                this.$router.replace({
                   path: `${this.routerPrefix}/train/${this.courseID}/applyresult`
                 });
               } else if (res.code == '201') {

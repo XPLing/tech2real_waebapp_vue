@@ -1,0 +1,30 @@
+.g-course-apply-infocollect {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: $color-text-b45;
+  background: $color-shadow-nav;
+  .info-collect-wrapper{
+    position: fixed;
+    z-index: 101;
+    top: formatVal(40,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+  }
+  .no-result{
+    padding-top: formatVal(30,rem);
+  }
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translate3d(100%, 0, 0);
+}
