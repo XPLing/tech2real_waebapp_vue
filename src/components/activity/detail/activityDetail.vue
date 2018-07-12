@@ -101,12 +101,6 @@
         loadedImgs: []
       };
     },
-    beforeRouteUpdate (to, from, next) {
-      if (from.name === to.name) {
-        this.reload();
-      }
-      next();
-    },
     created () {
       this.id = this.$route.params.id;
       this._getActivityById().then((res) => {
@@ -243,6 +237,13 @@
         } else {
           if (this.$refs.backTop.backTopShowFlag) {
             this.$refs.backTop.hideIcon();
+          }
+        }
+      },
+      $route (to, from) {
+        if (to.name === 'activityDetail') {
+          if (/activityDetail/.test(from.name)) {
+            this.reload();
           }
         }
       }

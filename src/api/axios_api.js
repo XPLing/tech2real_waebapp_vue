@@ -560,8 +560,24 @@ apiRouter.post('/applyCourse', jsonParser, function (req, res) {
     res.json(e);
   });
 });
-
-
+apiRouter.post('/getCourseApplyByCourseId', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getCourseApplyByCourseId`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 
 /* 登录注册 */
 apiRouter.get('/webLoginByPhone', function (req, res) {
@@ -849,6 +865,19 @@ apiRouter.post('/applyActivity', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+apiRouter.post('/cancelActivityApply', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/cancelActivityApply`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 apiRouter.post('/getApplyByActivityId', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/getApplyByActivityId`;
   axios({
@@ -892,6 +921,5 @@ apiRouter.post('/listInfoCollectionsByGuid', jsonParser, function (req, res) {
     res.json(e);
   });
 });
-
 
 module.exports = apiRouter;

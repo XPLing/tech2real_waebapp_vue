@@ -94,7 +94,7 @@
       selectListItem (item, index) {
         this.selectInfo.item = item;
         this.selectInfo.index = index;
-        this.$emit('selectListItem', item, index);
+        this.$emit('selectListItem', {item, index});
       },
       clickMask () {
         this.hide();

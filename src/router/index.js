@@ -42,10 +42,6 @@ const CourseApplyPay = () => import(/* webpackChunkName: "courseApplyPay" */ 'co
 const ApplyResult = () => import(/* webpackChunkName: "ApplyResult" */ 'components/applyResult/applyResult');
 const ApplyInfoCollect = () => import(/* webpackChunkName: "ApplyInfoCollect" */ 'components/applyInfoCollect/applyInfoCollect');
 const ApplyPay = () => import(/* webpackChunkName: "ApplyPay" */ 'components/applyPay/applyPay');
-const TrainDetailIntro = () => import(/* webpackChunkName: "trainDetailIntro" */ 'components/train-detail/intro/course-intro');
-const TrainDetailChapters = () => import(/* webpackChunkName: "trainDetailChapters" */ 'components/train-detail/chapters/course-chapters');
-const TrainDetailEvaluate = () => import(/* webpackChunkName: "trainDetailEvaluate" */ 'components/train-detail/evaluate/course-evaluate');
-const TrainDetailCommunity = () => import(/* webpackChunkName: "trainDetailCommunity" */ 'components/train-detail/community/course-community');
 const Community = () => import(/* webpackChunkName: "community" */ 'components/community/community');
 const Activity = () => import(/* webpackChunkName: "activity" */ 'components/activity/activity');
 const ActivityList = () => import(/* webpackChunkName: "ActivityList" */ 'components/activity/list/activityList');
@@ -92,14 +88,17 @@ const Router = new VueRouter({
             {
               path: 'commentlist',
               component: InfoDetailComment,
+              name: 'infoDetail_commentList',
               children: [
                 {
                   path: ':commentId(\\d+)',
                   component: InfoDetailCommentItem,
+                  name: 'infoDetail_commentDetail',
                   children: [
                     {
                       path: 'commentform',
                       component: InfoDetailCommentForm,
+                      name: 'infoDetail_commentForm',
                       props: true
                     }
                   ]
@@ -107,6 +106,7 @@ const Router = new VueRouter({
                 {
                   path: 'commentform',
                   component: InfoDetailCommentForm,
+                  name: 'infoDetail_commentFormRoot',
                   props: true
                 }
               ]
@@ -122,20 +122,19 @@ const Router = new VueRouter({
         {
           path: ':id(\\d+)',
           component: TrainDetail,
+          name: 'trainDetail',
           meta: {
             requireLogin: true
           },
           children: [
             {
-              path: '',
-              redirect: 'intro'
-            },
-            {
               path: 'applyresult',
+              name: 'trainDetailApply_applyresult',
               component: CourseApplyResult
             },
             {
               path: 'applyinfocollect/:applyTargetGuid',
+              name: 'trainDetailApply_applyinfocollect',
               component: CourseApplyInfoCollect,
               props: {
                 applyType: 'applyCourse'
@@ -143,23 +142,8 @@ const Router = new VueRouter({
             },
             {
               path: 'applypay',
+              name: 'trainDetailApply_applypay',
               component: CourseApplyPay
-            },
-            {
-              path: 'intro',
-              component: TrainDetailIntro
-            },
-            {
-              path: 'evaluate',
-              component: TrainDetailEvaluate
-            },
-            {
-              path: 'community',
-              component: TrainDetailCommunity
-            },
-            {
-              path: 'chapters',
-              component: TrainDetailChapters
             }
           ]
         },
@@ -188,6 +172,7 @@ const Router = new VueRouter({
     {
       path: routerPrefix + '/activity',
       component: Activity,
+      name: 'activity',
       children: [
         {
           path: 'list',
@@ -223,27 +208,33 @@ const Router = new VueRouter({
                 {
                   path: 'ticketList',
                   component: TicketList,
+                  props: true,
+                  name: 'activityDetail_Tickets',
                   children: [
                     {
                       path: 'applyresult',
-                      component: ApplyResult
+                      component: ApplyResult,
+                      name: 'activityDetail_TicketApplyResult'
                     },
                     {
                       path: ':ticketId/applyinfocollect/:applyTargetGuid',
                       component: ApplyInfoCollect,
+                      name: 'activityDetail_applyInfoCollect',
                       props: {
                         applyType: 'applyActivity'
                       }
                     },
                     {
                       path: 'applypay',
+                      name: 'activityDetail_applyPay',
                       component: ApplyPay
                     }
                   ]
                 },
                 {
                   path: 'applyresult',
-                  component: ApplyResult
+                  component: ApplyResult,
+                  name: 'activityDetail_ApplyResult'
                 }
               ]
             }

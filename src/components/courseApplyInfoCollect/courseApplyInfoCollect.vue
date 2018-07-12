@@ -141,7 +141,7 @@
                   path: `/train/${this.applyTargetID}/applyresult`
                 });
               } else if (res.code == '201') {
-                this.$router.push({
+                this.$router.replace({
                   path: `/train/${this.applyTargetID}/applypay`
                 });
               } else {
@@ -171,7 +171,7 @@
           userGuid: this.userGuid,
           productGuid: this.productGuid,
           infoCollections: infoCollections,
-          courseValidityPeriodId: this.applyResult.courseValidityPeriod.item.id
+          courseValidityPeriodId: this.applyResult.courseValidityPeriod.id
         };
         return applyCourse(params);
       },

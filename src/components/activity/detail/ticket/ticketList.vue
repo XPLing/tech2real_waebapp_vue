@@ -180,6 +180,9 @@
         this.$nextTick(() => {
           this.$refs.scroll.refresh();
         });
+      },
+      activity(newVal){
+        this.articleInfo = this.activity;
       }
     },
     components: {

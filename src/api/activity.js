@@ -123,3 +123,19 @@ export function getApplyByActivityId (params) {
     return Promise.reject(err);
   });
 }
+export function cancelActivityApply (params) {
+  var url = debug ? '/api/cancelActivityApply' : `${REQUEST_PREFIX}/cancelActivityApply`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}

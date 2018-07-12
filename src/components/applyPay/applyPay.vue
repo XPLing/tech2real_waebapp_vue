@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="g-course-pay">
-      <scroll :data="applyResult" ref="scroll">
+      <scroll :data="applyInfo" ref="scroll">
         <div class="g-scroll-continer">
           <header class="g-header">
             <HeaderTitle :title="pageTitle" :has-back="hasBack"></HeaderTitle>
@@ -9,8 +9,8 @@
           <div class="chunk info-wrapper">
             <!--<h1 class="title">课程信息</h1>-->
             <div class="info">
-              <course-list :course-list="applyTargetList" v-if="applyTargetList.length>0"
-                           @selectcourse="selectApplyTarget"></course-list>
+              <apply-item v-if="applyInfo" :apply-result-base="applyInfo.activity" :apply-result-detail="applyInfo.ticket"  :apply-result="applyInfo"
+                          @selectApplyResultItem="selectApplyTarget"></apply-item>
             </div>
           </div>
         </div>
@@ -84,6 +84,10 @@
         <form-tip-error :tip-name="'pay.totalMsg'"></form-tip-error>
       </scroll>
       <bottom-btn :price="0" :btnstr="'立即支付'" @confirm="toPay"></bottom-btn>
+      <top-tip ref="toptip" :delay="10000">
+        <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
+      </top-tip>
+      <loading ref="loading"></loading>
     </div>
 
   </transition>
@@ -91,20 +95,18 @@
 
 <script type="text/ecmascript-6">
   import HeaderTitle from 'components/header-title/header-title';
-  import CourseList from 'base/course-list/course-list';
+  import ApplyItem from 'base/applyResult-item/applyResult-item';
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import Scroll from 'base/scroll/scroll';
   import BottomBtn from 'base/bottom-btn/bottom-btn';
   import * as util from 'assets/js/util';
   import { Validator, ErrorBag } from 'vee-validate';
-
+  import { getApplyByActivityId } from 'api/activity';
+  import { mapGetters } from 'vuex';
+  import { ERR_OK } from 'api/config';
+  import Loading from 'base/loading/loading';
+  import TopTip from 'base/top-tip/top-tip';
   export default {
-    props: {
-      applyResult: {
-        type: Object,
-        default: null
-      }
-    },
     data () {
       return {
         pageTitle: '购买课程',
@@ -112,10 +114,13 @@
         routerPrefix: util.routerPrefix,
         fornName: 'pay',
         payWay: '',
-        protocol: true
+        protocol: true,
+        applyInfo: null,
+        toptipTxt: ''
       };
     },
     created () {
+      this.applyTargetID = this.$route.params.id;
       this.errors.update({
         field: 'payWay',
         msg: 'Newsletter Email is required',
@@ -135,15 +140,25 @@
 //          }
         }
       });
+      this._getApplyByActivityId().then((res) => {
+        if (res.code) {
+          if (res.code != ERR_OK) {
+            this.toptipTxt = res.message;
+            this.$refs.toptip.show();
+            return;
+          }
+          this.applyInfo = res.result;
+        }
+      }, erro => {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      });
     },
     computed: {
-      applyTargetList () {
-        var list = [];
-        if (this.applyResult) {
-          list.push(this.applyResult.ticket);
-        }
-        return list;
-      }
+      ...mapGetters([
+        'productGuid',
+        'userGuid'
+      ])
     },
     methods: {
       validateForm (scope) {
@@ -160,14 +175,24 @@
       },
       toPay () {
         this.validateForm(this.fornName);
+      },
+      _getApplyByActivityId () {
+        let params = {
+          id: this.applyTargetID,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid
+        };
+        return getApplyByActivityId(params);
       }
     },
     components: {
       HeaderTitle,
-      CourseList,
+      ApplyItem,
       Scroll,
       FormTipError,
-      BottomBtn
+      BottomBtn,
+      Loading,
+      TopTip
     }
   };
 </script>

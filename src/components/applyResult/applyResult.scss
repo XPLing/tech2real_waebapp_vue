@@ -16,7 +16,7 @@
     .apply-base {
       padding: formatVal(20, rem) formatVal(15, rem);
       background-color: $color-theme;
-      .price, .intro {
+      .status, .intro {
         background-color: $whiteColor;
       }
       .header-bg {
@@ -26,7 +26,7 @@
         @include bg-image('bg-header');
         background-size: 100% 100%;
       }
-      .price {
+      .status {
         padding: formatVal(10, rem) formatVal(15, rem);
         @include fs(16);
         color: $color-theme;
@@ -34,6 +34,9 @@
         @include bg-image('bg-price');
         background-size: 100%;
         background-position: left bottom;
+        &.reject{
+          color: #C5001D;
+        }
         .fa {
           @include fs(20);
           margin-right: 3px;
@@ -41,7 +44,6 @@
         i, span {
           @extend %lineElem_middle;
         }
-
       }
       .intro {
         padding: formatVal(15, rem);
@@ -78,6 +80,10 @@
           &.confirm {
             color: $whiteColor;
             background-color: $color-theme;
+          }
+          &.reapply{
+            color: $color-theme;
+            border: 1px solid $color-theme;
           }
           & + .btn {
             margin-left: formatVal(10, rem);

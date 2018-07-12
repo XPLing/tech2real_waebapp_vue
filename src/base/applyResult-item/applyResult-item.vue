@@ -45,7 +45,7 @@
     },
     methods: {
       selectItem (applyResult) {
-        this.$emit('selectapplyResult', applyResult);
+        this.$emit('selectApplyResultItem', applyResult);
       }
     }
   };

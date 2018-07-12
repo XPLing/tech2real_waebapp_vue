@@ -111,6 +111,14 @@
 
   export default {
     inject: ['reload'],
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        if (from.name === 'activity') {
+          vm.articleId = to.params.articleId;
+          vm.reload();
+        }
+      });
+    },
     data () {
       return {
         toptipTxt: '',
@@ -124,14 +132,9 @@
         recommendList: null,
         communityList: null,
         viewArticle: null,
-        scrollY: 0
+        scrollY: 0,
+        articleId: 0
       };
-    },
-    beforeRouteUpdate (to, from, next) {
-      if (from.name === to.name) {
-        this.reload();
-      }
-      next();
     },
     created () {
       this.articleId = this.$route.params.articleId;
@@ -472,6 +475,13 @@
         this.$nextTick(() => {
           this.$refs.scroll.refresh();
         });
+      },
+      $route (to, from) {
+        if (to.name === 'infoDetail') {
+          if (/infoDetail/.test(from.name)) {
+            this.reload();
+          }
+        }
       }
     },
     components: {

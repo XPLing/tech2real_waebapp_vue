@@ -145,11 +145,11 @@
               this.$refs.loading.hide();
               var baseUrl = this.$route.fullPath.replace(/ticketList.*/, 'ticketList/');
               if (res.code == ERR_OK) {
-                this.$router.push({
+                this.$router.replace({
                   path: `${baseUrl}applyresult`
                 });
               } else if (res.code == '201') {
-                this.$router.push({
+                this.$router.replace({
                   path: `${baseUrl}applypay`
                 });
               } else {
@@ -191,7 +191,7 @@
           userGuid: this.userGuid,
           productGuid: this.productGuid,
           infoCollections: infoCollections,
-          courseValidityPeriodId: this.applyResult.courseValidityPeriod.item.id
+          courseValidityPeriodId: this.applyResult.courseValidityPeriod.id
         };
         return applyCourse(params);
       },

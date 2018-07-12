@@ -72,7 +72,7 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
-    <router-view></router-view>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
@@ -97,8 +97,14 @@
   import NoResult from 'base/no-result/no-result';
 
   export default {
+    provide () {
+      return {
+        reload: this.reload
+      };
+    },
     data () {
       return {
+        isRouterAlive: true,
         toptipTxt: '',
         pageTitle: '培训',
         routerPrefix: util.routerPrefix,
@@ -188,6 +194,12 @@
     mounted () {
     },
     methods: {
+      reload () {
+        this.isRouterAlive = false;
+        this.$nextTick(() => {
+          this.isRouterAlive = true;
+        });
+      },
       selectBanner (item, index) {
         console.log(item);
         var type = item.type;

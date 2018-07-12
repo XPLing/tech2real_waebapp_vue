@@ -5,7 +5,7 @@
         <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack"></HeaderTitle>
       </header>
       <div class="g-video" v-if="courseData">
-        <div v-if="chapterData">
+        <div v-if="chapterData" class="recourse-wrapper">
           <div v-if="videoUrl" class="video-wrapper">
             <video controls :src="videoUrl" ref="video"></video>
             <p class="video-mask" v-show="isPause" @click.stop="Vclick">
@@ -19,14 +19,16 @@
         <img v-else :src="coverUrl">
       </div>
       <nav class="g-nav-wrapper">
-        <TrainDetailTab></TrainDetailTab>
+        <TrainDetailTab @changeTab="changeTab"></TrainDetailTab>
       </nav>
       <div class="g-main">
         <keep-alive>
-          <router-view :applied-state="appliedState" :course-data="courseData" :chapter-data="chapterData"
-                       :apply-result="applyResult"
-                       @setdata="setDatas" @changevideo="changeVideo" @changeapplyres="changeApplyResult"
-                       ref="view"></router-view>
+          <component v-bind:is="view" :key="`view_${view}`" :applied-state="appliedState" :course-data="courseData" :chapter-data="chapterData"
+                     :apply-result="applyResult"
+                     @setdata="setDatas" @changevideo="changeVideo" @changeapplyres="changeApplyResult"
+                     ref="view">
+
+          </component>
         </keep-alive>
       </div>
       <div class="g-join" ref="join" v-if="courseData && (!userGuid || this.appliedState!=1)">
@@ -48,6 +50,7 @@
           <p class="original">原价：<span>¥ {{courseOriginalPrice}}</span></p>
         </div>
       </g-select>
+      <router-view :apply-result="applyResult"></router-view>
     </div>
   </transition>
 </template>
@@ -57,6 +60,10 @@
   import Loading from 'base/loading/loading';
   import Confirm from 'base/confirm/confirm';
   import TrainDetailTab from 'components/train-detail-tab/train-detail-tab';
+  import CourseIntro from 'components/train-detail/intro/course-intro';
+  import CourseChapters from 'components/train-detail/chapters/course-chapters';
+  import CourseCommunity from 'components/train-detail/community/course-community';
+  import CourseEvaluate from 'components/train-detail/evaluate/course-evaluate';
   import {
     getCourseById,
     listChaptersByCourseId,
@@ -95,11 +102,13 @@
   };
   const COURSESTATESTR = [COURSESTATECONFIG.STATE_APPLY, COURSESTATECONFIG.STATE_BY_COURSE_DETAIL, COURSESTATECONFIG.STATE_APPLY_GO_ON,
     COURSESTATECONFIG.STATE_PAY, COURSESTATECONFIG.STATE_END, COURSESTATECONFIG.STATE_SELL_OUT, COURSESTATECONFIG.STATE_PREPARTING];
-
+  const VIEW = ['CourseIntro', 'CourseChapters', 'CourseEvaluate', 'CourseCommunity'];
   export default {
+    inject: ['reload'],
     props: {},
     data () {
       return {
+        view: 'CourseIntro',
         courseID: 0,
         pageTitle: '课程详情',
         hasSearch: false,
@@ -141,58 +150,45 @@
         'userGuid'
       ])
     },
-    beforeRouteEnter (to, from, next) {
-      next((vm) => {
-        var $this = vm;
-        vm.getCourseData($this);
-        return true;
-      });
-    },
-    beforeRouteUpdate (to, from, next) {
-      let list = ['applyresult'];
-      for (var i = 0, len = list.length; i < len; i++) {
-        var reg = list[i];
-        if (from.path.indexOf(reg) > -1) {
-          this.getCourseData();
-          break;
-        }
-      }
-      next();
-    },
     created () {
-      this._getCourseID();
-      this._listCourseValidityPeriodByCourseId().then((res) => {
-        if (res.code) {
-          if (res.code != ERR_OK) {
-            this.toptipTxt = res.message;
-            this.$refs.toptip.show();
-            return;
-          }
-          this.listCourseValidityPeriod = res.result;
-          this.coursePrice = this.listCourseValidityPeriod[0].priceAfterDiscount;
-          this.courseOriginalPrice = this.listCourseValidityPeriod[0].price;
-        }
-      }, erro => {
-        this.toptipTxt = erro.message;
-        this.$refs.toptip.show();
-      });
-      communication.$off();
-      communication.$on('showGlobalMask', (vm) => {
-        if (vm.$refs.join) {
-          vm.$refs.join.style.zIndex = 1;
-        }
-        vm.$refs.mask.show();
-      });
-      communication.$on('hideGlobalMask', (vm) => {
-        if (vm.$refs.join) {
-          vm.$refs.join.style.zIndex = 5;
-        }
-        vm.$refs.mask.hide();
-      });
-
-      // this.getCourseData();
+      this.init();
     },
     methods: {
+      changeTab(data){
+          this.view = VIEW[data.id];
+      },
+      init () {
+        this._getCourseID();
+        this.getCourseData();
+        this._listCourseValidityPeriodByCourseId().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            this.listCourseValidityPeriod = res.result;
+            this.coursePrice = this.listCourseValidityPeriod[0].priceAfterDiscount;
+            this.courseOriginalPrice = this.listCourseValidityPeriod[0].price;
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+        communication.$off();
+        communication.$on('showGlobalMask', (vm) => {
+          if (vm.$refs.join) {
+            vm.$refs.join.style.zIndex = 1;
+          }
+          vm.$refs.mask.show();
+        });
+        communication.$on('hideGlobalMask', (vm) => {
+          if (vm.$refs.join) {
+            vm.$refs.join.style.zIndex = 5;
+          }
+          vm.$refs.mask.hide();
+        });
+      },
       setCourseValidityPeriod (data) {
         if (!this.courseData) {
           return;
@@ -202,11 +198,11 @@
         this.courseOriginalPrice = this.courseData.courseValidityPeriod.price;
       },
       selectPeriodConfirm (data) {
-        this.setCourseValidityPeriod(data);
+        this.setCourseValidityPeriod(data.item);
         this.$refs.confirmsWrapper.show();
       },
       selectPeriodItem (data) {
-        this.setCourseValidityPeriod(data);
+        this.setCourseValidityPeriod(data.item);
       },
       ...mapMutations({
         updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
@@ -276,7 +272,7 @@
           id: this.courseID,
           userGuid: this.userGuid,
           productGuid: this.productGuid,
-          courseValidityPeriodId: this.courseData.courseValidityPeriod.item.id
+          courseValidityPeriodId: this.courseData.courseValidityPeriod.id
         };
         return applyCourse(params);
       },
@@ -434,7 +430,11 @@
       TopTip,
       Loading,
       'g-mask': Mask,
-      GSelect
+      GSelect,
+      CourseIntro,
+      CourseEvaluate,
+      CourseChapters,
+      CourseCommunity
     },
     watch: {
       videoUrl (newVal) {
@@ -446,6 +446,13 @@
             this.isCanplay = true;
           });
         }, 20);
+      },
+      $route (to, from) {
+        if (to.name === 'trainDetail') {
+          if (/trainDetailApply/.test(from.name)) {
+            this.reload();
+          }
+        }
       }
     }
   };
