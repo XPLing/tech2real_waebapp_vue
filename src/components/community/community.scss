@@ -1,3 +1,91 @@
-.g-recommend {
+.g-community {
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-main{
+    position: fixed;
+    z-index: 101;
+    left: 0;
+    right: 0;
+    top: formatVal(40,rem);
+    bottom: formatVal(50,rem);
+    .community-list{
+      >.item{
+        padding: formatVal(10,rem);
+        &+.item{
+          border-top: formatVal(10,rem) solid $color-gray-F6;
+        }
+        .user-info{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .avatar{
+            display: flex;
+            align-items: center;
+            font-size: 0;
+            img{
+              @include w(36);
+              @include h(36);
+              margin-right: formatVal(10,rem);
+            }
+            .name{
+              @include fs(14);
+              color: $color-text-40;
+            }
+          }
+          .time{
+            @include fs(12);
+            color: $color-border-nav;
+          }
 
+        }
+        .cont{
+          margin-top: formatVal(10,rem);
+        }
+        .tools{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: $color-text-66;
+          margin-top: formatVal(20,rem);
+          @include fs(12);
+          p{
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .icon{
+              margin-right: formatVal(5,rem);
+            }
+          }
+        }
+      }
+    }
+  }
+  .add-comment{
+    position: absolute;
+    z-index: 102;
+    bottom: formatVal(80,rem);
+    right: formatVal(15,rem);
+    @include w(48);
+    @include h(48);
+    color: $whiteColor;
+    text-align: center;
+    background-color: $color-theme;
+    border-radius: 50%;
+    .icon{
+      @include lh(48);
+      @include fs(20);
+    }
+  }
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s ease;
 }

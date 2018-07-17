@@ -1,0 +1,16 @@
+.c-share-link{
+  display: flex;
+  align-items: center;
+  padding: formatVal(5,rem);
+  background-color: $color-gray-F6;
+  .cover{
+    @include fs(14);
+    color: $color-text-40;
+    @include w(46);
+    @include h(46);
+    margin-right: formatVal(10,rem);
+  }
+  .title{
+    flex: 1;
+  }
+}

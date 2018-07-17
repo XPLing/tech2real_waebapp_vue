@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="g-info-comment-item">
+    <div class="g-community-comment-item">
       <header class="g-header">
         <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
       </header>
@@ -10,8 +10,10 @@
           <div>
             <div class="comment">
               <div v-if="community">
-                <community-list :community-list="community" @selectCommunity="selectCommunity"
-                                @like="likeComment"></community-list>
+                <community-club-item :community="community" @selectCommunity="selectCommunity"
+                                @like="likeComment">
+
+                </community-club-item>
               </div>
             </div>
             <p class="comment-count"></p>
@@ -26,7 +28,7 @@
         </scroll>
       </div>
       <router-link
-        :to="`/info/infodetail/${this.$route.params.articleId}/commentlist/${this.$route.params.commentId}/commentform`"
+        :to="{path:`${this.$route.params.commentId}/commentform`,append: true}"
         class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>
@@ -54,7 +56,7 @@
   import { getCommentById, listRepliesByCommentId, likeCommentV2 } from 'api/info';
   import { imgOnload } from 'assets/js/imgOnload';
   import InfoItemLeft from 'base/info-item-left/info-item-left';
-  import CommunityList from 'base/community-list/community-list';
+  import CommunityClubItem from 'base/community-club-item/community-club-item';
   import ReplyList from 'base/reply-list/reply-list';
 
   export default {
@@ -144,7 +146,7 @@
               this.$refs.toptip.show();
               return;
             }
-            this.community = [res.result];
+            this.community = res.result;
             this.placeholder = res.result.nickname;
             this.requestReply();
           }
@@ -255,7 +257,7 @@
       BackTop,
       NoResult,
       InfoItemLeft,
-      CommunityList,
+      CommunityClubItem,
       ReplyList
     }
   };

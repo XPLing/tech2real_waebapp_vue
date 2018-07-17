@@ -43,6 +43,8 @@ const ApplyResult = () => import(/* webpackChunkName: "ApplyResult" */ 'componen
 const ApplyInfoCollect = () => import(/* webpackChunkName: "ApplyInfoCollect" */ 'components/applyInfoCollect/applyInfoCollect');
 const ApplyPay = () => import(/* webpackChunkName: "ApplyPay" */ 'components/applyPay/applyPay');
 const Community = () => import(/* webpackChunkName: "community" */ 'components/community/community');
+const CommunityCommentItem = () => import(/* webpackChunkName: "CommunityCommentItem" */ 'components/community/comment-item/comment-item');
+const CommunityCommentForm = () => import(/* webpackChunkName: "CommunityCommentForm" */ 'components/community/commentForm/commentForm');
 const Activity = () => import(/* webpackChunkName: "activity" */ 'components/activity/activity');
 const ActivityList = () => import(/* webpackChunkName: "ActivityList" */ 'components/activity/list/activityList');
 const ActivityDetail = () => import(/* webpackChunkName: "ActivityDetail" */ 'components/activity/detail/activityDetail');
@@ -167,7 +169,28 @@ const Router = new VueRouter({
     },
     {
       path: routerPrefix + '/community',
-      component: Community
+      component: Community,
+      children: [
+        {
+          path: ':commentId(\\d+)',
+          component: CommunityCommentItem,
+          name: 'community_commentDetail',
+          children: [
+            {
+              path: 'commentform',
+              component: CommunityCommentForm,
+              name: 'community_commentForm',
+              props: true
+            }
+          ]
+        },
+        {
+          path: 'commentform',
+          component: CommunityCommentForm,
+          name: 'community_commentFormRoot',
+          props: true
+        }
+      ]
     },
     {
       path: routerPrefix + '/activity',

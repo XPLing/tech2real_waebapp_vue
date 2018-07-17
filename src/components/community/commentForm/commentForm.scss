@@ -1,0 +1,195 @@
+$color-red: #FF5F7A;
+$color-green: #7ED321;
+.g-commentForm {
+  position: fixed;
+  z-index: 103;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @include fs(14);
+  color: $color-text-b45;
+  background-color: $color-border-split;
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+
+  .g-swiper /deep/ .swiper-pagination-bullet-active {
+    background: $color-theme;
+  }
+  .g-header{
+
+  }
+  .g-main{
+    position: fixed;
+    z-index: 11;
+    top: formatVal(40,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    .top{
+      padding-bottom: formatVal(20,rem);
+      background-color: $whiteColor;
+      .commentForm-cont{
+        display: block;
+        padding: formatVal(10,rem);
+        width: 100%;
+        @include h(150);
+        border: none;
+
+        resize: none;
+        font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
+      }
+      .upload{
+        display: flex;
+        flex-flow: wrap;
+        border-top: 1px solid $color-gray-e9;
+        border-bottom: 1px solid $color-gray-e9;
+        padding: formatVal(10,rem) formatVal(15,rem);
+        font-size: 0;
+        .icon{
+          color: $borderColor2;
+          @include fs(75);
+          margin: formatVal(5,rem);
+        }
+        img {
+          margin: formatVal(5,rem);
+          @include w(75);
+          @include h(75);
+        }
+      }
+      .upload-wrapper{
+        .upload-btn{
+
+        }
+        /deep/ .imgUploader{
+          border-width: 1px 0;
+          .file-list{
+            display: flex;
+            flex-flow: wrap;
+            font-size: 0;
+            padding: formatVal(10,rem) formatVal(15,rem);
+            .file-item{
+              margin: formatVal(5,rem);
+              @include w(75);
+              @include h(75);
+              .add{
+                margin-left: 0;
+              }
+              .file-remove{
+                @include fs(14);
+                right: 0;
+              }
+            }
+          }
+          .uploadBtn{
+            padding: formatVal(10,rem) formatVal(15,rem) formatVal(10,rem) formatVal(20,rem);
+            .empty{
+              position: static;
+              display: inline-block;
+              background-color: $color-theme;
+            }
+          }
+        }
+      }
+    }
+    .bottom{
+      margin-top: formatVal(20,rem);
+      .info-group {
+        &.text {
+          & + .text {
+            margin-top: formatVal(10, rem);
+          }
+        }
+        .title {
+          position: relative;
+          color: $color-gray-B2;
+          @include fs(14);
+          @at-root #{&},.tip {
+            padding: formatVal(11, rem) formatVal(13, rem);
+          }
+          .request-icon{
+            top: formatVal(18,rem);
+          }
+        }
+        .input-item {
+          position: relative;
+          z-index: 10;
+          display: flex;
+          @include fs(14);
+          padding:  0 formatVal(12, rem);
+          background-color: $whiteColor;
+          &.text {
+            @include h(45);
+            @include lh(45);
+          }
+          & + .input-item {
+            margin-top: formatVal(10, rem);
+          }
+          .name {
+            color: $color-gray-99;
+            margin-right: formatVal(10, rem);
+          }
+          .cont {
+            flex: 1;
+            input, textarea {
+              width: 100%;
+              border: none;
+              outline: none;
+              @include fs(14);
+              background: transparent;
+            }
+          }
+          &>.icon{
+            @include fs(20);
+            @include lh(45);
+            transition: all .3s;
+            transform: rotate(0);
+            &.active{
+              transform: rotate(180deg);
+            }
+          }
+
+        }
+        .selectList{
+          position: relative;
+          z-index: 5;
+          .title{
+            @include fs(12);
+          }
+          .list{
+            .item{
+              display: flex;
+              align-items: center;
+              padding: formatVal(10,rem);
+              background-color: $whiteColor;
+              &+.item{
+                border-top: 1px solid $color-gray-e9;
+              }
+              .avatar{
+                @include w(30);
+                @include h(30);
+                margin-right: formatVal(10,rem);
+              }
+              .name{
+                @include fs(14);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+}
+.slide-down-enter-active, .slide-down-leave-active {
+  transition: all .3s;
+}
+.slide-down-enter, .slide-down-leave-to {
+  transform: translate3d(0, -30px, 0);
+  opacity: 0;
+}

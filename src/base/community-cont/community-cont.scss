@@ -1,0 +1,35 @@
+.c-community-cont{
+  @include fs(14);
+  .desc{
+    word-wrap: break-word;
+    word-break: break-all;
+
+  }
+  .link{
+    margin-top: formatVal(20,rem);
+  }
+  .gallery{
+    margin-top: formatVal(20,rem);
+    display: flex;
+    &.one{
+      img{
+        @include w(330);
+        @include h(330);
+      }
+    }
+    &.two{
+      justify-content: space-between;
+      img{
+        @include w(160);
+        @include h(160);
+      }
+    }
+    &.three{
+      justify-content: space-between;
+      img{
+        @include w(110);
+        @include h(110);
+      }
+    }
+  }
+}

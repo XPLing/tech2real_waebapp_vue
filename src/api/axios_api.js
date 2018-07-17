@@ -826,6 +826,25 @@ apiRouter.get('/listDiscoverActivities', function (req, res) {
     res.json(e);
   });
 });
+apiRouter.get('/listDiscoverActivities', function (req, res) {
+  var url = `${config.dev.apiproxy_open}/listDiscoverActivities`;
+  axios({
+    method: 'get',
+    url: url,
+    headers: {
+      host: 'https://open.dev.tech2real.com',
+      referer: 'https://open.dev.tech2real.com/register_page'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (error) => {
+    res.json(error);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 apiRouter.post('/listActivities', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/listActivities`;
   axios({
@@ -910,6 +929,49 @@ apiRouter.post('/listTickets', jsonParser, function (req, res) {
 /* 报名 */
 apiRouter.post('/listInfoCollectionsByGuid', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/listInfoCollectionsByGuid`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listMyClubs', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listMyClubs`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
+/* 社群 */
+apiRouter.post('/listAllComments', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listAllComments`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
+/* 上传 */
+apiRouter.post('/getFileCloudToken', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getFileCloudToken`;
   axios({
     method: 'post',
     url: url,

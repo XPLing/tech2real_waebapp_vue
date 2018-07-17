@@ -12,6 +12,7 @@ import { VeeValidate, Veeconfig } from 'assets/js/validate';
 import store from 'store';
 import * as filters from 'assets/js/filters';
 import VueLazyload from 'vue-lazyload';
+import Uploader from 'vue-easy-uploader'
 import Mint from 'mint-ui';
 
 Vue.use(Mint);
@@ -24,6 +25,7 @@ fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟
 
 Vue.config.productionTip = false;
 
+Vue.use(Uploader, store);
 Vue.use(VeeValidate, Veeconfig);
 
 // 注册全局过滤器

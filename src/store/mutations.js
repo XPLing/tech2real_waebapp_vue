@@ -40,6 +40,12 @@ const mutations = {
   },
   [types.SET_BEFORELOGINPAGE] (state, val) {
     state.beforeLoginPage = val;
+  },
+  [types.SET_UPLOAD_IMGPATHS] (state, val) {
+    state.imgstore.img_paths = val;
+  },
+  [types.SET_UPLOAD_IMGSTATUS] (state, val) {
+    state.imgstore.img_status = val;
   }
 };
 
