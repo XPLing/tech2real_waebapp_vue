@@ -8,9 +8,13 @@
         <span class="name">{{reply.nickname}}</span>
 
       </p>
-      <p class="cont">
-        <span>{{ reply.content }}</span>
-      </p>
+      <div class="cont-wrap">
+        <div v-if="reply.replyId">
+          <p class="reply-content">@{{reply.replyNickname}}：{{reply.replyContent}}</p>
+          <p class="cont">{{reply.content}}</p>
+        </div>
+        <p class="cont" v-else>{{reply.content}}</p>
+      </div>
       <div class="operate">
         <p class="time">{{reply.createTime | formatDate('yyyy-MM-dd')}}</p>
         <p class="tool">

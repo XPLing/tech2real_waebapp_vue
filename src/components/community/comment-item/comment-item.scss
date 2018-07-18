@@ -39,9 +39,8 @@
       }
     }
     .comment{
-      padding: formatVal(14,rem);
+      padding: 0 formatVal(10,rem);
       background-color: $whiteColor;
-      margin-bottom: formatVal(20,rem);
       .title{
         display: flex;
         margin-bottom: formatVal(10,rem);
@@ -65,8 +64,13 @@
         text-align: center;
       }
     }
+    .comment-count{
+      padding: formatVal(10,rem);
+      @include fs(12);
+      color: $color-gray-A1;
+    }
     .reply{
-      padding: 0 formatVal(14,rem);
+      //padding: 0 formatVal(14,rem);
       .request-result{
         padding: formatVal(10,rem) 0;
         @include fs(12);

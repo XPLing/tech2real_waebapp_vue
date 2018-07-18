@@ -10,13 +10,13 @@
           <div>
             <div class="comment">
               <div v-if="community">
-                <community-club-item :community="community" @selectCommunity="selectCommunity"
-                                @like="likeComment">
+                <community-club-item :community="community" @selectItem="selectCommunity"
+                                @like="likeComment" @deleteComment="deleteComment">
 
                 </community-club-item>
               </div>
             </div>
-            <p class="comment-count"></p>
+            <p class="comment-count" v-if="community">{{community.replyCount}}条回复</p>
             <div class="reply">
               <div v-if="replyList">
                 <reply-list :reply-list="replyList" @selectReply="selectReply" @like="likeReply"></reply-list>
@@ -28,7 +28,7 @@
         </scroll>
       </div>
       <router-link
-        :to="{path:`${this.$route.params.commentId}/commentform`,append: true}"
+        :to="{path:`commentform`,append: true}"
         class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>
@@ -36,6 +36,8 @@
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
+      <confirm ref="confirmsWrapper" :text="confirmTxt" @confirm="confirm"></confirm>
+      <g-mask @clickMask="clickMask" ref="mask"></g-mask>
     </div>
   </transition>
 
@@ -54,16 +56,18 @@
   import NoResult from 'base/no-result/no-result';
   import BackTop from 'base/backtop/backtop';
   import { getCommentById, listRepliesByCommentId, likeCommentV2 } from 'api/info';
+  import { deleteCommentV2 } from 'api/comment';
   import { imgOnload } from 'assets/js/imgOnload';
   import InfoItemLeft from 'base/info-item-left/info-item-left';
   import CommunityClubItem from 'base/community-club-item/community-club-item';
   import ReplyList from 'base/reply-list/reply-list';
-
+  import Confirm from 'base/confirm/confirm';
+  import Mask from 'base/mask/mask';
   export default {
     data () {
       return {
         toptipTxt: '',
-        pageTitle: '',
+        pageTitle: '话题讨论',
         articleInfo: null,
         probeType: 2,
         listenScroll: true,
@@ -74,13 +78,13 @@
         noMore: false,
         noResult: '加载中。。。',
         noMoreStr: '没有更多了~',
-        requestPage: 1
+        requestPage: 1,
+        confirmTxt: '确定删除该话题？'
       };
     },
     created () {
       this.commentId = this.$route.params.commentId;
       this.articleId = this.$route.params.articleId;
-      this.pageTitle = this.$route.query.title;
       this.isUpdate = false;
       this.dataInit();
     },
@@ -130,6 +134,28 @@
           });
         }
       },
+      deleteComment (data) {
+        this.$refs.confirmsWrapper.show();
+      },
+      confirm () {
+          this._deleteCommentV2().then((res) => {
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                this.toptipTxt = res.message;
+                this.$refs.toptip.show();
+                return;
+              }
+              this.$emit('update');
+              this.$router.back();
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+      },
+      clickMask(){
+
+      },
       update () {
         this.requestPage = 1;
         this.replyList = null;
@@ -156,17 +182,21 @@
         });
       },
       selectReply (data) {
+        this.placeholder = data.nickname;
         this.$router.push({
-          path: `/info/infodetail/${this.$route.params.articleId}/commentlist/${this.$route.params.commentId}/commentform`,
+          path: `commentform`,
+          append: true,
           query: {
-            replyId: data.replyId,
-            replyUserGuid: data.replyUserGuid
+            replyId: data.id,
+            replyUserGuid: data.userGuid
           }
         });
       },
       selectCommunity (data) {
+        this.placeholder = data.nickname;
         this.$router.push({
-          path: `/info/infodetail/${this.$route.params.articleId}/commentlist/${this.$route.params.commentId}/commentform`
+          path: `commentform`,
+          append: true
         });
       },
       requestReply () {
@@ -238,6 +268,14 @@
           targetId: targetId
         };
         return likeCommentV2(param);
+      },
+      _deleteCommentV2 () {
+        var param = {
+          clientType: 1,
+          userGuid: this.userGuid,
+          id: this.commentId
+        };
+        return deleteCommentV2(param);
       }
     },
     watch: {
@@ -258,7 +296,9 @@
       NoResult,
       InfoItemLeft,
       CommunityClubItem,
-      ReplyList
+      ReplyList,
+      Confirm,
+      'g-mask': Mask
     }
   };
 </script>

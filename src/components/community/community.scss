@@ -57,6 +57,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            &.active{
+              .icon{
+                color: $color-theme;
+              }
+            }
             .icon{
               margin-right: formatVal(5,rem);
             }

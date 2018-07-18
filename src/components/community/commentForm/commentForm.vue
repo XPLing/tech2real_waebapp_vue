@@ -11,13 +11,19 @@
             <div class="top">
               <textarea class="commentForm-cont" name="commentForm" rows="100" v-model="commentFormCont"
                         :placeholder="commentFormPlaceholder"></textarea>
-              <div class="upload-wrapper">
-                <!--<img :src="item.url" v-for="(item, index) in uploadInfo.imgs" :key="index" v-if="uploadInfo">-->
-                <!--<i class="icon c-icon-upload"></i>-->
-                <uploader url="https://up.qbox.me" :token="token"></uploader>
+              <div class="upload">
+                <div class="img-item" v-for="(item, index) in uploadInfo.files" :key="index" v-if="uploadInfo">
+                  <img :src="item.src">
+                  <i class="icon" @click="removeUploadFile(item,index)">x</i>
+                </div>
+                <upload :token="token" url="https://up.qbox.me" @uploadComplete="uploadComplete" @selectImgs="upDateUpload" @upDateUpload="upDateUpload" ref="upload"></upload>
+                <!--<uploader url="https://up.qbox.me" :token="token"></uploader>-->
+              </div>
+              <div class="upload-tools">
+                <button class="btn upload-btn" @click="uploadFiles">上传图片</button>
               </div>
             </div>
-            <div class="bottom" v-if="favoriteClub">
+            <div class="bottom" v-if="favoriteClub && type==='comment'">
               <div class="info-group text">
                 <div class="input-item text" @click="toggleCommunityList">
                   <div class="name">发布到：</div>
@@ -53,7 +59,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll';
   import HeaderTitle from 'components/header-title/header-title';
-  import { ERR_OK } from 'api/config';
+  import { ERR_OK, ERR_OK_STR } from 'api/config';
   import * as util from 'assets/js/util';
   import { addCommentV2, addCommentReply } from 'api/info';
   import { getFileCloudToken } from 'api/upload';
@@ -61,6 +67,7 @@
   import { mapState, mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import Confirm from 'base/confirm/confirm';
+  import Upload from 'base/upload/upload';
 
   export default {
     props: ['commentFormPlaceholder', 'type'],
@@ -76,7 +83,7 @@
         clubName: '',
         clubId: null,
         uploadInfo: {
-          imgs: []
+          files: []
         },
         token: null
       };
@@ -93,27 +100,29 @@
       })
     },
     created () {
-      this._listMyClubs().then((res) => {
-        if (res.code) {
-          if (res.code != ERR_OK) {
-            this.toptipTxt = res.message;
-            this.$refs.toptip.show();
-            return;
+      if (this.type === 'comment') {
+        this._listMyClubs().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            this.favoriteClub = res.result;
           }
-          this.favoriteClub = res.result;
-        }
-      }, erro => {
-        this.toptipTxt = erro.message;
-        this.$refs.toptip.show();
-      });
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+      }
       this._getFileCloudToken().then((res) => {
-        if (res.code) {
-          if (res.code != ERR_OK) {
+        if (res.status) {
+          if (res.status != ERR_OK_STR) {
             this.toptipTxt = res.message;
             this.$refs.toptip.show();
             return;
           }
-          this.token = res.result.token;
+          this.token = res.results.token;
         }
       }, erro => {
         this.toptipTxt = erro.message;
@@ -123,6 +132,18 @@
     mounted () {
     },
     methods: {
+      uploadComplete(){
+        console.log('uploadComplete');
+      },
+      uploadFiles(){
+        this.$refs.upload.upload();
+      },
+      removeUploadFile(item, index){
+        this.$refs.upload.removeUploadFile(item, index);
+      },
+      upDateUpload(data){
+        this.uploadInfo.files = data;
+      },
       submit () {
         let values = [];
         for (let key of this.imgPaths) {
@@ -153,18 +174,21 @@
 
       },
       send () {
-        if (!this.commentFormCont.trim() || !this.clubName || !this.userGuid) {
+        if (!this.commentFormCont.trim() || !this.userGuid) {
           if (!this.userGuid) {
             this.$refs.confirmsWrapper.show();
           }
+          return false;
+        }
+        if (this.type === 'comment') {
           if (!this.clubName) {
             this.toptipTxt = '请选择发布对象！';
             this.$refs.toptip.show();
             setTimeout(() => {
               this.$refs.toptip.hide();
             }, 2000);
+            return false;
           }
-          return false;
         }
         var fnName = '';
         if (this.type === 'comment') {
@@ -243,7 +267,7 @@
       },
       imgStatus () {
         if (this.imgStatus === 'finished') {
-          this.submit()
+          this.submit();
         }
       }
     },
@@ -251,7 +275,8 @@
       HeaderTitle,
       TopTip,
       Scroll,
-      Confirm
+      Confirm,
+      Upload
     }
   };
 </script>

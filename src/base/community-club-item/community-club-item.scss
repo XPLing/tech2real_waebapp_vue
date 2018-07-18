@@ -2,14 +2,6 @@
   position: relative;
   padding: formatVal(12,rem) 0;
   color: $color-text-40;
-  &:before{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-bottom: 1px solid $color-gray-e9;
-  }
   .user-info{
     display: flex;
     justify-content: space-between;
@@ -36,15 +28,32 @@
 
   }
   .cont{
-    margin-top: formatVal(10,rem);
+    position: relative;
+    padding: formatVal(15,rem) 0;
+
+    &:before{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid $color-gray-e9;
+    }
   }
   .operate{
+    margin-top: formatVal(15,rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
     .time{
+      display: flex;
+      align-items: center;
       @include fs(12);
       color: $color-text-wcc;
+      .delete{
+        margin-left: formatVal(10,rem);
+        color: $color-text-link;
+      }
     }
     .tool{
       display: flex;
@@ -62,6 +71,26 @@
           }
         }
       }
+    }
+  }
+  .club{
+    margin-top: formatVal(10,rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .info{
+      display: flex;
+      align-items: center;
+      img{
+        @include w(25);
+        @include h(25);
+      }
+      .name{
+        margin-left: formatVal(10, rem);
+      }
+    }
+    .icon{
+      @include fs(20);
     }
   }
 }

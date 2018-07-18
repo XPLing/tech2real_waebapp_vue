@@ -968,6 +968,19 @@ apiRouter.post('/listAllComments', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+apiRouter.post('/deleteCommentV2', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/deleteCommentV2`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 
 /* 上传 */
 apiRouter.post('/getFileCloudToken', jsonParser, function (req, res) {

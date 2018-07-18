@@ -8,20 +8,20 @@
               @pullingUp="requestScrollData">
         <div>
           <ul class="community-list">
-            <li class="item" v-for="(item, index) in communityList" :key="index" @click="selectItem(item)">
-              <div class="user-info">
+            <li class="item" v-for="(item, index) in communityList" :key="index">
+              <div class="user-info"  @click.stop="selectItem(item)">
                 <div class="avatar">
                   <img v-lazy="item.faceUrl">
                   <p class="name">{{item.nickname}}</p>
                 </div>
                 <p class="time">{{item.createTime | formatDate('yyyy-MM-dd')}}</p>
               </div>
-              <div class="cont">
+              <div class="cont"  @click.stop="selectItem(item)">
                 <community-cont :data="item"></community-cont>
               </div>
               <div class="tools">
-                <p class="item comment"><i class="icon c-icon-comment-square"></i>{{item.replyCount}}</p>
-                <p class="item like" :class="{'active': item.isLike == 'N'}"><i
+                <p class="item comment"  @click.stop="selectItem(item)"><i class="icon c-icon-comment-square"></i>{{item.replyCount}}</p>
+                <p class="item like" @click.stop="like(item)" :class="{'active': item.isLike === 'Y'}"><i
                   class="icon c-icon-like"></i>{{item.likeCount}}</p>
               </div>
             </li>
@@ -52,6 +52,7 @@
   import NoResult from 'base/no-result/no-result';
   import BackTop from 'base/backtop/backtop';
   import { listAllComments } from 'api/community';
+  import { likeCommentV2 } from 'api/comment';
   import CommunityCont from 'base/community-cont/community-cont';
   export default {
     provide () {
@@ -86,6 +87,26 @@
       ])
     },
     methods: {
+      like (data) {
+        if (data.isLike === 'N' && !this.likeFlag) {
+          this.likeFlag = true;
+          this._likeCommentV2(data.id).then((res) => {
+            this.likeFlag = false;
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                this.toptipTxt = res.message;
+                this.$refs.toptip.show();
+                return false;
+              }
+              data.isLike = 'Y';
+              data.likeCount = data.likeCount + 1;
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+        }
+      },
       update(){
         this.noMore = false;
         this.requestMoreFlag = false;
@@ -141,6 +162,16 @@
             this.$refs.toptip.show();
           });
         }
+      },
+      _likeCommentV2 (id) {
+        var param = {
+          isLike: 'Y',
+          clientType: 1,
+          type: 1,
+          userGuid: this.userGuid,
+          targetId: id
+        };
+        return likeCommentV2(param);
       },
       _listAllComments (page) {
         var param = {

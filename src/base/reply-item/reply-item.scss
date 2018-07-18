@@ -1,7 +1,8 @@
 .c-reply-list-item.c-media{
   position: relative;
-  padding: formatVal(12,rem) 0;
+  padding: formatVal(12,rem);
   color: $color-text-40;
+  background-color: $whiteColor;
   &:before{
     content: '';
     position: absolute;
@@ -25,12 +26,19 @@
     display: flex;
     flex-flow: column;
     justify-content: space-between;
-    .cont{
+    .cont-wrap{
       @include fs(14);
       margin: formatVal(10,rem) 0;
       color: $color-text-40;
       word-break: break-all;
       word-wrap: break-word;
+      .reply-content{
+        padding: formatVal(5,rem);
+        @include fs(12);
+        color: $color-gray-99;
+        background-color: $color-gray-F5;
+        margin-bottom: formatVal(5,rem);
+      }
     }
     .info{
       @include fs(14);
