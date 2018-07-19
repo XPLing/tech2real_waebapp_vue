@@ -59,6 +59,7 @@ const Register = () => import(/* webpackChunkName: "register" */ 'components/use
 const BackPW = () => import(/* webpackChunkName: "backPW" */ 'components/user/backpw/backpw');
 const MobileBind = () => import(/* webpackChunkName: "mobileBind" */ 'components/user/mobilebind/mobilebind');
 const FeedBack = () => import(/* webpackChunkName: "feedback" */ 'components/feedback/feedback');
+const ClubDetail = () => import(/* webpackChunkName: "ClubDetail" */ 'components/club/detail/clubDetail');
 
 Vue.use(VueRouter);
 const Router = new VueRouter({
@@ -181,6 +182,11 @@ const Router = new VueRouter({
               component: CommunityCommentForm,
               name: 'community_commentForm',
               props: true
+            },
+            {
+              path: 'clubdetail/:clubguId(\\d+)',
+              component: ClubDetail,
+              name: 'community_clubDetail'
             }
           ]
         },

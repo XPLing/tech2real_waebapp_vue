@@ -39,7 +39,8 @@
               <router-link class="more" :to="{path: '/'}">更多社群</router-link>
             </div>
             <ul class="club-list" v-if="clubList">
-              <clubs-item v-for="(citem, index) in clubList" :key="index" :club="citem"  @selectClub="selectClub"></clubs-item>
+              <clubs-item v-for="(citem, index) in clubList" :key="index" :club="citem"
+                          @selectClub="selectClub"></clubs-item>
             </ul>
           </div>
           <div class="g-recommend activity">
@@ -53,7 +54,7 @@
               <swiper :options="swiperOPts_activity" class="g-swiper">
                 <swiper-slide class="swiper-item" v-for="(item,index) in activitiesList" :key="index">
                   <ul>
-                    <activity-item :data="item"  @selectActivity="selectActivity"></activity-item>
+                    <activity-item :data="item" @selectActivity="selectActivity"></activity-item>
                   </ul>
                 </swiper-slide>
                 <div class="swiper-pagination swiper-pagination-activity" slot="pagination"></div>
@@ -143,7 +144,9 @@
         bannerInfo: null,
         contList: null,
         activitiesList: null,
-        clubList: null
+        clubList: null,
+        infoFirst: true,
+        clubFirst: true
       };
     },
     created () {
@@ -222,14 +225,26 @@
       selectInfo (data) {
         var url = `/info/infodetail/${data.id}`;
         this.$router.push({
-          path: url
+          path: url,
+          query: {
+            first: this.infoFirst
+          }
         });
+        if (this.infoFirst) {
+          this.infoFirst = false;
+        }
       },
       selectClub (data) {
         var url = `/info/infodetail/${data.id}`;
         this.$router.push({
-          path: url
+          path: url,
+          query: {
+            first: this.clubFirst
+          }
         });
+        if (this.clubFirst) {
+          this.clubFirst = false;
+        }
       },
       _listDiscoverActivities () {
         var param = {

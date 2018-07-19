@@ -113,9 +113,11 @@
     inject: ['reload'],
     beforeRouteEnter (to, from, next) {
       next((vm) => {
-        if (from.name === 'activity') {
+        if (from.name === 'activity' || /clubDetail/.test(from.name)) {
           vm.articleId = to.params.articleId;
-          vm.reload();
+          if (!to.query.first) {
+            vm.reload();
+          }
         }
       });
     },
@@ -479,6 +481,7 @@
       $route (to, from) {
         if (to.name === 'infoDetail') {
           if (/infoDetail/.test(from.name)) {
+            console.log(from.name);
             this.reload();
           }
         }

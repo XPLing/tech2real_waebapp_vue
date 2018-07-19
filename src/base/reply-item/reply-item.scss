@@ -39,6 +39,29 @@
         background-color: $color-gray-F5;
         margin-bottom: formatVal(5,rem);
       }
+      .gallery{
+        margin-top: formatVal(20,rem);
+        display: flex;
+        img{
+          @include w(100);
+          @include h(100);
+        }
+        &.one{
+
+        }
+        &.two{
+          img+img{
+            margin-left: formatVal(20,rem);
+          }
+        }
+        &.three{
+          justify-content: space-between;
+          img{
+            @include w(90);
+            @include h(90);
+          }
+        }
+      }
     }
     .info{
       @include fs(14);

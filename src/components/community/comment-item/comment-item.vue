@@ -10,9 +10,8 @@
           <div>
             <div class="comment">
               <div v-if="community">
-                <community-club-item :community="community" @selectItem="selectCommunity"
-                                @like="likeComment" @deleteComment="deleteComment">
-
+                <community-club-item :community="community" @selectItem="selectCommunity" @selectClub="selectClub"
+                                     @like="likeComment" @deleteComment="deleteComment">
                 </community-club-item>
               </div>
             </div>
@@ -63,6 +62,7 @@
   import ReplyList from 'base/reply-list/reply-list';
   import Confirm from 'base/confirm/confirm';
   import Mask from 'base/mask/mask';
+
   export default {
     data () {
       return {
@@ -95,6 +95,12 @@
       ])
     },
     methods: {
+      selectClub (data) {
+        this.$router.push({
+          path: `clubdetail/${data.club.guid}`,
+          append: true
+        });
+      },
       likeComment (data) {
         if (data.isLike === 'N' && !this.likeFlag) {
           this.likeFlag = true;
@@ -138,22 +144,22 @@
         this.$refs.confirmsWrapper.show();
       },
       confirm () {
-          this._deleteCommentV2().then((res) => {
-            if (res.code) {
-              if (res.code != ERR_OK) {
-                this.toptipTxt = res.message;
-                this.$refs.toptip.show();
-                return;
-              }
-              this.$emit('update');
-              this.$router.back();
+        this._deleteCommentV2().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
             }
-          }, erro => {
-            this.toptipTxt = erro.message;
-            this.$refs.toptip.show();
-          });
+            this.$emit('update');
+            this.$router.back();
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
       },
-      clickMask(){
+      clickMask () {
 
       },
       update () {

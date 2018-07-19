@@ -1,0 +1,57 @@
+.c-topic-list{
+  >.item{
+    padding: formatVal(10,rem);
+    &+.item{
+      border-top: formatVal(10,rem) solid $color-gray-F6;
+    }
+    .user-info{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .avatar{
+        display: flex;
+        align-items: center;
+        font-size: 0;
+        img{
+          @include w(36);
+          @include h(36);
+          margin-right: formatVal(10,rem);
+        }
+        .name{
+          @include fs(14);
+          color: $color-text-40;
+        }
+      }
+      .time{
+        @include fs(12);
+        color: $color-border-nav;
+      }
+
+    }
+    .cont{
+      margin-top: formatVal(10,rem);
+    }
+    .tools{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $color-text-66;
+      margin-top: formatVal(20,rem);
+      @include fs(12);
+      p{
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &.active{
+          .icon{
+            color: $color-theme;
+          }
+        }
+        .icon{
+          margin-right: formatVal(5,rem);
+        }
+      }
+    }
+  }
+}

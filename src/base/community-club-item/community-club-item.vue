@@ -54,7 +54,6 @@
     },
     methods: {
       selectClub(){
-        console.log('selectClub');
         this.$emit('selectClub', this.community);
       },
       selectItem (communityItem) {
@@ -64,7 +63,6 @@
         this.$emit('like', communityItem);
       },
       deleteItem () {
-        console.log('deleteItem');
         this.$emit('deleteComment', this.community);
       }
     },

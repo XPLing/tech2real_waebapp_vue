@@ -14,11 +14,15 @@
           <p class="cont">{{reply.content}}</p>
         </div>
         <p class="cont" v-else>{{reply.content}}</p>
+        <div class="gallery" :class="imgs.length>=3?'three':imgs.length===1?'one':'two'" v-if="imgs&&imgs.length>0">
+          <img :src="item" v-for="(item, index) in imgs" :key="index">
+        </div>
       </div>
       <div class="operate">
         <p class="time">{{reply.createTime | formatDate('yyyy-MM-dd')}}</p>
         <p class="tool">
-          <span class="item like" @click.stop="like(reply)"><i class="icon c-icon-like" :class="{'active': reply.isLiked==='Y'}"></i>{{reply.likeCount}}</span>
+          <span class="item like" @click.stop="like(reply)"><i class="icon c-icon-like"
+                                                               :class="{'active': reply.isLiked==='Y'}"></i>{{reply.likeCount}}</span>
         </p>
       </div>
     </div>
@@ -35,15 +39,19 @@
     },
     data () {
       return {
+        imgs: null
       };
     },
     created () {
+      if (this.reply.imgUrls) {
+        this.imgs = this.reply.imgUrls.split(',');
+      }
     },
     methods: {
       selectItem (replyItem) {
         this.$emit('selectReplyItem', replyItem);
       },
-      like(replyItem){
+      like (replyItem) {
         this.$emit('like', replyItem);
       }
     }

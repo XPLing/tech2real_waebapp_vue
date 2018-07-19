@@ -982,6 +982,34 @@ apiRouter.post('/deleteCommentV2', jsonParser, function (req, res) {
   });
 });
 
+
+/* 俱乐部 */
+apiRouter.post('/getClubByClubGuid', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getClubByClubGuid`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }).catch((e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listArticlesByClubGuid', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listArticlesByClubGuid`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }).catch((e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 /* 上传 */
 apiRouter.post('/getFileCloudToken', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/getFileCloudToken`;

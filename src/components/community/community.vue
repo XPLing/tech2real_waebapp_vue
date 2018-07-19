@@ -1,7 +1,7 @@
 <template>
   <div class="g-community">
     <header class="g-header">
-      <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
+      <HeaderTitle :title="pageTitle"></HeaderTitle>
     </header>
     <div class="g-main">
       <scroll ref="scroll" :pullup="true" :data="communityList" :probeType="probeType" :listenScroll="listenScroll"
@@ -35,7 +35,9 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
-    <router-view v-if="isRouterAlive" @update="update" :comment-form-placeholder="`@${placeholder}:`" :type="routerType"></router-view>
+    <keep-alive>
+      <router-view v-if="isRouterAlive" @update="update" :comment-form-placeholder="`@${placeholder}:`" :type="routerType"></router-view>
+    </keep-alive>
   </div>
 </template>
 

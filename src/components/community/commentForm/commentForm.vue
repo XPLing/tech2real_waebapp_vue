@@ -14,13 +14,18 @@
               <div class="upload">
                 <div class="img-item" v-for="(item, index) in uploadInfo.files" :key="index" v-if="uploadInfo">
                   <img :src="item.src">
-                  <i class="icon" @click="removeUploadFile(item,index)">x</i>
+                  <i class="icon" @click="removeUploadFile(item,index)" v-if="uploadStatus !== 'uploadComplete'">x</i>
                 </div>
-                <upload :token="token" url="https://up.qbox.me" @uploadComplete="uploadComplete" @selectImgs="upDateUpload" @upDateUpload="upDateUpload" ref="upload"></upload>
+                <upload :token="token" :regex="uploadInfo.regex" url="https://up.qbox.me"
+                        @uploadComplete="uploadComplete"
+                        @cleanUploadFile="cleanUploadFile" @uploadError="uploadError"
+                        @selectImgs="upDateUpload" @upDateUpload="upDateUpload" ref="upload"></upload>
                 <!--<uploader url="https://up.qbox.me" :token="token"></uploader>-->
               </div>
-              <div class="upload-tools">
-                <button class="btn upload-btn" @click="uploadFiles">上传图片</button>
+              <div class="upload-tools" v-if="uploadInfo && uploadInfo.files.length>0">
+                <button v-if="uploadStatus !== 'uploadComplete'" class="btn upload-btn" @click="uploadFiles">上传图片
+                </button>
+                <button class="btn reupload-btn" v-else @click="cleanFile">重新上传</button>
               </div>
             </div>
             <div class="bottom" v-if="favoriteClub && type==='comment'">
@@ -52,6 +57,7 @@
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
+      <loading ref="loading"></loading>
     </div>
   </transition>
 </template>
@@ -68,6 +74,9 @@
   import TopTip from 'base/top-tip/top-tip';
   import Confirm from 'base/confirm/confirm';
   import Upload from 'base/upload/upload';
+  import Loading from 'base/loading/loading';
+
+  /* currentConfirmsOperate打开对话框时当下操作的类型: 1.去登录 2.删除图片 */
 
   export default {
     props: ['commentFormPlaceholder', 'type'],
@@ -76,14 +85,19 @@
       return {
         confirmTxt: '请先登录!',
         toptipTxt: '',
-        pageTitle: '评论',
+        pageTitle: '',
         commentFormCont: '',
         communityListShowFlag: false,
         favoriteClub: null,
         clubName: '',
         clubId: null,
+        uploadStatus: '',
         uploadInfo: {
-          files: []
+          regex: /.jpg|.gif|.png|.bmp/i,
+          uploadLimit: 9,
+          files: [],
+          imgHashes: '',
+          remove: null
         },
         token: null
       };
@@ -101,6 +115,7 @@
     },
     created () {
       if (this.type === 'comment') {
+        this.pageTitle = '发布新话题';
         this._listMyClubs().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
@@ -114,6 +129,8 @@
           this.toptipTxt = erro.message;
           this.$refs.toptip.show();
         });
+      } else {
+        this.pageTitle = '评论';
       }
       this._getFileCloudToken().then((res) => {
         if (res.status) {
@@ -132,24 +149,53 @@
     mounted () {
     },
     methods: {
-      uploadComplete(){
-        console.log('uploadComplete');
+      uploadError (error) {
+        var text = '';
+        switch (error.type) {
+          case 1:
+            text = `最多选择${this.uploadInfo.uploadLimit}张图片！`;
+            break;
+          case 2:
+            text = `请选择图片类型的文件！`;
+            break;
+        }
+        this.topTipAuto(text);
       },
-      uploadFiles(){
+      cleanFile () {
+        this.$refs.upload.cleanUploadFile();
+      },
+      cleanUploadFile () {
+        this.uploadStatus = 'none';
+        this.uploadInfo.files = [];
+      },
+      uploadComplete (data) {
+        this.uploadStatus = 'uploadComplete';
+        this.uploadInfo.files = data;
+        this.$refs.loading.hide();
+      },
+      uploadFiles () {
+        this.$refs.loading.show();
+        this.uploadStatus = 'uploading';
         this.$refs.upload.upload();
       },
-      removeUploadFile(item, index){
-        this.$refs.upload.removeUploadFile(item, index);
+      removeUploadFile (item, index) {
+        this.confirmTxt = '确定删除该图片？';
+        this.uploadInfo.remove = {item, index};
+        this.currentConfirmsOperate = 2;
+        this.$refs.confirmsWrapper.show();
       },
-      upDateUpload(data){
+      upDateUpload (data) {
+        this.uploadStatus = 'selected';
         this.uploadInfo.files = data;
       },
-      submit () {
+      getUploadHash () {
         let values = [];
-        for (let key of this.imgPaths) {
-          values.push(key);
+        for (let key of this.uploadInfo.files) {
+          if (key.hash) {
+            values.push(key.hash);
+          }
         }
-        this.uploadInfo.imgs = values;
+        return values.join(',');
       },
       selectClub (data) {
         this.clubName = data.name;
@@ -165,10 +211,22 @@
       toggleCommunityList () {
         this.communityListShowFlag = !this.communityListShowFlag;
       },
+      topTipAuto (text) {
+        this.toptipTxt = text;
+        this.$refs.toptip.show();
+        setTimeout(() => {
+          this.$refs.toptip.hide();
+        }, 2000);
+      },
       confirm () {
-        this.$router.push({
-          path: '/user/login'
-        });
+        if (this.currentConfirmsOperate === 1) {
+          this.$router.push({
+            path: '/user/login'
+          });
+        } else {
+          this.$refs.upload.removeUploadFile(this.uploadInfo.remove.item, this.uploadInfo.remove.index);
+        }
+
       },
       cancel () {
 
@@ -176,17 +234,15 @@
       send () {
         if (!this.commentFormCont.trim() || !this.userGuid) {
           if (!this.userGuid) {
+            this.currentConfirmsOperate = 1;
+            this.confirmTxt = '请先登录!';
             this.$refs.confirmsWrapper.show();
           }
           return false;
         }
         if (this.type === 'comment') {
           if (!this.clubName) {
-            this.toptipTxt = '请选择发布对象！';
-            this.$refs.toptip.show();
-            setTimeout(() => {
-              this.$refs.toptip.hide();
-            }, 2000);
+            this.topTipAuto('请选择发布对象！');
             return false;
           }
         }
@@ -195,6 +251,15 @@
           fnName = '_addCommentV2';
         } else {
           fnName = '_addCommentReply';
+        }
+        var imgHashes = '';
+        if (this.uploadInfo.files.length > 0) {
+          imgHashes = this.getUploadHash();
+          if (!imgHashes) {
+            this.topTipAuto('请上传图片！');
+            return;
+          }
+          this.uploadInfo.imgHashes = imgHashes;
         }
         this[fnName]().then((res) => {
           if (res.code) {
@@ -220,7 +285,7 @@
           clientType: 1,
           version: 1,
           shareType: 1,
-          imgHashes: this.uploadInfo.imgHash
+          imgHashes: this.uploadInfo.imgHashes
         };
         return addCommentV2(param);
       },
@@ -243,7 +308,9 @@
           commentId: this.$route.params.commentId,
           userGuid: this.userGuid,
           content: this.commentFormCont,
-          clientType: 1
+          clientType: 1,
+          version: 1,
+          imgHashes: this.uploadInfo.imgHashes
         };
         if (this.$route.query.replyId) {
           param = Object.assign({}, param, {
@@ -276,7 +343,8 @@
       TopTip,
       Scroll,
       Confirm,
-      Upload
+      Upload,
+      Loading
     }
   };
 </script>
