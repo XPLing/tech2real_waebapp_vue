@@ -5,7 +5,7 @@
         <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
       </header>
       <div class="g-main">
-        <scroll :refreshDelay="10000" :data="articleInfo" @scroll="descImage" ref="scroll" :probeType="probeType"
+        <scroll :data="articleInfo" @scroll="descImage" ref="scroll" :probeType="probeType"
                 :listenScroll="listenScroll">
           <div>
             <!--<div class="g-title" v-if="articleInfo">-->

@@ -97,8 +97,7 @@
     methods: {
       selectClub (data) {
         this.$router.push({
-          path: `clubdetail/${data.club.guid}`,
-          append: true
+          path: `/clubs/clubdetail/${data.club.guid}`
         });
       },
       likeComment (data) {

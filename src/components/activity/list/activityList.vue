@@ -67,7 +67,9 @@
         noResult: '加载中。。。',
         noMoreStr: '没有更多了~',
         requestPage: 1,
-        scrollY: 0
+        scrollY: 0,
+        infoFist: true,
+        Fist: true
       };
     },
     created () {

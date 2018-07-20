@@ -90,7 +90,6 @@
         if (this.loadedImgs.length > 0) {
           for (var i = 0, len = this.loadedImgs.length; i < len; i++) {
             var item = this.loadedImgs[i];
-            console.log(this.introImgs);
             this.introImgs.splice(item, 1);
           }
         }
@@ -119,6 +118,13 @@
             return;
           }
           imgOnload(imgs, this, 'descImageLoaded').then((res) => {
+            this.loadedImgs = res.loaded;
+            this.$refs.scroll.refresh();
+            if (res.index === imgs.length - 1) {
+              this.descImageLoaded = true;
+              this.$refs.scroll.scroll.off('scroll');
+            }
+          }).catch(res => {
             this.loadedImgs = res.loaded;
             this.$refs.scroll.refresh();
             if (res.index === imgs.length - 1) {

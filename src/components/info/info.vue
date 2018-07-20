@@ -22,7 +22,7 @@
     </div>
     <div class="bg-layer" ref="bgLayer"></div>
     <div class="g-main" ref="main">
-      <scroll ref="scroll" class="train-content" :pullup="true" :data="bannerList"
+      <scroll ref="scroll" class="train-content" :pullup="true" :data="bannerList" :probeType="probeType"
               @pullingUp="requestInfo" :listenScroll="true" @scroll="scrollHandle">
         <div>
           <div class="g-info-list" v-if="infoList.length>0">
@@ -80,6 +80,7 @@
     },
     data () {
       return {
+        probeType: 3,
         toptipTxt: '',
         pageTitle: '资讯',
         currView: 'v-a',
@@ -193,10 +194,10 @@
           return;
         }
         if (!this.requestMoreFlag[[this.tagCurrentIndex]]) {
-          this.requestMoreFlag[this.tagCurrentIndex] = true;
+          this.$set(this.requestMoreFlag, this.tagCurrentIndex, true);
           this._listNewsArticlesByCategory(this.tagList[this.tagCurrentIndex].id, this.infoPage[this.tagCurrentIndex]).then((res) => {
             this.$refs.scroll.finishPullUp();
-            this.requestMoreFlag[this.tagCurrentIndex] = false;
+            this.$set(this.requestMoreFlag, this.tagCurrentIndex, false);
             if (res.code) {
               if (res.code != ERR_OK) {
                 this.toptipTxt = res.message;
@@ -211,7 +212,7 @@
                 }
                 this.infoPage[this.tagCurrentIndex] = this.infoPage[this.tagCurrentIndex] + 1;
               } else {
-                this.noMore[this.tagCurrentIndex] = true;
+                this.$set(this.noMore, this.tagCurrentIndex, true);
                 this.$refs.scroll.closePullUp();
                 this.$nextTick(() => {
                   this.$refs.scroll.refresh();

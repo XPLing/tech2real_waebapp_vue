@@ -1,0 +1,55 @@
+
+.c-club-list{
+  padding: formatVal(20,rem) formatVal(7,rem);
+  .item{
+    &+.item{
+      margin-top: formatVal(10,rem);
+    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: formatVal(15,rem) formatVal(10,rem);
+    background-color: $whiteColor;
+    .avatar{
+      flex: 0 0 formatVal(58,rem);
+      @include h(58);
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+      }
+    }
+    .desc{
+      flex: 1;
+      margin: 0 formatVal(15,rem) 0 formatVal(8,rem);
+      .title{
+        margin-bottom: formatVal(8,rem);
+        @include fs(16);
+        color: $color-text-66;
+        font-weight: bold;
+      }
+      .intro{
+        @include fs(12);
+        color: $color-gray-99;
+      }
+    }
+    .btn{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include w(50);
+      @include h(25);
+      color: $color-theme;
+      @include fs(12);
+      border: 1px solid $color-theme;
+      border-radius: 20px;
+      &.joined{
+        color: $whiteColor;
+        background-color: $color-theme;
+      }
+      .icon{
+        @include fs(18);
+      }
+    }
+  }
+}

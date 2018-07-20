@@ -27,7 +27,10 @@ export function imgOnload (imgs, vm, flag, singerLoadFn, allLoadFn) {
         imgObj.onerror = function () {
           loaded.push(i);
           imgObj = null;
-          reject(i, loaded);
+          reject({
+            index: i,
+            loaded: loaded
+          });
         };
         imgObj.src = src;
       })(i, imgObj);

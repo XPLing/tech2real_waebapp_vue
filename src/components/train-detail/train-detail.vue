@@ -230,7 +230,6 @@
       _getCourseById ($this) {
         var param = {
           id: $this.courseID,
-          productGuid: $this.productGuid,
           userGuid: $this.userGuid
         };
         getCourseById(param).then((res) => {

@@ -19,7 +19,6 @@
     z-index: 100;
   }
   .brief{
-    @include h(140);
     padding: formatVal(10,rem) formatVal(10,rem) formatVal(20,rem);
     margin-bottom: formatVal(20,rem);
     background-color: $whiteColor;
@@ -40,6 +39,25 @@
           margin-top: formatVal(5,rem);
           @include fs(12);
           color: $color-gray-99;
+        }
+        .btn{
+          margin-top: formatVal(15,rem);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          @include w(50);
+          @include h(25);
+          color: $color-theme;
+          @include fs(12);
+          border: 1px solid $color-theme;
+          border-radius: 20px;
+          &.joined{
+            color: $whiteColor;
+            background-color: $color-theme;
+          }
+          .icon{
+            @include fs(18);
+          }
         }
       }
     }

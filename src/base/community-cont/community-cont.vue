@@ -3,11 +3,15 @@
     <div class="desc">
       {{data.content | ellipsis(150)}}
     </div>
-    <div class="link" v-if="data.article">
-      <share-link :data="data.article"></share-link>
+    <div class="link" v-if="data.shareFlag==='Y'">
+      <share-link :data="data"></share-link>
     </div>
     <div class="gallery" :class="data.imgs.length>=3?'three':data.imgs.length===1?'one':'two'" v-if="data.imgs && data.imgs.length>0">
-      <img :src="item.url" v-for="(item, index) in data.imgs" :key="index">
+      <img v-for="(item, index) in data.imgs" :key="index" v-lazy="{
+          src: item.url,
+          error: lazy.error,
+          loading: lazy.loading
+        }">
     </div>
   </div>
 </template>
@@ -24,6 +28,10 @@
     },
     data () {
       return {
+        lazy: {
+          error: require('./loading.jpg'),
+          loading: require('./loading.jpg')
+        }
       };
     },
     created () {

@@ -983,6 +983,8 @@ apiRouter.post('/deleteCommentV2', jsonParser, function (req, res) {
 });
 
 
+
+
 /* 俱乐部 */
 apiRouter.post('/getClubByClubGuid', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/getClubByClubGuid`;
@@ -1006,6 +1008,58 @@ apiRouter.post('/listArticlesByClubGuid', jsonParser, function (req, res) {
   }).then((response) => {
     res.json(response.data);
   }).catch((e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/signPublicClubInView', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/signPublicClubInView`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }).catch((e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/quitClub', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/quitClub`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }).catch((e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listClub', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listClub`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }).catch((e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listMyClubs', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listMyClubs`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
     console.log(e);
     res.json(e);
   });

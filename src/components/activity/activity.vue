@@ -248,7 +248,6 @@
       },
       _listDiscoverActivities () {
         var param = {
-          productGuid: this.productGuid,
           userGuid: this.userGuid
         };
         return listDiscoverActivities(param);
