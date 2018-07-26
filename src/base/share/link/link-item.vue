@@ -1,7 +1,7 @@
 <template>
   <div @click.stop="clickLink" class="c-share-link">
     <img class="cover" v-lazy="{
-          src: lazy.cover,
+          src: cover,
           error: lazy.error,
           loading: lazy.loading
         }">
@@ -45,15 +45,17 @@
       };
     },
     created () {
-      var requestName = '', titleName = 'title', coverName = 'coverUrl', firstType = '';
+      var requestName = '', titleName = 'title', coverName = 'coverUrl', firstType = '', sourceType = '';
       this.shareContent = JSON.parse(this.data.shareContent);
       switch (this.data.shareType) {
         case 1:
+          sourceType = 'course';
           requestName = '_getCourseById';
           firstType = 'infoFirst';
           this.shareUrl = `/train/${this.shareContent}`;
           break;
         case 2:
+          sourceType = 'article';
           requestName = '_getArticleById';
           titleName = 'listTitle';
           coverName = 'pictureUrl';
@@ -61,6 +63,7 @@
           this.shareUrl = `/info/infodetail/${this.shareContent}`;
           break;
         case 3:
+          sourceType = 'activity';
           firstType = 'clubFirst';
           requestName = '_getActivityById';
           this.shareUrl = `/activity/list/detail/${this.shareContent}`;

@@ -11,22 +11,29 @@
             <div class="top">
               <textarea class="commentForm-cont" name="commentForm" rows="100" v-model="commentFormCont"
                         :placeholder="commentFormPlaceholder"></textarea>
-              <div class="upload">
-                <div class="img-item" v-for="(item, index) in uploadInfo.files" :key="index" v-if="uploadInfo">
-                  <img :src="item.src">
-                  <i class="icon" @click="removeUploadFile(item,index)" v-if="uploadStatus !== 'uploadComplete'">x</i>
+              <template v-if="isShare">
+                <div class="share-wrapper">
+                  <share-link :data="shareData"></share-link>
                 </div>
-                <upload :token="token" :regex="uploadInfo.regex" url="https://up.qbox.me"
-                        @uploadComplete="uploadComplete"
-                        @cleanUploadFile="cleanUploadFile" @uploadError="uploadError"
-                        @selectImgs="upDateUpload" @upDateUpload="upDateUpload" ref="upload"></upload>
-                <!--<uploader url="https://up.qbox.me" :token="token"></uploader>-->
-              </div>
-              <div class="upload-tools" v-if="uploadInfo && uploadInfo.files.length>0">
-                <button v-if="uploadStatus !== 'uploadComplete'" class="btn upload-btn" @click="uploadFiles">上传图片
-                </button>
-                <button class="btn reupload-btn" v-else @click="cleanFile">重新上传</button>
-              </div>
+              </template>
+              <template v-else>
+                <div class="upload">
+                  <div class="img-item" v-for="(item, index) in uploadInfo.files" :key="index" v-if="uploadInfo">
+                    <img :src="item.src">
+                    <i class="icon" @click="removeUploadFile(item,index)" v-if="uploadStatus !== 'uploadComplete'">x</i>
+                  </div>
+                  <upload :token="token" :regex="uploadInfo.regex" url="https://up.qbox.me"
+                          @uploadComplete="uploadComplete"
+                          @cleanUploadFile="cleanUploadFile" @uploadError="uploadError"
+                          @selectImgs="upDateUpload" @upDateUpload="upDateUpload" ref="upload"></upload>
+                  <!--<uploader url="https://up.qbox.me" :token="token"></uploader>-->
+                </div>
+                <div class="upload-tools" v-if="uploadInfo && uploadInfo.files.length>0">
+                  <button v-if="uploadStatus !== 'uploadComplete'" class="btn upload-btn" @click="uploadFiles">上传图片
+                  </button>
+                  <button class="btn reupload-btn" v-else @click="cleanFile">重新上传</button>
+                </div>
+              </template>
             </div>
             <div class="bottom" v-if="favoriteClub && type==='comment'">
               <div class="info-group text">
@@ -75,11 +82,21 @@
   import Confirm from 'base/confirm/confirm';
   import Upload from 'base/upload/upload';
   import Loading from 'base/loading/loading';
+  import ShareLink from 'base/share/link/link-item2';
 
   /* currentConfirmsOperate打开对话框时当下操作的类型: 1.去登录 2.删除图片 */
 
   export default {
-    props: ['commentFormPlaceholder', 'type'],
+    props: {
+      commentFormPlaceholder: {
+        type: String,
+        default: '@你想聊点什么？:'
+      },
+      type: {
+        type: String,
+        default: 'comment'
+      }
+    },
     inject: ['reload'],
     data () {
       return {
@@ -99,7 +116,11 @@
           imgHashes: '',
           remove: null
         },
-        token: null
+        token: null,
+        isShare: false,
+        shareType: 1,
+        shareOriginalData: null,
+        shareData: null
       };
     },
     computed: {
@@ -107,13 +128,30 @@
         'productGuid',
         'userGuid',
         'userInfo'
-      ]),
-      ...mapState({
-        imgStatus: state => state.imgstore.img_status,
-        imgPaths: state => state.imgstore.img_paths
-      })
+      ])
     },
     created () {
+      var routeParams = this.$route.params;
+      if (routeParams) {
+        if (routeParams.shareData) {
+          this.isShare = true;
+          this.shareType = routeParams.shareType;
+          this.shareOriginalData = routeParams.shareData;
+
+          var titleName = '', coverName = '';
+          if (this.shareType === 2) {
+            titleName = 'name';
+            coverName = 'pictureUrl';
+          } else if (this.shareType === 1 || this.shareType === 3) {
+            titleName = 'title';
+            coverName = 'coverUrl';
+          }
+          this.shareData = {
+            title: this.shareOriginalData[titleName],
+            cover: this.shareOriginalData[coverName]
+          };
+        }
+      }
       if (this.type === 'comment') {
         this.pageTitle = '发布新话题';
         this._listMyClubs().then((res) => {
@@ -261,7 +299,7 @@
           }
           this.uploadInfo.imgHashes = imgHashes;
         }
-        this[fnName]().then((res) => {
+        this[fnName](this.shareType).then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
               this.toptipTxt = res.message;
@@ -276,7 +314,7 @@
           this.$refs.toptip.show();
         });
       },
-      _addCommentV2 () {
+      _addCommentV2 (shareType) {
         var param = {
           targetId: this.clubId,
           userGuid: this.userGuid,
@@ -287,6 +325,11 @@
           shareType: 1,
           imgHashes: this.uploadInfo.imgHashes
         };
+        if (this.isShare) {
+          param.shareType = shareType;
+          param.shareFlag = 'Y';
+          param.shareContent = this.shareOriginalData.id;
+        }
         return addCommentV2(param);
       },
       _listMyClubs () {
@@ -344,7 +387,8 @@
       Scroll,
       Confirm,
       Upload,
-      Loading
+      Loading,
+      ShareLink
     }
   };
 </script>

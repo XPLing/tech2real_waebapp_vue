@@ -4,8 +4,8 @@
       <img v-lazy="club.logoUrl" alt="">
     </div>
     <div class="media-body">
-      <p class="title">{{club.title}}</p>
-      <p class="brief">{{club.profile}}</p>
+      <p class="title">{{club.name}}</p>
+      <p class="brief">{{club.profile  | ellipsis(28)}}</p>
     </div>
   </li>
 </template>

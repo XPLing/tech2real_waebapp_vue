@@ -51,6 +51,10 @@
       </div>
       <div class="bottom-btn" v-if="dataInfo">
         <div class="control-bar">
+          <p @click.stop="showShare">
+            <i class="icon c-icon-share"></i>
+            <span class="name">分享</span>
+          </p>
           <router-link tag="p"
                        :to="{path:`/activity/list/detail/${this.id}/commentlist`,query: {title: `${this.pageTitle}`}}">
             <i class="icon c-icon-comment-square-o"></i>
@@ -60,7 +64,7 @@
         <p class="btn disable" v-if="applyStatus.isDisable">{{applyStatus.value}}</p>
         <p class="btn" v-else @click="applyActivity">{{applyStatus.value}}</p>
       </div>
-
+      <share @cancel="cancelShare" @share="share" ref="share"></share>
       <back-top ref="backTop" @backTop="backTop"></back-top>
       <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" :activity="dataInfo"></router-view>
       <top-tip ref="toptip" :delay="10000">
@@ -86,9 +90,20 @@
   import BackTop from 'base/backtop/backtop';
   import { imgOnload } from 'assets/js/imgOnload';
   import ActivityList from 'base/activity-list/activity-list';
+  import Share from 'base/share/share';
 
   export default {
     inject: ['reload'],
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        if (/me/.test(from.name)) {
+          vm.articleId = to.params.articleId;
+          if (!to.query.first) {
+            vm.reload();
+          }
+        }
+      });
+    },
     data () {
       return {
         toptipTxt: '',
@@ -135,6 +150,32 @@
       ])
     },
     methods: {
+      cancelShare () {
+
+      },
+      showShare () {
+        this.$refs.share.show();
+      },
+      share (data) {
+        if (data < 0) {
+          this.$router.push({
+            name: 'community_commentFormRoot',
+            params: {
+              shareData: this.dataInfo,
+              shareType: 3
+            }
+          });
+
+        } else if (data === 1) {
+
+        } else if (data === 2) {
+
+        } else if (data === 3) {
+
+        } else if (data === 4) {
+
+        }
+      },
       applyStatusValue (status) {
         var value = '', isDisable = false;
         switch (status) {
@@ -257,7 +298,8 @@
       Scroll,
       BackTop,
       NoResult,
-      ActivityList
+      ActivityList,
+      Share
     }
   };
 </script>

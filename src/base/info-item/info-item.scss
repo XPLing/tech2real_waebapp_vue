@@ -1,31 +1,133 @@
-.c-info-list-item.c-media{
+.c-info-list-item{
   padding: formatVal(12,rem) formatVal(14,rem);
-  .media-right{
-    margin-left: formatVal(15,rem);
-    @include w(109);
-    @include h(85);
-    img {
+  .wrapper{
+    &.recommend{
+      display: flex;
+      flex-direction: column;
+      img{
+        width: 100%;
+        margin-bottom: formatVal(10,rem);
+      }
+      .detail{
+        margin-bottom: formatVal(10,rem);
+        .brief{
+          @include fs(12);
+          color: $color-gray-99;
+          margin-top: formatVal(5,rem);
+        }
+      }
+      .info{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: $color-gray-99;
+        .left{
+          display: flex;
+          align-items: flex-end;
+          span+span{
+            margin-left: formatVal(10,rem);
+          }
+        }
+        .right{
+          display: flex;
+          .flag{
+            @include fs(12);
+            color: $whiteColor;
+            padding: formatVal(2,rem) formatVal(10,rem);
+            border-radius: 10px;
+            &.org {
+              background-color: $color-theme;
+            }
+            &.red {
+              background-color: $color-text-stress-r;
+            }
+            &.green {
+              background-color: $color-text-stress-g;
+            }
+          }
+        }
+      }
+    }
+    &.club{
+      .titlebox{
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: formatVal(15,rem);
+        &.red{
+          .icon{
+            span{
+              background-color: $color-text-stress-r;
+            }
+          }
+        }
+        &.green{
+          .icon{
+            span{
+              background-color: $color-text-stress-g;
+            }
+          }
+        }
+        .icon{
+          display: flex;
+          span{
+            display: inline-block;
+            &+span{
+              margin-left: formatVal(3,rem);
+            }
+            &.big{
+              @include w(7);
+              @include h(7);
+            }
+            &.small{
+              @include w(3);
+              @include h(3);
+            }
+          }
+        }
+        .title{
+          @include fs(16);
+          margin: 0 formatVal(10,rem);
+          color: $color-text-tip-b9a;
+        }
+        .more{
+          position: absolute;
+          top: formatVal(4,rem);
+          right: 0;
+          @include fs(12);
+          color: $color-text-tip-ac;
+        }
+      }
+    }
+    .media-right{
+      margin-left: formatVal(15,rem);
       @include w(109);
       @include h(85);
+      img {
+        @include w(109);
+        @include h(85);
+      }
     }
-  }
-  .media-body{
-    display: flex;
-    flex-flow: column;
-    justify-content: space-between;
-    .title{
-      word-break: break-all;
-      margin-bottom: formatVal(10,rem);
-    }
-    .info{
-      .price {
-        &.red {
-          color: $color-text-stress-r;
-        }
-        &.green {
-          color: $color-text-stress-g;
+    .media-body{
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+      .title{
+        word-break: break-all;
+        margin-bottom: formatVal(10,rem);
+      }
+      .info{
+        .price {
+          &.red {
+            color: $color-text-stress-r;
+          }
+          &.green {
+            color: $color-text-stress-g;
+          }
         }
       }
     }
   }
+
 }

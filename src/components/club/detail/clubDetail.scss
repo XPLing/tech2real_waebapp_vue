@@ -7,6 +7,12 @@
   z-index: 100;
   background: $color-shadow-nav;
   @include fs(14);
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
   .g-swiper /deep/ .swiper-pagination-bullet-active {
     background: $color-theme;
   }

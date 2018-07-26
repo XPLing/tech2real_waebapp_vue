@@ -3,7 +3,8 @@
  */
 export let commonParams = {
   productGuid: 'a5c72d76-16dc-4bb6-b6af-f2e562b1839b',
-  version: 2
+  version: 2,
+  clientType: 1
 };
 export let options = {
   param: 'jsonpCallback'

@@ -36,7 +36,7 @@
               <p class="icon left"><span class="small"></span><span class="big"></span></p>
               <p class="title">社群推荐</p>
               <p class="icon right"><span class="big"></span><span class="small"></span></p>
-              <router-link class="more" :to="{path: '/'}">更多社群</router-link>
+              <router-link class="more" :to="{path: '/clubs'}">更多社群</router-link>
             </div>
             <ul class="club-list" v-if="clubList">
               <clubs-item v-for="(citem, index) in clubList" :key="index" :club="citem"
@@ -77,13 +77,13 @@
                 </div>
               </div>
             </a>
-
-
           </div>
         </div>
       </scroll>
     </div>
-    <router-view v-if="isRouterAlive"></router-view>
+    <keep-alive>
+      <router-view v-if="isRouterAlive"></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -235,7 +235,7 @@
         }
       },
       selectClub (data) {
-        var url = `/info/infodetail/${data.id}`;
+        var url = `/clubs/clubdetail/${data.guid}`;
         this.$router.push({
           path: url,
           query: {

@@ -5,4 +5,11 @@
   right: 0;
   top: formatVal(40,rem);
   bottom: formatVal(50,rem);
+  background-color: $color-gray-F6;
+  .request-result{
+    padding: formatVal(10,rem) 0;
+    @include fs(12);
+    color: $color-text-tip-b9a;
+    text-align: center;
+  }
 }

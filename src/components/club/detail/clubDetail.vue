@@ -1,5 +1,6 @@
 <template>
-  <div class="g-club-detail">
+  <transition name="slide">
+    <div class="g-club-detail">
     <header class="g-header">
       <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
     </header>
@@ -26,7 +27,7 @@
     <div class="bg-layer" ref="bgLayer"></div>
     <div class="g-main" ref="main">
       <scroll ref="scroll" class="train-content" :pullup="true" :data="clubInfo" :probeType="probeType"
-              @pullingUp="requestScrollDate" :listenScroll="true" @scroll="scrollHandle">
+              @pullingUp="requestScrollData" :listenScroll="true" @scroll="scrollHandle">
         <div>
           <div class="g-info-list" v-if="infoList">
             <div class="info-type-item" v-for="(item,index) in infoList" :key="index" v-show="tagCurrentIndex===index">
@@ -55,9 +56,10 @@
     </top-tip>
     <back-top ref="backTop" @backTop="backTop"></back-top>
     <keep-alive>
-      <router-view v-if="isRouterAlive"></router-view>
+      <router-view></router-view>
     </keep-alive>
   </div>
+  </transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -86,17 +88,22 @@
   const transform = util.common.cssPrefix('transform');
 
   export default {
-    provide () {
-      return {
-        reload: this.reload
-      };
+    inject: ['reload'],
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        if (from.name === 'info') {
+          vm.articleId = to.params.articleId;
+          if (!to.query.first) {
+            vm.reload();
+          }
+        }
+      });
     },
     data () {
       return {
         probeType: 3,
         toptipTxt: '',
         pageTitle: '',
-        isRouterAlive: true,
         tagList: [
           {
             name: '文章'
@@ -137,7 +144,7 @@
           }
           this.clubInfo = res.result;
           this.pageTitle = res.result.name;
-          this.requestScrollDate();
+          this.requestScrollData();
         }
       }, erro => {
         this.toptipTxt = erro.message;
@@ -184,12 +191,6 @@
             this.$refs.toptip.show();
           });
         }
-      },
-      reload () {
-        this.isRouterAlive = false;
-        this.$nextTick(() => {
-          this.isRouterAlive = true;
-        });
       },
       selectTopic (data) {
         var url = `/community/${data.id}`;
@@ -244,7 +245,7 @@
       changeTag (item, index) {
         this.tagCurrentIndex = index;
         if (!this.infoList[this.tagCurrentIndex] && !this.requestMoreFlag[[this.tagCurrentIndex]]) {
-          this.requestScrollDate();
+          this.requestScrollData();
         }
         this.$nextTick(() => {
           this.$refs.scroll.refresh();
@@ -258,7 +259,7 @@
 
         });
       },
-      requestScrollDate () {
+      requestScrollData () {
         if (this.noMore[this.tagCurrentIndex]) {
           return;
         }

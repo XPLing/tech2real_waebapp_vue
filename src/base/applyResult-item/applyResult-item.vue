@@ -35,7 +35,6 @@
     data () {
       return {
         lazy: {
-          src: this.applyResult.coverUrl,
           error: require('./loading.jpg'),
           loading: require('./loading.jpg')
         }

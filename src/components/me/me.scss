@@ -1,3 +1,87 @@
-.g-recommend {
+.g-me {
+  position: fixed;
+  z-index: 101;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: formatVal(50,rem);
+  background: $color-shadow-nav;
 
+  .g-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: formatVal(10,rem) formatVal(10,rem) 0 formatVal(10,rem);
+    background-color: $whiteColor;
+    .icon {
+      @include fs(26);
+    }
+  }
+  .g-main {
+    >div{
+      padding: 0 formatVal(20,rem);
+      background-color: $whiteColor;
+      border-bottom: formatVal(10,rem) solid $color-shadow-nav;
+    }
+    .info-base {
+      padding: formatVal(15,rem) formatVal(20,rem);
+      display: flex;
+      align-items: center;
+      img{
+        @include w(60);
+        @include h(60);
+        border-radius: 50%;
+        margin-right: formatVal(10,rem);
+      }
+      .info{
+        @include fs(24);
+        color: $color-text-211;
+      }
+    }
+    .info-my {
+      .list{
+        .item{
+          display: flex;
+          align-items: center;
+          &+.item{
+            .desc{
+              border-top: 1px solid $color-shadow-nav;
+            }
+          }
+          .icon-wrapper{
+            font-size: 0;
+            margin-right: formatVal(10,rem);
+            /deep/ span{
+              @include fs(20);
+            }
+          }
+          .desc{
+            flex: 1;
+            padding: formatVal(15,rem) 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .name{
+              flex: 1;
+              color: $color-text-211;
+              @include fs(16);
+            }
+            .icon{
+              @include fs(20);
+              color: $color-gray-99;
+            }
+
+          }
+        }
+      }
+    }
+    .info-system {
+      @extend .info-my;
+    }
+  }
+  .request-result {
+    padding: formatVal(10, rem) 0;
+    @include fs(12);
+    color: $color-text-tip-b9a;
+    text-align: center;
+  }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="g-train">
     <scroll ref="scroll" class="train-content" :pullup="true" :data="bannerList"
-            @pullingUp="requestCourses">
+            @pullingUp="requestScrollData">
       <div>
         <!--<header class="g-header">-->
         <!--<HeaderTitle :title="pageTitle"></HeaderTitle>-->
@@ -9,7 +9,7 @@
         <div class="g-banner" v-if="bannerList">
           <swiper :options="swiperOPts" class="g-swiper">
             <swiper-slide v-for="(item, index) in bannerList" :key="index" >
-              <img :src="item.coverUrl">
+              <img :src="item.coverUrl" @click="bannerClick(item)">
             </swiper-slide>
             <div class="swiper-pagination swiper-pagination-banner" slot="pagination"></div>
           </swiper>
@@ -189,7 +189,7 @@
         this.toptipTxt = erro.message;
         this.$refs.toptip.show();
       });
-      this.requestCourses();
+      this.requestScrollData();
     },
     mounted () {
     },
@@ -235,7 +235,7 @@
           path: `/train/${course.id}`
         });
       },
-      requestCourses () {
+      requestScrollData () {
         if (this.noMore) {
           return;
         }
@@ -272,6 +272,37 @@
           });
         }
       },
+      bannerClick (data) {
+        /**
+         * banner type: 1.资讯 2.活动 3.课程 4.网页 5. 老师
+         */
+        var params = JSON.parse(data.params);
+        switch (data.type) {
+          case 1:
+            this.$router.push({
+              path: `/info/infodetail/${params.id}`
+            });
+            break;
+          case 2:
+            this.$router.push({
+              path: `/activity/list/detail/${params.id}`
+            });
+            break;
+          case 3:
+            this.$router.push({
+              path: `/train/${params.id}`
+            });
+            break;
+          case 4:
+            this.$router.push({
+              path: `/train/teacherdetail/${params.id}`
+            });
+            break;
+          case 5:
+            window.open(params.url);
+            break;
+        }
+      },
       _getTrainHomeContainer () {
         var param = {
           productGuid: this.productGuid
@@ -287,7 +318,7 @@
       _listBannersByLocationType () {
         var param = {
           productGuid: this.productGuid,
-          type: 2,
+          type: 3,
           userGuid: this.userGuid
         };
         return listBannersByLocationType(param);

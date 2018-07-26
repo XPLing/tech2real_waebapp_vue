@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="g-train-detail">
       <header class="g-header">
-        <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack"></HeaderTitle>
+        <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack" :has-share="true" @share="showShare"></HeaderTitle>
       </header>
       <div class="g-video" v-if="courseData">
         <div v-if="chapterData" class="recourse-wrapper">
@@ -41,6 +41,7 @@
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
       <loading ref="loading"></loading>
+      <share @cancel="cancelShare" @share="share" ref="share"></share>
       <g-mask @clickMask="clickMask" ref="mask"></g-mask>
       <g-select :title="selectTitle" :select-data="listCourseValidityPeriod" @selectConfirm="selectPeriodConfirm"
                 @selectListItem="selectPeriodItem"
@@ -50,7 +51,7 @@
           <p class="original">原价：<span>¥ {{courseOriginalPrice}}</span></p>
         </div>
       </g-select>
-      <router-view :apply-result="applyResult"></router-view>
+      <router-view :apply-result="applyResult" @updateResult="updateResult"></router-view>
     </div>
   </transition>
 </template>
@@ -78,6 +79,7 @@
   import communication from 'assets/js/communication';
   import Mask from 'base/mask/mask';
   import GSelect from 'base/select2/select2';
+  import Share from 'base/share/share';
 
   const LOGINTIP = '请先登录!';
   const JOINTIP = '是否加入课程开始学习?';
@@ -106,6 +108,16 @@
   export default {
     inject: ['reload'],
     props: {},
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        if (/me/.test(from.name)) {
+          vm.articleId = to.params.articleId;
+          if (!to.query.first) {
+            // vm.reload();
+          }
+        }
+      });
+    },
     data () {
       return {
         view: 'CourseIntro',
@@ -154,6 +166,35 @@
       this.init();
     },
     methods: {
+      cancelShare () {
+
+      },
+      showShare () {
+        this.$refs.share.show();
+      },
+      share (data) {
+        if (data < 0) {
+          this.$router.push({
+            name: 'community_commentFormRoot',
+            params: {
+              shareData: this.courseData,
+              shareType: 1
+            }
+          });
+
+        } else if (data === 1) {
+
+        } else if (data === 2) {
+
+        } else if (data === 3) {
+
+        } else if (data === 4) {
+
+        }
+      },
+      updateResult(data){
+          this.applyResult = data;
+      },
       changeTab(data){
           this.view = VIEW[data.id];
       },
@@ -433,7 +474,8 @@
       CourseIntro,
       CourseEvaluate,
       CourseChapters,
-      CourseCommunity
+      CourseCommunity,
+      Share
     },
     watch: {
       videoUrl (newVal) {

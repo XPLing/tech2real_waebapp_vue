@@ -44,7 +44,7 @@
     },
     methods: {
       toggleTab (item, index) {
-        this.currView = this.pageTitle[index].component;
+         this.currView = this.pageTitle[index].component;
       }
     },
     components: {

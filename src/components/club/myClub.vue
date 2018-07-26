@@ -134,7 +134,7 @@
           path: `/clubs/clubdetail/${data.guid}`
         });
       },
-      requestScrollDate () {
+      requestScrollData () {
         if (this.noMore) {
           return;
         }

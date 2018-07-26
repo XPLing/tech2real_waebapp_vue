@@ -12,7 +12,7 @@
           </div>
         </scroll>
       </div>
-      <router-view @update="update"></router-view>
+      <router-view @update="update"  v-if="isRouterAlive"></router-view>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -40,8 +40,24 @@
   import Mask from 'base/mask/mask';
 
   export default {
+    provide () {
+      return {
+        reload: this.reload
+      };
+    },
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        if (from.name === 'activity') {
+          vm.articleId = to.params.articleId;
+          if (!to.query.first) {
+            vm.reload();
+          }
+        }
+      });
+    },
     data () {
       return {
+        isRouterAlive: true,
         toptipTxt: '',
         pageTitle: '话题讨论',
         articleInfo: null,
@@ -68,6 +84,12 @@
       ])
     },
     methods: {
+      reload () {
+        this.isRouterAlive = false;
+        this.$nextTick(() => {
+          this.isRouterAlive = true;
+        });
+      },
       update(){
         this.requestData();
       },
@@ -128,7 +150,7 @@
           append: true
         });
       },
-      requestScrollDate () {
+      requestScrollData () {
         if (this.noMore) {
           return;
         }

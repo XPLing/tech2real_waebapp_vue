@@ -10,7 +10,7 @@ var queryString = require('querystring');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 const jsonParser = bodyParser.json();
 
-/* 培训 */
+/* 资讯 */
 apiRouter.post('/listNewsCategories', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/listNewsCategories`;
   axios({
@@ -31,6 +31,24 @@ apiRouter.post('/listNewsCategories', jsonParser, function (req, res) {
 });
 apiRouter.post('/listNewsArticlesByCategory', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/listNewsArticlesByCategory`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listArticlesByClubGuids', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listArticlesByClubGuids`;
   axios({
     method: 'post',
     url: url,
@@ -329,6 +347,24 @@ apiRouter.post('/getTagByTagId', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+apiRouter.post('/listMyCourses', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listMyCourses`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 apiRouter.post('/getTrainHomeContainer', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/getTrainHomeContainer`;
   axios({
@@ -403,24 +439,6 @@ apiRouter.post('/listRecommendCourses', jsonParser, function (req, res) {
 });
 apiRouter.post('/listCoursesByTagId', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/listCoursesByTagId`;
-  axios({
-    method: 'post',
-    url: url,
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-      'referer': config.dev.apiproxy,
-      'host': config.dev.apiproxyhost
-    },
-    data: req.body
-  }).then((response) => {
-    res.json(response.data);
-  }, (e) => {
-    console.log(e);
-    res.json(e);
-  });
-});
-apiRouter.post('/getTagByTagId', jsonParser, function (req, res) {
-  var url = `${config.dev.apiproxy}/getTagByTagId`;
   axios({
     method: 'post',
     url: url,
@@ -1078,5 +1096,35 @@ apiRouter.post('/getFileCloudToken', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+
+
+/* 我的 */
+apiRouter.post('/getUserInfoByGuid', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getUserInfoByGuid`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listMyActivities', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listMyActivities`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
 
 module.exports = apiRouter;

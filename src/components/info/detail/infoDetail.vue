@@ -61,16 +61,17 @@
           <i class="icon c-icon-star" :class="{'active': viewArticle && viewArticle.likeFlag === 'Y'}"></i>
           <span class="name">收藏 <i v-if="viewArticle && viewArticle.likeCount>0">({{viewArticle.likeCount}})</i> </span>
         </p>
-        <!--<p>-->
-        <!--<i class="icon c-icon-share"></i>-->
-        <!--<span class="name">分享</span>-->
-        <!--</p>-->
+        <p @click.stop="showShare">
+          <i class="icon c-icon-share"></i>
+          <span class="name">分享</span>
+        </p>
         <router-link tag="p"
                      :to="{path:`/info/infodetail/${this.articleId}/commentlist`, query: {title:`${this.pageTitle}`}}">
           <i class="icon c-icon-comment-square-o"></i>
           <span class="name">评论 <i v-if="viewArticle && viewArticle.commentCount>0">({{viewArticle.commentCount}})</i> </span>
         </router-link>
       </div>
+      <share @cancel="cancelShare" @share="share" ref="share"></share>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -108,6 +109,7 @@
   import { imgOnload } from 'assets/js/imgOnload';
   import InfoItemLeft from 'base/info-item-left/info-item-left';
   import CommunityList from 'base/community-list/community-list';
+  import Share from 'base/share/share';
 
   export default {
     inject: ['reload'],
@@ -212,6 +214,32 @@
       ])
     },
     methods: {
+      cancelShare () {
+
+      },
+      showShare () {
+        this.$refs.share.show();
+      },
+      share (data) {
+        if (data < 0) {
+          this.$router.push({
+            name: 'community_commentFormRoot',
+            params: {
+              shareData: this.articleInfo,
+              shareType: 2
+            }
+          });
+
+        } else if (data === 1) {
+
+        } else if (data === 2) {
+
+        } else if (data === 3) {
+
+        } else if (data === 4) {
+
+        }
+      },
       setLike () {
         if (this.viewArticle.likeFlag === 'Y') {
           this._unlikeArticle().then((res) => {
@@ -497,7 +525,8 @@
       BackTop,
       NoResult,
       InfoItemLeft,
-      CommunityList
+      CommunityList,
+      Share
     }
   };
 </script>

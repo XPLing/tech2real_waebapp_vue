@@ -39,9 +39,11 @@ $color-green: #7ED321;
         width: 100%;
         @include h(150);
         border: none;
-
         resize: none;
         font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif;
+      }
+      .share-wrapper{
+        padding: formatVal(20,rem) formatVal(10,rem);
       }
       .upload {
         display: flex;

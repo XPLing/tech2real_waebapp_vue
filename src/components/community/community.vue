@@ -5,7 +5,7 @@
     </header>
     <div class="g-main">
       <scroll ref="scroll" :pullup="true" :data="communityList" :probeType="probeType" :listenScroll="listenScroll"
-              @pullingUp="requestScrollDate">
+              @pullingUp="requestScrollData">
         <div>
           <ul class="community-list">
             <li class="item" v-for="(item, index) in communityList" :key="index">
@@ -80,7 +80,7 @@
       };
     },
     created () {
-      this.requestScrollDate();
+      this.requestScrollData();
     },
     computed: {
       ...mapGetters([
@@ -114,7 +114,7 @@
         this.requestMoreFlag = false;
         this.requestPage = 1;
         this.communityList = null;
-        this.requestScrollDate();
+        this.requestScrollData();
       },
       reload () {
         this.isRouterAlive = false;
@@ -128,7 +128,7 @@
           append: true
         });
       },
-      requestScrollDate () {
+      requestScrollData () {
         if (this.noMore) {
           return;
         }

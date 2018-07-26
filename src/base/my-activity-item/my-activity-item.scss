@@ -1,0 +1,60 @@
+.c-subscribe-item{
+  display: flex;
+  flex-direction: column;
+  @include fs(14);
+  background-color: $whiteColor;
+  &+.c-subscribe-item{
+    margin-top: formatVal(10,rem);
+  }
+  .apply-time{
+    padding: formatVal(15,rem) formatVal(10,rem);
+  }
+  .data{
+    padding: formatVal(15,rem) formatVal(10,rem);
+    background-color: $color-gray-F5;
+    display: flex;
+    .media-left{
+      position: relative;
+      margin-right: formatVal(15,rem);
+      @include w(117);
+      @include h(68);
+      img {
+        @include w(117);
+        @include h(68);
+      }
+    }
+    .media-body{
+      display: flex;
+      flex: 1;
+      flex-flow: column;
+      justify-content: space-between;
+      >.title{
+
+      }
+      .info{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        color: $color-gray-99;
+      }
+    }
+  }
+  .operate{
+    padding: formatVal(15,rem) formatVal(10,rem);
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    border-top: 1px solid $color-shadow-nav;
+    .btn{
+      @include fs(12);
+      background-color: $whiteColor;
+      padding: formatVal(5,rem) formatVal(10,rem);
+      border: 1px solid $color-border-nav;
+      border-radius: 5px;
+      &+.btn{
+        margin-left: formatVal(10,rem);
+      }
+    }
+  }
+
+}

@@ -117,6 +117,9 @@
         flex-direction: column;
         justify-content: space-around;
         color: #43484D;
+        &+p{
+          margin-left: formatVal(20,rem);
+        }
         .num{
           color: $whiteColor;
           @include fs(12);

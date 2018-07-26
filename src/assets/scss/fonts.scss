@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'c-icon';
-  src:  url('../fonts/c-icon.eot?hfq028');
-  src:  url('../fonts/c-icon.eot?hfq028#iefix') format('embedded-opentype'),
-  url('../fonts/c-icon.ttf?hfq028') format('truetype'),
-  url('../fonts/c-icon.woff?hfq028') format('woff'),
-  url('../fonts/c-icon.svg?hfq028#c-icon') format('svg');
+  src:  url('../fonts/c-icon.eot?46nr8h');
+  src:  url('../fonts/c-icon.eot?46nr8h#iefix') format('embedded-opentype'),
+  url('../fonts/c-icon.ttf?46nr8h') format('truetype'),
+  url('../fonts/c-icon.woff?46nr8h') format('woff'),
+  url('../fonts/c-icon.svg?46nr8h#c-icon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -22,6 +22,124 @@
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.c-icon-find:before {
+  content: "\e93c";
+}
+.c-icon-info-o:before {
+  content: "\e93d";
+}
+.c-icon-study:before {
+  content: "\e93e";
+}
+.c-icon-my_topic .path1:before {
+  content: "\e93a";
+  color: rgb(254, 146, 4);
+}
+.c-icon-my_topic .path2:before {
+  content: "\e93b";
+  margin-left: -1em;
+  color: rgb(251, 194, 122);
+}
+.c-icon-community:before {
+  content: "\e939";
+}
+.c-icon-my_course .path1:before {
+  content: "\e91a";
+  color: rgb(254, 146, 4);
+}
+.c-icon-my_course .path2:before {
+  content: "\e925";
+  margin-left: -1em;
+  color: rgb(251, 194, 122);
+}
+.c-icon-my_course .path3:before {
+  content: "\e938";
+  margin-left: -1em;
+  color: rgb(251, 194, 122);
+}
+.c-icon-about .path1:before {
+  content: "\e927";
+  color: rgb(53, 53, 52);
+}
+.c-icon-about .path2:before {
+  content: "\e928";
+  margin-left: -1em;
+  color: rgb(137, 135, 133);
+}
+.c-icon-about .path3:before {
+  content: "\e929";
+  margin-left: -1em;
+  color: rgb(137, 135, 133);
+}
+.c-icon-my_activity .path1:before {
+  content: "\e92a";
+  color: rgb(254, 146, 4);
+}
+.c-icon-my_activity .path2:before {
+  content: "\e92b";
+  margin-left: -1em;
+  color: rgb(251, 194, 122);
+}
+.c-icon-my_collect .path1:before {
+  content: "\e92c";
+  color: rgb(254, 146, 4);
+}
+.c-icon-my_collect .path2:before {
+  content: "\e92d";
+  margin-left: -1em;
+  color: rgb(251, 194, 122);
+}
+.c-icon-me:before {
+  content: "\e919";
+}
+.c-icon-my_clubs .path1:before {
+  content: "\e92e";
+  color: rgb(254, 146, 4);
+}
+.c-icon-my_clubs .path2:before {
+  content: "\e92f";
+  margin-left: -1em;
+  color: rgb(251, 194, 122);
+}
+.c-icon-message:before {
+  content: "\e926";
+}
+.c-icon-balance .path1:before {
+  content: "\e930";
+  color: rgb(254, 146, 4);
+}
+.c-icon-balance .path2:before {
+  content: "\e931";
+  margin-left: -1em;
+  color: rgb(251, 194, 122);
+}
+.c-icon-my_set .path1:before {
+  content: "\e932";
+  color: rgb(53, 53, 52);
+}
+.c-icon-my_set .path2:before {
+  content: "\e933";
+  margin-left: -1em;
+  color: rgb(137, 135, 133);
+}
+.c-icon-my_share .path1:before {
+  content: "\e934";
+  color: rgb(53, 53, 52);
+}
+.c-icon-my_share .path2:before {
+  content: "\e935";
+  margin-left: -1em;
+  color: rgb(137, 135, 133);
+}
+.c-icon-suggestion .path1:before {
+  content: "\e936";
+  color: rgb(53, 53, 52);
+}
+.c-icon-suggestion .path2:before {
+  content: "\e937";
+  margin-left: -1em;
+  color: rgb(137, 135, 133);
 }
 .c-icon-upload:before {
   content: "\e900";
@@ -92,17 +210,11 @@
 .c-icon-activity:before {
   content: "\e916";
 }
-.c-icon-community:before {
+.c-icon-community2:before {
   content: "\e917";
 }
 .c-icon-info:before {
   content: "\e918";
-}
-.c-icon-me:before {
-  content: "\e919";
-}
-.c-icon-train:before {
-  content: "\e91a";
 }
 .c-icon-pw:before {
   content: "\e91b";

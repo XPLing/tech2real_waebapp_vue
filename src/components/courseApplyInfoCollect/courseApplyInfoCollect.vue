@@ -62,6 +62,7 @@
         routerPrefix: util.routerPrefix,
         isActiving: false,
         applyTargetID: 0,
+        applyTargetGuid: 0,
         selectData: null,
         selectOpts: null,
         selectFlag: false,
@@ -112,6 +113,7 @@
       _getTargetGuid () {
         this.applyTargetID = this.$route.params.id;
         this.applyTargetGuid = this.$route.params.applyTargetGuid;
+        this.ticketId = this.$route.params.ticketId;
       },
       selectCourse (applyTargetID) {
         this.$router.back();
@@ -129,6 +131,9 @@
               newItem.settingId = item.id;
               newItem.value = Object.prototype.toString.call(item.value) == '[object Array]' ? item.value.join('|') : item.value;
               newItem.settingName = item.name;
+              if (item.type == 3) {
+                newItem.value = new Date(newItem.value.toString()).getTime();
+              }
               infoCollect.push(newItem);
             });
             this.$refs.loading.show();
@@ -137,14 +142,21 @@
               submitBtn.changeSubmitBtn(false);
               this.$refs.loading.hide();
               if (res.code == ERR_OK) {
+                this.$emit('updateResult', res.result);
                 this.$router.replace({
-                  path: `/train/${this.applyTargetID}/applyresult`
+                  path: `/train/${this.applyTargetID}/applyresult`,
+                  query: {
+                    applyId: res.result.id
+                  }
                 });
               } else if (res.code == '201') {
+                this.$emit('updateResult', res.result);
                 this.$router.replace({
                   path: `/train/${this.applyTargetID}/applypay`
                 });
               } else {
+                submitBtn.changeSubmitBtn(false);
+                this.$refs.loading.hide();
                 util.common.request.tipMsg(this, res);
               }
             }, erro => {
@@ -201,5 +213,5 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "courseApplyInfoCollect";
+  @import "./courseApplyInfoCollect";
 </style>

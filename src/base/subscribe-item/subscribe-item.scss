@@ -1,0 +1,119 @@
+.c-subscribe-item{
+  display: flex;
+  flex-direction: column;
+  padding: 0 formatVal(10,rem);
+  @include fs(14);
+  background-color: $whiteColor;
+  &+.c-subscribe-item{
+    margin-top: formatVal(10,rem);
+  }
+  .data{
+    padding: formatVal(15,rem) 0;
+    display: flex;
+    .media-left{
+      position: relative;
+      margin-right: formatVal(15,rem);
+      @include w(117);
+      @include h(68);
+      img {
+        @include w(117);
+        @include h(68);
+      }
+      .bg-layer{
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: $color-transparency-black-3;
+      }
+      .progress-wrapper{
+        position: absolute;
+        z-index: 2;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: formatVal(5,rem);
+        @include fs(12);
+        color: $whiteColor;
+        .desc{
+          margin-bottom: formatVal(5,rem);
+        }
+        .progress{
+          position: relative;
+          height: 5px;
+          overflow: hidden;
+          background-color: $color-border-nav;
+          border-radius: 20px;
+          .bar{
+            position: absolute;
+            top:0;
+            bottom: 0;
+            left: 0;
+            background-color: $color-theme;
+          }
+        }
+      }
+    }
+    .media-body{
+      display: flex;
+      flex: 1;
+      flex-flow: column;
+      justify-content: space-between;
+      >.title{
+
+      }
+      .info{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        .validity-time{
+          @include fs(12);
+          color: $whiteColor;
+          padding: formatVal(2,rem) formatVal(10,rem);
+          border-radius: 10px;
+          border: 1px solid transparent;
+          &.org {
+            color: $color-theme;
+            border-color: $color-theme;
+          }
+          &.red {
+            color: $color-text-stress-r;
+            border-color: $color-text-stress-r;
+          }
+          &.green {
+            color: $color-text-stress-g;
+            border-color: $color-text-stress-g;
+          }
+        }
+        .price {
+          &.red {
+            color: $color-text-stress-r;
+          }
+          &.green {
+            color: $color-text-stress-g;
+          }
+        }
+      }
+    }
+  }
+  .operate{
+    padding: formatVal(15,rem) formatVal(10,rem);
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    border-top: 1px solid $color-shadow-nav;
+    .btn{
+      @include fs(12);
+      background-color: $whiteColor;
+      padding: formatVal(5,rem) formatVal(10,rem);
+      border: 1px solid $color-border-nav;
+      border-radius: 5px;
+      &+.btn{
+        margin-left: formatVal(10,rem);
+      }
+    }
+  }
+
+}

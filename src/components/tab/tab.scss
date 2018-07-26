@@ -7,14 +7,17 @@
   background-color: $whiteColor;
   .tab-item{
     flex: 1;
-    text-align: center;
-    color: $color-text-b3d;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: $color-gray-99;
     .tab-link,.icon{
       display: block;
     }
     .icon{
       @include fs(20);
-      padding-bottom: formatVal(5,rem);
+      margin-bottom: formatVal(2,rem);
     }
     .tab-link{
 

@@ -1,0 +1,97 @@
+.c-share {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  &.active{
+    z-index: 999;
+  }
+  >div{
+    width: 100%;
+    height: 100%;
+    .bg-layer {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: $color-transparency-black-3;
+    }
+    .share-wrapper {
+      position: absolute;
+      z-index: 3;
+      bottom: formatVal(10,rem);
+      left: formatVal(10,rem);
+      right: formatVal(10,rem);
+      .cont {
+        padding: formatVal(15, rem) formatVal(35, rem);
+        color: $color-text-40;
+        background-color: $whiteColor;
+        border-bottom: 1px solid $color-shadow-nav;
+        border-radius: 5px 5px 0 0;
+        .to-clubs {
+          display: flex;
+          align-items: center;
+          .avatar{
+            margin-right: formatVal(15,rem);
+            img{
+              @include w(56);
+              @include h(56);
+            }
+          }
+          .desc{
+            .title{
+              @include fs(14);
+            }
+            .subtitle{
+              margin-top: formatVal(5,rem);
+              color: $color-gray-99;
+              @include fs(12);
+            }
+          }
+        }
+        .to-vendor {
+          display: flex;
+          justify-content: space-between;
+          .item{
+            @include w(56);
+            @include h(56);
+          }
+        }
+        .split {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin: formatVal(20,rem) 0;
+          color: #676666;
+          @include fs(12);
+          &:after, &:before {
+            content: '';
+            border-top: 1px dashed $color-border-nav;
+            width: 30%;
+            height: 0;
+          }
+        }
+      }
+      .operate {
+        background-color: $whiteColor;
+        border-radius: 0 0 5px 5px;
+        .btn {
+          display: block;
+          width: 100%;
+          @include h(50);
+          @include lh(50);
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}
+.drop-down-enter-active, .drop-down-leave-active {
+  transition: all .3s;
+}
+.drop-down-enter, .drop-down-leave-to {
+  transform: translate3d(0, 100%, 0);
+}

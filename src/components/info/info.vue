@@ -6,7 +6,7 @@
     <div class="g-banner" v-if="bannerList">
       <swiper :options="swiperOPts" class="g-swiper">
         <swiper-slide v-for="(item, index) in bannerList" :key="index">
-          <img :src="item.coverUrl">
+          <img :src="item.coverUrl" @click="bannerClick(item)">
         </swiper-slide>
         <div class="swiper-pagination swiper-pagination-banner" slot="pagination"></div>
       </swiper>
@@ -28,7 +28,8 @@
           <div class="g-info-list" v-if="infoList.length>0">
             <div class="info-type-item" v-for="(item,index) in infoList" :key="index" v-show="tagCurrentIndex===index">
               <ul class="list">
-                <info-item :info="Iitem" v-for="(Iitem, Iindex) in item" :key="Iindex"
+                <info-item :show-special="true" :type="tagCurrentIndex+1" :info="Iitem" v-for="(Iitem, Iindex) in item"
+                           :key="Iindex"
                            @selectInfo="selectInfo"></info-item>
               </ul>
               <div v-if="item.length<=0" class="no-result-wrapper">
@@ -63,7 +64,7 @@
   import Loading from 'base/loading/loading';
   import InfoItem from 'base/info-item/info-item';
   import NoResult from 'base/no-result/no-result';
-  import { listNewsCategories, listNewsArticlesByCategory } from 'api/info';
+  import { listNewsCategories, listNewsArticlesByCategory, listArticlesByClubGuids } from 'api/info';
   import listBannersByLocationType from 'api/banner';
   import BackTop from 'base/backtop/backtop';
 
@@ -103,6 +104,7 @@
           pagination: false
         },
         tagList: null,
+        requestDataName: ['_listNewsArticlesByCategory', '_listArticlesByClubGuids'],
         tagCurrentIndex: 0,
         bannerList: null,
         requestMoreFlag: [false, false],
@@ -195,7 +197,7 @@
         }
         if (!this.requestMoreFlag[[this.tagCurrentIndex]]) {
           this.$set(this.requestMoreFlag, this.tagCurrentIndex, true);
-          this._listNewsArticlesByCategory(this.tagList[this.tagCurrentIndex].id, this.infoPage[this.tagCurrentIndex]).then((res) => {
+          this[this.requestDataName[this.tagCurrentIndex]](this.tagList[this.tagCurrentIndex].id, this.infoPage[this.tagCurrentIndex]).then((res) => {
             this.$refs.scroll.finishPullUp();
             this.$set(this.requestMoreFlag, this.tagCurrentIndex, false);
             if (res.code) {
@@ -229,6 +231,37 @@
       switching (val) {
         this.currView = val;
       },
+      bannerClick (data) {
+        /**
+         * banner type: 1.资讯 2.活动 3.课程 4.网页 5. 老师
+         */
+        var params = JSON.parse(data.params);
+        switch (data.type) {
+          case 1:
+            this.$router.push({
+              path: `/info/infodetail/${params.id}`
+            });
+            break;
+          case 2:
+            this.$router.push({
+              path: `/activity/list/detail/${params.id}`
+            });
+            break;
+          case 3:
+            this.$router.push({
+              path: `/train/${params.id}`
+            });
+            break;
+          case 4:
+            window.open(params.url);
+            break;
+          case 5:
+            this.$router.push({
+              path: `/train/teacherdetail/${params.id}`
+            });
+            break;
+        }
+      },
       _listBannersByLocationType () {
         var param = {
           productGuid: this.productGuid,
@@ -252,6 +285,14 @@
           limitSize: 10
         };
         return listNewsArticlesByCategory(param);
+      },
+      _listArticlesByClubGuids (id, page) {
+        var param = {
+          userGuid: this.userGuid,
+          page: page,
+          limitSize: 10
+        };
+        return listArticlesByClubGuids(param);
       }
     },
     watch: {
