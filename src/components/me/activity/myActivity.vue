@@ -1,22 +1,29 @@
 <template>
-  <div class="g-subscribe">
-    <scroll ref="scroll" class="train-content" :pullup="true" :data="requestScrollDataList"
-            @pullingUp="requestScrollData">
-      <div>
-        <div class="g-recommend course">
-          <ul class="list" v-if="requestScrollDataList">
-            <my-activity-item :data="item" v-for="(item, index) in requestScrollDataList" :key="index"
-                              @selectItem="selectItem" @details="applyDetail"></my-activity-item>
-          </ul>
-          <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
-        </div>
+  <transition name="slide">
+    <div class="g-myActivity">
+      <header class="g-header">
+        <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
+      </header>
+      <div class="g-main">
+        <scroll ref="scroll" class="train-content" :pullup="true" :data="requestScrollDataList"
+                @pullingUp="requestScrollData">
+          <div>
+            <div class="g-recommend course">
+              <ul class="list" v-if="requestScrollDataList">
+                <my-activity-item :data="item" v-for="(item, index) in requestScrollDataList" :key="index"
+                                  @selectItem="selectItem" @details="applyDetail"></my-activity-item>
+              </ul>
+              <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
+            </div>
+          </div>
+        </scroll>
       </div>
-    </scroll>
-    <top-tip ref="toptip" :delay="10000">
-      <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
-    </top-tip>
-    <router-view v-if="isRouterAlive"></router-view>
-  </div>
+      <top-tip ref="toptip" :delay="10000">
+        <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
+      </top-tip>
+      <router-view v-if="isRouterAlive"></router-view>
+    </div>
+  </transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -42,6 +49,7 @@
     },
     data () {
       return {
+        pageTitle: '我的活动',
         isRouterAlive: true,
         toptipTxt: '',
         requestScrollDataList: null,

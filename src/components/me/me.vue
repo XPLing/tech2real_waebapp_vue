@@ -43,7 +43,7 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
-    <router-view v-if="isRouterAlive" :curr-view="currView" :page-title="subPageTitle"></router-view>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
@@ -73,37 +73,43 @@
             icon: '<span class="c-icon-my_course"><i class="path1"></i><i class="path2"></i><i class="path3"></i></span>',
             name: '我的课程',
             viewName: 'subscribe',
-            title: '我的课程'
+            title: '我的课程',
+            path: 'course'
           },
           {
             icon: '<span class="c-icon-my_activity"><i class="path1"></i><i class="path2"></i></span>',
             name: '我的活动',
             viewName: 'MyActivity',
-            title: '我的活动'
+            title: '我的活动',
+            path: 'activity'
           },
           {
             icon: '<span class="c-icon-my_collect"><i class="path1"></i><i class="path2"></i></span>',
             name: '我的收藏',
             viewName: 'subscribe',
-            title: '我的收藏'
+            title: '我的收藏',
+            path: 'collection'
           },
           {
             icon: '<span class="c-icon-my_topic"><i class="path1"></i><i class="path2"></i></span>',
             name: '我的话题',
             viewName: 'subscribe',
-            title: '我的话题'
+            title: '我的话题',
+            path: 'topic'
           },
           {
             icon: '<span class="c-icon-my_clubs"><i class="path1"></i><i class="path2"></i></span>',
             name: '关注社群',
             viewName: 'subscribe',
-            title: '关注社群'
+            title: '关注社群',
+            path: 'clubs'
           },
           {
             icon: '<span class="c-icon-balance"><i class="path1"></i><i class="path2"></i></span>',
             name: '我的余额',
             viewName: 'subscribe',
-            title: '我的余额'
+            title: '我的余额',
+            path: 'balance'
           }
         ],
         systemList: [
@@ -147,10 +153,7 @@
     methods: {
       clickMy(data){
           this.$router.push({
-            path: `detail/${data.viewName}`,
-            query: {
-              title: data.title
-            },
+            path: `${data.path}`,
             append: true
           });
       },

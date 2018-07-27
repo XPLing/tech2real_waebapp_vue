@@ -53,7 +53,8 @@ const ActivityDetailCommentItem = () => import(/* webpackChunkName: "ActivityDet
 const ActivityDetailCommentForm = () => import(/* webpackChunkName: "ActivityDetailCommentForm" */ 'components/activity/detail/commentForm/commentForm');
 const TicketList = () => import(/* webpackChunkName: "TicketList" */ 'components/activity/detail/ticket/ticketList');
 const Me = () => import(/* webpackChunkName: "me" */ 'components/me/me');
-const MeDetail = () => import(/* webpackChunkName: "MeDetail" */ 'components/me/detail/detail');
+const MyCourse = () => import(/* webpackChunkName: "MyCourse" */ 'components/me/course/myCourse');
+const MyActivity = () => import(/* webpackChunkName: "MyActivity" */ 'components/me/activity/myActivity');
 const Login = () => import(/* webpackChunkName: "login" */ 'components/user/login/login');
 const User = () => import(/* webpackChunkName: "user" */ 'components/user/user');
 const Register = () => import(/* webpackChunkName: "register" */ 'components/user/register/register');
@@ -123,7 +124,7 @@ const Router = new VueRouter({
       ]
     },
     {
-      path: routerPrefix + '/train',
+      path: '/train',
       component: Train,
       children: [
         {
@@ -275,8 +276,12 @@ const Router = new VueRouter({
       component: Me,
       children: [
         {
-          path: 'detail/(:view)',
-          component: MeDetail
+          path: 'course',
+          component: MyCourse
+        },
+        {
+          path: 'activity',
+          component: MyActivity
         }
       ]
     },
