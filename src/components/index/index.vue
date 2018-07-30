@@ -1,8 +1,6 @@
 <template>
   <div id="app" class="g-app-wrapper">
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <router-view></router-view>
     <nav class="g-nav">
       <g-tab></g-tab>
     </nav>

@@ -16,7 +16,7 @@
               <div class="rich_media_inner" v-html="articleInfo.content" ref="articleCont"></div>
             </article>
             <div class="community">
-              <div class="community-cont" v-if="clubInfo">
+              <div class="community-cont" v-if="clubInfo" @click="selectClub">
                 <p class="cont-item avatar">
                   <img :src="clubInfo.logoUrl">
                 </p>
@@ -54,12 +54,12 @@
       </div>
       <div class="control-bar">
         <p @click.stop="setFavorite">
-          <i class="icon c-icon-heart" :class="{'active': viewArticle && viewArticle.favoriteFlag === 'Y'}"></i>
-          <span class="name">喜欢 <i v-if="viewArticle && viewArticle.favoriteCount>0">({{viewArticle.favoriteCount}})</i> </span>
+          <i class="icon c-icon-heart" :class="{'active': viewArticle && viewArticle.likeFlag === 'Y'}"></i>
+          <span class="name">喜欢 <i v-if="viewArticle && viewArticle.likeCount>0">({{viewArticle.likeCount}})</i> </span>
         </p>
         <p @click.stop="setLike">
-          <i class="icon c-icon-star" :class="{'active': viewArticle && viewArticle.likeFlag === 'Y'}"></i>
-          <span class="name">收藏 <i v-if="viewArticle && viewArticle.likeCount>0">({{viewArticle.likeCount}})</i> </span>
+          <i class="icon c-icon-star" :class="{'active': viewArticle && viewArticle.favoriteFlag === 'Y'}"></i>
+          <span class="name">收藏 <i v-if="viewArticle && viewArticle.favoriteCount>0">({{viewArticle.favoriteCount}})</i> </span>
         </p>
         <p @click.stop="showShare">
           <i class="icon c-icon-share"></i>
@@ -115,12 +115,12 @@
     inject: ['reload'],
     beforeRouteEnter (to, from, next) {
       next((vm) => {
-        if (from.name === 'activity' || /clubDetail/.test(from.name)) {
-          vm.articleId = to.params.articleId;
-          if (!to.query.first) {
-            vm.reload();
-          }
-        }
+//        if (from.name === 'activity' || /clubDetail/.test(from.name)) {
+//          vm.articleId = to.params.articleId;
+//          if (!to.query.first) {
+//            vm.reload();
+//          }
+//        }
       });
     },
     data () {
@@ -360,6 +360,12 @@
           path: url
         });
       },
+      selectClub () {
+        var url = `/clubs/clubdetail/${this.clubInfo.guid}`;
+        this.$router.push({
+          path: url
+        });
+      },
       descImage (pos) {
         this.scrollY = pos.y;
         if (this.loadingImgs.length > 0) {
@@ -509,7 +515,6 @@
       $route (to, from) {
         if (to.name === 'infoDetail') {
           if (/infoDetail/.test(from.name)) {
-            console.log(from.name);
             this.reload();
           }
         }

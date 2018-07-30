@@ -55,14 +55,16 @@ const TicketList = () => import(/* webpackChunkName: "TicketList" */ 'components
 const Me = () => import(/* webpackChunkName: "me" */ 'components/me/me');
 const MyCourse = () => import(/* webpackChunkName: "MyCourse" */ 'components/me/course/myCourse');
 const MyActivity = () => import(/* webpackChunkName: "MyActivity" */ 'components/me/activity/myActivity');
+const MyCollection = () => import(/* webpackChunkName: "MyCollection" */ 'components/me/collection/myCollection');
+const MyTopic = () => import(/* webpackChunkName: "MyTopic" */ 'components/me/topic/myTopic');
+const MyClub = () => import(/* webpackChunkName: "MyClub" */ 'components/me/club/myClub');
 const Login = () => import(/* webpackChunkName: "login" */ 'components/user/login/login');
 const User = () => import(/* webpackChunkName: "user" */ 'components/user/user');
 const Register = () => import(/* webpackChunkName: "register" */ 'components/user/register/register');
 const BackPW = () => import(/* webpackChunkName: "backPW" */ 'components/user/backpw/backpw');
 const MobileBind = () => import(/* webpackChunkName: "mobileBind" */ 'components/user/mobilebind/mobilebind');
 const FeedBack = () => import(/* webpackChunkName: "feedback" */ 'components/feedback/feedback');
-const MyClub = () => import(/* webpackChunkName: "MyClub" */ 'components/club/myClub');
-const Clubs = () => import(/* webpackChunkName: "MyClub" */ 'components/club/clubs');
+const Clubs = () => import(/* webpackChunkName: "Clubs" */ 'components/club/clubs');
 const ClubDetail = () => import(/* webpackChunkName: "ClubDetail" */ 'components/club/detail/clubDetail');
 
 Vue.use(VueRouter);
@@ -282,14 +284,19 @@ const Router = new VueRouter({
         {
           path: 'activity',
           component: MyActivity
+        },
+        {
+          path: 'collection',
+          component: MyCollection
+        },
+        {
+          path: 'topic',
+          component: MyTopic
+        },
+        {
+          path: 'club',
+          component: MyClub
         }
-      ]
-    },
-    {
-      path: routerPrefix + '/myclub',
-      component: MyClub,
-      children: [
-
       ]
     },
     {

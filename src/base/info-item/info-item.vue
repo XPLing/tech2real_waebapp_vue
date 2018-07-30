@@ -14,7 +14,7 @@
           </div>
           <div class="info">
             <p class="left">
-              <span class="source">{{ initInfo.author }}</span>
+              <span class="source">{{ initInfo.source }}</span>
               <span class="time">{{ new Date(initInfo.createdTime) | formatDate('yyyy-MM-dd')}}</span>
             </p>
             <p class="right">
@@ -26,7 +26,7 @@
           <div class="media-body">
             <p class="title">{{initInfo.listTitle | ellipsis(28)}}</p>
             <p class="info">
-              <span>{{ initInfo.author }}</span>
+              <span>{{ initInfo.source }}</span>
               <span>{{ new Date(initInfo.createdTime) | formatDate('yyyy-MM-dd')}}</span>
             </p>
           </div>

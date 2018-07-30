@@ -6,7 +6,6 @@
     <div class="media-body">
       <p class="info">
         <span class="name">{{reply.nickname}}</span>
-
       </p>
       <div class="cont-wrap">
         <div v-if="reply.replyId">

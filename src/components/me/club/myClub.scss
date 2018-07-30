@@ -1,0 +1,107 @@
+$color-red: #FF5F7A;
+$color-green: #7ED321;
+.g-community-comment-item {
+  position: fixed;
+  z-index: 103;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-gray-F6;
+  @include fs(14);
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-main{
+    position: fixed;
+    z-index: 10;
+    top: formatVal(40,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    .toList{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: formatVal(12,rem) formatVal(15,rem);
+      background-color: $whiteColor;
+      .cover{
+        @include w(114);
+      }
+      .operate{
+        flex: 1;
+        padding-left: formatVal(10,rem);
+        text-align: center;
+        .text{
+          color: $color-text-33;
+        }
+        .btn{
+          display: block;
+          @include w(100);
+          @include h(30);
+          @include lh(30);
+          margin:formatVal(10,rem) auto 0;
+          color: $whiteColor;
+          border-radius: 5px;
+          background-color: $color-theme;
+        }
+      }
+    }
+    .titlebox{
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: formatVal(15,rem) 0;
+      &.red{
+        .icon{
+          span{
+            background-color: $color-red;
+          }
+        }
+      }
+      &.green{
+        .icon{
+          span{
+            background-color: $color-green;
+          }
+        }
+      }
+      .icon{
+        display: flex;
+        span{
+          display: inline-block;
+          &+span{
+            margin-left: formatVal(3,rem);
+          }
+          &.big{
+            @include w(7);
+            @include h(7);
+          }
+          &.small{
+            @include w(3);
+            @include h(3);
+          }
+        }
+      }
+      .title{
+        @include fs(16);
+        margin: 0 formatVal(10,rem);
+        color: $color-text-tip-b9a;
+      }
+      .more{
+        position: absolute;
+        top: formatVal(4,rem);
+        right: 0;
+        @include fs(12);
+        color: $color-text-tip-ac;
+      }
+    }
+    /deep/ .c-club-list{
+      padding: 0;
+    }
+  }
+}

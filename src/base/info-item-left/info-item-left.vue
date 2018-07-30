@@ -10,7 +10,7 @@
     <div class="media-body">
       <p class="title">{{info.listTitle}}</p>
       <p class="info">
-        <span>{{ info.author }}</span>
+        <span>{{ info.source }}</span>
       </p>
     </div>
   </li>

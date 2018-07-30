@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="g-myActivity">
+    <div class="g-myCollection">
       <header class="g-header">
         <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
       </header>
@@ -10,10 +10,14 @@
           <div>
             <div class="g-recommend course">
               <ul class="list" v-if="requestScrollDataList">
-                <my-activity-item :data="item" v-for="(item, index) in requestScrollDataList" :key="index"
-                                  @selectItem="selectItem" @details="applyDetail"></my-activity-item>
+                <info-item :info="item" v-for="(item, index) in requestScrollDataList" :key="index"
+                                @selectInfo="selectItem"></info-item>
               </ul>
-              <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
+              <div class="no-result" v-show="!requestScrollDataList">
+                <no-result :title="'没有找到您要的内容'"></no-result>
+              </div>
+              <p v-show="requestScrollDataList && (requestMoreFlag || noMore)" class="request-result">
+                {{noMore ? noMoreStr : noResult}}</p>
             </div>
           </div>
         </scroll>
@@ -33,12 +37,12 @@
   import HeaderTitle from 'components/header-title/header-title';
   import { ERR_OK } from 'api/config';
   import * as util from 'assets/js/util';
-  import { listMyActivities } from 'api/me';
+  import { listFavoriteArticles } from 'api/me';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import Loading from 'base/loading/loading';
   import Confirm from 'base/confirm/confirm';
-  import MyActivityItem from 'base/my-activity-item/my-activity-item';
+  import InfoItem from 'base/info-item/info-item';
   import NoResult from 'base/no-result/no-result';
 
   export default {
@@ -49,7 +53,7 @@
     },
     data () {
       return {
-        pageTitle: '我的活动',
+        pageTitle: '我的收藏',
         isRouterAlive: true,
         toptipTxt: '',
         requestScrollDataList: null,
@@ -78,7 +82,7 @@
       },
       selectItem (data) {
         this.$router.push({
-          path: `/activity/list/detail/${data.id}`
+          path: `/info/infodetail/${data.id}`
         });
       },
       applyDetail (data) {
@@ -95,7 +99,7 @@
         }
         if (!this.requestMoreFlag) {
           this.requestMoreFlag = true;
-          this._listMyActivities(this.requestPage).then((res) => {
+          this._listFavoriteArticles(this.requestPage).then((res) => {
             this.$refs.scroll.finishPullUp();
             this.requestMoreFlag = false;
             if (res.code) {
@@ -126,14 +130,15 @@
           });
         }
       },
-      _listMyActivities (page) {
+      _listFavoriteArticles (page) {
         var param = {
-          limiSize: 10,
+          page_size: 10,
           page: page,
           version: 1,
-          userGuid: this.userGuid
+          user_guid: this.userGuid,
+          product_guid: this.productGuid
         };
-        return listMyActivities(param);
+        return listFavoriteArticles(param);
       }
     },
     watch: {
@@ -151,7 +156,7 @@
       TopTip,
       Loading,
       Scroll,
-      MyActivityItem,
+      InfoItem,
       NoResult
     }
   };
@@ -160,5 +165,5 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "./myActivity";
+  @import "./myCollection";
 </style>

@@ -102,7 +102,7 @@
             name: '关注社群',
             viewName: 'subscribe',
             title: '关注社群',
-            path: 'clubs'
+            path: 'club'
           },
           {
             icon: '<span class="c-icon-balance"><i class="path1"></i><i class="path2"></i></span>',

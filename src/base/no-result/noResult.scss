@@ -1,4 +1,5 @@
 .no-result{
+  margin-top: formatVal(50,rem);
   text-align: center;
   .no-result-icon{
     @include w(86);

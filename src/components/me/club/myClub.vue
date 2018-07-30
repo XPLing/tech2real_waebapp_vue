@@ -7,12 +7,27 @@
       <div class="g-main">
         <scroll :data="community" ref="scroll">
           <div>
-            <club-join :data="clubList" @selectItem="selectItem" @join="joinClub"></club-join>
+            <header class="toList">
+              <img class="cover" src="./club1.png" >
+              <div class="operate">
+                <p class="text">更多精彩社群，等着你加入！</p>
+                <router-link class="btn" :to="{path:'/clubs'}">去看看</router-link>
+              </div>
+            </header>
+            <div class="titlebox green">
+              <p class="icon left"><span class="small"></span><span class="big"></span></p>
+              <p class="title">我的社群</p>
+              <p class="icon right"><span class="big"></span><span class="small"></span></p>
+            </div>
+            <club-join :data="clubList" v-if="clubList" @selectItem="selectItem" @join="joinClub" :join-show-flag="false"></club-join>
+            <div class="no-result" v-show="!clubList">
+              <no-result :title="'没有找到您要的内容'"></no-result>
+            </div>
             <back-top ref="backTop" @backTop="backTop"></back-top>
           </div>
         </scroll>
       </div>
-      <router-view @update="update"  v-if="isRouterAlive"></router-view>
+      <router-view></router-view>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -27,39 +42,23 @@
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import Scroll from 'base/scroll/scroll';
   import HeaderTitle from 'components/header-title/header-title';
-  import { ERR_OK, ERR_OK_STR } from 'api/config';
+  import { ERR_OK } from 'api/config';
   import * as util from 'assets/js/util';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import Loading from 'base/loading/loading';
   import NoResult from 'base/no-result/no-result';
   import BackTop from 'base/backtop/backtop';
-  import { listClub, signPublicClubInView } from 'api/club';
+  import { listMyClubs } from 'api/club';
   import Confirm from 'base/confirm/confirm';
   import ClubJoin from 'base/club-join/club-join';
   import Mask from 'base/mask/mask';
 
   export default {
-    provide () {
-      return {
-        reload: this.reload
-      };
-    },
-    beforeRouteEnter (to, from, next) {
-      next((vm) => {
-//        if (from.name === 'activity') {
-//          vm.articleId = to.params.articleId;
-//          if (!to.query.first) {
-//            vm.reload();
-//          }
-//        }
-      });
-    },
     data () {
       return {
-        isRouterAlive: true,
         toptipTxt: '',
-        pageTitle: '话题讨论',
+        pageTitle: '我的社群',
         articleInfo: null,
         probeType: 2,
         listenScroll: true,
@@ -75,7 +74,19 @@
       };
     },
     created () {
-      this.requestData();
+      this._listMyClubs().then((res) => {
+        if (res.code) {
+          if (res.code != ERR_OK) {
+            this.toptipTxt = res.message;
+            this.$refs.toptip.show();
+            return;
+          }
+          this.clubList = res.result;
+        }
+      }, erro => {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      });
     },
     computed: {
       ...mapGetters([
@@ -84,40 +95,17 @@
       ])
     },
     methods: {
-      reload () {
-        this.isRouterAlive = false;
-        this.$nextTick(() => {
-          this.isRouterAlive = true;
-        });
-      },
-      update(){
-        this.requestData();
-      },
-      requestData(){
-        this._listClub().then((res) => {
-          if (res.code) {
-            if (res.code != ERR_OK) {
-              this.toptipTxt = res.message;
-              this.$refs.toptip.show();
-              return;
-            }
-            this.clubList = res.result;
-          }
-        }, erro => {
-          this.toptipTxt = erro.message;
-          this.$refs.toptip.show();
-        });
-      },
       joinClub (data) {
-        if (data.userClubId !== 1) {
-          this._signPublicClubInView(data.guid).then((res) => {
+        if (data.isLiked === 'N') {
+          this._likeCommentV2(2, data.id).then((res) => {
             if (res.code) {
-              if (res.status !== ERR_OK_STR) {
+              if (res.code != ERR_OK) {
                 this.toptipTxt = res.message;
                 this.$refs.toptip.show();
                 return false;
               }
-              data.userClubId = 1;
+              data.isLiked = 'Y';
+              data.likeCount = data.likeCount + 1;
             }
           }, erro => {
             this.toptipTxt = erro.message;
@@ -146,8 +134,7 @@
       },
       selectItem (data) {
         this.$router.push({
-          path: `clubdetail/${data.guid}`,
-          append: true
+          path: `/clubs/clubdetail/${data.guid}`
         });
       },
       requestScrollData () {
@@ -156,7 +143,7 @@
         }
         if (!this.requestMoreFlag) {
           this.requestMoreFlag = true;
-          this._listClub(this.requestPage).then((res) => {
+          this._listMyClubs(this.requestPage).then((res) => {
             this.$refs.scroll.finishPullUp();
             this.requestMoreFlag = false;
             if (res.code) {
@@ -190,20 +177,11 @@
       backTop () {
         this.$refs.scroll.scrollTo(0, 0, 300);
       },
-      _listClub () {
+      _listMyClubs () {
         var param = {
-          user_guid: this.userGuid,
-          product_guid: this.productGuid
+          userGuid: this.userGuid
         };
-        return listClub(param);
-      },
-      _signPublicClubInView (id) {
-        var param = {
-          club_guid: id,
-          user_guid: this.userGuid,
-          product_guid: this.productGuid
-        };
-        return signPublicClubInView(param);
+        return listMyClubs(param);
       }
     },
     watch: {
@@ -231,5 +209,5 @@
 
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "./clubs";
+  @import "./myClub";
 </style>

@@ -96,11 +96,8 @@
     inject: ['reload'],
     beforeRouteEnter (to, from, next) {
       next((vm) => {
-        if (/me/.test(from.name)) {
-          vm.articleId = to.params.articleId;
-          if (!to.query.first) {
-            vm.reload();
-          }
+        if (/activity/.test(from.name)) {
+          vm.reload();
         }
       });
     },
@@ -118,21 +115,9 @@
     },
     created () {
       this.id = this.$route.params.id;
-      this._getActivityById().then((res) => {
-        if (res.code) {
-          if (res.code != ERR_OK) {
-            this.toptipTxt = res.message;
-            this.$refs.toptip.show();
-            return;
-          }
-          this.dataInfo = res.result;
-          this.pageTitle = res.result.title;
-          this.applyStatus = this.applyStatusValue(res.result.applyStatus);
-        }
-      }, erro => {
-        this.toptipTxt = erro.message;
-        this.$refs.toptip.show();
-      });
+    },
+    mounted() {
+      this.initDate();
     },
     computed: {
       loadingImgs () {
@@ -150,6 +135,23 @@
       ])
     },
     methods: {
+      initDate(){
+        this._getActivityById().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            this.dataInfo = res.result;
+            this.pageTitle = res.result.title;
+            this.applyStatus = this.applyStatusValue(res.result.applyStatus);
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+      },
       cancelShare () {
 
       },

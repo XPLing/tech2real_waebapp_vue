@@ -1,0 +1,37 @@
+.g-myCollection{
+  position: fixed;
+  z-index: 102;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: $color-gray-F6;
+  .g-main{
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    top: formatVal(40,rem);
+    bottom: 0;
+    .list{
+      /deep/ .c-info-list-item{
+        background-color: $whiteColor;
+        &+.c-info-list-item{
+          border-top: 1px solid $color-shadow-nav;
+        }
+      }
+    }
+  }
+  .request-result{
+    padding: formatVal(10,rem) 0;
+    @include fs(12);
+    color: $color-text-tip-b9a;
+    text-align: center;
+  }
+}
+.slide-enter-active {
+  animation: slide 0.3s;
+}
+.slide-leave-active {
+  animation: slide 0.3s reverse;
+}

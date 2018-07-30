@@ -110,12 +110,12 @@
     props: {},
     beforeRouteEnter (to, from, next) {
       next((vm) => {
-        if (/me/.test(from.name)) {
-          vm.articleId = to.params.articleId;
-          if (!to.query.first) {
-            // vm.reload();
-          }
-        }
+//        if (/me/.test(from.name)) {
+//          vm.articleId = to.params.articleId;
+//          if (!to.query.first) {
+//            // vm.reload();
+//          }
+//        }
       });
     },
     data () {

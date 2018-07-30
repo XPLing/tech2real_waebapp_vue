@@ -91,12 +91,12 @@
     inject: ['reload'],
     beforeRouteEnter (to, from, next) {
       next((vm) => {
-        if (from.name === 'info') {
-          vm.articleId = to.params.articleId;
-          if (!to.query.first) {
-            vm.reload();
-          }
-        }
+//        if (from.name === 'info') {
+//          vm.articleId = to.params.articleId;
+//          if (!to.query.first) {
+//            vm.reload();
+//          }
+//        }
       });
     },
     data () {

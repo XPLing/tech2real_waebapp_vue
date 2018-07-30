@@ -1112,8 +1112,47 @@ apiRouter.post('/getUserInfoByGuid', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+apiRouter.post('/listFavoriteArticles', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listFavoriteArticles`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 apiRouter.post('/listMyActivities', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/listMyActivities`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listMyClubComments', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listMyClubComments`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listMyClubReplies', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listMyClubReplies`;
   axios({
     method: 'post',
     url: url,
