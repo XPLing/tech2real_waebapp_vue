@@ -1,4 +1,4 @@
-.g-train-detail {
+.g-course-evaluate {
   position: fixed;
   z-index: 4;
   top: formatVal(289,rem);
@@ -6,9 +6,42 @@
   left: 0;
   right: 0;
   color: $color-text-b45;
+  @include fs(14);
   background: $color-shadow-nav;
   &.joined{
     bottom: 0;
+  }
+  .operate{
+    padding: formatVal(10,rem);
+    margin-bottom: formatVal(20,rem);
+    @include h(100);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    background-color: $whiteColor;
+    .title{
+      position: relative;
+      color: $color-gray-99;
+      .tools{
+        position: absolute;
+        top: formatVal(3,rem);
+        right: 0;
+        color: $color-theme;
+        @include fs(12);
+      }
+    }
+    .score{
+
+    }
+  }
+  .evaluate-list{
+    position: absolute;
+    top: formatVal(120,rem);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $whiteColor;
   }
 }
 

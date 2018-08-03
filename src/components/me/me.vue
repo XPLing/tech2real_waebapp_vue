@@ -3,7 +3,7 @@
     <scroll ref="scroll" :data="userInfo">
       <div>
         <header class="g-header">
-          <i class="icon c-icon-message"></i>
+          <router-link :to="{path:'message', append: true}" tag="i" class="icon c-icon-message"></router-link>
         </header>
         <section class="g-main">
           <div class="info-base">

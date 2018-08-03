@@ -2,12 +2,13 @@
   <transition name="slide">
     <div class="g-train-detail">
       <header class="g-header">
-        <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack" :has-share="true" @share="showShare"></HeaderTitle>
+        <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack" :has-share="true"
+                     @share="showShare"></HeaderTitle>
       </header>
       <div class="g-video" v-if="courseData">
         <div v-if="chapterData" class="recourse-wrapper">
           <div v-if="videoUrl" class="video-wrapper">
-            <video controls :src="videoUrl" ref="video"></video>
+            <video controls :src="videoUrl" ref="video" @canplay="videoCanplay"></video>
             <p class="video-mask" v-show="isPause" @click.stop="Vclick">
               <i class="fa" :class="{'fa-spin fa-circle-o-notch': !isCanplay,'fa-play-circle':isCanplay}"></i>
             </p>
@@ -19,15 +20,15 @@
         <img v-else :src="coverUrl">
       </div>
       <nav class="g-nav-wrapper">
-        <TrainDetailTab @changeTab="changeTab"></TrainDetailTab>
+        <TrainDetailTab @changeTab="changeTab" :applied-state="appliedState"></TrainDetailTab>
       </nav>
       <div class="g-main">
         <keep-alive>
-          <component v-bind:is="view" :key="`view_${view}`" :applied-state="appliedState" :course-data="courseData" :chapter-data="chapterData"
+          <component v-bind:is="view" :key="`view_${view}`" :applied-state="appliedState" :course-data="courseData"
+                     :chapter-data="chapterData"
                      :apply-result="applyResult"
                      @setdata="setDatas" @changevideo="changeVideo" @changeapplyres="changeApplyResult"
                      ref="view">
-
           </component>
         </keep-alive>
       </div>
@@ -51,7 +52,8 @@
           <p class="original">原价：<span>¥ {{courseOriginalPrice}}</span></p>
         </div>
       </g-select>
-      <router-view :apply-result="applyResult" @updateResult="updateResult"></router-view>
+      <router-view :apply-result="applyResult" @updateResult="updateResult" @evaluateUpdate="evaluateUpdate"
+                   :course-data="courseData"></router-view>
     </div>
   </transition>
 </template>
@@ -192,11 +194,17 @@
 
         }
       },
-      updateResult(data){
-          this.applyResult = data;
+      evaluateUpdate () {
+        if (this.view === 'CourseEvaluate') {
+          console.log(this.$refs.view);
+          this.$refs.view.updata();
+        }
       },
-      changeTab(data){
-          this.view = VIEW[data.id];
+      updateResult (data) {
+        this.applyResult = data;
+      },
+      changeTab (data) {
+        this.view = VIEW[data.id];
       },
       init () {
         this._getCourseID();
@@ -362,6 +370,9 @@
       setDatas (key, val, index, dataName) {
         this.$set(this.chapterData[index], key, val);
       },
+      videoCanplay () {
+        this.Vplay();
+      },
       changeVideo (data) {
         var vurl = data.videoUrl, type = data.type, furl = data.fileUrl;
         if (type === 2) {
@@ -385,15 +396,16 @@
       },
       Vclick () {
         if (this.appliedState <= 0) {
-          this.join();
+          this.operate();
           return;
         }
         if (this.isCanplay) {
-          this.isPause = false;
+
           this.Vplay();
         }
       },
       Vplay () {
+        this.isPause = false;
         this.$refs.video.play();
       },
       Vpause () {

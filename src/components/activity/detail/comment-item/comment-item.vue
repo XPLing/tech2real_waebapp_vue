@@ -157,7 +157,8 @@
       },
       selectReply (data) {
         this.$router.push({
-          path: `/activity/list/detail/${this.$route.params.id}/commentlist/${this.$route.params.commentId}/commentform`,
+          path: `commentform`,
+          append: true,
           query: {
             replyId: data.replyId,
             replyUserGuid: data.replyUserGuid
@@ -166,7 +167,8 @@
       },
       selectCommunity (data) {
         this.$router.push({
-          path: `/activity/list/detail/${this.$route.params.id}/commentlist/${this.$route.params.commentId}/commentform`
+          path: `commentform`,
+          append: true
         });
       },
       requestReply () {

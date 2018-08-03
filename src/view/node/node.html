@@ -17,8 +17,17 @@
       <div>
         <span>啊实打实大师的啊实打实大师阿萨德啊实打实大斯达舒大啊飒飒的</span>
         <span>大声地卡死了的卡死了的卡死了的卡死了老大啊省大师级的哈斯尽快的哈金卡省得还安居客的</span>
+        <input type="file" id="files">
       </div>
     </div>
     <!-- built files will be auto injected -->
+  <script>
+
+    var files = document.querySelector('#files');
+    files.addEventListener('change', function(){
+      console.log(files.files);
+    });
+
+  </script>
   </body>
 </html>

@@ -1,0 +1,60 @@
+$color-red: #FF5F7A;
+$color-green: #7ED321;
+.g-evaluateForm {
+  position: fixed;
+  z-index: 101;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @include fs(14);
+  color: $color-text-b45;
+  background-color: $color-border-split;
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-swiper /deep/ .swiper-pagination-bullet-active {
+    background: $color-theme;
+  }
+  .g-header{
+
+  }
+  .operate{
+    padding: formatVal(10,rem);
+    @include h(100);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    background-color: $whiteColor;
+    .title{
+      position: relative;
+      color: $color-gray-99;
+    }
+    .score{
+
+    }
+  }
+  .g-main{
+    position: fixed;
+    z-index: 11;
+    top: formatVal(140,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .form-cont{
+    padding: formatVal(10,rem);
+    width: 100%;
+    @include h(200);
+    border: none;
+    border-top: 1px solid $color-shadow-nav;
+    background-color: $whiteColor;
+    resize: none;
+    font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
+  }
+
+}

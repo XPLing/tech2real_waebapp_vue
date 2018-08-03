@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="g-app-wrapper">
+  <div id="app" class="g-app-wrapper" @touchmove.prevent>
     <router-view></router-view>
     <nav class="g-nav">
       <g-tab></g-tab>

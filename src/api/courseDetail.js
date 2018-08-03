@@ -92,6 +92,40 @@ export function getUnpaidCourseApply (params) {
   });
 }
 
+export function listEvaluatesByTargetId (params) {
+  var url = debug ? '/api/listEvaluatesByTargetId' : `${REQUEST_PREFIX}/listEvaluatesByTargetId`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
+export function addEvaluate (params) {
+  var url = debug ? '/api/addEvaluate' : `${REQUEST_PREFIX}/addEvaluate`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
 export function listCourseValidityPeriodByCourseId (params) {
   var url = debug ? '/api/listCourseValidityPeriodByCourseId' : `${REQUEST_PREFIX}/listCourseValidityPeriodByCourseId`;
   const data = Object.assign({}, commonParams, params);

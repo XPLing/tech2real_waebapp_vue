@@ -1,0 +1,57 @@
+.c-notice-item.c-media{
+  position: relative;
+  padding: formatVal(12,rem);
+  color: $color-text-40;
+  background-color: $whiteColor;
+  &:before{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: formatVal(36,rem);
+    right: formatVal(-14,rem);
+    border-bottom: 1px solid $color-gray-F6;
+  }
+  .media-left{
+    margin-right: formatVal(15,rem);
+    @include w(36);
+    @include h(36);
+    img {
+      display: block;
+      @include w(36);
+      @include h(36);
+      border-radius: 50%;
+    }
+  }
+  .media-body{
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    &.readed{
+      opacity: 0.5;
+    }
+    .cont-wrap{
+      @include fs(14);
+      margin: formatVal(10,rem) 0;
+      color: $color-text-40;
+      word-break: break-all;
+      word-wrap: break-word;
+      .tip{
+        font-weight: bold;
+        margin-bottom: formatVal(5,rem);
+      }
+    }
+    .info{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      @include fs(14);
+      .name{
+        color: $color-text-40;
+        margin-right: formatVal(5,rem);
+      }
+      .time{
+        color: $color-gray-99;
+      }
+    }
+  }
+}

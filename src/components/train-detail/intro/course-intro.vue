@@ -11,19 +11,21 @@
         <div class="section detail-info" v-if="courseIntro">
           <div class="detail-info-item teacher">
             <h2 class="title">讲师</h2>
-            <ul class="teacher-list">
-              <li class="item" v-for="(item,index) in courseIntro.teachers" :key="index">
-                <router-link :to="{path:`/train/teacherdetail/${item.id}`}" class="c-media">
-                  <div class="avatar">
-                    <img :src="item.faceUrl">
-                  </div>
-                  <div class="desc">
-                    <p class="title">{{item.realName}}</p>
-                    <p class="info career">{{item.career}}</p>
-                  </div>
-                </router-link>
-              </li>
-            </ul>
+            <div class="teacher-list">
+              <swiper :options="swiperOPtsTeacher" class="g-swiper">
+                <swiper-slide class="swiper-item" v-for="(item,index) in courseIntro.teachers" :key="index">
+                  <router-link :to="{path:`/train/teacherdetail/${item.id}`}" class="c-media">
+                    <div class="avatar">
+                      <img :src="item.faceUrl">
+                    </div>
+                    <div class="desc">
+                      <p class="title">{{item.realName}}</p>
+                      <p class="info career">{{item.career}}</p>
+                    </div>
+                  </router-link>
+                </swiper-slide>
+              </swiper>
+            </div>
           </div>
           <div class="detail-info-item course-intro">
             <h2 class="title">课程介绍</h2>
@@ -36,6 +38,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import 'swiper/dist/css/swiper.css';
+  import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import { imgOnload } from 'assets/js/imgOnload';
   import Scroll from 'base/scroll/scroll';
   import { getCourseIntro } from 'api/courseDetail';
@@ -60,7 +64,13 @@
         probeType: 2,
         listenScroll: true,
         introImgs: [],
-        loadedImgs: []
+        loadedImgs: [],
+        swiperOPtsTeacher: {
+          freeMode: true,
+          loop: false,
+          slidesPerView: 2.5,
+          spaceBetween: 10
+        }
       };
     },
     created () {
@@ -138,7 +148,9 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      swiper,
+      swiperSlide
     }
   };
 </script>

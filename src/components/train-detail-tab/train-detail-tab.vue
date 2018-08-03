@@ -1,17 +1,5 @@
 <template>
   <ul class="g-train-detail-tab">
-    <!--<router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/intro'}" replace>-->
-    <!--<span class="tab-link">课程</span>-->
-    <!--</router-link>-->
-    <!--<router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/chapters'}" replace>-->
-    <!--<span class="tab-link">章节</span>-->
-    <!--</router-link>-->
-    <!--<router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/evaluate'}" replace>-->
-    <!--<span class="tab-link">评价</span>-->
-    <!--</router-link>-->
-    <!--<router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/'+ courseID +'/community'}" replace>-->
-    <!--<span class="tab-link">交流</span>-->
-    <!--</router-link>-->
     <li class="tab-item" @click="changeTab(item)" :class="{'active': currentIndex===item.id}"
         v-for="(item,index) in list" :key="index">
       <span class="tab-link">{{item.name}}</span>
@@ -23,6 +11,7 @@
   import { routerPrefix } from 'assets/js/util';
 
   export default {
+    props: ['appliedState'],
     data () {
       return {
         courseID: 0,
@@ -36,23 +25,21 @@
           {
             name: '章节',
             id: 1
-          },
-          {
-            name: '评价',
-            id: 2
-          },
-          {
-            name: '交流',
-            id: 3
           }
         ]
       };
     },
     created () {
       this.courseID = this.$route.params.id;
+      if (this.appliedState !== 0) {
+        this.list.push({
+          name: '评价',
+          id: 2
+        });
+      }
     },
     methods: {
-      changeTab(data){
+      changeTab (data) {
         this.currentIndex = data.id;
         this.$emit('changeTab', data);
       }

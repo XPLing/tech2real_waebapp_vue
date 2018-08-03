@@ -156,7 +156,8 @@
       selectReply (data) {
         this.placeholder = data.nickname;
         this.$router.push({
-          path: `/info/infodetail/${this.$route.params.articleId}/commentlist/${this.$route.params.commentId}/commentform`,
+          path: `commentform`,
+          append: true,
           query: {
             replyId: data.replyId || data.id,
             replyUserGuid: data.replyUserGuid || data.userGuid
@@ -166,7 +167,8 @@
       selectCommunity (data) {
         this.placeholder = data.nickname;
         this.$router.push({
-          path: `/info/infodetail/${this.$route.params.articleId}/commentlist/${this.$route.params.commentId}/commentform`
+          path: `commentform`,
+          append: true
         });
       },
       requestReply () {

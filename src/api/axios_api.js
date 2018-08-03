@@ -596,6 +596,42 @@ apiRouter.post('/getCourseApplyByCourseId', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+apiRouter.post('/addEvaluate', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/addEvaluate`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listEvaluatesByTargetId', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listEvaluatesByTargetId`;
+  axios({
+    method: 'post',
+    url: url,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'referer': config.dev.apiproxy,
+      'host': config.dev.apiproxyhost
+    },
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
 
 /* 登录注册 */
 apiRouter.get('/webLoginByPhone', function (req, res) {
@@ -1153,6 +1189,19 @@ apiRouter.post('/listMyClubComments', jsonParser, function (req, res) {
 });
 apiRouter.post('/listMyClubReplies', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/listMyClubReplies`;
+  axios({
+    method: 'post',
+    url: url,
+    data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/listNotifiesByType', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/listNotifiesByType`;
   axios({
     method: 'post',
     url: url,

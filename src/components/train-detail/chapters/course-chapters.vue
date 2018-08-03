@@ -72,6 +72,12 @@
           },
           {
             'title': '课程4'
+          },
+          {
+            'title': '课程5'
+          },
+          {
+            'title': '课程6'
           }
         ],
         currentSelect: -1,

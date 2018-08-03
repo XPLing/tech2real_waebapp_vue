@@ -112,7 +112,8 @@
       },
       selectCommunity (data) {
         this.$router.push({
-          path: `/activity/list/detail/${this.id}/commentlist/${data.id}`,
+          path: `${data.id}`,
+          append: true,
           query: {
             title: `${this.pageTitle}`
           }

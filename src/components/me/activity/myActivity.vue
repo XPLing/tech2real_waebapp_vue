@@ -13,6 +13,9 @@
                 <my-activity-item :data="item" v-for="(item, index) in requestScrollDataList" :key="index"
                                   @selectItem="selectItem" @details="applyDetail"></my-activity-item>
               </ul>
+              <div class="no-result" v-else>
+                <no-result :title="'没有找到您要的内容'"></no-result>
+              </div>
               <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
             </div>
           </div>
