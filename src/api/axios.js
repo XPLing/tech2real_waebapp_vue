@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-let pending = []; //  声明一个数组用于存储每个ajax请求的取消函数和ajax标识
+export let pending = []; //  声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let CancelToken = axios.CancelToken;
-let removePending = (config, obj) => {
+export let removePending = (config, obj) => {
   for (let p in obj) {
     if (obj[p].u === config.url + '&' + config.method) { // 当当前请求在数组中存在时执行函数体
       obj[p].f(); //  执行取消操作
@@ -17,6 +17,9 @@ axios.interceptors.request.use(config => {
   config.cancelToken = new CancelToken((c) => {
     // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
     pending.push({u: config.url + '&' + config.method, f: c});
+    if (config.customParam && config.customParam.cancelSource) {
+      config.customParam.cancelSource.cancel = c;
+    }
   });
   return config;
 }, error => {
@@ -78,10 +81,14 @@ axios.interceptors.response.use(res => {
   }
   console.log(err.response);
   console.log(err.message);
-  return Promise.reject({
+  var errRes = {
     code: err.response ? err.response.status : err.response,
     message: err.message
-  }); // 返回一个空对象，主要是防止控制台报错
+  };
+  if (err.__CANCEL__) {
+    errRes.isCancel = true;
+  }
+  return Promise.reject(errRes); // 返回一个空对象，主要是防止控制台报错
 
 });
 

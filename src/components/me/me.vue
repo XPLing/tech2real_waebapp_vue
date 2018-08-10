@@ -28,7 +28,7 @@
           </div>
           <div class="info-system">
             <ul class="list">
-              <li class="item" v-for="(item, index) in systemList" :key="index">
+              <li class="item" v-for="(item, index) in systemList" :key="index" @click="clickSystem(item)">
                 <div class="icon-wrapper" v-html="item.icon"></div>
                 <div class="desc">
                   <p class="name">{{item.name}}</p>
@@ -43,6 +43,8 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
+    <share :no-self="true" @cancel="cancelShare" @share="share" ref="share"></share>
+    <confirm ref="confirmsWrapper" :text="confirmTxt" @confirm="confirm"></confirm>
     <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
@@ -54,11 +56,13 @@
   import HeaderTitle from 'components/header-title/header-title';
   import { ERR_OK, ERR_OK_STR } from 'api/config';
   import * as util from 'assets/js/util';
-  import { mapGetters, mapMutations } from 'vuex';
+  import { mapGetters, mapMutations, mapActions } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import { getUserInfoByGuid } from 'api/me';
   import Loading from 'base/loading/loading';
   import NoResult from 'base/no-result/no-result';
+  import Confirm from 'base/confirm/confirm';
+  import Share from 'base/share/share';
 
   export default {
     data () {
@@ -66,8 +70,7 @@
         toptipTxt: '',
         pageTitle: '我的',
         isRouterAlive: true,
-        name: '登录',
-        avatar: require('assets/image/defaultAvatar.png'),
+        avatarImg: require('assets/image/defaultAvatar.png'),
         myList: [
           {
             icon: '<span class="c-icon-my_course"><i class="path1"></i><i class="path2"></i><i class="path3"></i></span>',
@@ -116,26 +119,33 @@
           {
             icon: '<span class="c-icon-my_set"><i class="path1"></i><i class="path2"></i></span>',
             name: '设置',
-            path: '/'
+            append: true,
+            type: 'link',
+            path: 'setting'
           },
           {
             icon: '<span class="c-icon-suggestion"><i class="path1"></i><i class="path2"></i></span>',
             name: '意见反馈',
-            path: '/'
+            append: false,
+            type: 'link',
+            path: '/feedback'
           },
           {
             icon: '<span class="c-icon-about"><i class="path1"></i><i class="path2"></i><i class="path3"></i></span>',
             name: '关于我们',
-            path: '/'
+            type: 'link',
+            append: true,
+            path: 'about'
           },
           {
             icon: '<span class="c-icon-my_share"><i class="path1"></i><i class="path2"></i></span>',
             name: '把硬见分享给朋友',
-            path: '/'
+            type: 'operate'
           }
         ],
         subPageTitle: '',
-        currView: ''
+        currView: '',
+        confirmTxt: '请先登录!'
       };
     },
     computed: {
@@ -143,7 +153,19 @@
         'productGuid',
         'userGuid',
         'userInfo'
-      ])
+      ]),
+      avatar () {
+        if (!this.userInfo) {
+          return this.avatarImg;
+        }
+        return this.userInfo.faceUrl;
+      },
+      name () {
+        if (!this.userInfo) {
+          return '登录';
+        }
+        return this.userInfo.nickname;
+      }
     },
     created () {
       if (this.userGuid) {
@@ -151,11 +173,50 @@
       }
     },
     methods: {
-      clickMy(data){
+      cancelShare () {
+
+      },
+      share (data) {
+        if (data < 0) {
+
+        } else if (data === 1) {
+
+        } else if (data === 2) {
+
+        } else if (data === 3) {
+
+        } else if (data === 4) {
+
+        }
+      },
+      confirm () {
+        this.$router.push({
+          path: '/user/login'
+        });
+      },
+      clickSystem (data) {
+        if (!this.userGuid) {
+          this.$refs.confirmsWrapper.show();
+          return false;
+        }
+        if (data.type === 'link') {
           this.$router.push({
-            path: `${data.path}`,
-            append: true
+            path: data.path,
+            append: data.append ? data.append : false
           });
+        } else {
+           this.$refs.share.show();
+        }
+      },
+      clickMy (data) {
+        if (!this.userGuid) {
+          this.$refs.confirmsWrapper.show();
+          return false;
+        }
+        this.$router.push({
+          path: `${data.path}`,
+          append: true
+        });
       },
       getInfo () {
         return this._getUserInfoByGuid().then((res) => {
@@ -165,9 +226,7 @@
               this.$refs.toptip.show();
               return;
             }
-            this.recordUserinfo(res.results);
-            this.avatar = this.userInfo.faceUrl;
-            this.name = this.userInfo.nickname;
+            this.updateUserInfo(res.results.user);
           }
         }, erro => {
           this.toptipTxt = erro.message;
@@ -181,11 +240,13 @@
         };
         return getUserInfoByGuid(params);
       },
-      ...mapMutations({
-        recordUserinfo: 'RECORD_USERINFO'
-      })
+      ...mapActions([
+        'updateUserInfo'
+      ])
     },
-    watch: {},
+    watch: {
+
+    },
     components: {
       HeaderTitle,
       swiper,
@@ -193,7 +254,9 @@
       TopTip,
       Loading,
       Scroll,
-      NoResult
+      NoResult,
+      Confirm,
+      Share
     }
   };
 </script>

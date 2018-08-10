@@ -41,7 +41,7 @@ export function getCookie (key) {
 }
 
 export function removeCookie (key) {
-  let o = JSON.parse(window.localStorage[key]);
+  let o = window.localStorage[key];
   // o = Base64.decode(o);
   if (!o) {
     return false;
@@ -84,7 +84,7 @@ export function getCookieSession (key) {
 }
 
 export function removeCookieSession (key) {
-  let o = JSON.parse(window.sessionStorage[key]);
+  let o = window.sessionStorage[key];
   if (!o) {
     return false;
   } else {

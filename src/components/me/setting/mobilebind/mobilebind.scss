@@ -1,0 +1,34 @@
+.g-mobilebind {
+  position: fixed;
+  z-index: 103;
+  left: 0;
+  right: 0;
+  top: formatVal(40,rem);
+  bottom: 0;
+  background-color: $whiteColor;
+  .base-info {
+    text-align: center;
+    .avatar {
+      margin: 0 auto;
+      @include w(100);
+      @include h(100);
+      font-size: 0;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+    .name {
+      @include fs(16);
+    }
+  }
+
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s ease;
+}

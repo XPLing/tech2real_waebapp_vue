@@ -109,10 +109,11 @@
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import Confirm from 'base/confirm/confirm';
   import TopTip from 'base/top-tip/top-tip';
-  import { mapGetters, mapMutations } from 'vuex';
+  import { mapGetters, mapMutations, mapActions } from 'vuex';
   import SendMsg from 'base/send-msg/send-msg';
   import {
     boundMobileVerify,
+    boundMobileByThirdPartUid,
     webBoundMobileByThirdPartUid,
     webRegisterAndBoundMobileByThirdPartUid,
     webLoginByThirdPartCode,
@@ -140,6 +141,7 @@
     mounted () {
     },
     created () {
+
       this.thirdPartVerify();
       this.regiterFinish = false;
     },
@@ -154,13 +156,13 @@
     methods: {
       ...mapMutations({
         recordThirdParty: 'RECORD_THIRDPARTY',
-        recordThirdPartyInfo: 'RECORD_THIRDPARTYINFO',
-        recordUserinfo: 'RECORD_USERINFO',
-        setUserguid: 'SET_USERGUID',
-        loginIn: 'LOGIN_IN'
+        recordUserinfo: 'RECORD_USERINFO'
       }),
+      ...mapActions([
+        'signIn'
+      ]),
       startSend () {
-        this.$validator.validate('backpw.phone', this.phone).then((result) => {
+        this.$validator.validate('mobilebind.phone', this.phone).then((result) => {
           if (result) {
             this._getResetPwdAuthCode().then((response) => {
               var res = response;
@@ -212,9 +214,11 @@
                   if (resp.code == ERR_OK) {
                     this.operateTip = resp.message;
                     this.$refs.confirm.show();
-                    this.$refs.sendMsgRegister.send();
                     if (resp.result != -1) {
                       this.isRegistered = true;
+                      this.$refs.sendMsg.send();
+                    } else {
+                      this.$refs.sendMsgRegister.send();
                     }
                   } else {
                     util.formErrorMsg({
@@ -270,9 +274,7 @@
               this._webBoundMobileByThirdPartUid().then((resp) => {
                 this.changeSubmitBtn(false);
                 if (resp.code == ERR_OK) {
-                  var userGuid = resp.result.guid;
-                  this.loginIn(userGuid);
-                  this.recordUserinfo(res.result);
+                  this.signIn(resp.result);
                   this.$router.push({
                     path: util.cookieOperate.getBeforeLoginPage()
                   });
@@ -319,20 +321,15 @@
               userAvatar: res.result.headimgurl || res.result.figureurl_qq_2
             });
             this.recordThirdPartyInfo(userInfo);
-            this.recordUserinfo(userInfo);
             var browser = util.common.getbrowserType();
             var isWechat = browser >= 1 && browser < 2;
+            if (isWechat) {
+              util.cookieOperate.setWeChatOpenGuid(false);
+            }
             if (res.code == 201) {
-              if (isWechat) {
-                util.cookieOperate.setWeChatOpenGuid(false);
-              }
               return;
             }
-            if (isWechat) {
-              util.cookieOperate.setWeChatOpenGuid(true);
-            }
-            this.loginIn(res.result.guid);
-            this.recordUserinfo(res.result);
+            this.signIn(userInfo);
             this.$router.push({
               path: this.beforeLoginPage
             });
@@ -368,25 +365,74 @@
           third_party: this.thirdParty
         });
       },
+      _boundMobileByThirdPartUid () {
+        var uidName = '';
+        switch (this.thirdparty){
+          case 'weixin':
+            uidName = 'unionid';
+            break;
+          case 'qq':
+            uidName = 'openid';
+            break;
+          case 'sina':
+            uidName = 'uid';
+            break;
+        }
+        var param = {
+          mobile: this.userInfo.mobile,
+          uid: this.thirdPartyInfo[uidName],
+          third_party: this.thirdParty,
+          product_guid: this.productGuid,
+          nickname: this.thirdPartyInfo.nickname,
+          code: this.verifycode
+        };
+        return boundMobileByThirdPartUid(param);
+      },
       _webBoundMobileByThirdPartUid () {
-        return webBoundMobileByThirdPartUid({
-          mobile: this.phone,
-          uid: this.thirdPartyInfo.unionid,
+        var uidName = '';
+        switch (this.thirdparty){
+          case 'weixin':
+            uidName = 'unionid';
+            break;
+          case 'qq':
+            uidName = 'openid';
+            break;
+          case 'sina':
+            uidName = 'uid';
+            break;
+        }
+        var param = {
+          mobile: this.userInfo.mobile,
+          uid: this.thirdPartyInfo[uidName],
           thirdParty: this.thirdParty,
           nickname: this.thirdPartyInfo.nickname,
           code: this.verifycode
-        });
+        };
+        return webBoundMobileByThirdPartUid(param);
       },
       _webRegisterAndBoundMobileByThirdPartUid () {
-        return webRegisterAndBoundMobileByThirdPartUid({
+        var uidName = '';
+        switch (this.thirdparty){
+          case 'weixin':
+            uidName = 'unionid';
+            break;
+          case 'qq':
+            uidName = 'openid';
+            break;
+          case 'sina':
+            uidName = 'uid';
+            break;
+        }
+        var param = {
           mobile: this.phone,
-          uid: this.thirdPartyInfo.unionid,
+          uid: this.thirdPartyInfo[uidName],
           thirdParty: this.thirdParty,
           nickname: this.thirdPartyInfo.nickname,
           faceHash: this.thirdPartyInfo.faceHash,
           code: this.verifycode,
           password: this.password
-        });
+        };
+        return webRegisterAndBoundMobileByThirdPartUid(param);
       },
       _webLoginByThirdPartCode () {
 //        this.recordThirdParty('weixin');

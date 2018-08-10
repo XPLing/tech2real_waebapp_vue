@@ -32,7 +32,9 @@ export let thirdParty = {
     appId: 'wxef3355d78cfc7a3d',
     devAppId: 'wxef3355d78cfc7a3d', // "wxa6b9e9095db32224"
     devUri: 'http://open.dev.tech2real.com/m-web/user/mobilebind',
-    uri: 'http://open.tech2real.com/m-web/user/mobilebind'
+    uri: 'http://open.tech2real.com/m-web/user/mobilebind',
+    devBindUri: 'http://open.dev.tech2real.com/m-web/me/setting/safety/bindMobile',
+    bindUri: 'http://open.tech2real.com/m-web/me/setting/safety/bindMobile'
   },
   qq: {
     url: 'https://graph.qq.com/oauth2.0/authorize',
@@ -42,7 +44,9 @@ export let thirdParty = {
     devAppId: '101367357',
     appId: '101367357',
     devUri: 'http://open.dev.tech2real.com/m-web/user/mobilebind',
-    uri: 'http://open.tech2real.com/m-web/user/mobilebind'
+    uri: 'http://open.tech2real.com/m-web/user/mobilebind',
+    devBindUri: 'http://open.dev.tech2real.com/m-web/me/setting/safety/bindMobile',
+    bindUri: 'http://open.tech2real.com/m-web/me/setting/safety/bindMobile'
   },
   weibo: {
     url: 'https://api.weibo.com/oauth2/authorize',
@@ -52,6 +56,8 @@ export let thirdParty = {
     devAppId: '182034898',
     appId: '182034898',
     devUri: 'http://open.dev.tech2real.com/m-web/user/mobilebind',
-    uri: 'http://open.dev.tech2real.com/m-web/user/mobilebind'
+    uri: 'http://open.dev.tech2real.com/m-web/user/mobilebind',
+    devBindUri: 'http://open.dev.tech2real.com/m-web/me/setting/safety/bindMobile',
+    bindUri: 'http://open.tech2real.com/m-web/me/setting/safety/bindMobile'
   }
 };

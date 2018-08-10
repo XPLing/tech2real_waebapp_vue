@@ -132,3 +132,30 @@ export function webLoginByThirdPartCode (params) {
     return Promise.reject(error);
   });
 }
+
+export function boundMobileByThirdPartUid (params) {
+  var url = debug ? '/api/boundMobileByThirdPartUid' : `/boundMobileByThirdPartUid`;
+  const data = Object.assign({}, {}, params);
+  return axios({
+    url: url,
+    method: 'post',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }).catch((err) => {
+    return Promise.reject(err);
+  });
+}
+export function unbindThirdParty (params) {
+  var url = debug ? '/api/unbindThirdParty' : `/unbindThirdParty`;
+  const data = Object.assign({}, {}, params);
+  return axios({
+    url: url,
+    method: 'post',
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }).catch((err) => {
+    return Promise.reject(err);
+  });
+}

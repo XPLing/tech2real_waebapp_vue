@@ -60,6 +60,13 @@ const MyCollection = () => import(/* webpackChunkName: "MyCollection" */ 'compon
 const MyTopic = () => import(/* webpackChunkName: "MyTopic" */ 'components/me/topic/myTopic');
 const MyClub = () => import(/* webpackChunkName: "MyClub" */ 'components/me/club/myClub');
 const MyMessage = () => import(/* webpackChunkName: "MyMessage" */ 'components/me/message/myMessage');
+const About = () => import(/* webpackChunkName: "About" */ 'components/me/about/about');
+const Protocol = () => import(/* webpackChunkName: "Protocol" */ 'components/me/protocol/protocol');
+const Setting = () => import(/* webpackChunkName: "Setting" */ 'components/me/setting/setting');
+const SettingASafety = () => import(/* webpackChunkName: "SettingASafety" */ 'components/me/setting/account/safety');
+const SettingAManage = () => import(/* webpackChunkName: "SettingAManage" */ 'components/me/setting/account/manage');
+const ResetPW = () => import(/* webpackChunkName: "ResetPW" */ 'components/me/setting/account/resetPW');
+const MyAccountBindMobile = () => import(/* webpackChunkName: "MyAccountBindMobile" */ 'components/me/setting/mobilebind/mobilebind');
 const Login = () => import(/* webpackChunkName: "login" */ 'components/user/login/login');
 const User = () => import(/* webpackChunkName: "user" */ 'components/user/user');
 const Register = () => import(/* webpackChunkName: "register" */ 'components/user/register/register');
@@ -350,6 +357,38 @@ const Router = new VueRouter({
         {
           path: 'message',
           component: MyMessage
+        },
+        {
+          path: 'about',
+          component: About
+        },
+        {
+          path: 'protocol',
+          component: Protocol
+        },
+        {
+          path: 'setting',
+          component: Setting,
+          children: [
+            {
+              path: 'safety',
+              component: SettingASafety,
+              children: [
+                {
+                  path: 'resetPW',
+                  component: ResetPW
+                },
+                {
+                  path: 'bindMobile',
+                  component: MyAccountBindMobile
+                }
+              ]
+            },
+            {
+              path: 'manage',
+              component: SettingAManage
+            }
+          ]
         }
       ]
     },

@@ -1,9 +1,9 @@
 /**
  * Created by XPL on 2018/3/21.
  */
+import axios from './axios';
 var express = require('express');
 var apiRouter = express.Router();
-var axios = require('./axios_modules');
 var config = require('../../config');
 var bodyParser = require('body-parser');
 var queryString = require('querystring');
@@ -802,6 +802,33 @@ apiRouter.get('/webLoginByThirdPartCode', function (req, res) {
     res.json(e);
   });
 });
+apiRouter.post('/boundMobileByThirdPartUid', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/boundMobileByThirdPartUid`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/unbindThirdParty', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/unbindThirdParty`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
 
 /* 活动 */
 apiRouter.get('/listDiscoverArticles', function (req, res) {
@@ -1161,6 +1188,7 @@ apiRouter.post('/listFavoriteArticles', jsonParser, function (req, res) {
     res.json(e);
   });
 });
+
 apiRouter.post('/listMyActivities', jsonParser, function (req, res) {
   var url = `${config.dev.apiproxy}/listMyActivities`;
   axios({
@@ -1206,6 +1234,34 @@ apiRouter.post('/listNotifiesByType', jsonParser, function (req, res) {
     method: 'post',
     url: url,
     data: req.body
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+
+/* 账号 */
+apiRouter.post('/getPrivileged', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/getPrivileged`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
+  }).then((response) => {
+    res.json(response.data);
+  }, (e) => {
+    console.log(e);
+    res.json(e);
+  });
+});
+apiRouter.post('/resetUserPassWord', jsonParser, function (req, res) {
+  var url = `${config.dev.apiproxy}/resetUserPassWord`;
+  axios({
+    method: 'post',
+    url: url,
+    params: req.query
   }).then((response) => {
     res.json(response.data);
   }, (e) => {

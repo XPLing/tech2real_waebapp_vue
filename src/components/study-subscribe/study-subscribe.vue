@@ -6,7 +6,7 @@
         <div class="g-recommend course">
           <ul class="list" v-if="requestScrollDataList">
             <subscribe-item :data="item" v-for="(item, index) in requestScrollDataList" :key="index"
-                         @selectItem="selectItem" @details="courseDetails"></subscribe-item>
+                            @selectItem="selectItem" @details="courseDetails"></subscribe-item>
           </ul>
           <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
         </div>
@@ -50,7 +50,8 @@
         noResult: '加载中。。。',
         noMoreStr: '没有更多了~',
         requestPage: 1,
-        first: true
+        first: true,
+        axiosSource: {}
       };
     },
     computed: {
@@ -61,6 +62,7 @@
     },
     created () {
       this.requestScrollData();
+
     },
     methods: {
       reload () {
@@ -84,6 +86,9 @@
         if (this.first) {
           this.first = false;
         }
+      },
+      cancelRequest (msg) {
+        this.axiosSource.cancel(msg || '取消请求');
       },
       requestScrollData () {
         if (this.noMore) {
@@ -115,10 +120,13 @@
                 });
               }
             }
-          }, erro => {
-            this.$refs.scroll.finishPullUp();
-            this.toptipTxt = erro.message;
-            this.$refs.toptip.show();
+          }).catch(erro => {
+            console.log(erro);
+            if (!erro.isCancel) {
+              this.$refs.scroll.finishPullUp();
+              this.toptipTxt = erro.message;
+              this.$refs.toptip.show();
+            }
           });
         }
       },
@@ -129,8 +137,11 @@
           version: 1,
           userGuid: this.userGuid
         };
-        return listMyCourses(param);
+        return listMyCourses(param, this.axiosSource);
       }
+    },
+    beforeDestroy () {
+      this.cancelRequest();
     },
     watch: {
       requestScrollDataList () {

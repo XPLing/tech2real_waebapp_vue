@@ -64,7 +64,7 @@
   import { thirdParty, ERR_OK } from 'api/config';
   import { Validator } from 'vee-validate';
   import { webLoginByPhone } from 'api/login';
-  import { mapMutations, mapGetters } from 'vuex';
+  import { mapMutations, mapGetters, mapActions } from 'vuex';
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import * as util from 'assets/js/util';
 
@@ -117,11 +117,9 @@
       ])
     },
     methods: {
-      ...mapMutations({
-        recordUserinfo: 'RECORD_USERINFO',
-        setUserguid: 'SET_USERGUID',
-        loginIn: 'LOGIN_IN'
-      }),
+      ...mapActions([
+        'signIn'
+      ]),
       _login () {
         this.changeSubmitBtn(true, '登录中...');
         var data = {
@@ -131,9 +129,7 @@
         webLoginByPhone(data).then((res) => {
           if (res.code == ERR_OK) {
             this.changeSubmitBtn(false, '登录');
-            var userGuid = res.result.guid;
-            this.recordUserinfo(res.result);
-            this.loginIn(userGuid);
+            this.signIn(res.result);
             this.$router.push({
               path: this.beforeLoginPage
             });

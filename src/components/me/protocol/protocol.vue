@@ -1,10 +1,21 @@
 <template>
-  <div class="g-info-new">
-    <ul class="list">
-      <course-item :course="item" v-for="(item, index) in list" :key="index"
-                   @selectcourse="selectcourse"></course-item>
-    </ul>
-  </div>
+  <transition name="slide">
+    <div class="g-about">
+      <header class="g-header">
+        <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
+      </header>
+      <div class="g-main">
+        <scroll ref="scroll">
+          <div>
+          </div>
+        </scroll>
+      </div>
+      <top-tip ref="toptip" :delay="10000">
+        <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
+      </top-tip>
+      <router-view v-if="isRouterAlive"></router-view>
+    </div>
+  </transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -17,24 +28,21 @@
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import Loading from 'base/loading/loading';
-  import CourseItem from 'base/course-item/course-item';
+  import Confirm from 'base/confirm/confirm';
   import NoResult from 'base/no-result/no-result';
-  import {} from 'api/info';
-  import listBannersByLocationType from 'api/banner';
+
   export default {
-    data () {
+    provide () {
       return {
-        toptipTxt: '',
-        list: null,
-        requestMoreFlag: false,
-        noMore: false,
-        noResult: '加载中。。。',
-        noMoreStr: '没有更多了~',
-        page: 1
+        reload: this.reload
       };
     },
-    created(){
-
+    data () {
+      return {
+        pageTitle: '用户服务协议',
+        isRouterAlive: true,
+        toptipTxt: ''
+      };
     },
     computed: {
       ...mapGetters([
@@ -42,36 +50,26 @@
         'userGuid'
       ])
     },
+    created () {
+    },
     methods: {
-      changeTag(item, index){
-        this.tagCurrentIndex = index;
-      },
-      requestInfo () {
 
-      }
     },
     components: {
       HeaderTitle,
       swiper,
       swiperSlide,
+      Confirm,
       TopTip,
       Loading,
       Scroll,
-      CourseItem,
       NoResult
     }
   };
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "~assets/scss/compile";
-  @import "./new";
-
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
-
-  .fade-enter-active, .fade-leave-active {
-    transition: all .3s ease;
-  }
+  @import "./protocol";
 </style>

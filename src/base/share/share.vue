@@ -5,7 +5,7 @@
       <transition name="drop-down">
         <div v-show="showFlag" class="share-wrapper">
           <div class="cont">
-            <div class="to-clubs" @click="share(-1)">
+            <div v-if="!noSelf" class="to-clubs" @click="share(-1)">
               <div class="avatar">
                 <img src="./clubs.png">
               </div>
@@ -38,6 +38,10 @@
       data: {
         type: Object,
         default: null
+      },
+      noSelf: {
+        type: Boolean,
+        default: false
       }
     },
     data () {
@@ -49,19 +53,19 @@
 
     },
     methods: {
-      hide(){
+      hide () {
         this.showFlag = false;
       },
-      show(){
+      show () {
         this.showFlag = true;
       },
-      cancel(){
+      cancel () {
         this.hide();
-        this.$emit('cancel')
+        this.$emit('cancel');
       },
-      share(data){
+      share (data) {
         this.hide();
-        this.$emit('share', data)
+        this.$emit('share', data);
       }
     }
   };

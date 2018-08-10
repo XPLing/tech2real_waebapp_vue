@@ -3,7 +3,7 @@
  */
 var express = require('express');
 var apiRouter = express.Router();
-var axios = require('axios');
+var axios = require('./axios');
 var cancel;
 let pending = []; //  声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let CancelToken = axios.CancelToken;
