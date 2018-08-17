@@ -170,7 +170,7 @@
             if (util.browser.versions.mobile) {
               url = thirdParty.wechat.webUrl;
             }
-            href = url + '?appid=' + thirdParty.wechat[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=snsapi_login&state=' + util.uuid(8, 16) + '#wechat_redirect';
+            href = url + '?appid=' + thirdParty.wechat[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=snsapi_userinfo&state=' + util.uuid(8, 16) + '#wechat_redirect';
             break;
           case 'qq':
             url = thirdParty.qq.url;

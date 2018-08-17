@@ -63,6 +63,7 @@
   import NoResult from 'base/no-result/no-result';
   import Confirm from 'base/confirm/confirm';
   import Share from 'base/share/share';
+  import wx from 'weixin-js-sdk';
 
   export default {
     data () {

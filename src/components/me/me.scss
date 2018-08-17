@@ -6,7 +6,9 @@
   top: 0;
   bottom: formatVal(50,rem);
   background: $color-shadow-nav;
-
+  /deep/ .c-share{
+    bottom: formatVal(50,rem);
+  }
   .g-header {
     display: flex;
     justify-content: flex-end;

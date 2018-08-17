@@ -33,7 +33,8 @@
     "vue-lazyload": "^1.2.2",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1",
-    "vux": "^2.9.2"
+    "vux": "^2.9.2",
+    "weixin-js-sdk": "^1.3.3"
   },
   "devDependencies": {
     "vux-loader": "^1.0.56",

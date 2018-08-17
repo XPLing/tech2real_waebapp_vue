@@ -1,9 +1,9 @@
 /**
  * Created by XPL on 2018/3/21.
  */
-import axios from './axios';
 var express = require('express');
 var apiRouter = express.Router();
+var axios = require('./axios_modules');
 var config = require('../../config');
 var bodyParser = require('body-parser');
 var queryString = require('querystring');

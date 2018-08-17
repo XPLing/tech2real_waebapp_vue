@@ -22,6 +22,11 @@
           </li>
         </ul>
         <form-tip-error :tip-name="'mobilebind.totalMsg'"></form-tip-error>
+        <div class="btnbox">
+          <button type="button" class="submit submit-hook needsclick" data-type="register-next"
+                  @click="validateForm('mobilebind')" :class="{'disable':isActiving}">{{btnText}}
+          </button>
+        </div>
       </form>
       <top-tip ref="toptip" :is-auto-hide="topTipAutoHide">
         <p class="error" v-show="toptipTxt">
@@ -165,7 +170,7 @@
             this._boundMobileByThirdPartUid().then((resp) => {
               this.changeSubmitBtn(false);
               if (resp.code == ERR_OK) {
-                this.updateUserInfo(res.result);
+                this.updateUserInfo(resp.result);
                 this.$router.push({
                   path: util.cookieOperate.getBeforeLoginPage()
                 });
@@ -251,7 +256,7 @@
       },
       _boundMobileByThirdPartUid () {
         var uidName = '';
-        switch (this.thirdparty){
+        switch (this.thirdParty){
           case 'weixin':
             uidName = 'unionid';
             break;
@@ -264,10 +269,10 @@
         }
         var param = {
           mobile: this.userInfo.mobile,
-          uid: this.thirdPartyInfo[uidName],
+          uid: this.thirdPartyInfo[this.thirdParty][uidName],
           third_party: this.thirdParty,
           product_guid: this.productGuid,
-          nickname: this.thirdPartyInfo.nickname,
+          nickname: this.thirdPartyInfo[this.thirdParty].nickname,
           code: this.verifycode
         };
         return boundMobileByThirdPartUid(param);
@@ -287,9 +292,9 @@
         }
         var param = {
           mobile: this.userInfo.mobile,
-          uid: this.thirdPartyInfo[uidName],
+          uid: this.thirdPartyInfo[this.thirdParty][uidName],
           thirdParty: this.thirdParty,
-          nickname: this.thirdPartyInfo.nickname,
+          nickname: this.thirdPartyInfo[this.thirdParty].nickname,
           code: this.verifycode
         };
         return webBoundMobileByThirdPartUid(param);

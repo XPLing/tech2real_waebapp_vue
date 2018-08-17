@@ -29,8 +29,8 @@ export let thirdParty = {
     webUrl: 'https://open.weixin.qq.com/connect/oauth2/authorize',
     reUrl: 'https://api.weixin.qq.com/sns/oauth2/refresh_token',
     webReUrl: 'https://api.weixin.qq.com/sns/oauth2/refresh_token',
-    appId: 'wxef3355d78cfc7a3d',
-    devAppId: 'wxef3355d78cfc7a3d', // "wxa6b9e9095db32224"
+    appId: 'wxb7044f7a7d3f8a78', // wxef3355d78cfc7a3d
+    devAppId: 'wxb7044f7a7d3f8a78', // "wxa6b9e9095db32224"
     devUri: 'http://open.dev.tech2real.com/m-web/user/mobilebind',
     uri: 'http://open.tech2real.com/m-web/user/mobilebind',
     devBindUri: 'http://open.dev.tech2real.com/m-web/me/setting/safety/bindMobile',
@@ -55,9 +55,9 @@ export let thirdParty = {
     webReUrl: 'https://api.weixin.qq.com/sns/oauth2/refresh_token',
     devAppId: '182034898',
     appId: '182034898',
-    devUri: 'http://open.dev.tech2real.com/m-web/user/mobilebind',
-    uri: 'http://open.dev.tech2real.com/m-web/user/mobilebind',
-    devBindUri: 'http://open.dev.tech2real.com/m-web/me/setting/safety/bindMobile',
+    devUri: 'http://weibo.tech2real.com/m-web/user/mobilebind',
+    uri: 'http://weibo.tech2real.com/m-web/user/mobilebind',
+    devBindUri: 'http://weibo.tech2real.com/m-web/me/setting/safety/bindMobile',
     bindUri: 'http://open.tech2real.com/m-web/me/setting/safety/bindMobile'
   }
 };

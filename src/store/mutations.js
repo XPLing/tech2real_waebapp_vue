@@ -50,7 +50,7 @@ const mutations = {
   },
   // 记录登录第三方平台信息
   [types.RECORD_THIRDPARTYINFO] (state, val) {
-    state.thirdPartyInfo = val;
+    state.thirdPartyInfo[state.thirdParty] = val;
   },
   // 记录进入登录流程之前的页面路径 待废除
   [types.SET_BEFORELOGINPAGE] (state, val) {

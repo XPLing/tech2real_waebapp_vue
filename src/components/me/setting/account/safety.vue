@@ -37,6 +37,7 @@
           </div>
         </scroll>
       </div>
+      <confirm :text="operateTip" ref="confirm" @confirm="confirm"></confirm>
       <loading ref="loading"></loading>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
@@ -58,6 +59,7 @@
   import Loading from 'base/loading/loading';
   import Confirm from 'base/confirm/confirm';
   import NoResult from 'base/no-result/no-result';
+  import { unbindThirdParty } from 'api/login';
 
   export default {
     provide () {
@@ -70,9 +72,10 @@
         pageTitle: '设置',
         isRouterAlive: true,
         toptipTxt: '',
+        operateTip: '确定解绑？',
         vList: [
           {
-            type: 'wechat',
+            type: 'weixin',
             name: '微信',
             icon: require('./wechat.png'),
             isBand: false,
@@ -108,6 +111,22 @@
       }
     },
     methods: {
+      confirm () {
+        var type = this.currentBandVendor.type;
+        this._unbindThirdParty(type).then(res => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return false;
+            }
+            this.updateUserInfo(res.result);
+          }
+        }).catch(erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+      },
       thirdPartLogin (type) {
         var url = '', uri = '', href = '';
         var uriKey = 'bindUri', appIdKey = 'appId', currentUrl = window.location.href;
@@ -117,13 +136,13 @@
         }
         uriKey = 'devBindUri';
         switch (type) {
-          case 'wechat':
+          case 'weixin':
             url = thirdParty.wechat.url;
             uri = encodeURIComponent(thirdParty.wechat[uriKey] + '?thridparty=weixin');
             if (util.browser.versions.mobile) {
               url = thirdParty.wechat.webUrl;
             }
-            href = url + '?appid=' + thirdParty.wechat[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=snsapi_login&state=' + util.uuid(8, 16) + '#wechat_redirect';
+            href = url + '?appid=' + thirdParty.wechat[appIdKey] + '&redirect_uri=' + uri + '&response_type=code&scope=snsapi_userinfo&state=' + util.uuid(8, 16) + '#wechat_redirect';
             break;
           case 'qq':
             url = thirdParty.qq.url;
@@ -146,13 +165,19 @@
         window.location.href = href;
       },
       bandVendor (data) {
-        // this.$refs.loading.show();
-        this.updataBeforeLoginPage(this.$route.path);
-         this.thirdPartLogin(data.type);
+        this.currentBandVendor = data;
+        if (data.isBand) {
+          this.$refs.confirm.show();
+        } else {
+          // this.$refs.loading.show();
+          this.updataBeforeLoginPage(this.$route.path);
+          this.thirdPartLogin(data.type);
 //        this.$router.push({
 //          path: 'bindMobile',
 //          append: true
 //        });
+        }
+
       },
       resetVendorDate () {
         for (var i = 0, len = this.vList.length; i < len; i++) {
@@ -169,6 +194,15 @@
           path: 'resetPW',
           append: true
         });
+      },
+      _unbindThirdParty (type) {
+        var param = {
+          third_party: type,
+          product_guid: this.productGuid,
+          user_guid: this.userGuid,
+          clientType: 1
+        };
+        return unbindThirdParty(param);
       },
       ...mapActions([
         'updateUserInfo'

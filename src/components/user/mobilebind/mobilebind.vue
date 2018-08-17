@@ -7,11 +7,12 @@
       </p>
     </top-tip>
     <transition name="fade">
-      <div class="base-info" v-if="thirdPartyInfo && thirdPartyInfo.userAvatar">
+      <div class="base-info" v-if="thirdPartyInfo[thirdParty] && thirdPartyInfo[thirdParty].userAvatar">
         <p class="avatar">
-          <img :src="thirdPartyInfo.userAvatar" :alt="thirdPartyInfo.nickname">
+          <img :src="thirdPartyInfo[thirdParty].userAvatar"
+               :alt="thirdPartyInfo[thirdParty].nickname || thirdPartyInfo[thirdParty].name">
         </p>
-        <p class="name">{{thirdPartyInfo.nickname}}</p>
+        <p class="name">{{thirdPartyInfo[thirdParty].nickname || thirdPartyInfo[thirdParty].name}}</p>
       </div>
     </transition>
 
@@ -156,7 +157,7 @@
     methods: {
       ...mapMutations({
         recordThirdParty: 'RECORD_THIRDPARTY',
-        recordUserinfo: 'RECORD_USERINFO'
+        recordThirdPartyInfo: 'RECORD_THIRDPARTYINFO'
       }),
       ...mapActions([
         'signIn'
@@ -203,6 +204,9 @@
         }
       },
       validateForm (scope) {
+        if (this.isActiving) {
+          return false;
+        }
         this.$validator.validateAll(scope).then((res) => {
           if (res) {
             this.changeSubmitBtn(true);
@@ -210,27 +214,27 @@
               this._boundMobileVerify().then((resp) => {
                 this.passsFirst = true;
                 this.changeSubmitBtn(false);
-                this.$nextTick(() => {
-                  if (resp.code == ERR_OK) {
-                    this.operateTip = resp.message;
-                    this.$refs.confirm.show();
-                    if (resp.result != -1) {
-                      this.isRegistered = true;
+                if (resp.code == ERR_OK) {
+                  this.operateTip = resp.message;
+                  this.$refs.confirm.show();
+                  if (resp.result != -1) {
+                    this.isRegistered = true;
+                    this.$nextTick(() => {
                       this.$refs.sendMsg.send();
-                    } else {
-                      this.$refs.sendMsgRegister.send();
-                    }
-                  } else {
-                    util.formErrorMsg({
-                      errorObj: this.errors,
-                      name: 'totalMsg',
-                      message: resp.message,
-                      rule: undefined,
-                      scope: this.formName,
-                      interval: 2000
                     });
+                  } else {
+                    this.$refs.sendMsgRegister.send();
                   }
-                });
+                } else {
+                  util.formErrorMsg({
+                    errorObj: this.errors,
+                    name: 'totalMsg',
+                    message: resp.message,
+                    rule: undefined,
+                    scope: this.formName,
+                    interval: 2000
+                  });
+                }
               }, error => {
                 this.changeSubmitBtn(false);
                 util.formErrorMsg({
@@ -271,7 +275,7 @@
                 });
               });
             } else if (this.passsFirst && this.isRegistered) {
-              this._webBoundMobileByThirdPartUid().then((resp) => {
+              this._boundMobileByThirdPartUid().then((resp) => {
                 this.changeSubmitBtn(false);
                 if (resp.code == ERR_OK) {
                   this.signIn(resp.result);
@@ -318,7 +322,7 @@
         return this._webLoginByThirdPartCode().then((res) => {
           if (res.code == ERR_OK || res.code == 201) {
             var userInfo = Object.assign({}, res.result, {
-              userAvatar: res.result.headimgurl || res.result.figureurl_qq_2
+              userAvatar: res.result.headimgurl || res.result.figureurl_qq_2 || res.result.avatar_hd
             });
             this.recordThirdPartyInfo(userInfo);
             var browser = util.common.getbrowserType();
@@ -327,6 +331,7 @@
               util.cookieOperate.setWeChatOpenGuid(false);
             }
             if (res.code == 201) {
+
               return;
             }
             this.signIn(userInfo);
@@ -367,7 +372,7 @@
       },
       _boundMobileByThirdPartUid () {
         var uidName = '';
-        switch (this.thirdparty){
+        switch (this.thirdparty) {
           case 'weixin':
             uidName = 'unionid';
             break;
@@ -375,22 +380,22 @@
             uidName = 'openid';
             break;
           case 'sina':
-            uidName = 'uid';
+            uidName = 'openid';
             break;
         }
         var param = {
-          mobile: this.userInfo.mobile,
-          uid: this.thirdPartyInfo[uidName],
+          mobile: this.phone,
+          uid: this.thirdPartyInfo[this.thirdParty][uidName],
           third_party: this.thirdParty,
           product_guid: this.productGuid,
-          nickname: this.thirdPartyInfo.nickname,
+          nickname: this.thirdPartyInfo[this.thirdParty][thirdParty].nickname,
           code: this.verifycode
         };
         return boundMobileByThirdPartUid(param);
       },
       _webBoundMobileByThirdPartUid () {
         var uidName = '';
-        switch (this.thirdparty){
+        switch (this.thirdparty) {
           case 'weixin':
             uidName = 'unionid';
             break;
@@ -398,21 +403,21 @@
             uidName = 'openid';
             break;
           case 'sina':
-            uidName = 'uid';
+            uidName = 'openid';
             break;
         }
         var param = {
-          mobile: this.userInfo.mobile,
-          uid: this.thirdPartyInfo[uidName],
+          mobile: this.phone,
+          uid: this.thirdPartyInfo[this.thirdParty][uidName],
           thirdParty: this.thirdParty,
-          nickname: this.thirdPartyInfo.nickname,
+          nickname: this.thirdPartyInfo[this.thirdParty].nickname,
           code: this.verifycode
         };
         return webBoundMobileByThirdPartUid(param);
       },
       _webRegisterAndBoundMobileByThirdPartUid () {
         var uidName = '';
-        switch (this.thirdparty){
+        switch (this.thirdparty) {
           case 'weixin':
             uidName = 'unionid';
             break;
@@ -425,10 +430,10 @@
         }
         var param = {
           mobile: this.phone,
-          uid: this.thirdPartyInfo[uidName],
+          uid: this.thirdPartyInfo[this.thirdParty][uidName],
           thirdParty: this.thirdParty,
-          nickname: this.thirdPartyInfo.nickname,
-          faceHash: this.thirdPartyInfo.faceHash,
+          nickname: this.thirdPartyInfo[this.thirdParty].nickname,
+          faceHash: this.thirdPartyInfo[this.thirdParty].faceHash,
           code: this.verifycode,
           password: this.password
         };

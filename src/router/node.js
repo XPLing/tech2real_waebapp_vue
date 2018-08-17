@@ -47,41 +47,42 @@ const TestC = () => import(/* webpackChunkName: "testC" */ 'components/testC/me'
 
 Vue.use(VueRouter);
 const Router = new VueRouter({
-    linkActiveClass: 'active',
-    mode: 'history',
-    routes: [
+  linkActiveClass: 'active',
+  mode: 'history',
+  base: '/node',
+  routes: [
+    {
+      path: '/testC',
+      component: TestC,
+      children: [
         {
-            path: routerPrefix + '/info',
-            component: TestC,
-            children: [
-                {
-                    path: 'info-detail',
-                    component: TestC
-                }
-            ]
-        },
-        {
-            path: '*',
-            redirect: routerPrefix + '/info'
+          path: 'info-detail',
+          component: TestC
         }
-    ]
+      ]
+    },
+    {
+      path: '*',
+      redirect: '/testC'
+    }
+  ]
 });
 Router.beforeEach((to, form, next) => {
-    // console.log(Router.app.$options.store.state.userGuid);
-    // console.log(to.matched);
-    // let isLogin = Router.app.$options.store.state.userGuid;
-    // if (to.matched.some((record) => record.meta.requireLogin)) {
-    //   if (!isLogin) {
-    //     next();
-    //     Router.push({
-    //       path: '/user/login'
-    //     });
-    //     // next();
-    //   } else {
-    //     next();
-    //   }
-    // }
-    next();
+  // console.log(Router.app.$options.store.state.userGuid);
+  // console.log(to.matched);
+  // let isLogin = Router.app.$options.store.state.userGuid;
+  // if (to.matched.some((record) => record.meta.requireLogin)) {
+  //   if (!isLogin) {
+  //     next();
+  //     Router.push({
+  //       path: '/user/login'
+  //     });
+  //     // next();
+  //   } else {
+  //     next();
+  //   }
+  // }
+  next();
 });
 
 export default Router;
