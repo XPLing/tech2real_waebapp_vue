@@ -24,6 +24,7 @@ const InfoDetailCommentItem = () => import(/* webpackChunkName: "InfoDetailComme
 const InfoDetailCommentForm = () => import(/* webpackChunkName: "InfoDetailCommentForm" */ 'components/info/detail/commentForm/commentForm');
 const Train = () => import(/* webpackChunkName: "train" */ 'components/study/study');
 const TrainDetail = () => import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail');
+const CourseList = () => import(/* webpackChunkName: "courseList" */ 'components/train/course/courselist');
 const courseEvaluateForm = () => import(/* webpackChunkName: "courseEvaluateForm" */ 'components/train-detail/evaluateForm/evaluateForm');
 const TeacherDetail = () => import(/* webpackChunkName: "teacherDetail" */ 'components/teacher-detail/teacher-detail');
 const TeacherList = () => import(/* webpackChunkName: "teacherList" */ 'components/teacherlist/teacherlist');
@@ -54,6 +55,7 @@ const ActivityDetailCommentItem = () => import(/* webpackChunkName: "ActivityDet
 const ActivityDetailCommentForm = () => import(/* webpackChunkName: "ActivityDetailCommentForm" */ 'components/activity/detail/commentForm/commentForm');
 const TicketList = () => import(/* webpackChunkName: "TicketList" */ 'components/activity/detail/ticket/ticketList');
 const Me = () => import(/* webpackChunkName: "me" */ 'components/me/me');
+const MyInfo = () => import(/* webpackChunkName: "MyInfo" */ 'components/me/info/myInfo');
 const MyCourse = () => import(/* webpackChunkName: "MyCourse" */ 'components/me/course/myCourse');
 const MyActivity = () => import(/* webpackChunkName: "MyActivity" */ 'components/me/activity/myActivity');
 const MyCollection = () => import(/* webpackChunkName: "MyCollection" */ 'components/me/collection/myCollection');
@@ -75,6 +77,7 @@ const MobileBind = () => import(/* webpackChunkName: "mobileBind" */ 'components
 const FeedBack = () => import(/* webpackChunkName: "feedback" */ 'components/feedback/feedback');
 const Clubs = () => import(/* webpackChunkName: "Clubs" */ 'components/club/clubs');
 const ClubDetail = () => import(/* webpackChunkName: "ClubDetail" */ 'components/club/detail/clubDetail');
+const payResult = () => import(/* webpackChunkName: "payResult" */ 'components/payResult/payResult');
 
 Vue.use(VueRouter);
 const Router = new VueRouter({
@@ -82,10 +85,6 @@ const Router = new VueRouter({
   mode: 'history',
   base: '/m-web/',
   routes: [
-    {
-      path: '/',
-      redirect: routerPrefix + '/info'
-    },
     {
       path: routerPrefix + '/',
       redirect: routerPrefix + '/info'
@@ -161,6 +160,11 @@ const Router = new VueRouter({
       component: Train,
       children: [
         {
+          path: 'applypay',
+          alias: '/pay/courseApplypay',
+          component: CourseApplyPay
+        },
+        {
           path: ':id(\\d+)',
           component: TrainDetail,
           name: 'trainDetail',
@@ -187,10 +191,13 @@ const Router = new VueRouter({
             },
             {
               path: 'applypay',
-              name: 'trainDetailApply_applypay',
               component: CourseApplyPay
             }
           ]
+        },
+        {
+          path: 'courselist',
+          component: CourseList
         },
         {
           path: 'teacherdetail/:id',
@@ -244,6 +251,11 @@ const Router = new VueRouter({
           path: 'list',
           component: ActivityList,
           children: [
+            {
+              path: 'applypay',
+              component: ApplyPay,
+              alias: '/pay/activityApplyPay'
+            },
             {
               path: 'detail/:id(\\d+)',
               component: ActivityDetail,
@@ -334,6 +346,10 @@ const Router = new VueRouter({
       path: routerPrefix + '/me',
       component: Me,
       children: [
+        {
+          path: 'info',
+          component: MyInfo
+        },
         {
           path: 'course',
           component: MyCourse
@@ -433,12 +449,12 @@ const Router = new VueRouter({
       component: ApplyResult
     },
     {
-      path: '/applyinfocollect/:id(\\d+)',
-      component: ApplyInfoCollect
+      path: '/payresult',
+      component: payResult
     },
     {
-      path: '/applypay',
-      component: ApplyPay
+      path: '/applyinfocollect/:id(\\d+)',
+      component: ApplyInfoCollect
     },
     {
       path: '*',

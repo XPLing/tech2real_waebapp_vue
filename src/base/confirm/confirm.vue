@@ -1,12 +1,12 @@
 <template>
   <transition name="confirm-fade">
     <div class="confirm" v-show="showFlag">
-      <div class="confirm-wrapper">
+      <div class="confirm-wrapper" :class="layoutType==='vertical'?'vertical':'horizontal'">
         <div class="confirm-content">
           <p class="text">{{text}}</p>
           <div class="operate">
-            <div v-if="!isDialog" @click="cancel" class="operate-btn left">{{cancelBtnText}}</div>
-            <div @click="confirm" class="operate-btn">{{confirmBtnText}}</div>
+            <div v-if="!isDialog" @click="cancel" class="operate-btn btn-cancel">{{cancelBtnText}}</div>
+            <div @click="confirm" class="operate-btn btn-confirm">{{confirmBtnText}}</div>
           </div>
         </div>
       </div>
@@ -32,6 +32,10 @@
       isDialog: {
         type: Boolean,
         default: false
+      },
+      layoutType: {
+        type: String,
+        default: 'horizontal'
       }
     },
     data () {

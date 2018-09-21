@@ -71,12 +71,14 @@
           <span class="name">评论 <i v-if="viewArticle && viewArticle.commentCount>0">({{viewArticle.commentCount}})</i> </span>
         </router-link>
       </div>
-      <share @cancel="cancelShare" @share="share" ref="share"></share>
+      <share @cancel="cancelShare" @share="share" :share-info="shareInfo" ref="share"></share>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
       <back-top ref="backTop" @backTop="backTop"></back-top>
-      <router-view @update="updateCommunity"></router-view>
+      <keep-alive>
+        <router-view @update="updateCommunity"></router-view>
+      </keep-alive>
     </div>
   </transition>
 
@@ -87,7 +89,7 @@
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import Scroll from 'base/scroll/scroll';
   import HeaderTitle from 'components/header-title/header-title';
-  import { ERR_OK } from 'api/config';
+  import { ERR_OK, share } from 'api/config';
   import * as util from 'assets/js/util';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -137,10 +139,12 @@
         communityList: null,
         viewArticle: null,
         scrollY: 0,
-        articleId: 0
+        articleId: 0,
+        shareInfo: null
       };
     },
     created () {
+
       this.articleId = this.$route.params.articleId;
       this.likeFlag = true;
       this._getArticleById().then((res) => {
@@ -152,6 +156,11 @@
           }
           this.articleInfo = res.result;
           this.pageTitle = res.result.listTitle;
+          this.shareInfo = Object.assign({}, share, {
+            url: window.location.href,
+            cover: this.articleInfo.pictureUrl,
+            summary: this.articleInfo.listTitle
+          });
           this._getClubByClubGuid().then((res) => {
             if (res.code) {
               if (res.code != ERR_OK) {

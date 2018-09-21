@@ -141,18 +141,22 @@
               this.$emit('changeapplyres', res.result);
               submitBtn.changeSubmitBtn(false);
               this.$refs.loading.hide();
-              if (res.code == ERR_OK) {
+              if (res.code == '201') {
+                this.$emit('updateResult', res.result);
+                this.$router.replace({
+                  path: `/pay/courseApplypay`,
+                  query: {
+                    applyTargetId: this.applyTargetID,
+                    applyId: res.result.courseApply.id
+                  }
+                });
+              } else if (/2.*/.test(res.code)) {
                 this.$emit('updateResult', res.result);
                 this.$router.replace({
                   path: `/train/${this.applyTargetID}/applyresult`,
                   query: {
-                    applyId: res.result.id
+                    applyId: res.result.courseApply.id
                   }
-                });
-              } else if (res.code == '201') {
-                this.$emit('updateResult', res.result);
-                this.$router.replace({
-                  path: `/train/${this.applyTargetID}/applypay`
                 });
               } else {
                 submitBtn.changeSubmitBtn(false);

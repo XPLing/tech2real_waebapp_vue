@@ -7,12 +7,18 @@ $color-green: #7ED321;
   right: 0;
   top: formatVal(40,rem);
   bottom: formatVal(50,rem);
+  background-color: $color-background-gray;
   .g-swiper /deep/ .swiper-pagination-bullet-active {
     background: $color-theme;
   }
   .g-swiper /deep/ .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{
     line-height: 0;
     bottom: formatVal(20,rem);
+  }
+  .chunk{
+    &+.chunk{
+      margin-top: formatVal(10,rem);
+    }
   }
   .g-header{
 
@@ -32,6 +38,7 @@ $color-green: #7ED321;
   }
   .g-tagList{
     padding: formatVal(18,rem) formatVal(14,rem);
+    background-color: $whiteColor;
     .list{
       display: flex;
       justify-content: space-between;
@@ -60,13 +67,14 @@ $color-green: #7ED321;
     }
   }
   .g-recommend{
-    padding: formatVal(18,rem) formatVal(14,rem);
+    padding: formatVal(24,rem) formatVal(12,rem) 0;
+    background-color: $whiteColor;
     .titlebox{
       position: relative;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: formatVal(15,rem);
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: formatVal(20,rem);
       &.red{
         .icon{
           span{
@@ -99,28 +107,32 @@ $color-green: #7ED321;
         }
       }
       .title{
-        @include fs(16);
-        margin: 0 formatVal(10,rem);
-        color: $color-text-tip-b9a;
+        @include fs(20);
+        font-weight: bold;
+        color: $color-text-2B3;
       }
       .more{
-        position: absolute;
-        top: formatVal(4,rem);
-        right: 0;
+        display: flex;
+        align-items: center;
         @include fs(12);
         color: $color-text-tip-ac;
+        .icon{
+          margin-left: formatVal(5,rem);
+          color: $color-theme;
+        }
       }
     }
     &.teachers{
-      background-color: $color-border-split;
+      padding-bottom: formatVal(24,rem);
+      background-color: $whiteColor;
       .list{
         .swiper-item{
           padding: formatVal(3,rem);
         }
         .item{
           padding: formatVal(10,rem) formatVal(15,rem);
-          box-shadow: 0 0 10px $color-transparency-black-1;
           text-align: center;
+          border: 1px solid $color-background-gray;
           background-color: $whiteColor;
           border-radius: 5px;
           @include fs(12);
@@ -144,16 +156,35 @@ $color-green: #7ED321;
       }
     }
     &.course{
-      .list /deep/ .c-course-list-item{
-        &+.c-course-list-item{
-          margin-top: formatVal(15,rem);
+      .list /deep/ {
+        .c-course-list-item{
+          padding: formatVal(12,rem) 0;
+          &+.c-course-list-item{
+            border-top: 1px solid $color-border-split-D8D;
+          }
+          &:first-child{
+            padding-top: 0;
+          }
         }
       }
       .request-result{
         padding: formatVal(10,rem) 0;
         @include fs(12);
-        color: $color-text-tip-b9a;
+        color: $color-gray-B6B;
         text-align: center;
+      }
+    }
+    &.like{
+      @extend .course;
+      .refresh{
+        @include fs(14);
+        padding: formatVal(12,rem) 0;
+        .icon{
+          margin-right: formatVal(10,rem);
+        }
+        .icon,span{
+          vertical-align: middle;
+        }
       }
     }
   }

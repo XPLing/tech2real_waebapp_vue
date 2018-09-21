@@ -88,6 +88,9 @@
       width: 35%;
       color: $whiteColor;
       background-color: $color-theme;
+      &.off{
+        background-color: $borderColor2;
+      }
     }
   }
   .g-select-wrapper{

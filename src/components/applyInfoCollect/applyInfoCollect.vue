@@ -150,7 +150,10 @@
                 });
               } else if (res.code == '201') {
                 this.$router.replace({
-                  path: `${baseUrl}applypay`
+                  path: `/pay/activityApplyPay`,
+                  query: {
+                    applyTargetId: this.applyTargetID
+                  }
                 });
               } else {
                 submitBtn.changeSubmitBtn(false);

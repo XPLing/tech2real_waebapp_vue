@@ -1,18 +1,39 @@
-.c-course-list-item.c-media{
+.c-course-list-item{
+  display: flex;
   .media-left{
     margin-right: formatVal(15,rem);
-    @include w(117);
-    @include h(68);
+    @include w(110);
+    @include h(82);
     img {
-      @include w(117);
-      @include h(68);
+      @include w(110);
+      @include h(82);
+      border-radius: 5px;
     }
   }
   .media-body{
+    flex: 1;
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+    .title{
+      @include fs(16);
+    }
     .info{
+      display: flex;
+      align-items: flex-end;
+      color: $color-gray-B6B;
+      line-height: 1;
+      span+span{
+        margin-left: formatVal(14,rem);
+      }
+      .apply{
+        display: flex;
+        align-items: center;
+        .icon{
+          @include fs(12);
+          margin-right: formatVal(8,rem);
+        }
+      }
       .price {
         &.red {
           color: $color-text-stress-r;

@@ -32,6 +32,7 @@
     },
     data () {
       return {
+        defaultAvatar: require('assets/image/defaultAvatar.png')
       };
     },
     created () {

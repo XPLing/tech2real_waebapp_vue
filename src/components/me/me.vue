@@ -7,11 +7,12 @@
         </header>
         <section class="g-main">
           <div class="info-base">
-            <img v-lazy="avatar"/>
             <template v-if="userGuid">
+              <router-link tag="img" :to="{path:'info',append:true}" v-lazy="avatar"></router-link>
               <p class="info">{{name}}</p>
             </template>
             <template v-else>
+              <img v-lazy="avatar"/>
               <router-link :to="{path:'/user/login'}" class="info">{{name}}</router-link>
             </template>
           </div>
@@ -54,7 +55,7 @@
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import Scroll from 'base/scroll/scroll';
   import HeaderTitle from 'components/header-title/header-title';
-  import { ERR_OK, ERR_OK_STR } from 'api/config';
+  import { ERR_OK, ERR_OK_STR, thirdParty } from 'api/config';
   import * as util from 'assets/js/util';
   import { mapGetters, mapMutations, mapActions } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -171,6 +172,16 @@
     created () {
       if (this.userGuid) {
         this.getInfo();
+        if (/^1.*/.test(util.common.getbrowserType())) {
+//          wx.config({
+//            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+//            appId: thirdParty.wechat.appId, // 必填，公众号的唯一标识
+//            timestamp: '', // 必填，生成签名的时间戳
+//            nonceStr: '', // 必填，生成签名的随机串
+//            signature: '',// 必填，签名
+//            jsApiList: [] // 必填，需要使用的JS接口列表
+//          });
+        }
       }
     },
     methods: {
@@ -206,7 +217,7 @@
             append: data.append ? data.append : false
           });
         } else {
-           this.$refs.share.show();
+          this.$refs.share.show();
         }
       },
       clickMy (data) {
@@ -245,9 +256,7 @@
         'updateUserInfo'
       ])
     },
-    watch: {
-
-    },
+    watch: {},
     components: {
       HeaderTitle,
       swiper,

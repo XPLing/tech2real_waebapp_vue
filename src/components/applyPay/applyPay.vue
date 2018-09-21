@@ -120,7 +120,7 @@
       };
     },
     created () {
-      this.applyTargetID = this.$route.params.id;
+      this.applyTargetID = this.$route.query.applyTargetId;
       this.errors.update({
         field: 'payWay',
         msg: 'Newsletter Email is required',

@@ -1,6 +1,6 @@
 <template>
   <div class="g-bottom-btn" v-show="showFlag">
-    <span class="price">{{price == 0 ? "免费" : price}}</span>
+    <span class="price">{{price == 0 ? "免费" : `${price.toFixed(2)}元`}}</span>
     <button class="btn" @click="confirm">{{btnstr}}</button>
   </div>
 </template>

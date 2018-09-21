@@ -1,12 +1,11 @@
 <template>
   <div class="g-train">
-    <scroll ref="scroll" class="train-content" :pullup="true" :data="bannerList"
-            @pullingUp="requestScrollData">
+    <scroll ref="scroll" class="train-content" :data="bannerList">
       <div>
         <!--<header class="g-header">-->
         <!--<HeaderTitle :title="pageTitle"></HeaderTitle>-->
         <!--</header>-->
-        <div class="g-banner" v-if="bannerList">
+        <div class="chunk g-banner" v-if="bannerList">
           <swiper :options="swiperOPts" class="g-swiper">
             <swiper-slide v-for="(item, index) in bannerList" :key="index" >
               <img :src="item.coverUrl" @click="bannerClick(item)">
@@ -14,7 +13,7 @@
             <div class="swiper-pagination swiper-pagination-banner" slot="pagination"></div>
           </swiper>
         </div>
-        <div class="g-tagList">
+        <div class="chunk g-tagList">
           <ul class="list">
             <li class="item" v-for="(item, index) in tagList" :key="index">
               <router-link :to="{path: `/train/tagdetail/${item.id}`}">
@@ -34,12 +33,10 @@
             </li>
           </ul>
         </div>
-        <div class="g-recommend teachers">
-          <div class="titlebox red">
-            <p class="icon left"><span class="small"></span><span class="big"></span></p>
+        <div class="chunk g-recommend teachers">
+          <div class="titlebox">
             <p class="title">名师推荐</p>
-            <p class="icon right"><span class="big"></span><span class="small"></span></p>
-            <router-link class="more" :to="{path: '/train/teacherlist'}">更多名师</router-link>
+            <router-link class="more" :to="{path: '/train/teacherlist'}">更多 <i class="icon c-icon-angle-right"></i></router-link>
           </div>
           <div class="list">
             <swiper :options="swiperOPtsCourse" class="g-swiper">
@@ -55,17 +52,37 @@
             </swiper>
           </div>
         </div>
-        <div class="g-recommend course">
-          <div class="titlebox green">
-            <p class="icon left"><span class="small"></span><span class="big"></span></p>
+        <div class="chunk g-recommend course aggregation">
+          <div class="titlebox">
+            <p class="title">合辑推荐</p>
+            <router-link class="more" :to="{path: '/train/courselist', query:{type: 'aggregation'}}">更多 <i class="icon c-icon-angle-right"></i></router-link>
+          </div>
+          <ul class="list">
+            <course-item :course="item" v-for="(item, index) in courseList" :key="index"
+                         @selectcourse="selectCourseAggregation"></course-item>
+          </ul>
+          <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
+        </div>
+        <div class="chunk g-recommend course">
+          <div class="titlebox">
             <p class="title">课程推荐</p>
-            <p class="icon right"><span class="big"></span><span class="small"></span></p>
+            <router-link class="more" :to="{path: '/train/courselist'}">更多 <i class="icon c-icon-angle-right"></i></router-link>
           </div>
           <ul class="list">
             <course-item :course="item" v-for="(item, index) in courseList" :key="index"
                          @selectcourse="selectcourse"></course-item>
           </ul>
           <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
+        </div>
+        <div class="chunk g-recommend like">
+          <div class="titlebox">
+            <p class="title">猜你喜欢</p>
+          </div>
+          <ul class="list">
+            <course-item :course="item" v-for="(item, index) in courseList" :key="index"
+                         @selectcourse="selectcourse"></course-item>
+          </ul>
+          <p class="request-result refresh"><i class="icon c-icon-refresh"></i><span>换一换</span></p>
         </div>
       </div>
     </scroll>
@@ -235,6 +252,14 @@
           path: `/train/${course.id}`
         });
       },
+      selectCourseAggregation (course) {
+        this.$router.push({
+          path: `/train/${course.id}`,
+          query: {
+            aggregation: true
+          }
+        });
+      },
       requestScrollData () {
         if (this.noMore) {
           return;
@@ -326,7 +351,8 @@
       _listRecommendCourses (page) {
         var param = {
           productGuid: this.productGuid,
-          page: page
+          page: page,
+          limitSize: 3
         };
         return listRecommendCourses(param);
       }

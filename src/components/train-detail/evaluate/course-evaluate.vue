@@ -1,5 +1,5 @@
 <template>
-  <div class="g-course-evaluate" :class="{'joined':this.appliedState>0}">
+  <div class="g-course-evaluate" :class="{'joined':this.appliedState===1}">
     <div class="operate">
       <div class="title">
         <span>对该课程的评价</span>
@@ -20,7 +20,8 @@
           <div class="no-result" v-else>
             <no-result :title="'没有找到您要的内容'"></no-result>
           </div>
-          <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
+          <p v-show="requestScrollDataList && (requestMoreFlag || noMore)" class="request-result">
+            {{noMore ? noMoreStr : noResult}}</p>
         </div>
       </scroll>
     </div>

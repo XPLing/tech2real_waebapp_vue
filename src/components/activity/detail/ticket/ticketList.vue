@@ -102,8 +102,10 @@
                 });
               } else if (res.code == '201') {
                 this.$router.replace({
-                  path: `applypay`,
-                  append: true
+                  path: `/pay/activityApplyPay`,
+                  query: {
+                    applyTargetId: this.articleInfo.id
+                  }
                 });
               } else {
                 this.$refs.loading.hide();

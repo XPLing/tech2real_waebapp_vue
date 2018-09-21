@@ -6,7 +6,7 @@
       </header>
       <div class="g-main">
         <scroll ref="scroll" class="tag-detail-content" :data="teacherList" :pullup="true"
-                @pullingUp="requestCourses">
+                @pullingUp="requestScrollData">
           <div>
             <div class="g-teacher">
               <ul class="teacher-list">
@@ -75,12 +75,12 @@
       ])
     },
     created () {
-      this.requestCourses()
+      this.requestScrollData()
     },
     mounted () {
     },
     methods: {
-      requestCourses () {
+      requestScrollData () {
         if (this.noMore) {
           return;
         }

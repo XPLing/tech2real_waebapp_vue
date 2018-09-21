@@ -176,6 +176,9 @@ export let common = {
     }
     return el.getAttribute(attributeName);
   },
+  getWechatVersion () {
+    var wechatInfo = navigator.userAgent.match(/MicroMessenger\/([\d\\.]+)/i);
+  },
   getbrowserType () {
     if (browser.versions.mobile) {
       var ua = navigator.userAgent.toLowerCase();// 获取判断用的对象
@@ -287,7 +290,7 @@ export let common = {
     }
     return c;
   },
-  deuce(arr, deuceNum){
+  deuce (arr, deuceNum) {
     var deuceItem = [], deuceArr = [];
     for (var i = 0, len = arr.length; i < len; i++) {
       var isBreakpoint = i % deuceNum === 0;

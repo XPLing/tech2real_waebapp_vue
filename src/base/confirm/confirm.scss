@@ -1,4 +1,4 @@
-.confirm{
+.confirm {
   position: fixed;
   left: 0;
   right: 0;
@@ -6,65 +6,92 @@
   bottom: 0;
   z-index: 998;
   background-color: $color-background-d;
-  &.confirm-fade-enter-active{
+  &.confirm-fade-enter-active {
     animation: confirm-fadein 0.3s;
-    .confirm-content{
+    .confirm-content {
       animation: confirm-zoom 0.3s;
     }
   }
-  .confirm-wrapper{
+  .confirm-wrapper {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 999;
-    .confirm-content{
+    .confirm-content {
       @include w(270);
       border-radius: 5px;
       background: $color-border-split;
     }
-    .text{
-      padding: formatVal(19,rem) formatVal(15,rem);
+    .text {
+      padding: formatVal(19, rem) formatVal(15, rem);
       @include lh(22);
       text-align: center;
       @include fs(16);
       color: $color-text-b45;
     }
-
-    .operate{
+    .operate {
       display: flex;
       align-items: center;
       text-align: center;
       @include fs(16);
-    }
-    .operate-btn{
-      flex: 1;
-      @include lh(22);
-      padding: formatVal(10,rem) 0;
-      border-top: 1px solid $color-border-nav;
-      color: $color-text-b45;
-      &.left{
-        border-right: 1px solid $color-border-nav;
+      .operate-btn {
+        flex: 1;
+        @include lh(22);
+        color: $color-text-tip-ac;
       }
     }
+    &.horizontal{
+      .operate{
+        .operate-btn {
+          padding: formatVal(10, rem) 0;
+          border-top: 1px solid $color-border-nav;
+          &.btn-cancel {
+            border-right: 1px solid $color-border-nav;
+          }
+        }
+      }
+    }
+    &.vertical{
+      .text {
+        padding: formatVal(10, rem) formatVal(15, rem);
+      }
+      .operate{
+        //padding: formatVal(10,rem) 0;
+        flex-direction: column;
+        align-items: stretch;
+        .operate-btn {
+          flex: 1;
+          border-top: 1px solid $color-border-nav;
+          @include lh(40);
+          &.btn-confirm {
+            color: $color-error-ef;
+          }
+        }
+      }
+    }
+
+
   }
 }
-@keyframes confirm-fadein{
-  0%{
+
+@keyframes confirm-fadein {
+  0% {
     opacity: 0;
   }
-  100%{
+  100% {
     opacity: 1;
   }
 }
-@keyframes confirm-zoom{
-  0%{
+
+@keyframes confirm-zoom {
+  0% {
     transform: scale(0);
   }
-  50%{
+  50% {
     transform: scale(1.1);
   }
-  100%{
+  100% {
     transform: scale(1);
   }
 }

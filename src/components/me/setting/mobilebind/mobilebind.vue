@@ -279,7 +279,7 @@
       },
       _webBoundMobileByThirdPartUid () {
         var uidName = '';
-        switch (this.thirdparty){
+        switch (this.thirdParty){
           case 'weixin':
             uidName = 'unionid';
             break;

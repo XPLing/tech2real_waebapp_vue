@@ -94,13 +94,13 @@
 
   export default {
     inject: ['reload'],
-    beforeRouteEnter (to, from, next) {
-      next((vm) => {
-        if (/activity/.test(from.name)) {
-          vm.reload();
-        }
-      });
-    },
+//    beforeRouteEnter (to, from, next) {
+//      next((vm) => {
+//        if (/activity/.test(from.name)) {
+//          vm.reload();
+//        }
+//      });
+//    },
     data () {
       return {
         toptipTxt: '',

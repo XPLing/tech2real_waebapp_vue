@@ -6,18 +6,14 @@
   left: 0;
   right: 0;
   color: $color-text-b45;
-  background: $color-shadow-nav;
   &.joined{
     bottom: 0;
   }
   .g-scroll-continer{
-    border-bottom: formatVal(20,rem) solid $color-shadow-nav;
-    background-color: $whiteColor;
   }
   .g-package{
-    background-color: #fff;
-    margin: formatVal(10,rem) 0;
-
+    border-bottom: formatVal(10,rem) solid $color-background-gray;
+    border-top: formatVal(10,rem) solid $color-background-gray;
     line-height: 0;
     .form-body{
       line-height: 1em;
@@ -46,8 +42,8 @@
         padding: 0 formatVal(15, rem);
         @include h(40);
         @include lh(40);
-        @include fs(14);
-        background-color: $color-border-split;
+        @include fs(16);
+        color: $color-text-2B3;
         .collapsible {
           position: absolute;
           right: formatVal(15, rem);
@@ -66,6 +62,7 @@
             @include h(35);
             @include lh(35);
             @include fs(14);
+            color: $color-gray-717;
             i, em {
               @extend %lineElem_middle;
             }

@@ -1,39 +1,40 @@
 <template>
-  <div class="g-course-chapters" :class="{'joined':this.appliedState>0}">
+  <div class="g-course-chapters" :class="{'joined':this.appliedState===1}">
     <scroll :data="chapterData" ref="scroll">
-      <div class="g-package c-form-item" ref="package" @click.stop="showSelect">
-        <p class="form-left">课程</p>
-        <p class="form-body">{{currentPackage}}</p>
-        <p class="form-right">
-          <i class="icon c-icon-angle-right"></i>
-        </p>
-      </div>
-      <div class="chapters g-scroll-continer">
-        <div class="chapter-item" :class="{ 'active': chapters.isCollapsed}" v-if="courseChapters.length>0"
-             v-for="(chapters,index) in courseChapters" :key="index">
-          <div class="title" @click.stop="chaptersCollapse(chapters,index,$event)">
-            {{chapters.title}}
-            <i class="fa collapsible up"></i>
+      <div class="g-scroll-continer">
+        <div v-if="aggregation" class="g-package c-form-item" ref="package" @click.stop="showSelect">
+          <p class="form-left">课程</p>
+          <p class="form-body">{{currentPackage}}</p>
+          <p class="form-right">
+            <i class="icon c-icon-angle-right"></i>
+          </p>
+        </div>
+        <div class="chapters g-scroll-continer">
+          <div class="chapter-item" :class="{ 'active': chapters.isCollapsed}" v-if="courseChapters.length>0"
+               v-for="(chapters,index) in courseChapters" :key="index">
+            <div class="title" @click.stop="chaptersCollapse(chapters,index,$event)">
+              {{chapters.title}}
+              <i class="fa collapsible up"></i>
+            </div>
+            <ul class="course-list">
+              <li class="course-item" v-for="chapter in chapters.chapters" :key="chapter.id">
+                <a href="javascript:void(0);" :data-url="chapter.videoUrl"
+                   @click.stop="changeVideo(chapter,$event)">
+                  <i class="fa fa-caret-square-o-right"></i><em>{{chapter.title}}</em>
+                </a>
+              </li>
+            </ul>
           </div>
-          <ul class="course-list">
-            <li class="course-item" v-for="chapter in chapters.chapters" :key="chapter.id">
-              <a href="javascript:void(0);" :data-url="chapter.videoUrl"
-                 @click.stop="changeVideo(chapter,$event)">
-                <i class="fa fa-caret-square-o-right"></i><em>{{chapter.title}}</em>
-              </a>
-            </li>
-          </ul>
+        </div>
+        <div v-show="!courseChapters.length">
+          <no-result :title="noResult"></no-result>
         </div>
       </div>
-
-      <div class="g-select-box">
-        <g-select :select-data="selectOpts" :current-select="currentSelect" ref="select"
-                  @select="selectItem" @clickMask="clickMask"></g-select>
-      </div>
-      <div v-show="!courseChapters.length">
-        <no-result :title="noResult"></no-result>
-      </div>
     </scroll>
+    <div class="g-select-box">
+      <g-select :select-data="selectOpts" :current-select="currentSelect" ref="select"
+                @select="selectItem" @clickMask="clickMask"></g-select>
+    </div>
   </div>
 </template>
 
@@ -82,10 +83,12 @@
         ],
         currentSelect: -1,
         chapters: [],
-        currentPackage: '注册供应商质量经理课程经理课程程经理课程程经理课程'
+        currentPackage: '注册供应商质量经理课程经理课程程经理课程程经理课程',
+        aggregation: null
       };
     },
     created () {
+      this.aggregation = this.$route.query.aggregation;
       communication.$on('clickMask', (vm) => {
         vm.$refs.select.hide();
         communication.$emit('hideGlobalMask', this.$parent);

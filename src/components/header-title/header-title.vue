@@ -19,6 +19,10 @@
         type: String,
         default: ''
       },
+      backHandle: {
+        type: String,
+        default: 'default'
+      },
       hasBack: {
         type: Boolean,
         default: false
@@ -37,20 +41,23 @@
       }
     },
     data () {
-      return {}
+      return {};
     },
     methods: {
-      back(){
-        this.$router.back()
+      back () {
+        if (this.backHandle === 'default') {
+          this.$router.back();
+        }
+        this.$emit('back');
       },
-      operateHandle(){
-        this.$emit('operate')
+      operateHandle () {
+        this.$emit('operate');
       },
-      share(){
-        this.$emit('share')
+      share () {
+        this.$emit('share');
       }
     }
-  }
+  };
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">

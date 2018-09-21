@@ -1,5 +1,5 @@
 <template>
-  <div class="g-course-intro" :class="{'joined':this.appliedState>0}">
+  <div class="g-course-intro" :class="{'joined':this.appliedState===1}">
     <scroll :data="courseIntro" :refreshDelay="refreshDelay" ref="scroll" @scroll="descImage" :probeType="probeType"
             :listenScroll="listenScroll">
       <div class="g-scroll-continer">

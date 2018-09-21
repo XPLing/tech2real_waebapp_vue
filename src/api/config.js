@@ -61,3 +61,12 @@ export let thirdParty = {
     bindUri: 'http://open.tech2real.com/m-web/me/setting/safety/bindMobile'
   }
 };
+export let share = {
+  appUrl: 'https://open.dev.tech2real.com/m-web/',
+  appDevUrl: 'https://open.dev.tech2real.com/m-web/',
+  title: '硬见|智慧连接硬件创新', // 分享标题
+  desc: '硬见|智慧连接硬件创新', // 分享理由
+  summary: '硬见|智慧连接硬件创新', // 分享描述
+  cover: 'https://dn-funnymeet.qbox.me/FucweAr6nX1IOpWpBz4nJMbugmHE?e=1803029570&token=u0R-dgswbXXA1PMGqJlkEIo8pc_iWtp5OuM67d94:XUF4SCL1atopTWdsDM639V8Kv04=', // 分享封面
+  source: '硬见' // 分享来源
+}

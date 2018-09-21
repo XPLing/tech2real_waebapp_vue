@@ -11,7 +11,7 @@ import * as util from 'assets/js/util';
 //
 // export default action;
 
-export let updateUserInfo = function ({commit, state}, data) {
+export let updateUserInfo = function ({commit, sFtate}, data) {
   commit(types.RECORD_USERINFO, data);
   commit(types.UPDATA_USERGUID, data.guid);
 };

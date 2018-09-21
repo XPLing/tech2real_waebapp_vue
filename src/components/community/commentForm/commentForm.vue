@@ -214,6 +214,7 @@
       uploadFiles () {
         this.$refs.loading.show();
         this.uploadStatus = 'uploading';
+        console.log(this.$refs.upload);
         this.$refs.upload.upload();
       },
       removeUploadFile (item, index) {

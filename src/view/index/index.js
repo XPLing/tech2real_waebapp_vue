@@ -14,12 +14,12 @@ import * as filters from 'assets/js/filters';
 import VueLazyload from 'vue-lazyload';
 import Mint from 'mint-ui';
 
-Vue.use(Mint);
+
 Vue.use(VueLazyload, {
   loading: require('assets/image/defaultAvatar.png'),
   error: require('assets/image/defaultAvatar.png')
-})
-
+});
+Vue.use(Mint);
 fastclick.attach(document.body); // 解决移动端click事件300毫秒的延迟
 
 Vue.config.productionTip = false;

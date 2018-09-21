@@ -40,6 +40,10 @@
       direction: {
         type: String,
         default: DIRECTION_V
+      },
+      freeScroll: {
+        type: Boolean,
+        default: false
       }
 
     },
@@ -81,9 +85,13 @@
         }
         var defaultOpts = {
           probeType: this.probeType,
-          click: this.click,
-          eventPassthrough: this.direction === DIRECTION_V ? DIRECTION_H : DIRECTION_V
+          click: this.click
         };
+        if (this.freeScroll) {
+          defaultOpts.freeScroll = true;
+        } else {
+          defaultOpts.eventPassthrough = this.direction === DIRECTION_V ? DIRECTION_H : DIRECTION_V;
+        }
         if (this.pullup) {
           defaultOpts = Object.assign({}, defaultOpts, {
             pullUpLoad: {

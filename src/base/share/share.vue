@@ -16,10 +16,10 @@
             </div>
             <div class="split">分享到社交平台</div>
             <div class="to-vendor">
-              <img class="item" src="./wechat.png" @click="share(1)">
-              <img class="item" src="./qq_sapce.png" @click="share(2)">
-              <img class="item" src="./qq.png" @click="share(3)">
-              <img class="item" src="./weibo.png" @click="share(4)">
+              <img class="item" src="./wechat.png" @click="share('weixin')">
+              <img class="item" src="./qzone.png" @click="share('friends')">
+              <img class="item" src="./qq.png" @click="share('qq')">
+              <img class="item" src="./weibo.png" @click="share('sina')">
             </div>
           </div>
           <div class="operate">
@@ -28,10 +28,17 @@
         </div>
       </transition>
     </div>
+    <wechat-share-guide ref="wechatShareGuide"></wechat-share-guide>
+    <confirm ref="confirmsWrapper" :is-dialog="true" :text="confirmTxt"></confirm>
   </div>
+
 </template>
 
 <script type="text/ecmascript-6">
+  import Confirm from 'base/confirm/confirm';
+  import WechatShareGuide from 'base/wechat-share-guide/wechat-share-guide';
+  import { share, thirdParty } from 'api/config';
+  import * as util from 'assets/js/util';
   // shareType; // -1 社群，1 微信,2 qq空间，3 qq，4 微博；
   export default {
     props: {
@@ -42,11 +49,16 @@
       noSelf: {
         type: Boolean,
         default: false
+      },
+      shareInfo: {
+        type: Object,
+        default: null
       }
     },
     data () {
       return {
-        showFlag: false
+        showFlag: false,
+        confirmTxt: '请在微信打开此网页'
       };
     },
     created () {
@@ -64,9 +76,66 @@
         this.$emit('cancel');
       },
       share (data) {
-        this.hide();
+        var shareInfo = this.shareInfo ? this.shareInfo : share;
+        var shareUrl = shareInfo.appUrl, shareAPIUrl = '', isOpen = true, shareConfig = {},
+          currentUrl = window.location.href;
+        if (/open.dev./.test(currentUrl)) {
+          shareUrl = shareInfo.appDevUrl;
+        }
+        var browser = util.common.getbrowserType();
+        var isWechat = /^1.*/.test(browser);
+        switch (data) {
+          case 'weixin':
+          case 'friends':
+            if (isWechat) {
+              this.$refs.wechatShareGuide.show();
+            } else {
+              this.$refs.confirmsWrapper.show();
+            }
+            isOpen = false;
+            break;
+          case 'sina':
+            shareConfig = {
+              url: shareUrl,
+              title: shareInfo.title,
+              pic: shareInfo.cover,
+              source: shareInfo.source, /* 分享来源 (可选) ，如：QQ分享 */
+              appkey: thirdParty.weibo.appId
+            };
+            shareAPIUrl = 'http://service.weibo.com/share/share.php';
+            break;
+          case 'qq':
+            shareConfig = {
+              url: shareUrl, /* 获取URL，可加上来自分享到QQ标识，方便统计 */
+//              desc: shareInfo.desc, // 分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）
+              title: shareInfo.title, // 分享标题(可选)
+              summary: shareInfo.summary, /* 分享描述(可选) */
+              pics: shareInfo.cover, /* 分享图片(可选) */
+//              flash: '', /* 视频地址(可选) */
+              // commonClient : true, /*客户端嵌入标志*/
+              site: shareInfo.source /* 分享来源 (可选) ，如：QQ分享 */
+            };
+            // 使用http://connect.qq.com/widget/shareqq/iframe_index.html链接，iframe_index.html是弹出层效果，index.html是新打开页面效果
+            shareAPIUrl = 'http://connect.qq.com/widget/shareqq/index.html';
+            break;
+        }
+        if (isOpen) {
+          this.hide();
+          var params = [];
+          for (var i in shareConfig) {
+            params.push(i + '=' + encodeURIComponent(shareConfig[i] || ''));
+          }
+          var _src = shareAPIUrl + '?' + params.join('&');
+          window.open(_src);
+        } else {
+
+        }
         this.$emit('share', data);
       }
+    },
+    components: {
+      Confirm,
+      WechatShareGuide
     }
   };
 </script>

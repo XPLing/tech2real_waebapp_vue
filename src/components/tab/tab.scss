@@ -1,9 +1,9 @@
 .g-tab {
   display: flex;
   padding-top: formatVal(6,rem);
-  height: formatVal(50,rem);
+  height: formatVal(49,rem);
   @include fs(10);
-  box-shadow: 0 -2px 5px $color-shadow-nav;
+  box-shadow: 0 -1px 3px $color-transparency-black-2;
   background-color: $whiteColor;
   .tab-item{
     flex: 1;

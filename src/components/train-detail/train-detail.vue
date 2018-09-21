@@ -2,8 +2,8 @@
   <transition name="slide">
     <div class="g-train-detail">
       <header class="g-header">
-        <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack" :has-share="true"
-                     @share="showShare"></HeaderTitle>
+        <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack" :back-handle="'custom'" :has-share="true"
+                     @share="showShare" @back="back"></HeaderTitle>
       </header>
       <div class="g-video" v-if="courseData">
         <div v-if="chapterData" class="recourse-wrapper">
@@ -25,8 +25,7 @@
       <div class="g-main">
         <keep-alive>
           <component v-bind:is="view" :key="`view_${view}`" :applied-state="appliedState" :course-data="courseData"
-                     :chapter-data="chapterData"
-                     :apply-result="applyResult"
+                     :chapter-data="chapterData" :apply-result="applyResult"
                      @setdata="setDatas" @changevideo="changeVideo" @changeapplyres="changeApplyResult"
                      ref="view">
           </component>
@@ -34,8 +33,8 @@
       </div>
       <div class="g-join" ref="join" v-if="courseData && (!userGuid || this.appliedState!=1)">
         <span
-          class="price">{{courseData.price == 0 ? "免费" : courseData.price}}</span>
-        <button class="btn" @click="operate">{{courseStateStr}}</button>
+          class="price">{{courseData.price == 0 ? "免费" : `${courseData.price.toFixed(2)}元`}}</span>
+        <button class="btn" :class="{'off': joinOff}" @click="operate">{{courseStateStr}}</button>
       </div>
       <confirm ref="confirmsWrapper" :text="confirmTxt" @cancel="cancel" @confirm="confirm"></confirm>
       <top-tip ref="toptip" :delay="10000">
@@ -87,39 +86,37 @@
   const JOINTIP = '是否加入课程开始学习?';
   const APPLYTIP = {
     LOGINTIP: '请先登录!',
-    STATE_APPLY: '是否加入课程开始学习?',
+    STATE_APPLY: '是否加入课程开始学习？',
+    STATE_READY_APPLY: '即将开始',
     STATE_BY_COURSE_DETAIL: '课程详情',
     STATE_APPLY_GO_ON: '继续报名',
-    STATE_PAY: '立即支付',
+    STATE_PAY: '待支付',
     STATE_END: '课程结束',
     STATE_SELL_OUT: '课程售罄',
-    STATE_PREPARTING: '准备中'
+    STATE_PREPARTING: '准备中',
+    STATE_APPLY_AGAIN: '是否加入课程开始学习？',
+    STATE_AUDIT: '待审核',
+    STATE_PASS_FAIL: '未通过',
+    STATE_AUDIT_FAIL: '是否加入课程开始学习？'
   };
   const COURSESTATECONFIG = {
+    STATE_SUCCESS: '报名完成',
     STATE_APPLY: '加入学习',
     STATE_BY_COURSE_DETAIL: '课程详情',
     STATE_APPLY_GO_ON: '继续报名',
-    STATE_PAY: '立即支付',
+    STATE_PAY: '待支付',
     STATE_END: '课程结束',
     STATE_SELL_OUT: '课程售罄',
-    STATE_PREPARTING: '准备中'
+    STATE_PREPARTING: '准备中',
+    STATE_APPLY_AGAIN: '重新报名',
+    STATE_AUDIT: '待审核',
+    STATE_PASS_FAIL: '未通过',
+    STATE_AUDIT_FAIL: '报名被驳回'
   };
-  const COURSESTATESTR = [COURSESTATECONFIG.STATE_APPLY, COURSESTATECONFIG.STATE_BY_COURSE_DETAIL, COURSESTATECONFIG.STATE_APPLY_GO_ON,
-    COURSESTATECONFIG.STATE_PAY, COURSESTATECONFIG.STATE_END, COURSESTATECONFIG.STATE_SELL_OUT, COURSESTATECONFIG.STATE_PREPARTING];
+  // applyStatus 0、加入学习  1、报名完成 6、待审核  7、未通过  8、待支付  9、被驳回  10、报名取消，显示重新报名  11、活动结束
+  const COURSESTATESTR = [COURSESTATECONFIG.STATE_APPLY, COURSESTATECONFIG.STATE_SUCCESS, COURSESTATECONFIG.STATE_AUDIT, COURSESTATECONFIG.STATE_PASS_FAIL, COURSESTATECONFIG.STATE_PAY, COURSESTATECONFIG.STATE_AUDIT_FAIL, COURSESTATECONFIG.STATE_APPLY_AGAIN, COURSESTATECONFIG.STATE_END];
   const VIEW = ['CourseIntro', 'CourseChapters', 'CourseEvaluate', 'CourseCommunity'];
   export default {
-    inject: ['reload'],
-    props: {},
-    beforeRouteEnter (to, from, next) {
-      next((vm) => {
-//        if (/me/.test(from.name)) {
-//          vm.articleId = to.params.articleId;
-//          if (!to.query.first) {
-//            // vm.reload();
-//          }
-//        }
-      });
-    },
     data () {
       return {
         view: 'CourseIntro',
@@ -143,7 +140,9 @@
         selectTitle: '套餐',
         listCourseValidityPeriod: null,
         coursePrice: '0.00',
-        courseOriginalPrice: '0.00'
+        courseOriginalPrice: '0.00',
+        // 底部按钮激活状态
+        joinOff: false
       };
     },
     computed: {
@@ -168,6 +167,11 @@
       this.init();
     },
     methods: {
+      back(){
+        this.$router.push({
+          path: '/train'
+        })
+      },
       cancelShare () {
 
       },
@@ -273,6 +277,138 @@
         $this._getCourseById($this);
         $this._listChaptersByCourseId($this);
       },
+      setDatas (key, val, index, dataName) {
+        this.$set(this.chapterData[index], key, val);
+      },
+      videoCanplay () {
+        this.Vplay();
+      },
+      changeVideo (data) {
+        var vurl = data.videoUrl, type = data.type, furl = data.fileUrl;
+        if (type === 2) {
+          if (vurl === this.videoUrl) {
+            return;
+          }
+          this.isCanplay = false;
+          this.videoUrl = vurl;
+          this.fileUrl = null;
+        } else {
+          if (furl === this.fileUrl) {
+            return;
+          }
+          this.videoUrl = null;
+          this.isCanplay = false;
+          this.fileUrl = furl;
+        }
+      },
+      changeApplyResult (res) {
+        this.applyResult = res;
+      },
+      Vclick () {
+        if (this.appliedState <= 0) {
+          this.operate();
+          return;
+        }
+        if (this.isCanplay) {
+
+          this.Vplay();
+        }
+      },
+      Vplay () {
+        this.isPause = false;
+        this.$refs.video.play();
+      },
+      Vpause () {
+        this.$refs.video.pause();
+      },
+      operate () {
+        // applyStatus 0、加入学习  1、报名完成 6、待审核  7、未通过  8、待支付  9、被驳回  10、报名取消，显示重新报名  11、活动结束
+        switch (this.appliedState) {
+          case 0:
+          case 10:
+            this.$refs.selectPeriod.showFlag = true;
+            break;
+          case 6:
+          case 7:
+          case 8:
+            this.$router.push({
+              path: `applyresult`,
+              append: true,
+              query: {
+                applyId: this.courseData.courseApplyValidityPeriod.courseApplyId
+              }
+            });
+            break;
+          case 9:
+            var isReapply = this.$route.query.isReapply == 1;
+            if (isReapply) {
+              this.$refs.selectPeriod.showFlag = true;
+            } else {
+              this.$router.push({
+                path: `applyresult`,
+                append: true,
+                query: {
+                  applyId: this.courseData.courseApplyValidityPeriod.courseApplyId
+                }
+              });
+            }
+
+            break;
+        }
+
+      },
+      confirm () {
+        if (!this.userGuid) {
+          this.updataBeforeLoginPage(this.$route.fullPath);
+          this.$router.push({
+            path: this.routerPrefix + '/user/login'
+          });
+          return false;
+        }
+        if (this.courseStateStr === COURSESTATECONFIG.STATE_APPLY || this.courseStateStr === COURSESTATECONFIG.STATE_APPLY_GO_ON || this.courseStateStr === COURSESTATECONFIG.STATE_APPLY_AGAIN || this.courseStateStr === COURSESTATECONFIG.STATE_AUDIT_FAIL) {
+          if (this.courseData.needInfo) {
+            this.applyResult = this.courseData;
+            this.$router.push({
+              path: `/train/${this.courseID}/applyinfocollect/${this.courseData.guid}`
+            });
+          } else {
+            this.$refs.loading.show();
+            this._applyCourse().then((res) => {
+              this.$refs.loading.hide();
+              this.applyResult = res.result;
+              if (res.code == ERR_OK) {
+                this.$router.push({
+                  path: `applyresult`,
+                  append: true,
+                  query: {
+                    applyId: this.applyResult.courseApply.id
+                  }
+                });
+              } else if (res.code == '201') {
+                this.$router.push({
+                  path: `/pay/courseApplypay`,
+                  query: {
+                    applyTargetId: this.courseData.id,
+                    applyId: this.applyResult.courseApply.id
+                  }
+                });
+              } else {
+                util.common.request.tipMsg(this, res);
+              }
+            }, erro => {
+              this.$refs.loading.hide();
+              util.common.request.tipMsg(this, erro);
+            });
+          }
+        }
+      },
+      cancel () {
+        if (this.confirmTxt === JOINTIP) {
+          console.log(JOINTIP);
+        } else {
+          console.log(LOGINTIP);
+        }
+      },
       _getCourseID () {
         this.courseID = this.$route.params.id;
       },
@@ -291,21 +427,26 @@
             let courseResultData = res.result;
             $this.courseData = courseResultData;
             $this.coverUrl = courseResultData.coverUrl;
+            // applyStatus 0、加入学习  1、报名完成 6、待审核  7、未通过  8、待支付  9、被驳回  10、报名取消，显示重新报名  11、活动结束
             $this.appliedState = courseResultData.appliedState;
             $this.courseState = courseResultData.status;
-            switch ($this.courseState) {
+            $this.courseStateStr = COURSESTATESTR[$this.appliedState];
+            if ($this.appliedState > 1) {
+              $this.courseStateStr = COURSESTATESTR[$this.appliedState - 4];
+            }
+            if ($this.appliedState == 9) {
+              var isReapply = this.$route.query.isReapply == 1;
+              if (isReapply) {
+                $this.courseStateStr = COURSESTATECONFIG.STATE_APPLY_AGAIN;
+              }
+            }
+            switch ($this.appliedState) {
               case 1:
-                $this.courseStateStr = COURSESTATESTR[6];
-                break;
-              case 3:
-                $this.courseStateStr = COURSESTATESTR[4];
+              case 11:
+                $this.joinOff = true;
                 break;
               default:
-                if (courseResultData.applyTotalCount != 0 && (courseResultData.applyTotalCount == courseResultData.applyCount)) {
-                  $this.courseStateStr = COURSESTATESTR[5];
-                } else {
-                  $this.courseStateStr = COURSESTATESTR[$this.appliedState];
-                }
+                $this.joinOff = false;
                 break;
             }
 
@@ -366,113 +507,6 @@
           userGuid: this.userGuid
         };
         return getUnpaidCourseApply(params);
-      },
-      setDatas (key, val, index, dataName) {
-        this.$set(this.chapterData[index], key, val);
-      },
-      videoCanplay () {
-        this.Vplay();
-      },
-      changeVideo (data) {
-        var vurl = data.videoUrl, type = data.type, furl = data.fileUrl;
-        if (type === 2) {
-          if (vurl === this.videoUrl) {
-            return;
-          }
-          this.isCanplay = false;
-          this.videoUrl = vurl;
-          this.fileUrl = null;
-        } else {
-          if (furl === this.fileUrl) {
-            return;
-          }
-          this.videoUrl = null;
-          this.isCanplay = false;
-          this.fileUrl = furl;
-        }
-      },
-      changeApplyResult (res) {
-        this.applyResult = res;
-      },
-      Vclick () {
-        if (this.appliedState <= 0) {
-          this.operate();
-          return;
-        }
-        if (this.isCanplay) {
-
-          this.Vplay();
-        }
-      },
-      Vplay () {
-        this.isPause = false;
-        this.$refs.video.play();
-      },
-      Vpause () {
-        this.$refs.video.pause();
-      },
-      operate () {
-        this.$refs.selectPeriod.showFlag = true;
-      },
-      confirm () {
-        if (!this.userGuid) {
-          this.updataBeforeLoginPage(this.$route.fullPath);
-          this.$router.push({
-            path: this.routerPrefix + '/user/login'
-          });
-          return false;
-        }
-        if (this.courseStateStr == COURSESTATECONFIG.STATE_APPLY || this.courseStateStr == COURSESTATECONFIG.STATE_APPLY_GO_ON) {
-          if (this.courseData.needInfo) {
-            this.applyResult = this.courseData;
-            this.$router.push({
-              path: `/train/${this.courseID}/applyinfocollect/${this.courseData.guid}`
-            });
-          } else {
-            this.$refs.loading.show();
-            this._applyCourse().then((res) => {
-              this.$refs.loading.hide();
-              this.applyResult = res.result;
-              if (res.code == ERR_OK) {
-                this.$router.replace({
-                  path: `${this.routerPrefix}/train/${this.courseID}/applyresult`
-                });
-              } else if (res.code == '201') {
-                this.$router.push({
-                  path: `${this.routerPrefix}/train/${this.courseID}/applypay`
-                });
-              } else {
-                util.common.request.tipMsg(this, res);
-              }
-            }, erro => {
-              this.$refs.loading.hide();
-              util.common.request.tipMsg(this, erro);
-            });
-          }
-        } else if (this.courseStateStr == COURSESTATECONFIG.STATE_PAY) {
-          this.$refs.loading.show();
-          this._getUnpaidCourseApply().then((res) => {
-            this.$refs.loading.hide();
-            if (res.code == ERR_OK) {
-              this.applyResult = res.result;
-              this.$router.push({
-                path: `${this.routerPrefix}/train/${this.courseID}/applypay`
-              });
-            } else {
-              util.common.request.tipMsg(this, res);
-            }
-          }, error => {
-            this.$refs.loading.hide();
-            util.common.request.tipMsg(this, error);
-          });
-        }
-      },
-      cancel () {
-        if (this.confirmTxt === JOINTIP) {
-          console.log(JOINTIP);
-        } else {
-          console.log(LOGINTIP);
-        }
       }
     },
     components: {
@@ -499,13 +533,6 @@
             this.isCanplay = true;
           });
         }, 20);
-      },
-      $route (to, from) {
-        if (to.name === 'trainDetail') {
-          if (/trainDetailApply/.test(from.name)) {
-            this.reload();
-          }
-        }
       }
     }
   };

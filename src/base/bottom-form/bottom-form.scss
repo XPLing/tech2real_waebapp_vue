@@ -1,0 +1,44 @@
+.g-edit-wrapper{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: formatVal(40, rem);
+  bottom: 0;
+  z-index: 10;
+  background-color: $color-transparency-black-3;
+  .flex-layer{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    .cont{
+      //padding: formatVal(10,rem);
+      background-color: $whiteColor;
+      textarea{
+        padding: formatVal(10,rem);
+        width: 100%;
+        @include h(200);
+        border: none;
+        resize: none;
+        font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
+      }
+    }
+    .control-btn{
+      padding: formatVal(10,rem);
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid $color-shadow-nav;
+      background-color: $whiteColor;
+      .item{
+        background-color: transparent;
+        &.cancel{
+          color: $color-gray-99;
+        }
+        &.confirm{
+          color: $color-text-link;
+        }
+      }
+    }
+  }
+
+}

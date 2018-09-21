@@ -1,0 +1,52 @@
+$color-text-career: #585653;
+$color-text-name: #201E1B;
+$color-text-intro: #999;
+.g-tag-list {
+  position: fixed;
+  z-index: 11;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @include fs(14);
+  color: $color-text-b45;
+  background-color: $color-border-split;
+  &.slide-enter-active, &.slide-leave-active {
+    transition: all .3s;
+  }
+  &.slide-enter, &.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .g-swiper /deep/ .swiper-pagination-bullet-active {
+    background: $color-theme;
+  }
+  .g-header{
+
+  }
+  .g-main{
+    position: fixed;
+    z-index: 11;
+    top: formatVal(40,rem);
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .g-course{
+    background-color: $whiteColor;
+    .list{
+      /deep/ .c-course-list-item{
+        padding: formatVal(10,rem);
+        &+.c-course-list-item{
+          border-top: 1px solid $borderColor;
+        }
+      }
+    }
+    .request-result{
+      padding: formatVal(10,rem) 0;
+      @include fs(12);
+      color: $color-text-tip-b9a;
+      text-align: center;
+    }
+  }
+
+}

@@ -12,7 +12,6 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
     baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name]);
 });
-
 module.exports = merge(baseWebpackConfig, {
     output: {
         path: config.dev.assetsRoot,

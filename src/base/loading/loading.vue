@@ -1,13 +1,12 @@
 <template>
   <transition name="loading-fade">
-    <div class="loading" v-if="showFlag">
+    <div class="loading" :class="isLocal?'local':''" v-if="showFlag">
       <div class="bg"></div>
       <div class="cont-wrapper">
-        <div class="cont">
+        <div class="cont" :class="type">
           <img class="loadingIcon" src="./loading.gif">
           <p class="desc">{{title}}</p>
         </div>
-
       </div>
     </div>
   </transition>
@@ -18,6 +17,14 @@
       title: {
         type: String,
         default: '正在载入...'
+      },
+      type: {
+        type: String,
+        default: 'normal'
+      },
+      isLocal: {
+        type: Boolean,
+        default: false
       }
     },
     data () {

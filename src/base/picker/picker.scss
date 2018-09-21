@@ -1,0 +1,123 @@
+.g-select{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 998;
+  .fix-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 3;
+    .chunk{
+      &+.chunk{
+        border-top: 1px solid $color-shadow-nav;
+      }
+      &.drop-down-enter-active, &.drop-down-leave-active {
+        transition: all .3s;
+      }
+      &.drop-down-enter, &.drop-down-leave-to {
+        transform: translate3d(0, 100%, 0);
+      }
+    }
+  }
+  .mask{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 2;
+    background-color: $color-transparency-black-3;
+  }
+  .control-bar,.titlebox{
+    background-color: $whiteColor;
+    @include h(30);
+    display: flex;
+  }
+  .control-bar{
+    padding: 0 formatVal(10,rem);
+    justify-content: space-between;
+    align-items: center;
+    .item{
+      &.cancel{
+        color: $color-gray-99;
+      }
+      &.confirm{
+        color: $color-text-link;
+      }
+    }
+  }
+  .titlebox{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    .item{
+      flex: 1;
+    }
+  }
+  .g-select-box{
+
+    @include h(200);
+    background-color: $whiteColor;
+    .scroll-group{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      .scroll-item{
+        flex: 1;
+        &+.scroll-item{
+          border-left: 1px solid $color-shadow-nav;
+        }
+      }
+    }
+    .g-form-select {
+      width: 100%;
+      height: 100%;
+      //position: fixed;
+      //left: 0;
+      //right: 0;
+      //top: 50%;
+      //bottom: 0;
+      //z-index: 998;
+      //background-color: $whiteColor;
+      .item{
+        padding: formatVal(10,rem) 0;
+        @include fs(16);
+        text-align: center;
+        white-space: nowrap;
+        &+.item{
+          border-top: 1px solid $color-shadow-nav;
+        }
+        &.on{
+          color: $color-theme;
+        }
+      }
+    }
+
+  }
+}
+
+
+
+@keyframes confirm-fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes confirm-zoom {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

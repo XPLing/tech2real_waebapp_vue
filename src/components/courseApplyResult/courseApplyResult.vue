@@ -27,18 +27,18 @@
                 <p class="item"> ·请检查报名信息，一经报名恕不办理退款；</p>
               </div>
               <div class="tip" v-else>
-                <p class="item">{{applyInfo.failMsg}}</p>
+                <p class="item">{{applyInfo.courseApplyExtend.failMsg}}</p>
               </div>
               <div class="control" v-if="applyInfo.applyState==3">
                 <button class="btn cancel" @click="cancelApply">取消报名</button>
                 <router-link
-                  :to="{path: `/activity/list/detail/${applyInfo.activity.id}/ticketList/applypay`, props:{applyResult:applyInfo}}"
+                  :to="{path: `/pay/courseApplypay`,query: {applyId: applyInfo.id, applyTargetId:applyInfo.course.id}}"
                   tag="button" class="btn confirm">去支付（还剩{{remainTime}}）
                 </router-link>
               </div>
               <div class="control" v-else>
                 <router-link
-                  :to="{path: `/activity/list/detail/${applyInfo.activity.id}/ticketList`, props:{activity:applyInfo.activity}}"
+                  :to="{path: `/train/${applyInfo.course.id}`, query:{isReapply:1}}"
                   tag="button" class="btn reapply">重新报名
                 </router-link>
               </div>
@@ -75,7 +75,7 @@
   import Scroll from 'base/scroll/scroll';
   import * as util from 'assets/js/util';
   import * as filters from 'assets/js/filters';
-  import { getCourseApplyByCourseId } from 'api/courseDetail';
+  import { getCourseApplyByCourseId, cancelOpenCourseApplyByApplyId } from 'api/courseDetail';
   import { ERR_OK } from 'api/config';
   import Loading from 'base/loading/loading';
   import TopTip from 'base/top-tip/top-tip';
@@ -84,7 +84,7 @@
   var APPLYSTATE = ['报名成功', '报名取消', '待支付', '待审核', '报名失败'];
 
   export default {
-    beforeRouteLeave(to, from, next){
+    beforeRouteLeave (to, from, next) {
       if (this.timer) {
         clearInterval(this.timer);
       }
@@ -113,7 +113,7 @@
     created () {
       this.applyTargetID = this.$route.params.id;
       this.applyID = this.$route.query.applyId;
-      this.requestArticle();
+      this.getApplyInfo();
     },
     computed: {
       ...mapGetters([
@@ -124,8 +124,23 @@
     methods: {
       cancelApply () {
         this.$refs.loading.show();
+        this._cancelOpenCourseApplyByApplyId().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            this.getApplyInfo();
+          }
+        }).catch(erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        }).finally(() => {
+          this.$refs.loading.hide();
+        });
       },
-      requestArticle () {
+      getApplyInfo () {
         return this._getCourseApplyByCourseId().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
@@ -159,9 +174,12 @@
             this.timer = setInterval(() => {
               var distance = 30 * 60 * 1000 - (new Date().getTime() - this.applyInfo.order.initiateTime);
               if (distance <= 0) {
+                this.cancelApply();
                 clearInterval(this.timer);
+                this.timer = null;
+              } else {
+                this.remainTime = filters.formatDate(distance, 'mm:ss').replace(/^([\w]*):([\w]*)$/, '$1分$2秒');
               }
-              this.remainTime = filters.formatDate(distance, 'mm:ss').replace(/^([\w]*):([\w]*)$/, '$1分$2秒');
             }, 1000);
             break;
           case 4:
@@ -171,10 +189,12 @@
         }
 
       },
-      selectApplyTarget (courseID) {
-        this.$router.back();
+      selectApplyTarget () {
+        this.$router.push({
+          path: `/train/${this.applyInfo.course.id}`
+        });
       },
-      _getCourseApplyByCourseId (infoCollections) {
+      _getCourseApplyByCourseId () {
         let params = {
           courseApplyId: this.applyID,
           id: this.applyTargetID,
@@ -182,6 +202,14 @@
           productGuid: this.productGuid
         };
         return getCourseApplyByCourseId(params);
+      },
+      _cancelOpenCourseApplyByApplyId () {
+        let params = {
+          id: this.applyID,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid
+        };
+        return cancelOpenCourseApplyByApplyId(params);
       }
     },
     components: {

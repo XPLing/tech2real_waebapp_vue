@@ -331,7 +331,9 @@
               util.cookieOperate.setWeChatOpenGuid(false);
             }
             if (res.code == 201) {
-
+              if (this.thirdParty === 'weixin') {
+                userInfo.wxOpenid = this.thirdPartyInfo[this.thirdParty].openid;
+              }
               return;
             }
             this.signIn(userInfo);
@@ -340,11 +342,13 @@
             });
 
           } else {
+            this.loginError = true;
             this.$nextTick(() => {
               this.toptipTxt = res.message;
-              this.loginError = true;
+
               this.$refs.toptip.show();
             });
+            return Promise.reject(res);
           }
         }, error => {
           this.$nextTick(() => {
@@ -372,7 +376,7 @@
       },
       _boundMobileByThirdPartUid () {
         var uidName = '';
-        switch (this.thirdparty) {
+        switch (this.thirdParty) {
           case 'weixin':
             uidName = 'unionid';
             break;
@@ -388,14 +392,14 @@
           uid: this.thirdPartyInfo[this.thirdParty][uidName],
           third_party: this.thirdParty,
           product_guid: this.productGuid,
-          nickname: this.thirdPartyInfo[this.thirdParty][thirdParty].nickname,
+          nickname: this.thirdPartyInfo[this.thirdParty].nickname,
           code: this.verifycode
         };
         return boundMobileByThirdPartUid(param);
       },
       _webBoundMobileByThirdPartUid () {
         var uidName = '';
-        switch (this.thirdparty) {
+        switch (this.thirdParty) {
           case 'weixin':
             uidName = 'unionid';
             break;
@@ -417,7 +421,7 @@
       },
       _webRegisterAndBoundMobileByThirdPartUid () {
         var uidName = '';
-        switch (this.thirdparty) {
+        switch (this.thirdParty) {
           case 'weixin':
             uidName = 'unionid';
             break;

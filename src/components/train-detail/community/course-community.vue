@@ -1,5 +1,5 @@
 <template>
-  <div class="g-course-intro" :class="{'joined':this.appliedState>0}"></div>
+  <div class="g-course-intro" :class="{'joined':this.appliedState===1}"></div>
 </template>
 
 <script type="text/ecmascript-6">

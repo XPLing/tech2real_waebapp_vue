@@ -46,7 +46,7 @@
       </div>
       <div class="btnbox row third-party-hook">
         <p class="wechat">
-          <i class="fa fa-weixin needsclick" data-type="wechat" @click="thirdPartLogin('wechat')"
+          <i class="fa fa-weixin needsclick" data-type="wechat" @click="thirdPartLogin('weixin')"
              ref="thirdPartyWechat"></i>
         </p>
         <p class="qq">
@@ -164,7 +164,7 @@
           appIdKey = 'devAppId';
         }
         switch (type) {
-          case 'wechat':
+          case 'weixin':
             url = thirdParty.wechat.url;
             uri = encodeURIComponent(thirdParty.wechat[uriKey] + '?thridparty=weixin');
             if (util.browser.versions.mobile) {

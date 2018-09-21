@@ -1,0 +1,37 @@
+.c-wechat-share-guide{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 998;
+  background-color: $color-background-d;
+  color: $whiteColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .icon{
+    position: absolute;
+    top: formatVal(10,rem);
+    left: formatVal(10,rem);
+  }
+}
+@keyframes confirm-fadein{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+@keyframes confirm-zoom{
+  0%{
+    transform: scale(0);
+  }
+  50%{
+    transform: scale(1.1);
+  }
+  100%{
+    transform: scale(1);
+  }
+}

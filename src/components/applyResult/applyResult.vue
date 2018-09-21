@@ -32,7 +32,7 @@
               <div class="control" v-if="applyInfo.applyState==3">
                 <button class="btn cancel" @click="cancelApply">取消报名</button>
                 <router-link
-                  :to="{path: `/activity/list/detail/${applyInfo.activity.id}/ticketList/applypay`, props:{applyResult:applyInfo}}"
+                  :to="{path: `/pay/activityApplyPay`, query:{applyTargetId: applyInfo.activity.id},props:{applyResult:applyInfo}}"
                   tag="button" class="btn confirm">去支付（还剩{{remainTime}}）
                 </router-link>
               </div>
@@ -84,7 +84,7 @@
   var APPLYSTATE = ['报名成功', '报名取消', '待支付', '待审核', '报名失败'];
 
   export default {
-    beforeRouteLeave(to, from, next){
+    beforeRouteLeave (to, from, next) {
       if (this.timer) {
         clearInterval(this.timer);
       }
@@ -174,8 +174,9 @@
               var distance = 30 * 60 * 1000 - (new Date().getTime() - this.applyInfo.order.initiateTime);
               if (distance <= 0) {
                 clearInterval(this.timer);
+              } else {
+                this.remainTime = filters.formatDate(distance, 'mm:ss').replace(/^([\w]*):([\w]*)$/, '$1分$2秒');
               }
-              this.remainTime = filters.formatDate(distance, 'mm:ss').replace(/^([\w]*):([\w]*)$/, '$1分$2秒');
             }, 1000);
             break;
           case 4:

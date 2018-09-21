@@ -1,7 +1,13 @@
 <template>
   <div class="c-upload-wrapper">
-    <input v-if="refresh" type="file" class="upload-file" @change="PreviewImage" ref="file"/>
-    <i class="icon c-icon-upload" v-if="uploadStatus !== 'uploadComplete'"></i>
+    <template v-if="type==='add'">
+      <input v-if="refresh" type="file" class="upload-file" @change="PreviewImage" ref="file"/>
+      <i class="icon c-icon-upload" v-if="uploadStatus !== 'uploadComplete'"></i>
+    </template>
+    <template v-else>
+      <input v-if="refresh" type="file" class="upload-file" @change="PreviewImage" ref="file"/>
+      <slot></slot>
+    </template>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -19,7 +25,11 @@
         type: Number,
         default: 9
       },
-      regex: ''
+      regex: '',
+      type: {
+        type: String,
+        default: 'add'
+      }
     },
     data () {
       return {

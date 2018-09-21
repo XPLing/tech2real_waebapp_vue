@@ -1,5 +1,5 @@
 <template>
-  <li class="c-course-list-item c-media" @click.stop="selectItem(course)">
+  <li class="c-course-list-item" @click.stop="selectItem(course)">
     <div class="media-left">
       <img v-lazy="{
           src: course.coverUrl,
@@ -9,8 +9,10 @@
     </div>
     <div class="media-body">
       <p class="title">{{course.title}}</p>
-      <p class="info"><span class="price"
-                            :class="course.price===0?'green':'red'">{{course.price === 0 ? '免费' : `￥${course.price}`}}</span>
+      <!--:class="course.price===0?'green':'red'"-->
+      <p class="info">
+        <span class="price">{{course.price === 0 ? '免费' : `￥${course.price}`}}</span>
+        <span class="apply"> <i class="icon c-icon-avatar"></i><em>{{course.applyCount}}</em></span>
       </p>
     </div>
   </li>
