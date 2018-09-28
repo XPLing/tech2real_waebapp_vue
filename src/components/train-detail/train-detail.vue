@@ -2,7 +2,8 @@
   <transition name="slide">
     <div class="g-train-detail">
       <header class="g-header">
-        <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack" :back-handle="'custom'" :has-share="true"
+        <HeaderTitle :title="pageTitle" :has-search="hasSearch" :has-back="hasBack" :back-handle="'custom'"
+                     :has-share="true"
                      @share="showShare" @back="back"></HeaderTitle>
       </header>
       <div class="g-video" v-if="courseData">
@@ -51,7 +52,11 @@
           <p class="original">原价：<span>¥ {{courseOriginalPrice}}</span></p>
         </div>
       </g-select>
-      <router-view :apply-result="applyResult" @updateResult="updateResult" @evaluateUpdate="evaluateUpdate"
+      <keep-alive >
+        <router-view v-if="$route.meta.keepAlive" :apply-result="applyResult" @updateResult="updateResult" @evaluateUpdate="evaluateUpdate"
+                     :course-data="courseData"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive" :apply-result="applyResult" @updateResult="updateResult" @evaluateUpdate="evaluateUpdate"
                    :course-data="courseData"></router-view>
     </div>
   </transition>
@@ -166,11 +171,15 @@
     created () {
       this.init();
     },
+    activated () {
+      console.log('111');
+      this.init();
+    },
     methods: {
-      back(){
+      back () {
         this.$router.push({
-          path: '/train'
-        })
+          path: '/train/all'
+        });
       },
       cancelShare () {
 
@@ -200,8 +209,9 @@
       },
       evaluateUpdate () {
         if (this.view === 'CourseEvaluate') {
-          console.log(this.$refs.view);
-          this.$refs.view.updata();
+          this._getCourseById(this).then(res => {
+            this.$refs.view.updata();
+          });
         }
       },
       updateResult (data) {
@@ -369,7 +379,7 @@
           if (this.courseData.needInfo) {
             this.applyResult = this.courseData;
             this.$router.push({
-              path: `/train/${this.courseID}/applyinfocollect/${this.courseData.guid}`
+              path: `/train/all/${this.courseID}/applyinfocollect/${this.courseData.guid}`
             });
           } else {
             this.$refs.loading.show();
@@ -417,7 +427,7 @@
           id: $this.courseID,
           userGuid: $this.userGuid
         };
-        getCourseById(param).then((res) => {
+        return getCourseById(param).then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
               $this.toptipTxt = res.message;

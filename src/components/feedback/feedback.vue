@@ -37,7 +37,8 @@
         confirmTxt: '请先登录!',
         toptipTxt: '',
         pageTitle: '意见反馈',
-        feedbackCont: ''
+        feedbackCont: '',
+        sendFlag: true
       };
     },
     computed: {
@@ -62,24 +63,25 @@
 
       },
       send () {
-        if (!this.feedbackCont.trim() || !this.userGuid || !this.userInfo || !this.userInfo.mobile) {
+        if (!this.sendFlag || !this.feedbackCont.trim() || !this.userGuid || !this.userInfo || !this.userInfo.mobile) {
           if (!this.userGuid) {
             this.$refs.confirmsWrapper.show();
           }
           return false;
         }
+        this.sendFlag = false;
         this._addFeedback().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
-              this.toptipTxt = res.message;
-              this.$refs.toptip.show();
-              return;
+              return Promise.reject(res);
             }
             this.$router.back();
           }
-        }, erro => {
-          this.toptipTxt = erro.message;
+        }).catch(error => {
+          this.toptipTxt = error.message;
           this.$refs.toptip.show();
+        }).finally(() => {
+          this.sendFlag = true;
         });
       },
       _addFeedback () {

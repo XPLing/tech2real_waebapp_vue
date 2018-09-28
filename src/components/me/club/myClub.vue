@@ -74,19 +74,24 @@
       };
     },
     created () {
-      this._listMyClubs().then((res) => {
-        if (res.code) {
-          if (res.code != ERR_OK) {
-            this.toptipTxt = res.message;
-            this.$refs.toptip.show();
-            return;
+
+    },
+    activated(){
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this._listMyClubs().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              return Promise.reject(res);
+            }
+            this.clubList = res.result;
           }
-          this.clubList = res.result;
-        }
-      }, erro => {
-        this.toptipTxt = erro.message;
-        this.$refs.toptip.show();
-      });
+        }).catch(error => {
+          this.toptipTxt = error.message;
+          this.$refs.toptip.show();
+        });
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     computed: {
       ...mapGetters([

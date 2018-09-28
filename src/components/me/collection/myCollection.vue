@@ -11,7 +11,7 @@
             <div class="g-recommend course">
               <ul class="list" v-if="requestScrollDataList">
                 <info-item :info="item" v-for="(item, index) in requestScrollDataList" :key="index"
-                                @selectInfo="selectItem"></info-item>
+                           @selectInfo="selectItem"></info-item>
               </ul>
               <div class="no-result" v-show="!requestScrollDataList">
                 <no-result :title="'没有找到您要的内容'"></no-result>
@@ -25,7 +25,10 @@
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
-      <router-view v-if="isRouterAlive"></router-view>
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
     </div>
   </transition>
 </template>
@@ -71,7 +74,14 @@
       ])
     },
     created () {
-      this.requestScrollData();
+
+    },
+    activated () {
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.requestScrollData();
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     methods: {
       reload () {
@@ -104,9 +114,7 @@
             this.requestMoreFlag = false;
             if (res.code) {
               if (res.code != ERR_OK) {
-                this.toptipTxt = res.message;
-                this.$refs.toptip.show();
-                return;
+                return Promise.reject(res);
               }
               if (res.result.length > 0) {
                 if (this.requestScrollDataList) {
@@ -123,9 +131,9 @@
                 });
               }
             }
-          }, erro => {
+          }).catch(error => {
             this.$refs.scroll.finishPullUp();
-            this.toptipTxt = erro.message;
+            this.toptipTxt = error.message;
             this.$refs.toptip.show();
           });
         }

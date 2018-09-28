@@ -13,7 +13,7 @@
                   <p class="title">{{item.title}}</p>
                   <ul class="tag-list">
                     <li class="tag-item" v-for="(titem, tindex) in item.tagList" :key="tindex">
-                      <router-link :to="{path: `/train/tagdetail/${titem.id}`}">
+                      <router-link :to="{path: `/train/all/tagdetail/${titem.id}`}">
                         {{titem.name}}
                       </router-link>
                     </li>
@@ -34,7 +34,10 @@
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
-      <router-view></router-view>
+      <keep-alive >
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
     </div>
   </transition>
 </template>
@@ -51,6 +54,12 @@
   import CourseItem from 'base/course-item/course-item';
 
   export default {
+    beforeRouteEnter (to, from, next) {
+      if (from.name === 'tagDetail') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; // 设置为true说明你是返回到这个页面，而不是通过跳转从其他页面进入到这个页面
+      }
+      next();
+    },
     data () {
       return {
         toptipTxt: '',
@@ -71,19 +80,26 @@
       ])
     },
     created () {
-      this._listTagContainers().then((res) => {
-        if (res.code) {
-          if (res.code != ERR_OK) {
-            this.toptipTxt = res.message;
-            this.$refs.toptip.show();
-            return;
+
+    },
+    activated () {
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this._listTagContainers().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            this.tagList = res.result;
           }
-          this.tagList = res.result;
-        }
-      }, erro => {
-        this.toptipTxt = erro.message;
-        this.$refs.toptip.show();
-      });
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     mounted () {
     },

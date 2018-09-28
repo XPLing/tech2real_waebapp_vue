@@ -38,7 +38,8 @@
         confirmTxt: '请先登录!',
         toptipTxt: '',
         pageTitle: '评论',
-        commentFormCont: ''
+        commentFormCont: '',
+        sendFlag: true
       };
     },
     computed: {
@@ -62,7 +63,7 @@
 
       },
       send () {
-        if (!this.commentFormCont.trim() || !this.userGuid || !this.userInfo || !this.userInfo.mobile) {
+        if (!this.sendFlag || !this.commentFormCont.trim() || !this.userGuid || !this.userInfo || !this.userInfo.mobile) {
           if (!this.userGuid) {
             this.$refs.confirmsWrapper.show();
           }
@@ -74,19 +75,20 @@
         } else {
           fnName = '_addCommentReply';
         }
+        this.sendFlag = false;
         this[fnName]().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
-              this.toptipTxt = res.message;
-              this.$refs.toptip.show();
-              return;
+              return Promise.reject(res);
             }
             this.$emit('update');
             this.$router.back();
           }
-        }, erro => {
-          this.toptipTxt = erro.message;
+        }).catch(error => {
+          this.toptipTxt = error.message;
           this.$refs.toptip.show();
+        }).finally(() => {
+          this.sendFlag = true;
         });
       },
       _addCommentV2 () {

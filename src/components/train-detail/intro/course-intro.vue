@@ -14,7 +14,7 @@
             <div class="teacher-list">
               <swiper :options="swiperOPtsTeacher" class="g-swiper">
                 <swiper-slide class="swiper-item" v-for="(item,index) in courseIntro.teachers" :key="index">
-                  <router-link :to="{path:`/train/teacherdetail/${item.id}`}" class="c-media">
+                  <router-link :to="{path:`/train/all/teacherdetail/${item.id}`}" class="c-media">
                     <div class="avatar">
                       <img :src="item.faceUrl">
                     </div>
@@ -65,6 +65,7 @@
         listenScroll: true,
         introImgs: [],
         loadedImgs: [],
+        imgsLoadStatus: 'ready',
         swiperOPtsTeacher: {
           freeMode: true,
           loop: false,
@@ -97,13 +98,21 @@
         return this.courseData;
       },
       loadingImgs () {
+        var arr = [];
         if (this.loadedImgs.length > 0) {
-          for (var i = 0, len = this.loadedImgs.length; i < len; i++) {
-            var item = this.loadedImgs[i];
-            this.introImgs.splice(item, 1);
+          for (var i = 0, len = this.introImgs.length; i < len; i++) {
+            var item = this.introImgs[i];
+            for (var j = 0, jlen = this.loadedImgs.length; j < jlen; j++) {
+              var jitem = this.loadedImgs[i];
+              if (jitem !== item) {
+                arr.push(item);
+              }
+            }
           }
+        } else {
+          arr = this.introImgs;
         }
-        return this.introImgs;
+        return arr;
       }
     },
     watch: {
@@ -122,28 +131,30 @@
         this.id = this.$route.params.id;
       },
       descImage () {
-        if (this.loadingImgs.length > 0) {
+        if (this.loadingImgs.length > 0 && this.imgsLoadStatus === 'ready') {
           var imgs = this.loadingImgs;
+          this.imgsLoadStatus = 'loading';
           if (imgs.length < 0) {
+            this.imgsLoadStatus = 'loaded';
             return;
           }
-          imgOnload(imgs, this, 'descImageLoaded').then((res) => {
-            this.loadedImgs = res.loaded;
-            this.$refs.scroll.refresh();
-            if (res.index === imgs.length - 1) {
-              this.descImageLoaded = true;
-              this.$refs.scroll.scroll.off('scroll');
-            }
-          }).catch(res => {
-            this.loadedImgs = res.loaded;
-            this.$refs.scroll.refresh();
-            if (res.index === imgs.length - 1) {
-              this.descImageLoaded = true;
-              this.$refs.scroll.scroll.off('scroll');
-            }
+          Promise.all(imgOnload(imgs, this, 'descImageLoaded')).then((res) => {
+            console.log('img: ' + res);
+            this.imgsLoadStatus = 'loaded';
+            this.loadedImgs = res;
+            this.$nextTick(() => {
+              this.$refs.scroll.refresh();
+            });
+//            if (res.loaded.length === this.introImgs.length) {
+//              // this.$refs.scroll.scroll.off('scroll');
+//            }
+          }).catch(() => {
+            this.imgsLoadStatus = 'error';
+            this.confirmTxt = '网络出错请重新加载！';
+            this.$refs.confirmsWrapper.show();
           });
         } else {
-          this.$refs.scroll.scroll.off('scroll');
+          // this.$refs.scroll.scroll.off('scroll');
         }
       }
     },

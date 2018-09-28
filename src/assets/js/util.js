@@ -258,7 +258,7 @@ export let common = {
   calculateWH (num) {
     var windowW = parseInt(window.outerWidth || window.innerWidth || window.screen.width);
     windowW = windowW > 375 ? 375 / 10 : windowW / 10;
-    return num / globalVariable.originWidth * windowW;
+    return num / config.originWidth * windowW;
   },
   cssPrefix (style) {
     if (vendor === false) {
@@ -329,8 +329,9 @@ export function getData (el, name, val) {
   return el.getAttribute(attributeName);
 }
 
-export var globalVariable = {
-  originWidth: 37.5
+export let config = {
+  originWidth: 37.5,
+  payRedirectUri: process.env.NODE_ENV === 'development' ? 'https://open.dev.tech2real.com/m-web/payresult' : 'https://open.dev.tech2real.com/m-web/payresult'
 };
 
 export function formErrorMsg ({errorObj, name, message, rule, scope, interval}) {

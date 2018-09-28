@@ -108,7 +108,7 @@
   import * as util from 'assets/js/util';
   import { Validator, ErrorBag } from 'vee-validate';
   import { getCourseApplyByCourseId } from 'api/courseDetail';
-  import { getWxJsApiConfig, wechatPay, wxPayH5 } from 'api/pay';
+  import { getWxJsApiConfig, wechatPay, wxPayH5, generateAlipayPaymentInfoV2 } from 'api/pay';
   import { mapGetters, mapMutations } from 'vuex';
   import { thirdParty, ERR_OK } from 'api/config';
   import Loading from 'base/loading/loading';
@@ -137,41 +137,44 @@
       };
     },
     created () {
-      this.applyTargetID = this.$route.query.applyTargetId;
-      this.applyID = this.$route.query.applyId;
-      this.errors.update({
-        field: 'payWay',
-        msg: 'Newsletter Email is required',
-        rule: 'required',
-        scope: 'pay'
-      });
-      this.$validator.localize({
-        zh_CN: {
-          attributes: {
-            payWay: '支付方式',
-            protocol: '支付须知'
-          }
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.applyTargetID = this.$route.query.applyTargetId;
+        this.applyID = this.$route.query.applyId;
+        this.errors.update({
+          field: 'payWay',
+          msg: 'Newsletter Email is required',
+          rule: 'required',
+          scope: 'pay'
+        });
+        this.$validator.localize({
+          zh_CN: {
+            attributes: {
+              payWay: '支付方式',
+              protocol: '支付须知'
+            }
 //          custom: {
 //            payWay: {
 //              required: field => '请勾选' + field
 //            }
 //          }
-        }
-      });
-      this._getCourseApplyByCourseId().then((res) => {
-        if (res.code) {
-          if (res.code != ERR_OK) {
-            this.toptipTxt = res.message;
-            this.$refs.toptip.show();
-            return;
           }
-          this.applyInfo = res.result;
-        }
-      }, erro => {
-        this.toptipTxt = erro.message;
-        this.$refs.toptip.show();
-      });
-
+        });
+        this._getCourseApplyByCourseId().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            this.applyInfo = res.result;
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     mounted () {
       this._getWxJsApiConfig().then((res) => {
@@ -210,6 +213,8 @@
       }).finally(() => {
         this.$refs.loading.hide();
       });
+    },
+    activated () {
 
     },
     computed: {
@@ -222,10 +227,10 @@
     },
     methods: {
       wxPayH5 (data) {
-
-
+        var url = data.mweb_url, redirectUri = encodeURIComponent(`${util.config.payRedirectUri}?id=${this.applyTargetID}&applyId=${this.applyID}&payType=weixin`);
+        url = url + '&redirect_url=' + redirectUri;
+        window.location.href = url;
       },
-
       wxPayJsApi (params) {
         /* eslint-disable no-undef */
         if (typeof WeixinJSBridge == 'undefined') {
@@ -345,7 +350,7 @@
         if (this.toPaying) {
           this.toPaying = false;
           this.$router.replace({
-            path: `/train/${this.applyInfo.course.id}`
+            path: `/train/all/${this.applyInfo.course.id}`
           });
         }
       },
@@ -418,9 +423,7 @@
                   }).finally(() => {
                     this.$refs.loading.hide();
                   });
-
                 }
-
               } else {
                 this.$refs.loading.hide();
                 this.toPaying = false;
@@ -502,6 +505,12 @@
           id: this.applyInfo.order.id
         };
         return wxPayH5(params);
+      },
+      _generateAlipayPaymentInfoV2 () {
+        let params = {
+          id: this.applyInfo.order.id
+        };
+        return generateAlipayPaymentInfoV2(params);
       }
     },
     components: {

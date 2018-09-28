@@ -104,7 +104,7 @@
       },
       selectcourse (course) {
         this.$router.push({
-          path: `/train/${course.id}`
+          path: `/train/all/${course.id}`
         });
       },
       _listRecommendCourses (page) {

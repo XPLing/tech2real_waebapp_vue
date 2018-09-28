@@ -13,7 +13,7 @@
                   <p class="title">{{item.title}}</p>
                   <ul class="tag-list">
                     <li class="tag-item needsclick" v-for="(titem, tindex) in item.tagList" :key="tindex">
-                      <router-link :to="{path: `/train/tagdetail/${titem.id}`}">
+                      <router-link :to="{path: `/train/all/tagdetail/${titem.id}`}">
                         {{titem.name}}
                       </router-link>
                     </li>

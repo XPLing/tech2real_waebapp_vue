@@ -46,7 +46,10 @@
     </top-tip>
     <share :no-self="true" @cancel="cancelShare" @share="share" ref="share"></share>
     <confirm ref="confirmsWrapper" :text="confirmTxt" @confirm="confirm"></confirm>
-    <router-view v-if="isRouterAlive"></router-view>
+    <keep-alive >
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 

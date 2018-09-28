@@ -31,7 +31,7 @@
         class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>
-      <router-view :comment-form-placeholder="`@${placeholder}:`" :type="'reply'" @update="update"></router-view>
+      <router-view :comment-form-placeholder="`@${placeholder}:`" :type="'reply'" @replayUpdate="update"></router-view>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -87,6 +87,9 @@
       this.articleId = this.$route.params.articleId;
       this.isUpdate = false;
       this.dataInit();
+    },
+    activated(){
+
     },
     computed: {
       ...mapGetters([
@@ -150,7 +153,7 @@
               this.$refs.toptip.show();
               return;
             }
-            this.$emit('update');
+            this.$emit('dataUpdate');
             this.$router.back();
           }
         }, erro => {

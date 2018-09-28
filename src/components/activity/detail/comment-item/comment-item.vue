@@ -30,7 +30,7 @@
         class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>
-      <router-view :comment-form-placeholder="`@${placeholder}:`" :type="'reply'" @update="update"></router-view>
+      <router-view :comment-form-placeholder="`@${placeholder}:`" :type="'reply'" @replyUpdate="update"></router-view>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>

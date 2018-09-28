@@ -48,7 +48,9 @@
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
     <back-top ref="backTop" @backTop="backTop"></back-top>
-    <router-view v-if="isRouterAlive"></router-view>
+    <keep-alive>
+      <router-view v-if="isRouterAlive"></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -249,7 +251,7 @@
             break;
           case 3:
             this.$router.push({
-              path: `/train/${params.id}`
+              path: `/train/all/${params.id}`
             });
             break;
           case 4:
@@ -257,7 +259,7 @@
             break;
           case 5:
             this.$router.push({
-              path: `/train/teacherdetail/${params.id}`
+              path: `/train/all/teacherdetail/${params.id}`
             });
             break;
         }

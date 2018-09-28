@@ -77,7 +77,7 @@
       </top-tip>
       <back-top ref="backTop" @backTop="backTop"></back-top>
       <keep-alive>
-        <router-view @update="updateCommunity"></router-view>
+        <router-view></router-view>
       </keep-alive>
     </div>
   </transition>
@@ -115,6 +115,11 @@
 
   export default {
     inject: ['reload'],
+    provide () {
+      return {
+        updateCommunity: this.updateCommunity
+      };
+    },
     beforeRouteEnter (to, from, next) {
       next((vm) => {
 //        if (from.name === 'activity' || /clubDetail/.test(from.name)) {
@@ -140,13 +145,19 @@
         viewArticle: null,
         scrollY: 0,
         articleId: 0,
-        shareInfo: null
+        shareInfo: null,
+        imgsLoadStatus: 'ready'
       };
     },
     created () {
-
-      this.articleId = this.$route.params.articleId;
       this.likeFlag = true;
+    },
+    activated () {
+      if (this.$route.meta.toTop) {
+        console.log('toTop');
+        this.$refs.scroll.scrollTo(0, 0);
+      }
+      this.articleId = this.$route.params.articleId;
       this._getArticleById().then((res) => {
         if (res.code) {
           if (res.code != ERR_OK) {
@@ -209,13 +220,21 @@
     },
     computed: {
       loadingImgs () {
+        var arr = [];
         if (this.loadedImgs.length > 0) {
-          for (var i = 0, len = this.loadedImgs.length; i < len; i++) {
-            var item = this.loadedImgs[i];
-            this.introImgs.splice(item, 1);
+          for (var i = 0, len = this.introImgs.length; i < len; i++) {
+            var item = this.introImgs[i];
+            for (var j = 0, jlen = this.loadedImgs.length; j < jlen; j++) {
+              var jitem = this.loadedImgs[i];
+              if (jitem !== item) {
+                arr.push(item);
+              }
+            }
           }
+        } else {
+          arr = this.introImgs;
         }
-        return this.introImgs;
+        return arr;
       },
       ...mapGetters([
         'productGuid',
@@ -375,22 +394,28 @@
           path: url
         });
       },
-      descImage (pos) {
-        this.scrollY = pos.y;
-        if (this.loadingImgs.length > 0) {
+      descImage () {
+        if (this.loadingImgs.length > 0 && this.imgsLoadStatus === 'ready') {
           var imgs = this.loadingImgs;
+          this.imgsLoadStatus = 'loading';
           if (imgs.length < 0) {
+            this.imgsLoadStatus = 'loaded';
             return;
           }
-          imgOnload(imgs, this, 'descImageLoaded').then((res) => {
-            this.loadedImgs = res.loaded;
+          Promise.all(imgOnload(imgs, this, 'descImageLoaded')).then((res) => {
+            this.imgsLoadStatus = 'loaded';
+            this.loadedImgs = res;
             this.$nextTick(() => {
               this.$refs.scroll.refresh();
             });
-            if (res.index === imgs.length - 1) {
-              this.descImageLoaded = true;
-              // this.$refs.scroll.scroll.off('scroll');
-            }
+//            if (res.loaded.length === this.introImgs.length) {
+//              // this.$refs.scroll.scroll.off('scroll');
+//            }
+          }).catch((error) => {
+            this.$refs.scroll.refresh();
+            console.log('加载富文本图片失败');
+            console.log(error);
+
           });
         } else {
           // this.$refs.scroll.scroll.off('scroll');
@@ -520,13 +545,6 @@
         this.$nextTick(() => {
           this.$refs.scroll.refresh();
         });
-      },
-      $route (to, from) {
-        if (to.name === 'infoDetail') {
-          if (/infoDetail/.test(from.name)) {
-            this.reload();
-          }
-        }
       }
     },
     components: {

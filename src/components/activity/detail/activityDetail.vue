@@ -44,7 +44,7 @@
             </div>
             <div class="info-detail" v-if="dataInfo">
               <p class="title">活动详情</p>
-              <div class="brief" v-html="dataInfo.brief"></div>
+              <div ref="brief" class="brief" v-html="dataInfo.brief"></div>
             </div>
           </div>
         </scroll>
@@ -66,18 +66,17 @@
       </div>
       <share @cancel="cancelShare" @share="share" ref="share"></share>
       <back-top ref="backTop" @backTop="backTop"></back-top>
-      <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" :activity="dataInfo"></router-view>
+      <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" :activity="dataInfo" @applyUpdate="applyUpdate"></router-view>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
+      <confirm ref="confirmsWrapper" :text="confirmTxt" @confirm="confirm"></confirm>
     </div>
   </transition>
 
 </template>
 
 <script type="text/ecmascript-6">
-  import 'swiper/dist/css/swiper.css';
-  import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import Scroll from 'base/scroll/scroll';
   import HeaderTitle from 'components/header-title/header-title';
   import { ERR_OK } from 'api/config';
@@ -85,6 +84,7 @@
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import Loading from 'base/loading/loading';
+  import Confirm from 'base/confirm/confirm';
   import NoResult from 'base/no-result/no-result';
   import { getActivityById } from 'api/activity';
   import BackTop from 'base/backtop/backtop';
@@ -93,11 +93,9 @@
   import Share from 'base/share/share';
 
   export default {
-    inject: ['reload'],
 //    beforeRouteEnter (to, from, next) {
 //      next((vm) => {
 //        if (/activity/.test(from.name)) {
-//          vm.reload();
 //        }
 //      });
 //    },
@@ -110,24 +108,34 @@
         listenScroll: true,
         scrollY: 0,
         introImgs: [],
-        loadedImgs: []
+        loadedImgs: [],
+        imgsLoadStatus: 'ready',
+        confirmTxt: ''
       };
     },
     created () {
       this.id = this.$route.params.id;
     },
-    mounted() {
+    mounted () {
       this.initDate();
     },
     computed: {
       loadingImgs () {
+        var arr = [];
         if (this.loadedImgs.length > 0) {
-          for (var i = 0, len = this.loadedImgs.length; i < len; i++) {
-            var item = this.loadedImgs[i];
-            this.introImgs.splice(item, 1);
+          for (var i = 0, len = this.introImgs.length; i < len; i++) {
+            var item = this.introImgs[i];
+            for (var j = 0, jlen = this.loadedImgs.length; j < jlen; j++) {
+              var jitem = this.loadedImgs[i];
+              if (jitem !== item) {
+                arr.push(item);
+              }
+            }
           }
+        } else {
+          arr = this.introImgs;
         }
-        return this.introImgs;
+        return arr;
       },
       ...mapGetters([
         'productGuid',
@@ -135,7 +143,11 @@
       ])
     },
     methods: {
-      initDate(){
+      applyUpdate(){
+
+      },
+      confirm(){},
+      initDate () {
         this._getActivityById().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
@@ -152,9 +164,7 @@
           this.$refs.toptip.show();
         });
       },
-      cancelShare () {
-
-      },
+      cancelShare () {},
       showShare () {
         this.$refs.share.show();
       },
@@ -241,20 +251,25 @@
       },
       descImage (pos) {
         this.scrollY = pos.y;
-        if (this.loadingImgs.length > 0) {
+        if (this.loadingImgs.length > 0 && this.imgsLoadStatus === 'ready') {
           var imgs = this.loadingImgs;
+          this.imgsLoadStatus = 'loading';
           if (imgs.length < 0) {
+            this.imgsLoadStatus = 'loaded';
             return;
           }
-          imgOnload(imgs, this, 'descImageLoaded').then((res) => {
-            this.loadedImgs = res.loaded;
+          Promise.all(imgOnload(imgs, this, 'descImageLoaded')).then((res) => {
+            this.imgsLoadStatus = 'loaded';
+            this.loadedImgs = res;
             this.$nextTick(() => {
               this.$refs.scroll.refresh();
             });
-            if (res.index === imgs.length - 1) {
-              this.descImageLoaded = true;
-              // this.$refs.scroll.scroll.off('scroll');
-            }
+//            if (res.loaded.length === this.introImgs.length) {
+//              // this.$refs.scroll.scroll.off('scroll');
+//            }
+          }).catch(() => {
+            this.imgsLoadStatus = 'error';
+            this.confirmTxt = '网络出错请重新加载！';
           });
         } else {
           // this.$refs.scroll.scroll.off('scroll');
@@ -272,6 +287,15 @@
       }
     },
     watch: {
+      dataInfo () {
+        this.$nextTick(() => {
+          this.introImgs = [];
+          var nodelist = this.$refs.brief.querySelectorAll('img');
+          for (var i = 0, len = nodelist.length; i < len; i++) {
+            this.introImgs.push(nodelist[i]);
+          }
+        });
+      },
       scrollY (newVal) {
         if (newVal < -100) {
           if (!this.$refs.backTop.backTopShowFlag) {
@@ -282,26 +306,18 @@
             this.$refs.backTop.hideIcon();
           }
         }
-      },
-      $route (to, from) {
-        if (to.name === 'activityDetail') {
-          if (/activityDetail/.test(from.name)) {
-            this.reload();
-          }
-        }
       }
     },
     components: {
       HeaderTitle,
-      swiper,
-      swiperSlide,
       TopTip,
       Loading,
       Scroll,
       BackTop,
       NoResult,
       ActivityList,
-      Share
+      Share,
+      Confirm
     }
   };
 </script>

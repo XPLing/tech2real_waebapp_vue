@@ -129,6 +129,7 @@
         }
       },
       update () {
+        console.log('comment-item');
         this.requestPage = 1;
         this.replyList = null;
         this.noMore = false;

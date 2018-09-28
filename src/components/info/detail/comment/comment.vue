@@ -51,6 +51,7 @@
   import CommunityList from 'base/community-list/community-list';
 
   export default {
+    inject: ['updateCommunity'],
     data () {
       return {
         toptipTxt: '',
@@ -64,15 +65,29 @@
         noMore: false,
         noResult: '加载中。。。',
         noMoreStr: '没有更多了~',
-        requestPage: 1
+        requestPage: 1,
+        isFirstEnter: true
       };
     },
+    beforeRouteEnter (to, from, next) {
+      if (from.name === 'infoDetail_commentForm') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; // 设置为true说明你是返回到这个页面，而不是通过跳转从其他页面进入到这个页面
+      }
+      next();
+    },
     created () {
-      this.commentId = this.$route.params.commentId;
-      this.articleId = this.$route.params.articleId;
-      this.pageTitle = this.$route.query.title;
-      this.isUpdate = false;
-      this.requestCommunity();
+
+    },
+    activated () {
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.commentId = this.$route.params.commentId;
+        this.articleId = this.$route.params.articleId;
+        this.pageTitle = this.$route.query.title;
+        this.isUpdate = false;
+        this.requestCommunity();
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     computed: {
       ...mapGetters([
@@ -108,7 +123,6 @@
         this.requestMoreFlag = false;
         this.isUpdate = true;
         this.requestCommunity();
-
       },
       selectCommunity (data) {
         this.$router.push({
@@ -150,7 +164,7 @@
               }
               if (this.isUpdate) {
                 this.isUpdate = false;
-                this.$emit('update');
+                 // this.updateCommunity();
               }
             }
           }, erro => {

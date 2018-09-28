@@ -23,8 +23,10 @@ const InfoDetailComment = () => import(/* webpackChunkName: "infoDetailComment" 
 const InfoDetailCommentItem = () => import(/* webpackChunkName: "InfoDetailCommentItem" */ 'components/info/detail/comment-item/comment-item');
 const InfoDetailCommentForm = () => import(/* webpackChunkName: "InfoDetailCommentForm" */ 'components/info/detail/commentForm/commentForm');
 const Train = () => import(/* webpackChunkName: "train" */ 'components/study/study');
+const TrainAll = () => import(/* webpackChunkName: "train" */ 'components/train/train');
 const TrainDetail = () => import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail');
-const CourseList = () => import(/* webpackChunkName: "courseList" */ 'components/train/course/courselist');
+const TrainMyCourse = () => import(/* webpackChunkName: "TrainMyCourse" */ 'components/study-subscribe/study-subscribe');
+const TrainCourseList = () => import(/* webpackChunkName: "TrainCourseList" */ 'components/train/course/courselist');
 const courseEvaluateForm = () => import(/* webpackChunkName: "courseEvaluateForm" */ 'components/train-detail/evaluateForm/evaluateForm');
 const TeacherDetail = () => import(/* webpackChunkName: "teacherDetail" */ 'components/teacher-detail/teacher-detail');
 const TeacherList = () => import(/* webpackChunkName: "teacherList" */ 'components/teacherlist/teacherlist');
@@ -84,13 +86,22 @@ const Router = new VueRouter({
   linkActiveClass: 'active',
   mode: 'history',
   base: '/m-web/',
+  scrollBehavior (to, from, savePosition) { // 在点击浏览器的“前进/后退”，或者切换导航的时候触发。
+    to.meta.toTop = false;
+    if (savePosition) {
+      return savePosition;
+    } else {
+      to.meta.toTop = true;
+      return {x: 0, y: 0};
+    }
+  },
   routes: [
     {
       path: routerPrefix + '/',
       redirect: routerPrefix + '/info'
     },
     {
-      path: routerPrefix + '/feedback',
+      path: '/feedback',
       component: FeedBack
     },
     {
@@ -111,6 +122,10 @@ const Router = new VueRouter({
                 {
                   path: ':commentId(\\d+)',
                   component: InfoDetailCommentItem,
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
                   name: 'infoDetail_commentDetail',
                   children: [
                     {
@@ -138,18 +153,18 @@ const Router = new VueRouter({
             {
               path: ':commentId(\\d+)',
               component: InfoDetailCommentItem,
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
               children: [
                 {
+                  name: 'infoCommentForm',
                   path: 'commentform',
                   component: InfoDetailCommentForm,
                   props: true
                 }
               ]
-            },
-            {
-              path: 'commentform',
-              component: InfoDetailCommentForm,
-              props: true
             }
           ]
         }
@@ -158,79 +173,161 @@ const Router = new VueRouter({
     {
       path: '/train',
       component: Train,
+      redirect: '/train/all',
+      name: 'train',
+      meta: {
+        keepAlive: true,
+        isBack: false
+      },
       children: [
         {
           path: 'applypay',
           alias: '/pay/courseApplypay',
+          name: 'courseApplyPay',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
           component: CourseApplyPay
         },
         {
-          path: ':id(\\d+)',
-          component: TrainDetail,
-          name: 'trainDetail',
+          path: 'all',
+          component: TrainAll,
           meta: {
-            requireLogin: true
+            keepAlive: true,
+            isBack: false
           },
           children: [
             {
-              path: 'evaluateForm',
-              component: courseEvaluateForm
+              path: ':id(\\d+)',
+              component: TrainDetail,
+              name: 'trainDetail',
+              meta: {
+                requireLogin: true,
+                keepAlive: false,
+                isBack: false
+              },
+              children: [
+                {
+                  path: 'evaluateForm',
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
+                  component: courseEvaluateForm,
+                  name: 'courseEvaluateForm'
+                },
+                {
+                  path: 'applyresult',
+                  name: 'trainDetailApply_applyresult',
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
+                  component: CourseApplyResult
+                },
+                {
+                  path: 'applyinfocollect/:applyTargetGuid',
+                  name: 'trainDetailApply_applyinfocollect',
+                  component: CourseApplyInfoCollect,
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
+                  props: {
+                    applyType: 'applyCourse'
+                  }
+                },
+                {
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
+                  path: 'applypay',
+                  component: CourseApplyPay
+                }
+              ]
             },
             {
-              path: 'applyresult',
-              name: 'trainDetailApply_applyresult',
-              component: CourseApplyResult
+              path: 'teacherdetail/:id',
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
+              component: TeacherDetail,
+              name: 'teacherDetail'
             },
             {
-              path: 'applyinfocollect/:applyTargetGuid',
-              name: 'trainDetailApply_applyinfocollect',
-              component: CourseApplyInfoCollect,
-              props: {
-                applyType: 'applyCourse'
-              }
+              path: 'teacherlist',
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
+              component: TeacherList,
+              name: 'teacherList'
             },
             {
-              path: 'applypay',
-              component: CourseApplyPay
+              path: 'tagdetail/:id',
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
+              component: TagDetail,
+              name: 'tagDetail'
+            },
+            {
+              path: 'taglist',
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
+              component: TagList,
+              name: 'tagList'
+            },
+            {
+              path: 'courselist',
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
+              component: TrainCourseList,
+              name: 'trainCourseList'
             }
           ]
         },
         {
-          path: 'courselist',
-          component: CourseList
-        },
-        {
-          path: 'teacherdetail/:id',
-          component: TeacherDetail
-        },
-        {
-          path: 'teacherlist',
-          component: TeacherList
-        },
-        {
-          path: 'tagdetail/:id',
-          component: TagDetail
-        },
-        {
-          path: 'taglist',
-          component: TagList
+          path: 'mycourse',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: TrainMyCourse,
+          name: 'trainMyCourse'
         }
       ]
     },
     {
-      path: routerPrefix + '/community',
+      path: '/community',
       component: Community,
       children: [
         {
           path: ':commentId(\\d+)',
           component: CommunityCommentItem,
           name: 'community_commentDetail',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
           children: [
             {
               path: 'commentform',
               component: CommunityCommentForm,
               name: 'community_commentForm',
-              props: true
+              props: true,
+              meta: {
+                keepAlive: true,
+                isBack: false
+              }
             }
           ]
         },
@@ -238,39 +335,72 @@ const Router = new VueRouter({
           path: 'commentform',
           component: CommunityCommentForm,
           name: 'community_commentFormRoot',
-          props: true
+          props: true,
+          meta: {
+            keepAlive: true,
+            isBack: false
+          }
         }
       ]
     },
     {
-      path: routerPrefix + '/activity',
+      path: '/activity',
       component: Activity,
       name: 'activity',
       children: [
         {
           path: 'list',
           component: ActivityList,
+          name: 'activityList',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
           children: [
             {
               path: 'applypay',
               component: ApplyPay,
+              name: 'activityApplyPay',
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
               alias: '/pay/activityApplyPay'
             },
             {
               path: 'detail/:id(\\d+)',
               component: ActivityDetail,
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
               name: 'activityDetail',
               children: [
                 {
                   path: 'commentlist',
+                  name: 'activityDetailComment',
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
                   component: ActivityDetailComment,
                   children: [
                     {
                       path: ':commentId(\\d+)',
+                      name: 'activityDetailCommentItem',
+                      meta: {
+                        keepAlive: true,
+                        isBack: false
+                      },
                       component: ActivityDetailCommentItem,
                       children: [
                         {
                           path: 'commentform',
+                          name: 'activityDetailCommentForm',
+                          meta: {
+                            keepAlive: true,
+                            isBack: false
+                          },
                           component: ActivityDetailCommentForm,
                           props: true
                         }
@@ -278,6 +408,11 @@ const Router = new VueRouter({
                     },
                     {
                       path: 'commentform',
+                      name: 'activityDetailCommentForm',
+                      meta: {
+                        keepAlive: true,
+                        isBack: false
+                      },
                       component: ActivityDetailCommentForm,
                       props: true
                     }
@@ -343,65 +478,121 @@ const Router = new VueRouter({
       ]
     },
     {
-      path: routerPrefix + '/me',
+      path: '/me',
       component: Me,
       children: [
         {
           path: 'info',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
           component: MyInfo
         },
         {
           path: 'course',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
           component: MyCourse
         },
         {
           path: 'activity',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
           component: MyActivity
         },
         {
           path: 'collection',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
           component: MyCollection
         },
         {
           path: 'topic',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
           component: MyTopic
         },
         {
           path: 'club',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
           component: MyClub
         },
         {
           path: 'message',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
           component: MyMessage
         },
         {
           path: 'about',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
           component: About
         },
         {
           path: 'protocol',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
           component: Protocol
         },
         {
           path: 'setting',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
           component: Setting,
           children: [
             {
               path: 'safety',
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
               component: SettingASafety,
               children: [
                 {
                   path: 'resetPW',
+                  meta: {
+                    keepAlive: false,
+                    isBack: false
+                  },
                   component: ResetPW
                 },
                 {
                   path: 'bindMobile',
+                  meta: {
+                    keepAlive: false,
+                    isBack: false
+                  },
                   component: MyAccountBindMobile
                 }
               ]
             },
             {
               path: 'manage',
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
               component: SettingAManage
             }
           ]

@@ -76,17 +76,27 @@
       ])
     },
     created () {
-      this.evaluateCount = this.courseData.evaluateCount;
-      this.evaluated = this.courseData.evaluated;
-      if (this.evaluated) {
-        this.myEvaluate = this.courseData.myEvaluate;
-        this.score = this.myEvaluate.star;
-      }
-      this.requestScrollData();
+      this.init();
     },
     mounted () {
     },
+    activated () {
+//      if (!this.$route.meta.isBack || this.isFirstEnter) {
+//
+//      }
+//      this.$route.meta.isBack = false;
+//      this.isFirstEnter = false;
+    },
     methods: {
+      init(){
+        this.evaluateCount = this.courseData.evaluateCount;
+        this.evaluated = this.courseData.evaluated;
+        if (this.evaluated) {
+          this.myEvaluate = this.courseData.myEvaluate;
+          this.score = this.myEvaluate.star;
+        }
+        this.requestScrollData();
+      },
       like (data) {
         if (data.isLike === 'N' && !this.likeFlag) {
           this.likeFlag = true;
@@ -112,11 +122,11 @@
         this.requestScrollDataList = null;
         this.noMore = false;
         this.requestMoreFlag = false;
-        this.requestScrollData();
+        this.init();
       },
       evaluate () {
         this.$router.push({
-          path: `/train/${this.$route.params.id}/evaluateForm`
+          path: `/train/all/${this.$route.params.id}/evaluateForm`
         });
       },
       requestScrollData () {

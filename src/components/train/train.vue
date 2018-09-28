@@ -16,7 +16,7 @@
         <div class="chunk g-tagList">
           <ul class="list">
             <li class="item" v-for="(item, index) in tagList" :key="index">
-              <router-link :to="{path: `/train/tagdetail/${item.id}`}">
+              <router-link :to="{path: `/train/all/tagdetail/${item.id}`}">
                 <p class="icon">
                   <img :src="item.bgUrl">
                 </p>
@@ -24,7 +24,7 @@
               </router-link>
             </li>
             <li class="item">
-              <router-link :to="{path: `/train/taglist`}">
+              <router-link :to="{path: `/train/all/taglist`}">
                 <p class="icon">
                   <img src="./more.png">
                 </p>
@@ -36,7 +36,7 @@
         <div class="chunk g-recommend teachers">
           <div class="titlebox">
             <p class="title">名师推荐</p>
-            <router-link class="more" :to="{path: '/train/teacherlist'}">更多 <i class="icon c-icon-angle-right"></i></router-link>
+            <router-link class="more" :to="{path: '/train/all/teacherlist'}">更多 <i class="icon c-icon-angle-right"></i></router-link>
           </div>
           <div class="list">
             <swiper :options="swiperOPtsCourse" class="g-swiper">
@@ -55,7 +55,7 @@
         <div class="chunk g-recommend course aggregation">
           <div class="titlebox">
             <p class="title">合辑推荐</p>
-            <router-link class="more" :to="{path: '/train/courselist', query:{type: 'aggregation'}}">更多 <i class="icon c-icon-angle-right"></i></router-link>
+            <router-link class="more" :to="{path: '/train/all/courselist', query:{type: 'aggregation'}}">更多 <i class="icon c-icon-angle-right"></i></router-link>
           </div>
           <ul class="list">
             <course-item :course="item" v-for="(item, index) in courseList" :key="index"
@@ -66,7 +66,7 @@
         <div class="chunk g-recommend course">
           <div class="titlebox">
             <p class="title">课程推荐</p>
-            <router-link class="more" :to="{path: '/train/courselist'}">更多 <i class="icon c-icon-angle-right"></i></router-link>
+            <router-link class="more" :to="{path: '/train/all/courselist'}">更多 <i class="icon c-icon-angle-right"></i></router-link>
           </div>
           <ul class="list">
             <course-item :course="item" v-for="(item, index) in courseList" :key="index"
@@ -89,7 +89,10 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
-    <router-view v-if="isRouterAlive"></router-view>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
@@ -229,13 +232,13 @@
             url = `/activity/detail/${item.id}`;
             break;
           case 3:
-            url = `/train/detail/${item.id}`;
+            url = `/train/all/${item.id}`;
             break;
           case 4:
-            window.location.href = JSON.parse(item.params).url;
+            url = `/train/all/teacherdetail/${item.id}`;
             return;
           case 5:
-            url = `/train/${item.id}`;
+            window.location.href = JSON.parse(item.params).url;
             break;
         }
         this.$router.push({
@@ -244,17 +247,17 @@
       },
       selectTeacher (teacher) {
         this.$router.push({
-          path: `/train/teacherdetail/${teacher.id}`
+          path: `/train/all/teacherdetail/${teacher.id}`
         });
       },
       selectcourse (course) {
         this.$router.push({
-          path: `/train/${course.id}`
+          path: `/train/all/${course.id}`
         });
       },
       selectCourseAggregation (course) {
         this.$router.push({
-          path: `/train/${course.id}`,
+          path: `/train/all/${course.id}`,
           query: {
             aggregation: true
           }
@@ -315,12 +318,12 @@
             break;
           case 3:
             this.$router.push({
-              path: `/train/${params.id}`
+              path: `/train/all/${params.id}`
             });
             break;
           case 4:
             this.$router.push({
-              path: `/train/teacherdetail/${params.id}`
+              path: `/train/all/teacherdetail/${params.id}`
             });
             break;
           case 5:

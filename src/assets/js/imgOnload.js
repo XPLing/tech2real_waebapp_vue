@@ -4,13 +4,16 @@
  *
  * */
 export function imgOnload (imgs, vm, flag, singerLoadFn, allLoadFn) {
-  return new Promise(function (resolve, reject) {
-    var loaded = [];
-    for (var i = 0, len = imgs.length; i < len; i++) {
-      var img = imgs[i], src = img.src;
-      var imgObj = new Image();
-      var me = vm;
-      (function (i, imgObj) {
+  var loaded = [], promiseArr = [];
+  for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i], src = img.src;
+    var imgObj = new Image();
+    var me = vm;
+    if (!src || src === window.location.href) {
+      continue;
+    }
+    promiseArr.push(new Promise(function (resolve, reject) {
+      (function (i, imgObj, img) {
         imgObj.onload = function () {
           // singerLoadFn && singerLoadFn();
           // if (i === len - 1) {
@@ -19,24 +22,16 @@ export function imgOnload (imgs, vm, flag, singerLoadFn, allLoadFn) {
           // }
           loaded.push(i);
           imgObj = null;
-          resolve({
-            index: i,
-            loaded: loaded
-          });
+          resolve(img);
         };
         imgObj.onerror = function () {
           loaded.push(i);
           imgObj = null;
-          reject({
-            index: i,
-            loaded: loaded
-          });
+          reject(img);
         };
         imgObj.src = src;
-      })(i, imgObj);
-    }
-    // console.log(loaded);
-    // return loaded;
-  });
-
+      })(i, imgObj, img);
+    }));
+  }
+  return promiseArr;
 }

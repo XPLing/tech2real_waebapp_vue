@@ -9,7 +9,7 @@
           <div class="g-scroll-continer">
             <div class="apply-base">
               <p class="header-bg"></p>
-              <div class="status" >
+              <div class="status">
                 支付结果确认
               </div>
               <div class="intro" v-if="applyInfo">
@@ -24,7 +24,7 @@
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
-      <loading ref="loading"></loading>
+      <loading ref="loading" :title="loadingTxt"></loading>
       <confirm ref="payConfirmsWrapper" :text="payConfirmTxt" :confirm-btn-text="'已完成支付'"
                :cancel-btn-text="'支付遇到问题,重新支付'" :layout-type="'vertical'"
                @cancel="payCancel" @confirm="payConfirm"></confirm>
@@ -39,6 +39,7 @@
   import * as util from 'assets/js/util';
   import * as filters from 'assets/js/filters';
   import { getCourseApplyByCourseId } from 'api/courseDetail';
+  import { getOrderSuc } from 'api/pay';
   import { ERR_OK } from 'api/config';
   import Loading from 'base/loading/loading';
   import TopTip from 'base/top-tip/top-tip';
@@ -73,12 +74,14 @@
         remainTime: '',
         payConfirmTxt: '请确认支付是否已完成',
         confirmTxt: '',
-        confirmDialog: true
+        confirmDialog: true,
+        loadingTxt: '正在加载中...'
       };
     },
     created () {
       this.applyTargetID = this.$route.query.id;
       this.applyID = this.$route.query.applyId;
+      this.payType = this.$route.query.payType;
       this.getApplyInfo();
     },
     computed: {
@@ -87,12 +90,43 @@
         'userGuid'
       ])
     },
-    mounted(){
+    mounted () {
       this.$refs.payConfirmsWrapper.show();
     },
     methods: {
-      payCancel () {},
-      payConfirm () {},
+      payCancel () {
+        this.validatePayResule();
+      },
+      payConfirm () {
+        this.validatePayResule();
+      },
+      validatePayResule () {
+        if (this.payType === 'weixin') {
+          return this._getOrderSuc().then((res) => {
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                this.loadingTxt = '支付失败，请重新报名支付！';
+              } else {
+                this.loadingTxt = '支付成功，正在跳转...！';
+              }
+              this.$refs.loading.show();
+              setTimeout(() => {
+                this.$router.replace({
+                  path: `/train/all/${this.applyInfo.course.id}`
+                });
+              }, 5000);
+            } else {
+              return Promise.reject(res);
+            }
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+        } else {
+
+        }
+
+      },
       getApplyInfo () {
         return this._getCourseApplyByCourseId().then((res) => {
           if (res.code) {
@@ -110,8 +144,8 @@
       },
       selectApplyTarget (courseID) {
         this.$router.replace({
-          path: `/train/${this.applyInfo.course.id}`
-        })
+          path: `/train/all/${this.applyInfo.course.id}`
+        });
       },
       _getCourseApplyByCourseId (infoCollections) {
         let params = {
@@ -120,6 +154,12 @@
           productGuid: this.productGuid
         };
         return getCourseApplyByCourseId(params);
+      },
+      _getOrderSuc (infoCollections) {
+        let params = {
+          id: this.applyInfo.order.id
+        };
+        return getOrderSuc(params);
       }
     },
     components: {

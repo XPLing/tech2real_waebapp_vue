@@ -21,7 +21,7 @@
           </div>
         </scroll>
       </div>
-      <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @update="update"></router-view>
+      <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @commentUpdate="update"></router-view>
       <router-link :to="`/activity/list/detail/${this.$route.params.id}/commentlist/commentform`" class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>

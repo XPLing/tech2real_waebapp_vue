@@ -126,8 +126,7 @@
       });
       this.requestCourses();
     },
-    mounted () {
-    },
+    mounted () {},
     methods: {
       scrollHandle (pos) {
         this.scrollY = pos.y;
@@ -137,7 +136,7 @@
       },
       selectcourse (course) {
         this.$router.push({
-          path: `/train/${course.id}`
+          path: `/train/all/${course.id}`
         });
       },
       requestCourses () {

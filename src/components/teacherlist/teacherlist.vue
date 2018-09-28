@@ -11,7 +11,7 @@
             <div class="g-teacher">
               <ul class="teacher-list">
                 <li class="teacher-item" v-for="(item, index) in teacherList" :key="index">
-                  <router-link :to="{path: `/train/teacherdetail/${item.id}`}">
+                  <router-link :to="{path: `/train/all/teacherdetail/${item.id}`}">
                     <div class="avatar">
                       <img  v-lazy="item.faceUrl || defaultAvatar" >
                     </div>
@@ -38,7 +38,10 @@
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
-      <router-view></router-view>
+      <keep-alive >
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
     </div>
   </transition>
 </template>
@@ -54,6 +57,12 @@
   import TopTip from 'base/top-tip/top-tip';
 
   export default {
+    beforeRouteEnter (to, from, next) {
+      if (from.name === 'teacherDetail') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; // 设置为true说明你是返回到这个页面，而不是通过跳转从其他页面进入到这个页面
+      }
+      next();
+    },
     data () {
       return {
         toptipTxt: '',
@@ -75,9 +84,16 @@
       ])
     },
     created () {
-      this.requestScrollData()
+
     },
     mounted () {
+    },
+    activated () {
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.requestScrollData()
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     methods: {
       requestScrollData () {

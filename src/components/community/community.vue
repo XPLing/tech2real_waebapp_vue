@@ -35,9 +35,7 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
-    <keep-alive>
-      <router-view v-if="isRouterAlive" @update="update" :comment-form-placeholder="`@${placeholder}:`" :type="routerType"></router-view>
-    </keep-alive>
+    <router-view v-if="isRouterAlive" @commentUpdate="update" @dataUpdate="update" :comment-form-placeholder="`@${placeholder}:`" :type="routerType"></router-view>
   </div>
 </template>
 

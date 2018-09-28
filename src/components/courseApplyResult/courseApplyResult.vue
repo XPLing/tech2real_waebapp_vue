@@ -38,7 +38,7 @@
               </div>
               <div class="control" v-else>
                 <router-link
-                  :to="{path: `/train/${applyInfo.course.id}`, query:{isReapply:1}}"
+                  :to="{path: `/train/all/${applyInfo.course.id}`, query:{isReapply:1}}"
                   tag="button" class="btn reapply">重新报名
                 </router-link>
               </div>
@@ -110,10 +110,15 @@
         applyID: 0
       };
     },
-    created () {
-      this.applyTargetID = this.$route.params.id;
-      this.applyID = this.$route.query.applyId;
-      this.getApplyInfo();
+    created () {},
+    activated () {
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.applyTargetID = this.$route.params.id;
+        this.applyID = this.$route.query.applyId;
+        this.getApplyInfo();
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     computed: {
       ...mapGetters([
@@ -191,7 +196,7 @@
       },
       selectApplyTarget () {
         this.$router.push({
-          path: `/train/${this.applyInfo.course.id}`
+          path: `/train/all/${this.applyInfo.course.id}`
         });
       },
       _getCourseApplyByCourseId () {

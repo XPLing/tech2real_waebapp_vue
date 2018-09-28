@@ -55,6 +55,12 @@
         default: null
       }
     },
+    beforeRouteEnter (to, from, next) {
+      if (/[trainDetailApply_applyresult|courseApplyPay]/.test(from.name)) { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; // 设置为true说明你是返回到这个页面，而不是通过跳转从其他页面进入到这个页面
+      }
+      next();
+    },
     data () {
       return {
         pageTitle: '报名信息',
@@ -72,20 +78,27 @@
       };
     },
     created () {
-      this._getTargetGuid();
-      this._listInfoCollectionsByGuid().then((res) => {
-        if (res.code) {
-          if (res.code != ERR_OK) {
-            this.toptipTxt = res.message;
-            this.$refs.toptip.show();
-            return;
+
+    },
+    activated () {
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this._getTargetGuid();
+        this._listInfoCollectionsByGuid().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return;
+            }
+            this.infoCollectData = res.result;
           }
-          this.infoCollectData = res.result;
-        }
-      }, erro => {
-        this.toptipTxt = erro.message;
-        this.$refs.toptip.show();
-      });
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     computed: {
       courseList () {
@@ -153,7 +166,7 @@
               } else if (/2.*/.test(res.code)) {
                 this.$emit('updateResult', res.result);
                 this.$router.replace({
-                  path: `/train/${this.applyTargetID}/applyresult`,
+                  path: `/train/all/${this.applyTargetID}/applyresult`,
                   query: {
                     applyId: res.result.courseApply.id
                   }

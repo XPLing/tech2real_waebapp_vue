@@ -96,6 +96,12 @@
       this.noResult = '暂无课程~~';
       this._getCourseID();
     },
+    activated () {
+//      if (!this.$route.meta.isBack || this.isFirstEnter) {
+//      }
+//      this.$route.meta.isBack = false;
+//      this.isFirstEnter = false;
+    },
     computed: {
       ...mapGetters([
         'productGuid',

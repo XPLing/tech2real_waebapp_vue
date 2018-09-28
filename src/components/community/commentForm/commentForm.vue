@@ -120,7 +120,8 @@
         isShare: false,
         shareType: 1,
         shareOriginalData: null,
-        shareData: null
+        shareData: null,
+        sendFlag: true
       };
     },
     computed: {
@@ -173,14 +174,12 @@
       this._getFileCloudToken().then((res) => {
         if (res.status) {
           if (res.status != ERR_OK_STR) {
-            this.toptipTxt = res.message;
-            this.$refs.toptip.show();
-            return;
+            return Promise.reject(res);
           }
           this.token = res.results.token;
         }
-      }, erro => {
-        this.toptipTxt = erro.message;
+      }).catch(error => {
+        this.toptipTxt = error.message;
         this.$refs.toptip.show();
       });
     },
@@ -271,7 +270,7 @@
 
       },
       send () {
-        if (!this.commentFormCont.trim() || !this.userGuid) {
+        if (!this.sendFlag || !this.commentFormCont.trim() || !this.userGuid) {
           if (!this.userGuid) {
             this.currentConfirmsOperate = 1;
             this.confirmTxt = '请先登录!';
@@ -285,6 +284,7 @@
             return false;
           }
         }
+
         var fnName = '';
         if (this.type === 'comment') {
           fnName = '_addCommentV2';
@@ -300,19 +300,25 @@
           }
           this.uploadInfo.imgHashes = imgHashes;
         }
+        this.sendFlag = false;
         this[fnName](this.shareType).then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
-              this.toptipTxt = res.message;
-              this.$refs.toptip.show();
-              return;
+              return Promise.reject(res);
             }
-            this.$emit('update');
+            if (this.type === 'comment') {
+              this.$emit('commentUpdate');
+            } else {
+              this.$emit('replayUpdate');
+            }
+
             this.$router.back();
           }
-        }, erro => {
-          this.toptipTxt = erro.message;
+        }).catch(error => {
+          this.toptipTxt = error.message;
           this.$refs.toptip.show();
+        }).finally(() => {
+          this.sendFlag = true;
         });
       },
       _addCommentV2 (shareType) {

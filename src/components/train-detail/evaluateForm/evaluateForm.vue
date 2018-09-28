@@ -49,7 +49,8 @@
         pageTitle: '写评论',
         formCont: '',
         score: 0,
-        starSize: 36
+        starSize: 36,
+        sendFlag: true
       };
     },
     computed: {
@@ -85,25 +86,26 @@
 
       },
       send () {
-        if (!this.formCont.trim() || !this.userGuid || !this.userInfo) {
+        if (!this.sendFlag || !this.formCont.trim() || !this.userGuid || !this.userInfo) {
           if (!this.userGuid) {
             this.$refs.confirmsWrapper.show();
           }
           return false;
         }
+        this.sendFlag = false;
         this._addEvaluate().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
-              this.toptipTxt = res.message;
-              this.$refs.toptip.show();
-              return;
+              return Promise.reject(res);
             }
             this.$emit('evaluateUpdate');
             this.$router.back();
           }
-        }, erro => {
-          this.toptipTxt = erro.message;
+        }).catch(error => {
+          this.toptipTxt = error.message;
           this.$refs.toptip.show();
+        }).finally(() => {
+          this.sendFlag = true;
         });
       },
       _addEvaluate () {

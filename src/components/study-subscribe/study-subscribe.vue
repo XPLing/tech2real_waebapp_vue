@@ -73,7 +73,7 @@
       },
       selectItem (data) {
         this.$router.push({
-          path: `/train/${data.courseId}`
+          path: `/train/all/${data.courseId}`
         });
         if (this.first) {
           this.first = false;
@@ -81,7 +81,7 @@
       },
       courseDetails (data) {
         this.$router.push({
-          path: `/train/${data.courseId}/applyresult`
+          path: `/train/all/${data.courseId}/applyresult`
         });
         if (this.first) {
           this.first = false;

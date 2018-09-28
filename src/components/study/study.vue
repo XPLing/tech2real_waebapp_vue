@@ -4,10 +4,13 @@
       <HeaderTitleTab :title="pageTitle" @toggle-tab="toggleTab"></HeaderTitleTab>
     </header>
     <div class="g-view">
-      <transition name="slide" mode="out-in">
+      <transition  name="slide" mode="out-in">
         <keep-alive>
-          <component :is="currView"></component>
+          <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
+      </transition>
+      <transition  name="slide" mode="out-in">
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
       </transition>
     </div>
   </div>
@@ -17,41 +20,49 @@
   import 'swiper/dist/css/swiper.css';
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import HeaderTitleTab from 'components/header-title-tab/header-title-tab';
-  import train from 'components/train/train';
-  import subscribe from 'components/study-subscribe/study-subscribe';
   import { ERR_OK } from 'api/config';
   import * as util from 'assets/js/util';
 
   export default {
+    beforeRouteEnter (to, from, next) {
+      console.log(to);
+      next();
+    },
     data () {
       return {
         pageTitle: [
           {
+            key: 'trainView',
             title: '培训',
-            component: 'train'
+            path: '/train/all'
           },
           {
+            key: 'myCourseView',
             title: '已订',
-            component: 'subscribe'
+            path: '/train/mycourse'
           }
         ],
-        currView: 'train'
+        currView: 'train',
+        viewKey: 'trainView'
       };
+    },
+    activated(){
     },
     mounted () {
 
     },
     methods: {
       toggleTab (item, index) {
-         this.currView = this.pageTitle[index].component;
+        this.viewKey = item.key;
+         this.$router.push({
+           path: item.path
+         })
       }
     },
     components: {
       HeaderTitleTab,
       swiper,
-      swiperSlide,
-      train,
-      subscribe
+      swiperSlide
     }
   };
 </script>

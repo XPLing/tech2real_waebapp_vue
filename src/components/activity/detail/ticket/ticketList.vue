@@ -31,8 +31,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import 'swiper/dist/css/swiper.css';
-  import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import Scroll from 'base/scroll/scroll';
   import HeaderTitle from 'components/header-title/header-title';
   import { ERR_OK } from 'api/config';
@@ -189,8 +187,6 @@
     },
     components: {
       HeaderTitle,
-      swiper,
-      swiperSlide,
       TopTip,
       Loading,
       Scroll,

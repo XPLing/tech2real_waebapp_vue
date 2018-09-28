@@ -52,7 +52,7 @@
           sourceType = 'course';
           requestName = '_getCourseById';
           firstType = 'infoFirst';
-          this.shareUrl = `/train/${this.shareContent}`;
+          this.shareUrl = `/train/all/${this.shareContent}`;
           break;
         case 2:
           sourceType = 'article';

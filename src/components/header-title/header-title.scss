@@ -4,9 +4,10 @@
   @include h(40);
   @include lh(40);
   @include fs(18);
-  color: $whiteColor;
+  color: $color-text-2B3;
   text-align: center;
-  background-color: $color-theme;
+  background-color: $whiteColor;
+  border-bottom: 1px solid $color-border-split-D8D;
   .title{
     max-width: 70%;
     display: inline-block;

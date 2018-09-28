@@ -51,9 +51,10 @@
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
       <back-top ref="backTop" @backTop="backTop"></back-top>
-      <keep-alive>
-        <router-view></router-view>
+      <keep-alive >
+        <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
     </div>
   </transition>
 </template>
@@ -107,9 +108,13 @@
       };
     },
     created () {
-      // BANNER_HEIGHT = this.$refs.innerHeight;
-
-      this.requestScrollData();
+    },
+    activated(){
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.requestScrollData();
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     computed: {
       ...mapGetters([
@@ -181,9 +186,7 @@
             this.$set(this.requestMoreFlag, this.tagCurrentIndex, false);
             if (res.code) {
               if (res.code != ERR_OK) {
-                this.toptipTxt = res.message;
-                this.$refs.toptip.show();
-                return;
+                return Promise.reject(res);
               }
               if (res.result.length > 0) {
                 if (this.infoList[this.tagCurrentIndex]) {
@@ -203,9 +206,9 @@
                 });
               }
             }
-          }, erro => {
+          }).catch(error => {
             this.$refs.scroll.finishPullUp();
-            this.toptipTxt = erro.message;
+            this.toptipTxt = error.message;
             this.$refs.toptip.show();
           });
         }

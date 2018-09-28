@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="g-apply-result">
       <header class="g-header">
-        <HeaderTitle :title="pageTitle" :has-back="hasBack"></HeaderTitle>
+        <HeaderTitle :title="pageTitle" :has-back="hasBack" @back="backCB"></HeaderTitle>
       </header>
       <div class="g-main-wrapper" v-if="applyInfo">
         <scroll :data="applyInfo" ref="scroll">
@@ -184,10 +184,13 @@
           case 5:
             break;
         }
-
+      },
+      backCB(){
+        this.$emit('applyUpdate');
       },
       selectApplyTarget (courseID) {
         this.$router.back();
+        this.$emit('applyUpdate');
       },
       _getApplyByActivityId (infoCollections) {
         let params = {

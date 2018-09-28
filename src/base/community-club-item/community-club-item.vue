@@ -6,7 +6,7 @@
         <p class="name">{{community.nickname}}</p>
       </div>
     </div>
-    <div class="cont" @click.stop="deleteItem(community)">
+    <div class="cont" @click.stop="selectItem(community)">
       <community-cont :data="community"></community-cont>
     </div>
     <div class="club" @click.stop="selectClub">
