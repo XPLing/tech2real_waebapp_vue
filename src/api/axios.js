@@ -79,8 +79,8 @@ axios.interceptors.response.use(res => {
       default:
     }
   }
-  console.log(err.response);
-  console.log(err.message);
+  // console.log(err.response);
+  // console.log(err.message);
   var errRes = {
     code: err.response ? err.response.status : err.response,
     message: err.message

@@ -4,13 +4,10 @@
       <HeaderTitleTab :title="pageTitle" @toggle-tab="toggleTab"></HeaderTitleTab>
     </header>
     <div class="g-view">
-      <transition  name="slide" mode="out-in">
-        <keep-alive>
-          <router-view v-if="$route.meta.keepAlive"></router-view>
+      <transition name="slide" mode="out-in">
+        <keep-alive :include="['studyTrainAll','studySubscribe']">
+          <component :is="currView"></component>
         </keep-alive>
-      </transition>
-      <transition  name="slide" mode="out-in">
-        <router-view v-if="!$route.meta.keepAlive"></router-view>
       </transition>
     </div>
   </div>
@@ -20,49 +17,41 @@
   import 'swiper/dist/css/swiper.css';
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import HeaderTitleTab from 'components/header-title-tab/header-title-tab';
+  import train from 'components/train/train';
+  import subscribe from 'components/study-subscribe/study-subscribe';
   import { ERR_OK } from 'api/config';
   import * as util from 'assets/js/util';
 
   export default {
-    beforeRouteEnter (to, from, next) {
-      console.log(to);
-      next();
-    },
     data () {
       return {
         pageTitle: [
           {
-            key: 'trainView',
             title: '培训',
-            path: '/train/all'
+            component: 'train'
           },
           {
-            key: 'myCourseView',
             title: '已订',
-            path: '/train/mycourse'
+            component: 'subscribe'
           }
         ],
-        currView: 'train',
-        viewKey: 'trainView'
+        currView: 'train'
       };
-    },
-    activated(){
     },
     mounted () {
 
     },
     methods: {
       toggleTab (item, index) {
-        this.viewKey = item.key;
-         this.$router.push({
-           path: item.path
-         })
+         this.currView = this.pageTitle[index].component;
       }
     },
     components: {
       HeaderTitleTab,
       swiper,
-      swiperSlide
+      swiperSlide,
+      train,
+      subscribe
     }
   };
 </script>

@@ -4,7 +4,7 @@
       <i class="icon c-icon-info-o"></i>
       <span class="tab-link">资讯</span>
     </router-link>
-    <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train/all'}">
+    <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train'}">
       <i class="icon c-icon-study"></i>
       <span class="tab-link">培训</span>
     </router-link>

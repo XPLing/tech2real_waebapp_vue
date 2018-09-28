@@ -11,6 +11,7 @@
             document.getElementsByTagName('html')[0].style.fontSize = windowW / 10 + 'px';
         }
 
+
     }
     common.initial();
 }(window, document));

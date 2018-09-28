@@ -2,8 +2,7 @@
   <div class="g-header-title-tab">
     <div class="wrapper">
       <i v-if="hasBack" class="fa fa-angle-left left" @click="back" aria-hidden="true"></i>
-      <router-link v-for="(item, index) in title" :key="index" tag="span" class="tab-item" :to="{path: item.path}">{{item.title}}</router-link>
-      <!--<span v-for="(item, index) in title" :key="index" :class="currentIndex===index?'active':''" @click="toggleTab(item, index)">{{item.title}}</span>-->
+      <span v-for="(item, index) in title" :key="index" :class="currentIndex===index?'active':''" @click="toggleTab(item, index)">{{item.title}}</span>
       <i v-if="hasSearch" class="fa c-icon-search right" aria-hidden="true"></i>
     </div>
   </div>

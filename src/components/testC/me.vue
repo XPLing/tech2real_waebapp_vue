@@ -3,6 +3,7 @@
         <div class="g-recommend">
             CCC
         </div>
+        <router-link to="/testB"></router-link>
     </transition>
 </template>
 

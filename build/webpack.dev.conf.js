@@ -28,6 +28,7 @@ module.exports = merge(baseWebpackConfig, {
     // cheap-module-eval-source-map is faster for development
     devtool: '#cheap-module-source-map',
     plugins: [
+        // 允许你创建一个在编译时可以配置的全局常量。这可能会对开发模式和发布模式的构建允许不同的行为非常有用
         new webpack.DefinePlugin({
             'process.env': config.dev.env
         }),
