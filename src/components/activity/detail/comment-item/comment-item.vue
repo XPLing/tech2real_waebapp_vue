@@ -30,7 +30,9 @@
         class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>
-      <router-view :comment-form-placeholder="`@${placeholder}:`" :type="'reply'" @replyUpdate="update"></router-view>
+      <keep-alive :include="keepAliveList">
+        <router-view :comment-form-placeholder="`@${placeholder}:`" :type="'reply'" @replyUpdate="update"></router-view>
+      </keep-alive>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -58,8 +60,10 @@
   import ReplyList from 'base/reply-list/reply-list';
 
   export default {
+    name: 'NKA_activityCommentDetail',
     data () {
       return {
+        keepAliveList: '',
         toptipTxt: '',
         pageTitle: '',
         articleInfo: null,

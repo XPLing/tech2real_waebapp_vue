@@ -52,11 +52,6 @@
   import NoResult from 'base/no-result/no-result';
 
   export default {
-    provide () {
-      return {
-        reload: this.reload
-      };
-    },
     data () {
       return {
         pageTitle: '设置',

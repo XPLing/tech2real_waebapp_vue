@@ -70,6 +70,7 @@
   import wx from 'weixin-js-sdk';
 
   export default {
+    name: 'KA_rootMe',
     data () {
       return {
         toptipTxt: '',

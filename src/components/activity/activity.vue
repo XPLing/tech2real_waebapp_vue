@@ -81,10 +81,9 @@
         </div>
       </scroll>
     </div>
-    <keep-alive >
-      <router-view v-if="$route.meta.keepAlive"></router-view>
+    <keep-alive :include="keepAliveList">
+      <router-view></router-view>
     </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
@@ -106,13 +105,10 @@
   import BackTop from 'base/backtop/backtop';
 
   export default {
-    provide () {
-      return {
-        reload: this.reload
-      };
-    },
+    name: 'KA_rootActivity',
     data () {
       return {
+        keepAliveList: /^KA_activity/,
         isRouterAlive: true,
         toptipTxt: '',
         pageTitle: '活动',

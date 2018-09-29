@@ -21,7 +21,9 @@
           </div>
         </scroll>
       </div>
-      <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @commentUpdate="update"></router-view>
+      <keep-alive :include="keepAliveList">
+        <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @commentUpdate="update"></router-view>
+      </keep-alive>
       <router-link :to="`/activity/list/detail/${this.$route.params.id}/commentlist/commentform`" class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>
@@ -51,8 +53,10 @@
   import CommunityList from 'base/community-list/community-list';
 
   export default {
+    name: 'KA_activityCommentList',
     data () {
       return {
+        keepAliveList: [],
         toptipTxt: '',
         pageTitle: '',
         articleInfo: null,
@@ -68,11 +72,13 @@
       };
     },
     created () {
-      this.commentId = this.$route.params.commentId;
-      this.id = this.$route.params.id;
-      this.pageTitle = this.$route.query.title;
-      this.isUpdate = false;
-      this.requestCommunity();
+    },
+    activated(){
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.initData();
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     computed: {
       ...mapGetters([
@@ -81,6 +87,13 @@
       ])
     },
     methods: {
+      initData(){
+        this.commentId = this.$route.params.commentId;
+        this.id = this.$route.params.id;
+        this.pageTitle = this.$route.query.title;
+        this.isUpdate = false;
+        this.requestCommunity();
+      },
       like (data) {
         if (data.isLike === 'N' && !this.likeFlag) {
           this.likeFlag = true;

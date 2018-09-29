@@ -13,7 +13,7 @@
                 支付结果确认
               </div>
               <div class="intro" v-if="applyInfo">
-                <apply-item :apply-result-base="applyInfo.course" :apply-result-detail="applyInfo.course"
+                <apply-item :apply-result-base="this.payTargetType === 'course'?applyInfo.course:applyInfo.activity" :apply-result-detail="this.payTargetType === 'course'?applyInfo.course:applyInfo.ticket"
                             :apply-result="applyInfo"
                             @selectApplyResultItem="selectApplyTarget"></apply-item>
               </div>
@@ -39,6 +39,7 @@
   import * as util from 'assets/js/util';
   import * as filters from 'assets/js/filters';
   import { getCourseApplyByCourseId } from 'api/courseDetail';
+  import { getApplyByActivityId } from 'api/activity';
   import { getOrderSuc } from 'api/pay';
   import { ERR_OK } from 'api/config';
   import Loading from 'base/loading/loading';
@@ -82,6 +83,7 @@
       this.applyTargetID = this.$route.query.id;
       this.applyID = this.$route.query.applyId;
       this.payType = this.$route.query.payType;
+      this.payTargetType = this.$route.query.payTargetType;
       this.getApplyInfo();
     },
     computed: {
@@ -128,7 +130,13 @@
 
       },
       getApplyInfo () {
-        return this._getCourseApplyByCourseId().then((res) => {
+        var fnName = '';
+        if (this.payTargetType === 'course') {
+          fnName = '_getCourseApplyByCourseId';
+        } else {
+          fnName = '_getApplyByActivityId';
+        }
+        return this[fnName]().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
               this.toptipTxt = res.message;
@@ -154,6 +162,14 @@
           productGuid: this.productGuid
         };
         return getCourseApplyByCourseId(params);
+      },
+      _getApplyByActivityId (infoCollections) {
+        let params = {
+          id: this.applyTargetID,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid
+        };
+        return getApplyByActivityId(params);
       },
       _getOrderSuc (infoCollections) {
         let params = {

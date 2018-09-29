@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="g-app-wrapper" @touchmove.prevent>
-    <keep-alive>
-      <router-view></router-view>
+    <keep-alive :include="keepAliveList">
+      <router-view v-if="isRouterAlive"></router-view>
     </keep-alive>
     <nav class="g-nav">
       <g-tab></g-tab>
@@ -15,8 +15,16 @@
 
   export default {
     name: 'App',
+    provide () {
+      return {
+        rootReload: this.reload
+      };
+    },
     data () {
-      return {};
+      return {
+        keepAliveList: /^KA_root/,
+        isRouterAlive: true
+      };
     },
     created () {
     },
@@ -24,7 +32,12 @@
       console.log('activated');
     },
     methods: {
-
+      reload() {
+        this.isRouterAlive = false;
+        this.$nextTick(() => {
+          this.isRouterAlive = true;
+        });
+      }
     },
     components: {
       'g-tab': Tab

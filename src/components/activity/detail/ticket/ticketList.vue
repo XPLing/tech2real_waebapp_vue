@@ -20,7 +20,9 @@
           </div>
         </scroll>
       </div>
-      <router-view :apply-result="articleInfo"></router-view>
+      <keep-alive :include="keepAliveList">
+        <router-view :apply-result="articleInfo"></router-view>
+      </keep-alive>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -55,6 +57,7 @@
     },
     data () {
       return {
+        keepAliveList: '',
         toptipTxt: '',
         pageTitle: '门票',
         articleInfo: null,

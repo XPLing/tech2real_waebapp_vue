@@ -66,7 +66,9 @@
       </div>
       <share @cancel="cancelShare" @share="share" ref="share"></share>
       <back-top ref="backTop" @backTop="backTop"></back-top>
-      <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" :activity="dataInfo" @applyUpdate="applyUpdate"></router-view>
+      <keep-alive :include="keepAliveList">
+        <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" :activity="dataInfo" @applyUpdate="applyUpdate"></router-view>
+      </keep-alive>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -93,14 +95,10 @@
   import Share from 'base/share/share';
 
   export default {
-//    beforeRouteEnter (to, from, next) {
-//      next((vm) => {
-//        if (/activity/.test(from.name)) {
-//        }
-//      });
-//    },
+    name: 'KA_activityDetail',
     data () {
       return {
+        keepAliveList: /^KA_activityComment/,
         toptipTxt: '',
         pageTitle: '活动详情',
         dataInfo: null,
@@ -114,10 +112,18 @@
       };
     },
     created () {
-      this.id = this.$route.params.id;
+
     },
     mounted () {
-      this.initDate();
+
+    },
+    activated(){
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.id = this.$route.params.id;
+        this.initDate();
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     computed: {
       loadingImgs () {
@@ -144,7 +150,7 @@
     },
     methods: {
       applyUpdate(){
-
+        this.initDate();
       },
       confirm(){},
       initDate () {
@@ -305,6 +311,12 @@
           if (this.$refs.backTop.backTopShowFlag) {
             this.$refs.backTop.hideIcon();
           }
+        }
+      },
+      $route (to, from) {
+        if (to.name === from.name) {
+          this.initData();
+          this.$refs.scroll.scrollTo(0, 0);
         }
       }
     },

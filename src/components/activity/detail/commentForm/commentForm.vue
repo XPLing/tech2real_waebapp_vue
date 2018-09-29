@@ -32,6 +32,7 @@
   import Confirm from 'base/confirm/confirm';
 
   export default {
+    name: 'NKA_activityCommentForm',
     props: ['commentFormPlaceholder', 'type'],
     data () {
       return {

@@ -174,10 +174,14 @@
             ])
         },
         created() {
-            this.initData();
+//            this.initData();
         },
         activated() {
-
+          if (!this.$route.meta.isBack || this.isFirstEnter) {
+            this.initData();
+          }
+          this.$route.meta.isBack = false;
+          this.isFirstEnter = false;
         },
         mounted() {
         },

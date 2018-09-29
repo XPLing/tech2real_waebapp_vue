@@ -21,7 +21,9 @@
         </scroll>
       </div>
       <back-top ref="backTop" @backTop="backTop"></back-top>
-      <router-view v-if="isRouterAlive" :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @update="update"></router-view>
+      <keep-alive :include="keepAliveList" :exclude="notkeepAliveList">
+        <router-view v-if="isRouterAlive" :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @update="update"></router-view>
+      </keep-alive>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -47,6 +49,7 @@
   import ActivityList from 'base/activity-list/activity-list';
 
   export default {
+    name: 'KA_activityList',
     provide () {
       return {
         reload: this.reload
@@ -54,6 +57,8 @@
     },
     data () {
       return {
+        keepAliveList: /^KA_activityDetail/,
+        notkeepAliveList: ['NKA_activityCommentDetail'],
         isRouterAlive: true,
         toptipTxt: '',
         pageTitle: '活动列表',

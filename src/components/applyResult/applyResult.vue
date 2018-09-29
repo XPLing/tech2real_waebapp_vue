@@ -84,6 +84,7 @@
   var APPLYSTATE = ['报名成功', '报名取消', '待支付', '待审核', '报名失败'];
 
   export default {
+    name: 'NKA_activityResult',
     beforeRouteLeave (to, from, next) {
       if (this.timer) {
         clearInterval(this.timer);

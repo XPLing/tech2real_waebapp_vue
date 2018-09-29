@@ -35,7 +35,10 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
-    <router-view v-if="isRouterAlive" @commentUpdate="update" @dataUpdate="update" :comment-form-placeholder="`@${placeholder}:`" :type="routerType"></router-view>
+    <keep-alive :include="keepAliveList">
+      <router-view v-if="isRouterAlive" @commentUpdate="update" @dataUpdate="update" :comment-form-placeholder="`@${placeholder}:`" :type="routerType"></router-view>
+    </keep-alive>
+
   </div>
 </template>
 
@@ -55,6 +58,7 @@
   import { likeCommentV2 } from 'api/comment';
   import CommunityCont from 'base/community-cont/community-cont';
   export default {
+    name: 'KA_rootCommunity',
     provide () {
       return {
         reload: this.reload
@@ -62,6 +66,7 @@
     },
     data () {
       return {
+        keepAliveList: [],
         toptipTxt: '',
         pageTitle: '社群',
         probeType: 2,

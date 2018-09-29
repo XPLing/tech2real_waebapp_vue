@@ -107,6 +107,7 @@
   import Loading from 'base/loading/loading';
   import TopTip from 'base/top-tip/top-tip';
   export default {
+    name: 'NKA_activityPay',
     data () {
       return {
         pageTitle: '购买课程',

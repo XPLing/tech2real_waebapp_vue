@@ -6,7 +6,7 @@
     <div class="g-view">
       <transition name="slide" mode="out-in">
         <keep-alive :include="['studyTrainAll','studySubscribe']">
-          <component :is="currView"></component>
+          <component :is="currView" v-if="isRouterAlive"></component>
         </keep-alive>
       </transition>
     </div>
@@ -23,8 +23,20 @@
   import * as util from 'assets/js/util';
 
   export default {
+    name: 'KA_rootStudy',
+    inject: ['rootReload'],
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        if (to.name !== 'rootTrain' && from.fullPath !== '/') {
+//          console.log(from);
+//          console.log(to);
+//          vm.rootReload();
+        }
+      });
+    },
     data () {
       return {
+        isRouterAlive: true,
         pageTitle: [
           {
             title: '培训',
@@ -43,7 +55,13 @@
     },
     methods: {
       toggleTab (item, index) {
-         this.currView = this.pageTitle[index].component;
+        this.currView = this.pageTitle[index].component;
+      },
+      reload() {
+        this.isRouterAlive = false;
+        this.$nextTick(() => {
+           this.isRouterAlive = true;
+        });
       }
     },
     components: {

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import {routerPrefix, getUserGuid} from 'assets/js/util';
+import { routerPrefix, getUserGuid } from 'assets/js/util';
 // import Info from 'components/info/info';
 // import Train from 'components/train/train';
 // import TrainDetail from 'components/train-detail/train-detail';
@@ -83,585 +83,589 @@ const payResult = () => import(/* webpackChunkName: "payResult" */ 'components/p
 
 Vue.use(VueRouter);
 const Router = new VueRouter({
-    linkActiveClass: 'active',
-    mode: 'history',
-    base: '/m-web/',
-    scrollBehavior(to, from, savePosition) { // 在点击浏览器的“前进/后退”，或者切换导航的时候触发。
-        to.meta.toTop = false;
-        if (savePosition) {
-            return savePosition;
-        } else {
-            to.meta.toTop = true;
-            return {x: 0, y: 0};
-        }
+  linkActiveClass: 'active',
+  mode: 'history',
+  base: '/m-web/',
+  scrollBehavior (to, from, savePosition) { // 在点击浏览器的“前进/后退”，或者切换导航的时候触发。
+    to.meta.toTop = false;
+    if (savePosition) {
+      return savePosition;
+    } else {
+      to.meta.toTop = true;
+      return {x: 0, y: 0};
+    }
+  },
+  routes: [
+    {
+      path: routerPrefix + '/',
+      redirect: routerPrefix + '/info'
     },
-    routes: [
+    {
+      path: '/feedback',
+      component: FeedBack,
+      name: 'rootFeedBack'
+    },
+    {
+      path: routerPrefix + '/info',
+      component: Info,
+      name: 'rootInfo',
+      children: [
         {
-            path: routerPrefix + '/',
-            redirect: routerPrefix + '/info'
-        },
-        {
-            path: '/feedback',
-            component: FeedBack
-        },
-        {
-            path: routerPrefix + '/info',
-            component: Info,
-            name: 'info',
-            children: [
+          path: 'infodetail/:articleId(\\d+)',
+          component: InfoDetail,
+          name: 'infoDetail',
+          children: [
+            {
+              path: 'commentlist',
+              component: InfoDetailComment,
+              name: 'infoDetail_commentList',
+              meta: {
+                isBack: false
+              },
+              children: [
                 {
-                    path: 'infodetail/:articleId(\\d+)',
-                    component: InfoDetail,
-                    name: 'infoDetail',
-                    children: [
-                        {
-                            path: 'commentlist',
-                            component: InfoDetailComment,
-                            name: 'infoDetail_commentList',
-                            meta: {
-                                isBack: false
-                            },
-                            children: [
-                                {
-                                    path: ':commentId(\\d+)',
-                                    component: InfoDetailCommentItem,
-                                    meta: {
-                                        keepAlive: true,
-                                        isBack: false
-                                    },
-                                    name: 'infoDetail_commentDetail',
-                                    children: [
-                                        {
-                                            path: 'commentform',
-                                            component: InfoDetailCommentForm,
-                                            name: 'infoDetail_commentForm',
-                                            props: true
-                                        }
-                                    ]
-                                },
-                                {
-                                    path: 'commentform',
-                                    component: InfoDetailCommentForm,
-                                    name: 'infoDetail_commentFormRoot',
-                                    props: true
-                                }
-                            ]
-                        }
-                    ]
+                  path: ':commentId(\\d+)',
+                  component: InfoDetailCommentItem,
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
+                  name: 'infoDetail_commentDetail',
+                  children: [
+                    {
+                      path: 'commentform',
+                      component: InfoDetailCommentForm,
+                      name: 'infoDetail_commentForm',
+                      props: true
+                    }
+                  ]
                 },
                 {
-                    path: 'infodetail/commentlist',
-                    component: InfoDetailComment,
-                    children: [
-                        {
-                            path: ':commentId(\\d+)',
-                            component: InfoDetailCommentItem,
-                            meta: {
-                                keepAlive: true,
-                                isBack: false
-                            },
-                            children: [
-                                {
-                                    name: 'infoCommentForm',
-                                    path: 'commentform',
-                                    component: InfoDetailCommentForm,
-                                    props: true
-                                }
-                            ]
-                        }
-                    ]
+                  path: 'commentform',
+                  component: InfoDetailCommentForm,
+                  name: 'infoDetail_commentFormRoot',
+                  props: true
                 }
-            ]
+              ]
+            }
+          ]
         },
         {
-            path: '/train',
-            component: Train,
-            name: 'train',
-            meta: {
+          path: 'infodetail/commentlist',
+          component: InfoDetailComment,
+          children: [
+            {
+              path: ':commentId(\\d+)',
+              component: InfoDetailCommentItem,
+              meta: {
                 keepAlive: true,
                 isBack: false
-            },
-            children: [
+              },
+              children: [
                 {
-                    path: 'applypay',
-                    alias: '/pay/courseApplypay',
-                    name: 'courseApplyPay',
-                    meta: {
-                        keepAlive: false,
-                        isBack: false
-                    },
-                    component: CourseApplyPay
-                },
-                {
-                    path: 'all/:id(\\d+)',
-                    component: TrainDetail,
-                    name: 'trainDetail',
-                    meta: {
-                        requireLogin: true,
-                        keepAlive: false,
-                        isBack: false
-                    },
-                    children: [
-                        {
-                            path: 'evaluateForm',
-                            meta: {
-                                keepAlive: true,
-                                isBack: false
-                            },
-                            component: courseEvaluateForm,
-                            name: 'courseEvaluateForm'
-                        },
-                        {
-                            path: 'applyresult',
-                            name: 'trainDetailApply_applyresult',
-                            meta: {
-                                keepAlive: true,
-                                isBack: false
-                            },
-                            component: CourseApplyResult
-                        },
-                        {
-                            path: 'applyinfocollect/:applyTargetGuid',
-                            name: 'trainDetailApply_applyinfocollect',
-                            component: CourseApplyInfoCollect,
-                            meta: {
-                                keepAlive: true,
-                                isBack: false
-                            },
-                            props: {
-                                applyType: 'applyCourse'
-                            }
-                        },
-                        {
-                            meta: {
-                                keepAlive: true,
-                                isBack: false
-                            },
-                            path: 'applypay',
-                            component: CourseApplyPay
-                        }
-                    ]
-                },
-                {
-                    path: 'all/teacherdetail/:id',
-                    meta: {
-                        keepAlive: false,
-                        isBack: false
-                    },
-                    component: TeacherDetail,
-                    name: 'teacherDetail'
-                },
-                {
-                    path: 'all/teacherlist',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: TeacherList,
-                    name: 'teacherList'
-                },
-                {
-                    path: 'all/tagdetail/:id',
-                    meta: {
-                        keepAlive: false,
-                        isBack: false
-                    },
-                    component: TagDetail,
-                    name: 'tagDetail'
-                },
-                {
-                    path: 'all/taglist',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: TagList,
-                    name: 'tagList'
-                },
-                {
-                    path: 'all/courselist',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: TrainCourseList,
-                    name: 'trainCourseList'
-                },
-                {
-                    path: 'mycourse',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: TrainMyCourse,
-                    name: 'trainMyCourse'
+                  name: 'infoCommentForm',
+                  path: 'commentform',
+                  component: InfoDetailCommentForm,
+                  props: true
                 }
-            ]
-        },
-        {
-            path: '/community',
-            component: Community,
-            children: [
-                {
-                    path: ':commentId(\\d+)',
-                    component: CommunityCommentItem,
-                    name: 'community_commentDetail',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    children: [
-                        {
-                            path: 'commentform',
-                            component: CommunityCommentForm,
-                            name: 'community_commentForm',
-                            props: true,
-                            meta: {
-                                keepAlive: true,
-                                isBack: false
-                            }
-                        }
-                    ]
-                },
-                {
-                    path: 'commentform',
-                    component: CommunityCommentForm,
-                    name: 'community_commentFormRoot',
-                    props: true,
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    }
-                }
-            ]
-        },
-        {
-            path: '/activity',
-            component: Activity,
-            name: 'activity',
-            children: [
-                {
-                    path: 'list',
-                    component: ActivityList,
-                    name: 'activityList',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    children: [
-                        {
-                            path: 'applypay',
-                            component: ApplyPay,
-                            name: 'activityApplyPay',
-                            meta: {
-                                keepAlive: true,
-                                isBack: false
-                            },
-                            alias: '/pay/activityApplyPay'
-                        },
-                        {
-                            path: 'detail/:id(\\d+)',
-                            component: ActivityDetail,
-                            meta: {
-                                keepAlive: false,
-                                isBack: false
-                            },
-                            name: 'activityDetail',
-                            children: [
-                                {
-                                    path: 'commentlist',
-                                    name: 'activityDetailComment',
-                                    meta: {
-                                        keepAlive: true,
-                                        isBack: false
-                                    },
-                                    component: ActivityDetailComment,
-                                    children: [
-                                        {
-                                            path: ':commentId(\\d+)',
-                                            name: 'activityDetailCommentItem',
-                                            meta: {
-                                                keepAlive: true,
-                                                isBack: false
-                                            },
-                                            component: ActivityDetailCommentItem,
-                                            children: [
-                                                {
-                                                    path: 'commentform',
-                                                    name: 'activityDetailCommentForm',
-                                                    meta: {
-                                                        keepAlive: true,
-                                                        isBack: false
-                                                    },
-                                                    component: ActivityDetailCommentForm,
-                                                    props: true
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            path: 'commentform',
-                                            name: 'activityCommentForm',
-                                            meta: {
-                                                keepAlive: true,
-                                                isBack: false
-                                            },
-                                            component: ActivityDetailCommentForm,
-                                            props: true
-                                        }
-                                    ]
-                                },
-                                {
-                                    path: 'ticketList',
-                                    component: TicketList,
-                                    props: true,
-                                    name: 'activityDetail_Tickets',
-                                    children: [
-                                        {
-                                            path: 'applyresult',
-                                            component: ApplyResult,
-                                            name: 'activityDetail_TicketApplyResult'
-                                        },
-                                        {
-                                            path: ':ticketId/applyinfocollect/:applyTargetGuid',
-                                            component: ApplyInfoCollect,
-                                            name: 'activityDetail_applyInfoCollect',
-                                            props: {
-                                                applyType: 'applyActivity'
-                                            }
-                                        },
-                                        {
-                                            path: 'applypay',
-                                            name: 'activityDetail_applyPay',
-                                            component: ApplyPay
-                                        }
-                                    ]
-                                },
-                                {
-                                    path: 'applyresult',
-                                    component: ApplyResult,
-                                    name: 'activityDetail_ApplyResult'
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    path: 'commentlist',
-                    component: ActivityDetailComment,
-                    children: [
-                        {
-                            path: ':commentId(\\d+)',
-                            component: ActivityDetailCommentItem,
-                            children: [
-                                {
-                                    path: 'commentform',
-                                    component: ActivityDetailCommentForm,
-                                    props: true
-                                }
-                            ]
-                        },
-                        {
-                            path: 'commentform',
-                            component: ActivityDetailCommentForm,
-                            props: true
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            path: '/me',
-            component: Me,
-            children: [
-                {
-                    path: 'info',
-                    meta: {
-                        keepAlive: false,
-                        isBack: false
-                    },
-                    component: MyInfo
-                },
-                {
-                    path: 'course',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: MyCourse
-                },
-                {
-                    path: 'activity',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: MyActivity
-                },
-                {
-                    path: 'collection',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: MyCollection
-                },
-                {
-                    path: 'topic',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: MyTopic
-                },
-                {
-                    path: 'club',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: MyClub
-                },
-                {
-                    path: 'message',
-                    meta: {
-                        keepAlive: true,
-                        isBack: false
-                    },
-                    component: MyMessage
-                },
-                {
-                    path: 'about',
-                    meta: {
-                        keepAlive: false,
-                        isBack: false
-                    },
-                    component: About
-                },
-                {
-                    path: 'protocol',
-                    meta: {
-                        keepAlive: false,
-                        isBack: false
-                    },
-                    component: Protocol
-                },
-                {
-                    path: 'setting',
-                    meta: {
-                        keepAlive: false,
-                        isBack: false
-                    },
-                    component: Setting,
-                    children: [
-                        {
-                            path: 'safety',
-                            meta: {
-                                keepAlive: false,
-                                isBack: false
-                            },
-                            component: SettingASafety,
-                            children: [
-                                {
-                                    path: 'resetPW',
-                                    meta: {
-                                        keepAlive: false,
-                                        isBack: false
-                                    },
-                                    component: ResetPW
-                                },
-                                {
-                                    path: 'bindMobile',
-                                    meta: {
-                                        keepAlive: false,
-                                        isBack: false
-                                    },
-                                    component: MyAccountBindMobile
-                                }
-                            ]
-                        },
-                        {
-                            path: 'manage',
-                            meta: {
-                                keepAlive: false,
-                                isBack: false
-                            },
-                            component: SettingAManage
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            path: routerPrefix + '/clubs',
-            component: Clubs,
-            children: [
-                {
-                    path: 'clubdetail/:clubguId',
-                    component: ClubDetail,
-                    name: 'clubDetail'
-                }
-            ]
-        },
-        {
-            path: routerPrefix + '/user',
-            component: User,
-            redirect: 'login',
-            name: 'user',
-            children: [
-                {
-                    path: 'login',
-                    component: Login
-                },
-                {
-                    path: 'register',
-                    component: Register
-                },
-                {
-                    path: 'mobilebind',
-                    component: MobileBind
-                },
-                {
-                    path: 'backpw',
-                    component: BackPW
-                }
-
-            ]
-        },
-        {
-            path: '/applyresult',
-            component: ApplyResult
-        },
-        {
-            path: '/payresult',
-            component: payResult
-        },
-        {
-            path: '/applyinfocollect/:id(\\d+)',
-            component: ApplyInfoCollect
-        },
-        {
-            path: '*',
-            redirect: routerPrefix + '/info'
+              ]
+            }
+          ]
         }
-    ]
+      ]
+    },
+    {
+      path: '/train',
+      component: Train,
+      name: 'rootTrain',
+      meta: {
+        keepAlive: true,
+        isBack: false
+      },
+      children: [
+        {
+          path: 'applypay',
+          alias: '/pay/courseApplypay',
+          name: 'courseApplyPay',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          component: CourseApplyPay
+        },
+        {
+          path: 'all/:id(\\d+)',
+          component: TrainDetail,
+          name: 'trainDetail',
+          meta: {
+            requireLogin: true,
+            keepAlive: false,
+            isBack: false
+          },
+          children: [
+            {
+              path: 'evaluateForm',
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
+              component: courseEvaluateForm,
+              name: 'courseEvaluateForm'
+            },
+            {
+              path: 'applyresult',
+              name: 'trainDetailApply_applyresult',
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
+              component: CourseApplyResult
+            },
+            {
+              path: 'applyinfocollect/:applyTargetGuid',
+              name: 'trainDetailApply_applyinfocollect',
+              component: CourseApplyInfoCollect,
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
+              props: {
+                applyType: 'applyCourse'
+              }
+            },
+            {
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
+              path: 'applypay',
+              component: CourseApplyPay
+            }
+          ]
+        },
+        {
+          path: 'all/teacherdetail/:id',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          component: TeacherDetail,
+          name: 'teacherDetail'
+        },
+        {
+          path: 'all/teacherlist',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: TeacherList,
+          name: 'teacherList'
+        },
+        {
+          path: 'all/tagdetail/:id',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          component: TagDetail,
+          name: 'tagDetail'
+        },
+        {
+          path: 'all/taglist',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: TagList,
+          name: 'tagList'
+        },
+        {
+          path: 'all/courselist',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: TrainCourseList,
+          name: 'trainCourseList'
+        },
+        {
+          path: 'mycourse',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: TrainMyCourse,
+          name: 'trainMyCourse'
+        }
+      ]
+    },
+    {
+      path: '/community',
+      component: Community,
+      name: 'rootCommunity',
+      children: [
+        {
+          path: ':commentId(\\d+)',
+          component: CommunityCommentItem,
+          name: 'community_commentDetail',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          children: [
+            {
+              path: 'commentform',
+              component: CommunityCommentForm,
+              name: 'community_commentForm',
+              props: true,
+              meta: {
+                keepAlive: true,
+                isBack: false
+              }
+            }
+          ]
+        },
+        {
+          path: 'commentform',
+          component: CommunityCommentForm,
+          name: 'community_commentFormRoot',
+          props: true,
+          meta: {
+            keepAlive: true,
+            isBack: false
+          }
+        }
+      ]
+    },
+    {
+      path: '/activity',
+      component: Activity,
+      name: 'rootActivity',
+      children: [
+        {
+          path: 'list',
+          component: ActivityList,
+          name: 'activityList',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          children: [
+            {
+              path: 'applypay',
+              component: ApplyPay,
+              name: 'activityApplyPay',
+              meta: {
+                keepAlive: true,
+                isBack: false
+              },
+              alias: '/pay/activityApplyPay'
+            },
+            {
+              path: 'detail/:id(\\d+)',
+              component: ActivityDetail,
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
+              name: 'activityDetail',
+              children: [
+                {
+                  path: 'commentlist',
+                  name: 'activityDetailComment',
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
+                  component: ActivityDetailComment,
+                  children: [
+                    {
+                      path: ':commentId(\\d+)',
+                      name: 'activityDetailCommentItem',
+                      meta: {
+                        keepAlive: true,
+                        isBack: false
+                      },
+                      component: ActivityDetailCommentItem,
+                      children: [
+                        {
+                          path: 'commentform',
+                          name: 'activityDetailCommentForm',
+                          meta: {
+                            keepAlive: true,
+                            isBack: false
+                          },
+                          component: ActivityDetailCommentForm,
+                          props: true
+                        }
+                      ]
+                    },
+                    {
+                      path: 'commentform',
+                      name: 'activityCommentForm',
+                      meta: {
+                        keepAlive: true,
+                        isBack: false
+                      },
+                      component: ActivityDetailCommentForm,
+                      props: true
+                    }
+                  ]
+                },
+                {
+                  path: 'ticketList',
+                  component: TicketList,
+                  props: true,
+                  name: 'activityDetail_Tickets',
+                  children: [
+                    {
+                      path: 'applyresult',
+                      component: ApplyResult,
+                      name: 'activityDetail_TicketApplyResult'
+                    },
+                    {
+                      path: ':ticketId/applyinfocollect/:applyTargetGuid',
+                      component: ApplyInfoCollect,
+                      name: 'activityDetail_applyInfoCollect',
+                      props: {
+                        applyType: 'applyActivity'
+                      }
+                    },
+                    {
+                      path: 'applypay',
+                      name: 'activityDetail_applyPay',
+                      component: ApplyPay
+                    }
+                  ]
+                },
+                {
+                  path: 'applyresult',
+                  component: ApplyResult,
+                  name: 'activityDetail_ApplyResult'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          path: 'commentlist',
+          component: ActivityDetailComment,
+          children: [
+            {
+              path: ':commentId(\\d+)',
+              component: ActivityDetailCommentItem,
+              children: [
+                {
+                  path: 'commentform',
+                  component: ActivityDetailCommentForm,
+                  props: true
+                }
+              ]
+            },
+            {
+              path: 'commentform',
+              component: ActivityDetailCommentForm,
+              props: true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      path: '/me',
+      component: Me,
+      name: 'rootMe',
+      children: [
+        {
+          path: 'info',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          component: MyInfo
+        },
+        {
+          path: 'course',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: MyCourse
+        },
+        {
+          path: 'activity',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: MyActivity
+        },
+        {
+          path: 'collection',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: MyCollection
+        },
+        {
+          path: 'topic',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: MyTopic
+        },
+        {
+          path: 'club',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: MyClub
+        },
+        {
+          path: 'message',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          component: MyMessage
+        },
+        {
+          path: 'about',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          component: About
+        },
+        {
+          path: 'protocol',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          component: Protocol
+        },
+        {
+          path: 'setting',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          component: Setting,
+          children: [
+            {
+              path: 'safety',
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
+              component: SettingASafety,
+              children: [
+                {
+                  path: 'resetPW',
+                  meta: {
+                    keepAlive: false,
+                    isBack: false
+                  },
+                  component: ResetPW
+                },
+                {
+                  path: 'bindMobile',
+                  meta: {
+                    keepAlive: false,
+                    isBack: false
+                  },
+                  component: MyAccountBindMobile
+                }
+              ]
+            },
+            {
+              path: 'manage',
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
+              component: SettingAManage
+            }
+          ]
+        }
+      ]
+    },
+    {
+      path: routerPrefix + '/clubs',
+      component: Clubs,
+      name: 'rootClubs',
+      children: [
+        {
+          path: 'clubdetail/:clubguId',
+          component: ClubDetail,
+          name: 'clubDetail'
+        }
+      ]
+    },
+    {
+      path: routerPrefix + '/user',
+      component: User,
+      redirect: 'login',
+      name: 'rootUser',
+      children: [
+        {
+          path: 'login',
+          component: Login
+        },
+        {
+          path: 'register',
+          component: Register
+        },
+        {
+          path: 'mobilebind',
+          component: MobileBind
+        },
+        {
+          path: 'backpw',
+          component: BackPW
+        }
+
+      ]
+    },
+    {
+      path: '/applyresult',
+      component: ApplyResult
+    },
+    {
+      path: '/payresult',
+      component: payResult
+    },
+    {
+      path: '/applyinfocollect/:id(\\d+)',
+      component: ApplyInfoCollect
+    },
+    {
+      path: '*',
+      redirect: routerPrefix + '/info'
+    }
+  ]
 });
 Router.beforeEach((to, form, next) => {
-    // console.log(Router.app.$options.store.state.userGuid);
-    //  console.log(to.matched);
-    //  console.log(Router.app.$options.store.state);
-    // let isLogin = Router.app.$options.store.state.userGuid;
-    // if (to.matched.some((record) => record.meta.requireLogin)) {
-    //   if (!isLogin) {
-    //     next();
-    //     Router.push({
-    //       path: '/user/login'
-    //     });
-    //     // next();
-    //   } else {
-    //     next();
-    //   }
-    // }
-    next();
+  // console.log(Router.app.$options.store.state.userGuid);
+  //  console.log(to.matched);
+  //  console.log(Router.app.$options.store.state);
+  // let isLogin = Router.app.$options.store.state.userGuid;
+  // if (to.matched.some((record) => record.meta.requireLogin)) {
+  //   if (!isLogin) {
+  //     next();
+  //     Router.push({
+  //       path: '/user/login'
+  //     });
+  //     // next();
+  //   } else {
+  //     next();
+  //   }
+  // }
+  next();
 });
 
 export default Router;

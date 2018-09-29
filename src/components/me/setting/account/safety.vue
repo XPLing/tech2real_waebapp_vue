@@ -62,11 +62,6 @@
   import { unbindThirdParty } from 'api/login';
 
   export default {
-    provide () {
-      return {
-        reload: this.reload
-      };
-    },
     data () {
       return {
         pageTitle: '设置',

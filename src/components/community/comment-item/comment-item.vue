@@ -64,6 +64,7 @@
   import Mask from 'base/mask/mask';
 
   export default {
+    name: 'NKA_communityItem',
     data () {
       return {
         toptipTxt: '',

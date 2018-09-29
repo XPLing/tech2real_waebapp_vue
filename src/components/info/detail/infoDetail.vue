@@ -54,12 +54,12 @@
                 </scroll>
             </div>
             <div class="control-bar">
-                <p @click.stop="setFavorite">
+                <p @click.stop="setLike">
                     <i class="icon c-icon-heart" :class="{'active': viewArticle && viewArticle.likeFlag === 'Y'}"></i>
                     <span class="name">喜欢 <i
                             v-if="viewArticle && viewArticle.likeCount>0">({{viewArticle.likeCount}})</i> </span>
                 </p>
-                <p @click.stop="setLike">
+                <p @click.stop="setFavorite">
                     <i class="icon c-icon-star"
                        :class="{'active': viewArticle && viewArticle.favoriteFlag === 'Y'}"></i>
                     <span class="name">收藏 <i v-if="viewArticle && viewArticle.favoriteCount>0">({{viewArticle.favoriteCount}})</i> </span>

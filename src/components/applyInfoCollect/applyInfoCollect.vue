@@ -50,6 +50,7 @@
   import { Toast } from 'mint-ui';
 
   export default {
+    name: 'NKA_activityInfoCollection',
     props: {
       applyResult: {
         type: Object,

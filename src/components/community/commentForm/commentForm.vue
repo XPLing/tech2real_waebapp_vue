@@ -87,6 +87,7 @@
   /* currentConfirmsOperate打开对话框时当下操作的类型: 1.去登录 2.删除图片 */
 
   export default {
+    name: 'NKA_communityForm',
     props: {
       commentFormPlaceholder: {
         type: String,

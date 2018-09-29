@@ -55,7 +55,7 @@
                 </div>
             </g-select>
             <keep-alive :include="keepAliveList">
-                <router-view :apply-result="applyResult" @updateResult="updateResult"
+                <router-view :apply-result="applyResult" @updateResult="updateResult" @courseApplyUpdate="update"
                 @evaluateUpdate="evaluateUpdate"
                 :course-data="courseData"></router-view>
             </keep-alive>
@@ -175,6 +175,11 @@
             this.init();
         },
         activated() {
+          if (!this.$route.meta.isBack || this.isFirstEnter) {
+
+          }
+          this.$route.meta.isBack = false;
+          this.isFirstEnter = false;
             // this.init();
         },
         methods: {
@@ -215,6 +220,9 @@
                         this.$refs.view.updata();
                     });
                 }
+            },
+            update(){
+              this.init();
             },
             updateResult(data) {
                 this.applyResult = data;
