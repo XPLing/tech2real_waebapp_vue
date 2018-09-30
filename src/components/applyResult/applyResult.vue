@@ -32,13 +32,13 @@
               <div class="control" v-if="applyInfo.applyState==3">
                 <button class="btn cancel" @click="cancelApply">取消报名</button>
                 <router-link
-                  :to="{path: `/pay/activityApplyPay`, query:{applyTargetId: applyInfo.activity.id},props:{applyResult:applyInfo}}"
+                  :to="{path: `/pay/activityApplyPay`, query:{applyId: applyInfo.id, applyTargetId: applyInfo.activity.id},props:{applyResult:applyInfo}}"
                   tag="button" class="btn confirm">去支付（还剩{{remainTime}}）
                 </router-link>
               </div>
               <div class="control" v-else>
                 <router-link
-                  :to="{path: `/activity/list/detail/${applyInfo.activity.id}/ticketList`, props:{activity:applyInfo.activity}}"
+                  :to="{path: `/activity/detail/${applyInfo.activity.id}/ticketList`, props:{activity:applyInfo.activity}}"
                   tag="button" class="btn reapply">重新报名
                 </router-link>
               </div>

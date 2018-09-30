@@ -26,7 +26,7 @@
         </scroll>
       </div>
       <router-link
-        :to="`/activity/list/detail/${this.$route.params.id}/commentlist/${this.$route.params.commentId}/commentform`"
+        :to="`/activity/detail/${this.$route.params.id}/commentlist/${this.$route.params.commentId}/commentform`"
         class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>

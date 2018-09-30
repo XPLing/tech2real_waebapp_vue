@@ -214,7 +214,7 @@
         });
       },
       selectActivity (data) {
-        var url = `/activity/list/detail/${data.id}`;
+        var url = `/activity/detail/${data.id}`;
         this.$router.push({
           path: url
         });

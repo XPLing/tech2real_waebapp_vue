@@ -91,7 +91,7 @@
       },
       selectItem (data) {
         this.$router.push({
-          path: `/activity/list/detail/${data.id}`
+          path: `/activity/detail/${data.id}`
         });
       },
       applyDetail (data) {

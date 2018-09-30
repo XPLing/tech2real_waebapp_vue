@@ -254,7 +254,7 @@
             break;
           case 2:
             this.$router.push({
-              path: `/activity/list/detail/${params.id}`
+              path: `/activity/detail/${params.id}`
             });
             break;
           case 3:

@@ -343,66 +343,45 @@ const Router = new VueRouter({
       name: 'rootActivity',
       children: [
         {
-          path: 'list',
-          component: ActivityList,
-          name: 'activityList',
+          path: 'applypay',
+          component: ApplyPay,
+          name: 'activityApplyPay',
           meta: {
             keepAlive: true,
             isBack: false
           },
+          alias: '/pay/activityApplyPay'
+        },
+        {
+          path: 'detail/:id(\\d+)',
+          component: ActivityDetail,
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          name: 'activityDetail',
           children: [
             {
-              path: 'applypay',
-              component: ApplyPay,
-              name: 'activityApplyPay',
+              path: 'commentlist',
+              name: 'activityDetailComment',
               meta: {
                 keepAlive: true,
                 isBack: false
               },
-              alias: '/pay/activityApplyPay'
-            },
-            {
-              path: 'detail/:id(\\d+)',
-              component: ActivityDetail,
-              meta: {
-                keepAlive: false,
-                isBack: false
-              },
-              name: 'activityDetail',
+              component: ActivityDetailComment,
               children: [
                 {
-                  path: 'commentlist',
-                  name: 'activityDetailComment',
+                  path: ':commentId(\\d+)',
+                  name: 'activityDetailCommentItem',
                   meta: {
                     keepAlive: true,
                     isBack: false
                   },
-                  component: ActivityDetailComment,
+                  component: ActivityDetailCommentItem,
                   children: [
                     {
-                      path: ':commentId(\\d+)',
-                      name: 'activityDetailCommentItem',
-                      meta: {
-                        keepAlive: true,
-                        isBack: false
-                      },
-                      component: ActivityDetailCommentItem,
-                      children: [
-                        {
-                          path: 'commentform',
-                          name: 'activityDetailCommentForm',
-                          meta: {
-                            keepAlive: true,
-                            isBack: false
-                          },
-                          component: ActivityDetailCommentForm,
-                          props: true
-                        }
-                      ]
-                    },
-                    {
                       path: 'commentform',
-                      name: 'activityCommentForm',
+                      name: 'activityDetailCommentForm',
                       meta: {
                         keepAlive: true,
                         isBack: false
@@ -413,38 +392,64 @@ const Router = new VueRouter({
                   ]
                 },
                 {
-                  path: 'ticketList',
-                  component: TicketList,
-                  props: true,
-                  name: 'activityDetail_Tickets',
-                  children: [
-                    {
-                      path: 'applyresult',
-                      component: ApplyResult,
-                      name: 'activityDetail_TicketApplyResult'
-                    },
-                    {
-                      path: ':ticketId/applyinfocollect/:applyTargetGuid',
-                      component: ApplyInfoCollect,
-                      name: 'activityDetail_applyInfoCollect',
-                      props: {
-                        applyType: 'applyActivity'
-                      }
-                    },
-                    {
-                      path: 'applypay',
-                      name: 'activityDetail_applyPay',
-                      component: ApplyPay
-                    }
-                  ]
-                },
+                  path: 'commentform',
+                  name: 'activityCommentForm',
+                  meta: {
+                    keepAlive: true,
+                    isBack: false
+                  },
+                  component: ActivityDetailCommentForm,
+                  props: true
+                }
+              ]
+            },
+            {
+              path: 'ticketList',
+              component: TicketList,
+              props: true,
+              meta: {
+                keepAlive: false,
+                isBack: false
+              },
+              name: 'activityDetail_Tickets',
+              children: [
                 {
                   path: 'applyresult',
                   component: ApplyResult,
-                  name: 'activityDetail_ApplyResult'
+                  name: 'activityDetail_TicketApplyResult'
+                },
+                {
+                  path: ':ticketId/applyinfocollect/:applyTargetGuid',
+                  component: ApplyInfoCollect,
+                  name: 'activityDetail_applyInfoCollect',
+                  props: {
+                    applyType: 'applyActivity'
+                  }
+                },
+                {
+                  path: 'applypay',
+                  name: 'activityDetail_applyPay',
+                  component: ApplyPay
                 }
               ]
+            },
+            {
+              path: 'applyresult',
+              component: ApplyResult,
+              name: 'activityDetail_ApplyResult'
             }
+          ]
+        },
+        {
+          path: 'list',
+          component: ActivityList,
+          name: 'activityList',
+          meta: {
+            keepAlive: true,
+            isBack: false
+          },
+          children: [
+
           ]
         },
         {

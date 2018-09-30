@@ -129,7 +129,7 @@
           data.isRead = false;
         }
         var params = JSON.parse(data.params);
-        var url = `/activity/list/detail/${params.activityId}/applyresult`;
+        var url = `/activity/detail/${params.activityId}/applyresult`;
         this.$router.push({
           path: url
         });

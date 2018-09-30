@@ -153,7 +153,8 @@
                 this.$router.replace({
                   path: `/pay/activityApplyPay`,
                   query: {
-                    applyTargetId: this.applyTargetID
+                    applyTargetId: this.applyTargetID,
+                    applyId: res.result.order.id
                   }
                 });
               } else {

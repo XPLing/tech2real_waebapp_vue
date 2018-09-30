@@ -49,6 +49,7 @@
   import TicketList from 'base/ticket-list/ticket-list';
 
   export default {
+    name: 'KA_activityTicket',
     props: {
       activity: {
         type: Object,
@@ -77,6 +78,9 @@
       this.articleInfo = this.activity;
       this.requestTicket();
     },
+    activated(){
+      console.log('activated ticket');
+    },
     computed: {
       ...mapGetters([
         'productGuid',
@@ -99,13 +103,14 @@
             if (res.code) {
               if (res.code == ERR_OK) {
                 this.$router.replace({
-                  path: `/activity/list/detail/76/applyresult`
+                  path: `/activity/detail/76/applyresult`
                 });
               } else if (res.code == '201') {
                 this.$router.replace({
                   path: `/pay/activityApplyPay`,
                   query: {
-                    applyTargetId: this.articleInfo.id
+                    applyTargetId: this.articleInfo.id,
+                    applyId: res.result.order.id
                   }
                 });
               } else {

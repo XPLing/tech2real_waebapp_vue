@@ -97,7 +97,6 @@ export function alipay (params) {
     }
     document.body.appendChild(temp);
     temp.submit();
-    debugger;
     document.body.removeChild(temp);
     return temp;
   }

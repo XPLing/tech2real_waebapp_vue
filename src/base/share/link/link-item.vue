@@ -66,7 +66,7 @@
           sourceType = 'activity';
           firstType = 'clubFirst';
           requestName = '_getActivityById';
-          this.shareUrl = `/activity/list/detail/${this.shareContent}`;
+          this.shareUrl = `/activity/detail/${this.shareContent}`;
           break;
         case 10:
           this.shareUrl = this.shareContent.link_url;

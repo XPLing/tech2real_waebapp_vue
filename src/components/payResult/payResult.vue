@@ -103,31 +103,26 @@
         this.validatePayResule();
       },
       validatePayResule () {
-        if (this.payType === 'weixin') {
-          return this._getOrderSuc().then((res) => {
-            if (res.code) {
-              if (res.code != ERR_OK) {
-                this.loadingTxt = '支付失败，请重新报名支付！';
-              } else {
-                this.loadingTxt = '支付成功，正在跳转...！';
-              }
-              this.$refs.loading.show();
-              setTimeout(() => {
-                this.$router.replace({
-                  path: `/train/all/${this.applyInfo.course.id}`
-                });
-              }, 5000);
+        return this._getOrderSuc().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.loadingTxt = '支付失败，请重新报名支付！';
             } else {
-              return Promise.reject(res);
+              this.loadingTxt = '支付成功，正在跳转...！';
             }
-          }, erro => {
-            this.toptipTxt = erro.message;
-            this.$refs.toptip.show();
-          });
-        } else {
-
-        }
-
+            this.$refs.loading.show();
+            setTimeout(() => {
+              this.$router.replace({
+                path: `/train/all/${this.applyInfo.course.id}`
+              });
+            }, 5000);
+          } else {
+            return Promise.reject(res);
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
       },
       getApplyInfo () {
         var fnName = '';

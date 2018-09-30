@@ -530,12 +530,6 @@
         };
         return wxPayH5(params);
       },
-      _generateAlipayPaymentInfoV2 () {
-        let params = {
-          id: this.applyInfo.order.id
-        };
-        return generateAlipayPaymentInfoV2(params);
-      },
       _alipay (params) {
         return alipay(params);
       },
@@ -544,7 +538,7 @@
         var url = `${util.config.payRedirectUri}?id=${this.applyTargetID}&applyId=${this.applyID}&payType=alipay&payTargetType=course`;
         let params = {
           id: this.applyInfo.order.id,
-          appPay: false,
+          appPay: browserType.mobile ? 'Y' : 'N',
           returnUrl: url,
           shouUrl: url
         };

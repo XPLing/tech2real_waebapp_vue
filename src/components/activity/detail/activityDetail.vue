@@ -56,7 +56,7 @@
             <span class="name">分享</span>
           </p>
           <router-link tag="p"
-                       :to="{path:`/activity/list/detail/${this.id}/commentlist`,query: {title: `${this.pageTitle}`}}">
+                       :to="{path:`/activity/detail/${this.id}/commentlist`,query: {title: `${this.pageTitle}`}}">
             <i class="icon c-icon-comment-square-o"></i>
             <span class="name">评论</span>
           </router-link>
@@ -95,10 +95,10 @@
   import Share from 'base/share/share';
 
   export default {
-    name: 'KA_activityDetail',
+    name: 'NKA_activityDetail',
     data () {
       return {
-        keepAliveList: /^KA_activityComment/,
+        keepAliveList: [],
         toptipTxt: '',
         pageTitle: '活动详情',
         dataInfo: null,
@@ -112,12 +112,14 @@
       };
     },
     created () {
+      this.id = this.$route.params.id;
 
     },
     mounted () {
-
+      this.initDate();
     },
     activated(){
+      console.log('activated activityDetail');
       if (!this.$route.meta.isBack || this.isFirstEnter) {
         this.id = this.$route.params.id;
         this.initDate();
@@ -152,7 +154,15 @@
       applyUpdate(){
         this.initDate();
       },
-      confirm(){},
+      confirm(){
+        if (!this.userGuid) {
+          this.updataBeforeLoginPage(this.$route.fullPath);
+          this.$router.push({
+            path: '/user/login'
+          });
+          return false;
+        }
+      },
       initDate () {
         this._getActivityById().then((res) => {
           if (res.code) {
@@ -242,10 +252,15 @@
         };
       },
       applyActivity () {
+        if (!this.userGuid) {
+          this.confirmTxt = '请先登录，前去登录？';
+          this.$refs.confirmsWrapper.show();
+          return false;
+        }
         /* 1、即将开始  2、立即报名  3、门票售罄  4、报名截止  5、已报名  6、待审核  7、未通过  8、待支付  9、被驳回  10、重新报名  11、活动结束 */
         if (this.applyStatus.index === 2 || this.applyStatus.index === 10) {
           this.$router.push({
-            path: `/activity/list/detail/${this.id}/ticketList`,
+            path: `/activity/detail/${this.id}/ticketList`,
             append: true
           });
         } else if (this.applyStatus.index === 5 || this.applyStatus.index === 6 || this.applyStatus.index === 7 || this.applyStatus.index === 8 || this.applyStatus.index === 9) {
@@ -284,6 +299,9 @@
       backTop () {
         this.$refs.scroll.scrollTo(0, 0, 300);
       },
+      ...mapMutations({
+        updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
+      }),
       _getActivityById () {
         var param = {
           id: this.id,
