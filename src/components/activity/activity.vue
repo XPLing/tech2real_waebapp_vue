@@ -62,21 +62,15 @@
             </div>
           </div>
           <div class="g-ad">
-            <a href="http://m.mall.tech2real.com/">
-              <img src="./bottom_bg.png">
-              <div class="float-layer">
-                <div class="main">
-                  <div class="item info">
-                    <p class="title">硬见商城</p>
-                    <p class="subtitle">智能硬件爱好者的专属商城</p>
-                  </div>
-                  <div class="item control">
-                    <p class="tag">beta</p>
-                    <p class="btn">GO>></p>
-                  </div>
-                </div>
-              </div>
-            </a>
+            <div class="activity-swiper" v-if="bannerList">
+              <swiper :options="swiperOPts_ad" class="g-swiper">
+                <swiper-slide v-for="(item, index) in bannerList" :key="index">
+                  <img :src="item.coverUrl" @click="bannerClick(item)">
+                </swiper-slide>
+                <div class="swiper-pagination swiper-pagination-ad" slot="pagination"></div>
+              </swiper>
+            </div>
+
           </div>
         </div>
       </scroll>
@@ -102,6 +96,7 @@
   import ActivityItem from 'base/activity-item/activity-item';
   import NoResult from 'base/no-result/no-result';
   import { listDiscoverArticles, listDiscoverContent, listDiscoverClubs, listDiscoverActivities } from 'api/activity';
+  import listBannersByLocationType from 'api/banner';
   import BackTop from 'base/backtop/backtop';
 
   export default {
@@ -124,6 +119,18 @@
             clickable: true
           }
         },
+        swiperOPts_ad: {
+          loop: true,
+          autoplay: {
+            delay: 5000,
+            stopOnLastSlide: false,
+            disableOnInteraction: false
+          },
+          pagination: {
+            el: '.swiper-pagination-ad',
+            clickable: true
+          }
+        },
         swiperOPts_cont: {
           slidesPerView: 1,
           loop: true,
@@ -141,6 +148,7 @@
         bannerInfo: null,
         contList: null,
         activitiesList: null,
+        bannerList: null,
         clubList: null,
         infoFirst: true,
         clubFirst: true
@@ -205,8 +213,50 @@
         this.toptipTxt = erro.message;
         this.$refs.toptip.show();
       });
+      this._listBannersByLocationType().then((res) => {
+        if (res.code) {
+          if (res.code != ERR_OK) {
+            return Promise.reject(res);
+          }
+          this.bannerList = res.result;
+        }
+      }).catch(erro => {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      });
     },
     methods: {
+      bannerClick (data) {
+        /**
+         * banner type: 1.资讯 2.活动 3.课程 4.网页 5. 老师
+         */
+        var params = JSON.parse(data.params);
+        switch (data.type) {
+          case 1:
+            this.$router.push({
+              path: `/info/infodetail/${params.id}`
+            });
+            break;
+          case 2:
+            this.$router.push({
+              path: `/activity/detail/${params.id}`
+            });
+            break;
+          case 3:
+            this.$router.push({
+              path: `/train/all/${params.id}`
+            });
+            break;
+          case 4:
+            window.open(params.url);
+            break;
+          case 5:
+            this.$router.push({
+              path: `/train/all/teacherdetail/${params.id}`
+            });
+            break;
+        }
+      },
       reload () {
         this.isRouterAlive = false;
         this.$nextTick(() => {
@@ -262,6 +312,14 @@
           userGuid: this.userGuid
         };
         return listDiscoverArticles(param);
+      },
+      _listBannersByLocationType () {
+        var param = {
+          productGuid: this.productGuid,
+          type: 4,
+          userGuid: this.userGuid
+        };
+        return listBannersByLocationType(param);
       },
       _listDiscoverClubs () {
         var param = {

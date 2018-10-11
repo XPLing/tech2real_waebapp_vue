@@ -88,14 +88,18 @@
       },
       courseDetails (data) {
         this.$router.push({
-          path: `/train/all/${data.courseId}/applyresult`
+          path: `/train/all/applyresult`,
+          query: {
+            id: data.courseId,
+            applyId: data.courseApplyValidityPeriod.courseApplyId
+          }
         });
         if (this.first) {
           this.first = false;
         }
       },
       cancelRequest (msg) {
-        this.axiosSource.cancel(msg || '取消请求');
+        this.axiosSource && this.axiosSource.cancel && this.axiosSource.cancel(msg || '取消请求');
       },
       requestScrollData () {
         if (this.noMore) {

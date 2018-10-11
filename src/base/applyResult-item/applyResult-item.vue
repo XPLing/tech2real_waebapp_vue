@@ -1,11 +1,7 @@
 <template>
   <div class="c-apply-result-item c-media" @click.stop="selectItem(applyResult)">
     <div class="media-left">
-      <img v-lazy="{
-          src: applyResultBase.coverUrl,
-          error: lazy.error,
-          loading: lazy.loading
-        }" />
+      <img :src="applyResultBase.coverUrl" />
     </div>
     <div class="media-body">
       <p class="title">{{applyResultBase.title}}</p>

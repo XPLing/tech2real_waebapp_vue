@@ -113,15 +113,10 @@
       };
     },
     created () {
-      if (!this.$route.meta.isBack || this.isFirstEnter) {
-        this.applyTargetID = this.$route.params.id;
-        this.applyID = this.$route.query.applyId;
-        this.getApplyInfo();
-      }
-      this.$route.meta.isBack = false;
-      this.isFirstEnter = false;
+      this.applyTargetID = this.$route.query.id;
+      this.applyID = this.$route.query.applyId;
+      this.getApplyInfo();
     },
-    activated () {},
     computed: {
       ...mapGetters([
         'productGuid',

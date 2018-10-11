@@ -6,6 +6,10 @@ $color-green: #7ED321;
   }
   .g-swiper /deep/ .swiper-pagination {
     position: static;
+    &.swiper-pagination-ad{
+      position: absolute;
+      bottom: 5px;
+    }
   }
   .g-swiper /deep/ .swiper-pagination-bullets {
     line-height: 0;
@@ -112,9 +116,10 @@ $color-green: #7ED321;
       a{
         display: block;
       }
-      img{
+      /deep/ .swiper-slide img{
         display: block;
         width: 100%;
+        @include h(140);
       }
       .float-layer{
         position: absolute;

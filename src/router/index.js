@@ -16,22 +16,48 @@ import { routerPrefix, getUserGuid } from 'assets/js/util';
 // import Register from 'components/user/register/register';
 // import BackPW from 'components/user/backpw/backpw';
 // import MobileBind from 'components/user/mobilebind/mobilebind';
+/**
+ * 处理路由页面切换时，异步组件加载过渡的处理函数
+ * @param {Object} AsyncView 需要加载的组件，如 import('@/components/home/Home.vue')
+ * @return {Object} 返回一个promise对象
+ */
+function lazyLoadView (AsyncView) {
+  const AsyncHandler = () => ({
+    // 需要加载的组件 (应该是一个 `Promise` 对象)
+    component: AsyncView,
+    // 异步组件加载时使用的组件
+    loading: require('base/page-loading/page-loading.vue').default,
+    // 加载失败时使用的组件
+    error: require('base/page-loadfail/page-loadfail.vue').default,
+    // 展示加载时组件的延时时间。默认值是 200 (毫秒)
+    delay: 200,
+    // 如果提供了超时时间且组件加载也超时了，
+    // 则使用加载失败时使用的组件。默认值是：`Infinity`
+    timeout: 50000
+  });
+  return Promise.resolve({
+    functional: true,
+    render (h, {data, children}) {
+      return h(AsyncHandler, data, children);
+    }
+  });
+}
 
-const Info = () => import(/* webpackChunkName: "info" */ 'components/info/info');
-const InfoDetail = () => import(/* webpackChunkName: "infoDetail" */ 'components/info/detail/infoDetail');
-const InfoDetailComment = () => import(/* webpackChunkName: "infoDetailComment" */ 'components/info/detail/comment/comment');
-const InfoDetailCommentItem = () => import(/* webpackChunkName: "InfoDetailCommentItem" */ 'components/info/detail/comment-item/comment-item');
-const InfoDetailCommentForm = () => import(/* webpackChunkName: "InfoDetailCommentForm" */ 'components/info/detail/commentForm/commentForm');
-const Train = () => import(/* webpackChunkName: "train" */ 'components/study/study');
-const TrainAll = () => import(/* webpackChunkName: "train" */ 'components/train/train');
-const TrainDetail = () => import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail');
-const TrainMyCourse = () => import(/* webpackChunkName: "TrainMyCourse" */ 'components/study-subscribe/study-subscribe');
-const TrainCourseList = () => import(/* webpackChunkName: "TrainCourseList" */ 'components/train/course/courselist');
-const courseEvaluateForm = () => import(/* webpackChunkName: "courseEvaluateForm" */ 'components/train-detail/evaluateForm/evaluateForm');
-const TeacherDetail = () => import(/* webpackChunkName: "teacherDetail" */ 'components/teacher-detail/teacher-detail');
-const TeacherList = () => import(/* webpackChunkName: "teacherList" */ 'components/teacherlist/teacherlist');
-const TagDetail = () => import(/* webpackChunkName: "tagDetail" */ 'components/tag-detail/tag-detail');
-const TagList = () => import(/* webpackChunkName: "tagList" */ 'components/taglist/taglist');
+const Info = () => lazyLoadView(lazyLoadView(import(/* webpackChunkName: "info" */ 'components/info/info')));
+const InfoDetail = () => lazyLoadView(import(/* webpackChunkName: "infoDetail" */ 'components/info/detail/infoDetail'));
+const InfoDetailComment = () => lazyLoadView(import(/* webpackChunkName: "infoDetailComment" */ 'components/info/detail/comment/comment'));
+const InfoDetailCommentItem = () => lazyLoadView(import(/* webpackChunkName: "InfoDetailCommentItem" */ 'components/info/detail/comment-item/comment-item'));
+const InfoDetailCommentForm = () => lazyLoadView(import(/* webpackChunkName: "InfoDetailCommentForm" */ 'components/info/detail/commentForm/commentForm'));
+const Train = () => lazyLoadView(import(/* webpackChunkName: "train" */ 'components/study/study'));
+const TrainAll = () => lazyLoadView(import(/* webpackChunkName: "train" */ 'components/train/train'));
+const TrainDetail = () => lazyLoadView(import(/* webpackChunkName: "trainDetail" */ 'components/train-detail/train-detail'));
+const TrainMyCourse = () => lazyLoadView(import(/* webpackChunkName: "TrainMyCourse" */ 'components/study-subscribe/study-subscribe'));
+const TrainCourseList = () => lazyLoadView(import(/* webpackChunkName: "TrainCourseList" */ 'components/train/course/courselist'));
+const courseEvaluateForm = () => lazyLoadView(import(/* webpackChunkName: "courseEvaluateForm" */ 'components/train-detail/evaluateForm/evaluateForm'));
+const TeacherDetail = () => lazyLoadView(import(/* webpackChunkName: "teacherDetail" */ 'components/teacher-detail/teacher-detail'));
+const TeacherList = () => lazyLoadView(import(/* webpackChunkName: "teacherList" */ 'components/teacherlist/teacherlist'));
+const TagDetail = () => lazyLoadView(import(/* webpackChunkName: "tagDetail" */ 'components/tag-detail/tag-detail'));
+const TagList = () => lazyLoadView(import(/* webpackChunkName: "tagList" */ 'components/taglist/taglist'));
 // const Train = resolve => {
 //   // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
 //   // （代码分块）
@@ -40,46 +66,46 @@ const TagList = () => import(/* webpackChunkName: "tagList" */ 'components/tagli
 //   });
 // };
 // const TrainDetail = r => require.ensure([], () => r(require('components/train-detail/train-detail')), 'trainDetail');
-const CourseApplyResult = () => import(/* webpackChunkName: "courseApplyResult" */ 'components/courseApplyResult/courseApplyResult');
-const CourseApplyInfoCollect = () => import(/* webpackChunkName: "courseApplyInfoCollect" */ 'components/courseApplyInfoCollect/courseApplyInfoCollect');
-const CourseApplyPay = () => import(/* webpackChunkName: "courseApplyPay" */ 'components/courseApplyPay/courseApplyPay');
-const ApplyResult = () => import(/* webpackChunkName: "ApplyResult" */ 'components/applyResult/applyResult');
-const ApplyInfoCollect = () => import(/* webpackChunkName: "ApplyInfoCollect" */ 'components/applyInfoCollect/applyInfoCollect');
-const ApplyPay = () => import(/* webpackChunkName: "ApplyPay" */ 'components/applyPay/applyPay');
-const Community = () => import(/* webpackChunkName: "community" */ 'components/community/community');
-const CommunityCommentItem = () => import(/* webpackChunkName: "CommunityCommentItem" */ 'components/community/comment-item/comment-item');
-const CommunityCommentForm = () => import(/* webpackChunkName: "CommunityCommentForm" */ 'components/community/commentForm/commentForm');
-const Activity = () => import(/* webpackChunkName: "activity" */ 'components/activity/activity');
-const ActivityList = () => import(/* webpackChunkName: "ActivityList" */ 'components/activity/list/activityList');
-const ActivityDetail = () => import(/* webpackChunkName: "ActivityDetail" */ 'components/activity/detail/activityDetail');
-const ActivityDetailComment = () => import(/* webpackChunkName: "ActivityDetailComment" */ 'components/activity/detail/comment/comment');
-const ActivityDetailCommentItem = () => import(/* webpackChunkName: "ActivityDetailCommentItem" */ 'components/activity/detail/comment-item/comment-item');
-const ActivityDetailCommentForm = () => import(/* webpackChunkName: "ActivityDetailCommentForm" */ 'components/activity/detail/commentForm/commentForm');
-const TicketList = () => import(/* webpackChunkName: "TicketList" */ 'components/activity/detail/ticket/ticketList');
-const Me = () => import(/* webpackChunkName: "me" */ 'components/me/me');
-const MyInfo = () => import(/* webpackChunkName: "MyInfo" */ 'components/me/info/myInfo');
-const MyCourse = () => import(/* webpackChunkName: "MyCourse" */ 'components/me/course/myCourse');
-const MyActivity = () => import(/* webpackChunkName: "MyActivity" */ 'components/me/activity/myActivity');
-const MyCollection = () => import(/* webpackChunkName: "MyCollection" */ 'components/me/collection/myCollection');
-const MyTopic = () => import(/* webpackChunkName: "MyTopic" */ 'components/me/topic/myTopic');
-const MyClub = () => import(/* webpackChunkName: "MyClub" */ 'components/me/club/myClub');
-const MyMessage = () => import(/* webpackChunkName: "MyMessage" */ 'components/me/message/myMessage');
-const About = () => import(/* webpackChunkName: "About" */ 'components/me/about/about');
-const Protocol = () => import(/* webpackChunkName: "Protocol" */ 'components/me/protocol/protocol');
-const Setting = () => import(/* webpackChunkName: "Setting" */ 'components/me/setting/setting');
-const SettingASafety = () => import(/* webpackChunkName: "SettingASafety" */ 'components/me/setting/account/safety');
-const SettingAManage = () => import(/* webpackChunkName: "SettingAManage" */ 'components/me/setting/account/manage');
-const ResetPW = () => import(/* webpackChunkName: "ResetPW" */ 'components/me/setting/account/resetPW');
-const MyAccountBindMobile = () => import(/* webpackChunkName: "MyAccountBindMobile" */ 'components/me/setting/mobilebind/mobilebind');
-const Login = () => import(/* webpackChunkName: "login" */ 'components/user/login/login');
-const User = () => import(/* webpackChunkName: "user" */ 'components/user/user');
-const Register = () => import(/* webpackChunkName: "register" */ 'components/user/register/register');
-const BackPW = () => import(/* webpackChunkName: "backPW" */ 'components/user/backpw/backpw');
-const MobileBind = () => import(/* webpackChunkName: "mobileBind" */ 'components/user/mobilebind/mobilebind');
-const FeedBack = () => import(/* webpackChunkName: "feedback" */ 'components/feedback/feedback');
-const Clubs = () => import(/* webpackChunkName: "Clubs" */ 'components/club/clubs');
-const ClubDetail = () => import(/* webpackChunkName: "ClubDetail" */ 'components/club/detail/clubDetail');
-const payResult = () => import(/* webpackChunkName: "payResult" */ 'components/payResult/payResult');
+const CourseApplyResult = () => lazyLoadView(import(/* webpackChunkName: "courseApplyResult" */ 'components/courseApplyResult/courseApplyResult'));
+const CourseApplyInfoCollect = () => lazyLoadView(import(/* webpackChunkName: "courseApplyInfoCollect" */ 'components/courseApplyInfoCollect/courseApplyInfoCollect'));
+const CourseApplyPay = () => lazyLoadView(import(/* webpackChunkName: "courseApplyPay" */ 'components/courseApplyPay/courseApplyPay'));
+const ApplyResult = () => lazyLoadView(import(/* webpackChunkName: "ApplyResult" */ 'components/applyResult/applyResult'));
+const ApplyInfoCollect = () => lazyLoadView(import(/* webpackChunkName: "ApplyInfoCollect" */ 'components/applyInfoCollect/applyInfoCollect'));
+const ApplyPay = () => lazyLoadView(import(/* webpackChunkName: "ApplyPay" */ 'components/applyPay/applyPay'));
+const Community = () => lazyLoadView(import(/* webpackChunkName: "community" */ 'components/community/community'));
+const CommunityCommentItem = () => lazyLoadView(import(/* webpackChunkName: "CommunityCommentItem" */ 'components/community/comment-item/comment-item'));
+const CommunityCommentForm = () => lazyLoadView(import(/* webpackChunkName: "CommunityCommentForm" */ 'components/community/commentForm/commentForm'));
+const Activity = () => lazyLoadView(import(/* webpackChunkName: "activity" */ 'components/activity/activity'));
+const ActivityList = () => lazyLoadView(import(/* webpackChunkName: "ActivityList" */ 'components/activity/list/activityList'));
+const ActivityDetail = () => lazyLoadView(import(/* webpackChunkName: "ActivityDetail" */ 'components/activity/detail/activityDetail'));
+const ActivityDetailComment = () => lazyLoadView(import(/* webpackChunkName: "ActivityDetailComment" */ 'components/activity/detail/comment/comment'));
+const ActivityDetailCommentItem = () => lazyLoadView(import(/* webpackChunkName: "ActivityDetailCommentItem" */ 'components/activity/detail/comment-item/comment-item'));
+const ActivityDetailCommentForm = () => lazyLoadView(import(/* webpackChunkName: "ActivityDetailCommentForm" */ 'components/activity/detail/commentForm/commentForm'));
+const TicketList = () => lazyLoadView(import(/* webpackChunkName: "TicketList" */ 'components/activity/detail/ticket/ticketList'));
+const Me = () => lazyLoadView(import(/* webpackChunkName: "me" */ 'components/me/me'));
+const MyInfo = () => lazyLoadView(import(/* webpackChunkName: "MyInfo" */ 'components/me/info/myInfo'));
+const MyCourse = () => lazyLoadView(import(/* webpackChunkName: "MyCourse" */ 'components/me/course/myCourse'));
+const MyActivity = () => lazyLoadView(import(/* webpackChunkName: "MyActivity" */ 'components/me/activity/myActivity'));
+const MyCollection = () => lazyLoadView(import(/* webpackChunkName: "MyCollection" */ 'components/me/collection/myCollection'));
+const MyTopic = () => lazyLoadView(import(/* webpackChunkName: "MyTopic" */ 'components/me/topic/myTopic'));
+const MyClub = () => lazyLoadView(import(/* webpackChunkName: "MyClub" */ 'components/me/club/myClub'));
+const MyMessage = () => lazyLoadView(import(/* webpackChunkName: "MyMessage" */ 'components/me/message/myMessage'));
+const About = () => lazyLoadView(import(/* webpackChunkName: "About" */ 'components/me/about/about'));
+const Protocol = () => lazyLoadView(import(/* webpackChunkName: "Protocol" */ 'components/me/protocol/protocol'));
+const Setting = () => lazyLoadView(import(/* webpackChunkName: "Setting" */ 'components/me/setting/setting'));
+const SettingASafety = () => lazyLoadView(import(/* webpackChunkName: "SettingASafety" */ 'components/me/setting/account/safety'));
+const SettingAManage = () => lazyLoadView(import(/* webpackChunkName: "SettingAManage" */ 'components/me/setting/account/manage'));
+const ResetPW = () => lazyLoadView(import(/* webpackChunkName: "ResetPW" */ 'components/me/setting/account/resetPW'));
+const MyAccountBindMobile = () => lazyLoadView(import(/* webpackChunkName: "MyAccountBindMobile" */ 'components/me/setting/mobilebind/mobilebind'));
+const Login = () => lazyLoadView(import(/* webpackChunkName: "login" */ 'components/user/login/login'));
+const User = () => lazyLoadView(import(/* webpackChunkName: "user" */ 'components/user/user'));
+const Register = () => lazyLoadView(import(/* webpackChunkName: "register" */ 'components/user/register/register'));
+const BackPW = () => lazyLoadView(import(/* webpackChunkName: "backPW" */ 'components/user/backpw/backpw'));
+const MobileBind = () => lazyLoadView(import(/* webpackChunkName: "mobileBind" */ 'components/user/mobilebind/mobilebind'));
+const FeedBack = () => lazyLoadView(import(/* webpackChunkName: "feedback" */ 'components/feedback/feedback'));
+const Clubs = () => lazyLoadView(import(/* webpackChunkName: "Clubs" */ 'components/club/clubs'));
+const ClubDetail = () => lazyLoadView(import(/* webpackChunkName: "ClubDetail" */ 'components/club/detail/clubDetail'));
+const payResult = () => lazyLoadView(import(/* webpackChunkName: "payResult" */ 'components/payResult/payResult'));
 
 Vue.use(VueRouter);
 const Router = new VueRouter({
@@ -186,12 +212,21 @@ const Router = new VueRouter({
         {
           path: 'applypay',
           alias: '/pay/courseApplypay',
-          name: 'courseApplyPay',
+          name: 'trainCourseApplyPay',
           meta: {
             keepAlive: false,
             isBack: false
           },
           component: CourseApplyPay
+        },
+        {
+          path: 'all/applyresult',
+          name: 'trainDetailApply_applyresult',
+          meta: {
+            keepAlive: false,
+            isBack: false
+          },
+          component: CourseApplyResult
         },
         {
           path: 'all/:id(\\d+)',
@@ -211,15 +246,6 @@ const Router = new VueRouter({
               },
               component: courseEvaluateForm,
               name: 'courseEvaluateForm'
-            },
-            {
-              path: 'applyresult',
-              name: 'trainDetailApply_applyresult',
-              meta: {
-                keepAlive: true,
-                isBack: false
-              },
-              component: CourseApplyResult
             },
             {
               path: 'applyinfocollect/:applyTargetGuid',
@@ -448,9 +474,7 @@ const Router = new VueRouter({
             keepAlive: true,
             isBack: false
           },
-          children: [
-
-          ]
+          children: []
         },
         {
           path: 'commentlist',
@@ -491,6 +515,7 @@ const Router = new VueRouter({
         },
         {
           path: 'course',
+          name: 'meMyCourse',
           meta: {
             keepAlive: true,
             isBack: false

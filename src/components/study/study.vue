@@ -1,7 +1,7 @@
 <template>
   <div class="g-study">
     <header class="g-header">
-      <HeaderTitleTab :title="pageTitle" @toggle-tab="toggleTab"></HeaderTitleTab>
+      <HeaderTitleTab :title="pageTitle" @toggle-tab="toggleTab" ref="titleTab"></HeaderTitleTab>
     </header>
     <div class="g-view">
       <transition name="slide" mode="out-in">
@@ -27,10 +27,13 @@
     inject: ['rootReload'],
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        if (to.name !== 'rootTrain' && from.fullPath !== '/') {
-//          console.log(from);
-//          console.log(to);
-//          vm.rootReload();
+        if (from.name && !/train/i.test(from.name)) {
+          if (/train\/all\//.test(to.fullPath) && vm.currView === 'subscribe') {
+            vm.$refs.titleTab.toggleTab({
+              title: '培训',
+              component: 'train'
+            }, 0);
+          }
         }
       });
     },
@@ -57,10 +60,10 @@
       toggleTab (item, index) {
         this.currView = this.pageTitle[index].component;
       },
-      reload() {
+      reload () {
         this.isRouterAlive = false;
         this.$nextTick(() => {
-           this.isRouterAlive = true;
+          this.isRouterAlive = true;
         });
       }
     },

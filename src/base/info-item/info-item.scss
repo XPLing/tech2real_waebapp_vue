@@ -6,6 +6,7 @@
       flex-direction: column;
       img{
         width: 100%;
+        @include h(200);
         margin-bottom: formatVal(10,rem);
       }
       .detail{

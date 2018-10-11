@@ -78,7 +78,7 @@
       this.articleInfo = this.activity;
       this.requestTicket();
     },
-    activated(){
+    activated () {
       console.log('activated ticket');
     },
     computed: {
@@ -103,7 +103,7 @@
             if (res.code) {
               if (res.code == ERR_OK) {
                 this.$router.replace({
-                  path: `/activity/detail/76/applyresult`
+                  path: `/activity/detail/${res.activity.id}/applyresult`
                 });
               } else if (res.code == '201') {
                 this.$router.replace({
@@ -189,7 +189,7 @@
           this.$refs.scroll.refresh();
         });
       },
-      activity(newVal){
+      activity (newVal) {
         this.articleInfo = this.activity;
       }
     },
