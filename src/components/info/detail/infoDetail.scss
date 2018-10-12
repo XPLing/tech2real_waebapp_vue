@@ -13,6 +13,10 @@
   &.slide-enter, &.slide-leave-to {
     transform: translate3d(100%, 0, 0);
   }
+  .g-header{
+    position: relative;
+    z-index: 12;
+  }
   .g-main{
     position: fixed;
     z-index: 10;

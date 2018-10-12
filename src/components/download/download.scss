@@ -1,0 +1,74 @@
+.c-download-app {
+  position: relative;
+  z-index: 2;
+  @include fs(14);
+  &.fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 11;
+    top: formatVal(41,rem);
+    left: 0;
+  }
+  .download-app {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $whiteColor;
+    padding: 0 formatVal(16, rem);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    @include h(52);
+    .info {
+      display: flex;
+      align-items: center;
+      .avatar {
+        font-size: 0;
+        margin-right: formatVal(17, rem);
+        img {
+          @include w(34);
+          @include h(34);
+          border-radius: 4px;
+        }
+      }
+      .desc {
+        .name {
+          color: $color-text-2B3;
+        }
+        .intro {
+          color: $color-gray-B6B;
+          @include fs(12);
+        }
+        p + p {
+          margin-top: formatVal(5, rem);
+        }
+      }
+    }
+    .btn {
+      @include w(75);
+      @include h(30);
+      @include lh(30);
+      color: $whiteColor;
+      text-align: center;
+      border-radius: 4px;
+      background-color: $color-theme;
+    }
+  }
+}
+
+.slide-enter-active {
+  animation: slide 0.3s;
+}
+
+.slide-leave-active {
+  opacity: 0;
+}
+
+@keyframes slide {
+  0% {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}

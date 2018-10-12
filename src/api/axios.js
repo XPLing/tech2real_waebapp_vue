@@ -1,10 +1,11 @@
 import axios from 'axios';
-
+const whiteList = '/getProductAppSetup|/api/getProductAppSetup';
 export let pending = []; //  声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let CancelToken = axios.CancelToken;
 export let removePending = (config, obj) => {
   for (let p in obj) {
-    if (obj[p].u === config.url + '&' + config.method) { // 当当前请求在数组中存在时执行函数体
+    var reg = new RegExp(config.url);
+    if (obj[p].u === config.url + '&' + config.method && !reg.test(whiteList)) { // 当当前请求在数组中存在时执行函数体
       obj[p].f(); //  执行取消操作
       obj.splice(p, 1); //  把这条记录从数组中移除
     }

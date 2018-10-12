@@ -45,7 +45,11 @@
         type: Boolean,
         default: false
       }
-
+    },
+    data () {
+      return {
+        directionY: 0
+      };
     },
     mounted () {
       setTimeout(() => {
@@ -103,6 +107,7 @@
         if (this.listenScroll) {
           let me = this;
           this.scroll.on('scroll', (pos) => {
+            this.directionY = this.scroll.directionY;
             me.$emit('scroll', pos);
           });
         }

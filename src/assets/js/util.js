@@ -303,6 +303,33 @@ export let common = {
       }
     }
     return deuceArr;
+  },
+  openClient: function (scheme, yingYongBaoUrl) {
+    // 打开应用或者跳转到应用宝产品网址
+    var ua = navigator.userAgent.toLowerCase();
+    var config = {
+      scheme_IOS: scheme + '://',
+      scheme_Adr: scheme + '://splash',
+      download_url: yingYongBaoUrl,
+      timeout: 2000
+    };
+    var startTime = Date.now();
+    var ifr = document.createElement('iframe');
+    var downUrl;
+    ifr.src = ua.indexOf('os') > 0 ? config.scheme_IOS : config.scheme_Adr;
+    downUrl = ua.indexOf('os') > 0 ? config.download_url : config.download_url;
+    ifr.style.display = 'none';
+    document.body.appendChild(ifr);
+    var t = setTimeout(function () {
+      var endTime = Date.now();
+      if (!startTime || endTime - startTime < config.timeout + 200) {
+        window.location = downUrl;
+      } else {
+      }
+    }, config.timeout);
+    window.onblur = function () {
+      clearTimeout(t);
+    }
   }
 };
 
