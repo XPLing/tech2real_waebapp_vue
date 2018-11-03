@@ -116,10 +116,27 @@ $color-green: #7ED321;
       a{
         display: block;
       }
-      /deep/ .swiper-slide img{
-        display: block;
-        width: 100%;
-        @include h(140);
+      /deep/ .swiper-slide {
+        img{
+          display: block;
+          width: 100%;
+          @include h(127);
+        }
+      }
+      /deep/ .swiper-pagination-ad{
+        bottom: 8px;
+        .swiper-pagination-bullet{
+          @include w(16);
+          @include h(4);
+          border-radius: 3px;
+          opacity: 0.5;
+          background-color: $color-white-f3;
+          &.swiper-pagination-bullet-active{
+            background-color: $color-white-f3;
+            opacity: 1;
+          }
+        }
+
       }
       .float-layer{
         position: absolute;

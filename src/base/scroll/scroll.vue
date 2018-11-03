@@ -128,6 +128,7 @@
     watch: {
       data () {
         setTimeout(() => {
+
           this.refresh();
         }, this.refreshDelay);
       }

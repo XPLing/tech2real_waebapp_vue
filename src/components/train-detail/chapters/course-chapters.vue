@@ -2,7 +2,7 @@
   <div class="g-course-chapters" :class="{'joined':this.appliedState===1}">
     <scroll :data="chapterData" ref="scroll">
       <div class="g-scroll-continer">
-        <div v-if="aggregation" class="g-package c-form-item" ref="package" @click.stop="showSelect">
+        <div v-if="this.aggregationOpts && this.aggregationOpts.length > 0" class="g-package c-form-item" ref="package" @click.stop="showSelect">
           <p class="form-left">课程</p>
           <p class="form-body">{{currentPackage}}</p>
           <p class="form-right">
@@ -32,7 +32,7 @@
       </div>
     </scroll>
     <div class="g-select-box">
-      <g-select :select-data="selectOpts" :current-select="currentSelect" ref="select"
+      <g-select :select-data="aggregationOpts" :current-select="currentSelect" ref="select"
                 @select="selectItem" @clickMask="clickMask"></g-select>
     </div>
   </div>
@@ -55,40 +55,28 @@
       appliedState: {
         type: Number,
         default: 0
+      },
+      aggregationOpts: {
+        type: Array,
+        default: null
       }
     },
     data () {
       return {
         id: 0,
         isSetData: false,
-        selectOpts: [
-          {
-            'title': '课程1'
-          },
-          {
-            'title': '课程2'
-          },
-          {
-            'title': '课程3'
-          },
-          {
-            'title': '课程4'
-          },
-          {
-            'title': '课程5'
-          },
-          {
-            'title': '课程6'
-          }
-        ],
-        currentSelect: -1,
+        selectOpts: [],
+        currentSelect: 0,
         chapters: [],
-        currentPackage: '注册供应商质量经理课程经理课程程经理课程程经理课程',
+        currentPackage: '',
         aggregation: null
       };
     },
     created () {
       this.aggregation = this.$route.query.aggregation;
+      if (this.aggregationOpts && this.aggregationOpts.length > 0) {
+        this.currentPackage = this.aggregationOpts[this.currentSelect].title;
+      }
       communication.$on('clickMask', (vm) => {
         vm.$refs.select.hide();
         communication.$emit('hideGlobalMask', this.$parent);
@@ -109,7 +97,7 @@
       ]),
       courseChapters () {
         if (this.chapterData) {
-          if (!this.isSetData) {
+          if (!this.isSetData || this.aggregation) {
             this.isSetData = true;
             this.chapters = this.chapterData;
             var len = this.chapters.length;
@@ -120,6 +108,8 @@
               }
             }
           }
+        } else {
+          this.chapters = [];
         }
         return this.chapters;
       }
@@ -136,6 +126,7 @@
         this.currentSelect = index;
         this.currentPackage = item.title;
         communication.$emit('hideGlobalMask', this.$parent);
+        this.$emit('selectAggregation', item);
       },
       _getCourseID () {
         this.id = this.$route.params.id;

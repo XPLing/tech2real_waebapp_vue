@@ -32,12 +32,8 @@
         showFlag: true
       };
     },
-    created(){
-      console.log('加载中');
-    },
-    activated(){
-
-    },
+    created(){},
+    activated(){},
     methods: {
       show () {
         this.showFlag = true;

@@ -22,7 +22,8 @@
       </div>
       <back-top ref="backTop" @backTop="backTop"></back-top>
       <keep-alive :include="keepAliveList" :exclude="notkeepAliveList">
-        <router-view v-if="isRouterAlive" :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @update="update"></router-view>
+        <router-view v-if="isRouterAlive" :comment-form-placeholder="'请输入评论内容'" :type="'comment'"
+                     @update="update"></router-view>
       </keep-alive>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
@@ -94,7 +95,7 @@
           this.isRouterAlive = true;
         });
       },
-      setScrollY(pos){
+      setScrollY (pos) {
         this.scrollY = pos.y;
       },
       update () {
@@ -174,6 +175,12 @@
         this.$nextTick(() => {
           this.$refs.scroll.refresh();
         });
+      },
+      '$route' (to, from) {
+        // 对路由变化作出响应...
+        if (to.name === 'activityList') {
+          this.$refs.scroll.refresh();
+        }
       }
     },
     components: {

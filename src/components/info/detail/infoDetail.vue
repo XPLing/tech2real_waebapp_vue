@@ -4,7 +4,7 @@
       <header class="g-header">
         <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
       </header>
-      <download ref="downloadAppFixed" :is-fixed="true"></download>
+      <download v-if="isShare" ref="downloadAppFixed" :is-fixed="true"></download>
       <div class="g-main">
         <scroll :data="articleInfo" @scroll="descImage" ref="scroll" :probeType="probeType"
                 :listenScroll="listenScroll">
@@ -13,7 +13,7 @@
             <!--<h1 class="title">{{articleInfo.listTitle}}</h1>-->
             <!--<p class="subtitle">{{articleInfo.tag}} ● {{articleInfo.author}} ● {{articleInfo.createdTime}}</p>-->
             <!--</div>-->
-            <download ref="downloadApp"></download>
+            <download v-if="isShare" ref="downloadApp"></download>
             <article class="g-article-cont wechat-article" id="articleCont" data-top-flog="true"
                      v-if="articleInfo">
               <div class="rich_media_inner" v-html="articleInfo.content" ref="articleCont"></div>
@@ -156,12 +156,12 @@
         scrollDirection: 0,
         articleId: 0,
         shareInfo: null,
-        imgsLoadStatus: 'ready'
+        imgsLoadStatus: 'ready',
+        isShare: false
       };
     },
     created () {
       this.likeFlag = true;
-
     },
     activated () {
       if (!this.$route.meta.isBack || this.isFirstEnter) {
@@ -195,6 +195,7 @@
     },
     methods: {
       initData () {
+        this.isShare = this.$route.query.share;
         this.articleId = this.$route.params.articleId;
         this._getArticleById().then((res) => {
           if (res.code) {
@@ -536,10 +537,12 @@
             this.$refs.backTop.hideIcon();
           }
         }
-        if (newVal < -DOWNLOADAPP_HEIGHT && this.$refs.scroll.directionY === -1) {
-          this.$refs.downloadAppFixed.show();
-        } else {
-          this.$refs.downloadAppFixed.hide();
+        if (this.isShare) {
+          if (newVal < -DOWNLOADAPP_HEIGHT && this.$refs.scroll.directionY === -1) {
+            this.$refs.downloadAppFixed.show();
+          } else {
+            this.$refs.downloadAppFixed.hide();
+          }
         }
       },
       articleInfo () {

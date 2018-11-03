@@ -35,9 +35,11 @@
   import { ERR_OK } from 'api/config';
   import * as util from 'assets/js/util';
   import { listRecommendCourses } from 'api/train';
+  import { listCoursePackage } from 'api/coursePackage';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
   import CourseItem from 'base/course-item/course-item';
+
   export default {
     data () {
       return {
@@ -48,7 +50,7 @@
         noMore: false,
         loadingMore: '加载中。。。',
         noMoreStr: '没有更多了~',
-        teacherPage: 1,
+        requestPage: 1,
         noResult: '暂无课程~~',
         defaultAvatar: require('assets/image/defaultAvatar.png')
       };
@@ -60,7 +62,8 @@
       ])
     },
     created () {
-      this.requestScrollData()
+      this.listType = this.$route.query ? this.$route.query.type : '';
+      this.requestScrollData();
     },
     mounted () {
     },
@@ -71,7 +74,11 @@
         }
         if (!this.requestMoreFlag) {
           this.requestMoreFlag = true;
-          this._listRecommendCourses(this.teacherPage).then((res) => {
+          var fnName = '_listRecommendCourses', dataName = '';
+          if (this.listType === 'aggregation') {
+            fnName = '_listCoursePackage'
+          }
+          this[fnName](this.requestPage).then((res) => {
             this.$refs.scroll.finishPullUp();
             this.requestMoreFlag = false;
             if (res.code) {
@@ -86,7 +93,7 @@
                 } else {
                   this.scrollDataList = res.result;
                 }
-                this.teacherPage = this.teacherPage + 1;
+                this.requestPage = this.requestPage + 1;
               } else {
                 this.noMore = true;
                 this.$refs.scroll.closePullUp();
@@ -103,9 +110,15 @@
         }
       },
       selectcourse (course) {
-        this.$router.push({
+        var opt = {
           path: `/train/all/${course.id}`
-        });
+        };
+        if (this.listType === 'aggregation') {
+          opt.query = {
+            aggregation: true
+          }
+        }
+        this.$router.push(opt);
       },
       _listRecommendCourses (page) {
         var param = {
@@ -113,6 +126,13 @@
           page: page
         };
         return listRecommendCourses(param);
+      },
+      _listCoursePackage (page) {
+        var param = {
+          productGuid: this.productGuid,
+          page: page
+        };
+        return listCoursePackage(param);
       }
     },
     watch: {
