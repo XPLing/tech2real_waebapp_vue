@@ -43,7 +43,7 @@ function lazyLoadView (AsyncView) {
   });
 }
 
-const Info = () => lazyLoadView(lazyLoadView(import(/* webpackChunkName: "info" */ 'components/info/info')));
+const Info = () => lazyLoadView(import(/* webpackChunkName: "info" */ 'components/info/info'));
 const InfoDetail = () => lazyLoadView(import(/* webpackChunkName: "infoDetail" */ 'components/info/detail/infoDetail'));
 const InfoDetailComment = () => lazyLoadView(import(/* webpackChunkName: "infoDetailComment" */ 'components/info/detail/comment/comment'));
 const InfoDetailCommentItem = () => lazyLoadView(import(/* webpackChunkName: "InfoDetailCommentItem" */ 'components/info/detail/comment-item/comment-item'));

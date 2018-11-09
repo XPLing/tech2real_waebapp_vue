@@ -1,63 +1,64 @@
 .g-star {
-    font-size: 0;
-    text-align: center;
-    .star-item{
-        @extend %lineElem_middle;
-        background-repeat: no-repeat;
+  font-size: 0;
+  text-align: center;
+  .star-item {
+    @extend %lineElem_middle;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  &.star-24 {
+    .star-item {
+      @include w(20);
+      @include h(20);
+      & + .star-item {
+        margin-left: 6px;
+      }
+      &.on {
+        @include bg-image('./imgs/star24_on');
+      }
+      &.off {
+        @include bg-image('./imgs/star24_off');
+      }
+      &.half {
+        @include bg-image('./imgs/star24_half');
+      }
     }
-    &.star-24 {
-        .star-item{
-            @include w(24);
-            @include h(24);
-            &+.star-item{
-                margin-left: 6px;
-            }
-            &.on{
-                @include bg-image('./imgs/star24_on');
-            }
-            &.off{
-                @include bg-image('./imgs/star24_off');
-            }
-            &.half{
-                @include bg-image('./imgs/star24_half');
-            }
-        }
+  }
+  &.star-36 {
+    .star-item {
+      @include w(30);
+      @include h(30);
+      & + .star-item {
+        margin-left: getSize(12, $originW, rem);
+      }
+      &.on {
+        @include bg-image('./imgs/star36_on');
+      }
+      &.off {
+        @include bg-image('./imgs/star36_off');
+      }
+      &.half {
+        @include bg-image('./imgs/star36_half');
+      }
     }
-    &.star-36 {
-        .star-item{
-            @include w(36);
-            @include h(36);
-            &+.star-item{
-                margin-left: getSize(12,$originW,rem);
-            }
-            &.on{
-                @include bg-image('./imgs/star36_on');
-            }
-            &.off{
-                @include bg-image('./imgs/star36_off');
-            }
-            &.half{
-                @include bg-image('./imgs/star36_half');
-            }
-        }
+  }
+  &.star-48 {
+    .star-item {
+      @include w(48);
+      @include h(48);
+      & + .star-item {
+        margin-left: getSize(44, $originW, rem);
+      }
+      &.on {
+        @include bg-image('./imgs/star48_on');
+      }
+      &.off {
+        @include bg-image('./imgs/star48_off');
+      }
+      &.half {
+        @include bg-image('./imgs/star48_half');
+      }
     }
-    &.star-48 {
-        .star-item{
-            @include w(48);
-            @include h(48);
-            &+.star-item{
-                margin-left: getSize(44,$originW,rem);
-            }
-            &.on{
-                @include bg-image('./imgs/star48_on');
-            }
-            &.off{
-                @include bg-image('./imgs/star48_off');
-            }
-            &.half{
-                @include bg-image('./imgs/star48_half');
-            }
-        }
-    }
+  }
 
 }

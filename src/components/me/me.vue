@@ -112,13 +112,6 @@
             viewName: 'subscribe',
             title: '关注社群',
             path: 'club'
-          },
-          {
-            icon: '<span class="c-icon-balance"><i class="path1"></i><i class="path2"></i></span>',
-            name: '我的余额',
-            viewName: 'subscribe',
-            title: '我的余额',
-            path: 'balance'
           }
         ],
         systemList: [

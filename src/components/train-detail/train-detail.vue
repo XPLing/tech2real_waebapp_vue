@@ -378,9 +378,10 @@
           case 7:
           case 8:
             this.$router.push({
-              path: `applyresult`,
+              path: `/train/all/applyresult`,
               append: true,
               query: {
+                id: this.courseData.id,
                 applyId: this.courseData.courseApplyValidityPeriod.courseApplyId
               }
             });
