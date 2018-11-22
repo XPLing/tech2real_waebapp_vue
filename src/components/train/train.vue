@@ -82,10 +82,10 @@
             <p class="title">猜你喜欢</p>
           </div>
           <ul class="list">
-            <course-item :course="item" v-for="(item, index) in courseList" :key="index"
+            <course-item :course="item" v-for="(item, index) in courseLiveList" :key="index"
                          @selectcourse="selectcourse"></course-item>
           </ul>
-          <p class="request-result refresh"><i class="icon c-icon-refresh"></i><span>换一换</span></p>
+          <p class="request-result refresh"><i @click="getCourseLiveList" class="icon c-icon-fresh"></i><span @click="getCourseLiveList">换一换</span></p>
         </div>
       </div>
     </scroll>
@@ -109,7 +109,8 @@
     getTrainHomeContainer,
     listRecommendTeachers,
     listBannersByLocationType,
-    listRecommendCourses
+    listRecommendCourses,
+    listCoursesForYouWant
   } from 'api/train';
   import { listRecommendCoursePackage } from 'api/coursePackage';
   import { mapGetters, mapMutations } from 'vuex';
@@ -166,7 +167,8 @@
         noMore: false,
         noResult: '加载中。。。',
         noMoreStr: '没有更多了~',
-        coursePage: 1
+        coursePage: 1,
+        courseLiveList: null
       };
     },
     computed: {
@@ -234,12 +236,26 @@
           this.toptipTxt = erro.message;
           this.$refs.toptip.show();
         });
+        this.getCourseLiveList();
         this.requestScrollData();
       },
       reload () {
         this.isRouterAlive = false;
         this.$nextTick(() => {
           this.isRouterAlive = true;
+        });
+      },
+      getCourseLiveList(){
+        this._listCoursesForYouWant().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              return Promise.reject(res);
+            }
+            this.courseLiveList = res.result;
+          }
+        }).catch(erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
         });
       },
       selectBanner (item, index) {
@@ -281,7 +297,7 @@
         this.$router.push({
           path: `/train/all/${course.id}`,
           query: {
-            aggregation: true
+            aggregation: 1
           }
         });
       },
@@ -372,6 +388,13 @@
           userGuid: this.userGuid
         };
         return listBannersByLocationType(param);
+      },
+      _listCoursesForYouWant () {
+        var param = {
+          productGuid: this.productGuid,
+          userGuid: this.userGuid
+        };
+        return listCoursesForYouWant(param);
       },
       _listRecommendCourses (page) {
         var param = {

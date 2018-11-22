@@ -246,6 +246,7 @@
          * banner type: 1.资讯 2.活动 3.课程 4.网页 5. 老师
          */
         var params = JSON.parse(data.params);
+//        console.log(data.type);
         switch (data.type) {
           case 1:
             this.$router.push({

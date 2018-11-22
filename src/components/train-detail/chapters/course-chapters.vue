@@ -73,7 +73,7 @@
       };
     },
     created () {
-      this.aggregation = this.$route.query.aggregation;
+      this.aggregation = this.$route.query.aggregation == 1;
       if (this.aggregationOpts && this.aggregationOpts.length > 0) {
         this.currentPackage = this.aggregationOpts[this.currentSelect].title;
       }

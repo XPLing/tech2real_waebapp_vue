@@ -80,7 +80,7 @@
     applyCourse,
     getUnpaidCourseApply
   } from 'api/courseDetail';
-  import { getCoursePackageDetail, listValidityPeriodByPackageId } from 'api/coursePackage';
+  import { getCoursePackageById, listValidityPeriodByPackageId, applyCoursePackage } from 'api/coursePackage';
   import { ERR_OK } from 'api/config';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -369,6 +369,11 @@
       },
       operate () {
         // applyStatus 0、加入学习  1、报名完成 6、待审核  7、未通过  8、待支付  9、被驳回  10、报名取消，显示重新报名  11、活动结束
+        var query = {}, applyIdKey = 'courseApplyValidityPeriod', applyId;
+        query.applyTargetId = this.courseData.id;
+        if (this.aggregation) {
+          query.aggregation = 1;
+        }
         switch (this.appliedState) {
           case 0:
           case 10:
@@ -377,26 +382,33 @@
           case 6:
           case 7:
           case 8:
+            if (this.aggregation) {
+              applyId = this.courseData.applyValidityPeriod.tagId;
+            } else {
+              applyId = this.courseData.courseApplyValidityPeriod.courseApplyId;
+            }
+            query.applyId = applyId;
             this.$router.push({
               path: `/train/all/applyresult`,
               append: true,
-              query: {
-                id: this.courseData.id,
-                applyId: this.courseData.courseApplyValidityPeriod.courseApplyId
-              }
+              query: query
             });
             break;
           case 9:
             var isReapply = this.$route.query.isReapply == 1;
+            if (this.aggregation) {
+              applyId = this.courseData.applyValidityPeriod.tagId;
+            } else {
+              applyId = this.courseData.courseApplyValidityPeriod.courseApplyId;
+            }
+            query.applyId = applyId;
             if (isReapply) {
               this.$refs.selectPeriod.showFlag = true;
             } else {
               this.$router.push({
-                path: `applyresult`,
+                path: `/train/all/applyresult`,
                 append: true,
-                query: {
-                  applyId: this.courseData.courseApplyValidityPeriod.courseApplyId
-                }
+                query: query
               });
             }
 
@@ -413,31 +425,41 @@
           return false;
         }
         if (this.courseStateStr === COURSESTATECONFIG.STATE_APPLY || this.courseStateStr === COURSESTATECONFIG.STATE_APPLY_GO_ON || this.courseStateStr === COURSESTATECONFIG.STATE_APPLY_AGAIN || this.courseStateStr === COURSESTATECONFIG.STATE_AUDIT_FAIL) {
+          var query = {};
+          if (this.aggregation) {
+            query.aggregation = 1;
+          }
           if (this.courseData.needInfo) {
             this.applyResult = this.courseData;
             this.$router.push({
-              path: `/train/all/${this.courseID}/applyinfocollect/${this.courseData.guid}`
+              path: `/train/all/${this.courseID}/applyinfocollect/${this.courseData.guid}`,
+              query: query
             });
           } else {
             this.$refs.loading.show();
-            this._applyCourse().then((res) => {
+            var fnName = '_applyCourse';
+            if (this.aggregation) {
+              fnName = '_applyCoursePackage';
+            }
+            this[fnName]().then((res) => {
               this.$refs.loading.hide();
               this.applyResult = res.result;
+              var applyKey = 'courseApply';
+              if (this.aggregation) {
+                applyKey = 'coursePackageApply';
+              }
+              query.applyId = this.applyResult[applyKey].id;
+              query.applyTargetId = this.courseID;
               if (res.code == ERR_OK) {
                 this.$router.push({
-                  path: `applyresult`,
+                  path: `/train/all/applyresult`,
                   append: true,
-                  query: {
-                    applyId: this.applyResult.courseApply.id
-                  }
+                  query: query
                 });
               } else if (res.code == '201') {
                 this.$router.push({
                   path: `/pay/courseApplypay`,
-                  query: {
-                    applyTargetId: this.courseData.id,
-                    applyId: this.applyResult.courseApply.id
-                  }
+                  query: query
                 });
               } else {
                 util.common.request.tipMsg(this, res);
@@ -473,20 +495,15 @@
         });
       },
       _getCourseID () {
-        this.aggregation = this.$route.query.aggregation;
+        this.aggregation = this.$route.query.aggregation == 1;
         this.courseID = this.$route.params.id;
       },
       _getCourseData ($this) {
-        var param = {
-          id: $this.courseID,
-          userGuid: $this.userGuid
-        };
-        var fnName = getCourseById;
+        var fnName = '_getCourseById';
         if ($this.aggregation) {
-          fnName = getCoursePackageDetail;
+          fnName = '_getCoursePackageById';
         }
-        return fnName(param).then((res) => {
-
+        return this[fnName]($this).then((res) => {
           if (res.code || $this.aggregation) {
             if (res.code != ERR_OK && !$this.aggregation) {
               $this.toptipTxt = res.message;
@@ -495,9 +512,9 @@
             }
             let courseResultData = res.result;
             if ($this.aggregation) {
-              courseResultData = res.coursePackageResult.result;
-              var aggregationOpts = res.couseResult.result.list;
-              if (aggregationOpts.length > 0) {
+              courseResultData = res.result;
+              var aggregationOpts = courseResultData.courseList;
+              if (aggregationOpts && aggregationOpts.length > 0) {
                 $this.aggregationOpts = aggregationOpts;
                 $this._listChaptersByCourseId($this.aggregationOpts[0].id).then((res) => {
                   if (res.code) {
@@ -551,7 +568,6 @@
           $this.$refs.toptip.show();
         });
       },
-
       _applyCourse () {
         let params = {
           id: this.courseID,
@@ -560,6 +576,15 @@
           courseValidityPeriodId: this.courseData.courseValidityPeriod.id
         };
         return applyCourse(params);
+      },
+      _applyCoursePackage () {
+        let params = {
+          id: this.courseID,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid,
+          validityPeriodId: this.courseData.courseValidityPeriod.id
+        };
+        return applyCoursePackage(params);
       },
       _listCourseValidityPeriodByCourseId () {
         let params = {
@@ -575,32 +600,19 @@
         };
         return listValidityPeriodByPackageId(params);
       },
-      _getCoursePackageDetail ($this) {
+      _getCoursePackageById ($this) {
         let params = {
-          id: this.courseID,
-          userGuid: this.userGuid,
-          productGuid: this.productGuid
+          id: $this.courseID,
+          userGuid: $this.userGuid
         };
-        getCoursePackageDetail(params).then((res) => {
-          if (res.code) {
-            if (res.code != ERR_OK) {
-              this.toptipTxt = res.message;
-              this.$refs.toptip.show();
-              return;
-            }
-            if (res.result.length > 0) {
-              $this.chapterData = res.result;
-              if (res.result[0].type !== 2) {
-                $this.fileUrl = res.result[0].fileUrl;
-              } else {
-                $this.videoUrl = res.result[0].videoUrl;
-              }
-            }
-          }
-        }, erro => {
-          this.toptipTxt = erro.message;
-          this.$refs.toptip.show();
-        });
+        return getCoursePackageById(params);
+      },
+      _getCourseById ($this) {
+        let params = {
+          id: $this.courseID,
+          userGuid: $this.userGuid
+        };
+        return getCourseById(params);
       },
       _listChaptersByCourseId (id) {
         let params = {

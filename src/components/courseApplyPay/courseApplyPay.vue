@@ -9,7 +9,8 @@
           <div class="chunk info-wrapper">
             <!--<h1 class="title">课程信息</h1>-->
             <div class="info" v-if="applyInfo">
-              <apply-item :apply-result-base="applyInfo.course" :apply-result-detail="applyInfo.course"
+              <apply-item :apply-result-base="showData"
+                          :apply-result-detail="showData"
                           :apply-result="applyInfo"
                           @selectApplyResultItem="selectApplyTarget"></apply-item>
             </div>
@@ -89,7 +90,8 @@
         </form>
         <form-tip-error :tip-name="'pay.totalMsg'"></form-tip-error>
       </scroll>
-      <bottom-btn v-if="applyInfo" :price="applyInfo.course.price" :btnstr="'立即支付'" @confirm="toPay"></bottom-btn>
+      <bottom-btn v-if="applyInfo" :price="showData.price"
+                  :btnstr="'立即支付'" @confirm="toPay"></bottom-btn>
       <top-tip ref="toptip" :delay="10000" :is-auto-hide="topTipAutoHide">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -113,6 +115,7 @@
   import * as util from 'assets/js/util';
   import { Validator, ErrorBag } from 'vee-validate';
   import { getCourseApplyByCourseId } from 'api/courseDetail';
+  import { getCoursePackageApplyByPackageId } from 'api/coursePackage';
   import { getWxJsApiConfig, wechatPay, wxPayH5, generateAlipayPaymentInfoV2, alipay, getAlipayConfig } from 'api/pay';
   import { mapGetters, mapMutations } from 'vuex';
   import { thirdParty, ERR_OK } from 'api/config';
@@ -130,6 +133,7 @@
         pageTitle: '购买课程',
         hasBack: true,
         applyInfo: null,
+        showData: null,
         routerPrefix: util.routerPrefix,
         fornName: 'pay',
         payWay: '',
@@ -139,48 +143,51 @@
         payConfirmTxt: '请确认支付是否已完成',
         confirmTxt: '',
         confirmDialog: true,
-        topTipAutoHide: false
+        topTipAutoHide: false,
+        aggregation: false
       };
     },
     created () {
-      if (!this.$route.meta.isBack || this.isFirstEnter) {
-        this.applyTargetID = this.$route.query.applyTargetId;
-        this.applyID = this.$route.query.applyId;
-        this.errors.update({
-          field: 'payWay',
-          msg: 'Newsletter Email is required',
-          rule: 'required',
-          scope: 'pay'
-        });
-        this.$validator.localize({
-          zh_CN: {
-            attributes: {
-              payWay: '支付方式',
-              protocol: '支付须知'
-            }
+      this.aggregation = this.$route.query.aggregation == 1;
+      this.applyTargetID = this.$route.query.applyTargetId;
+      this.applyID = this.$route.query.applyId;
+      this.errors.update({
+        field: 'payWay',
+        msg: 'Newsletter Email is required',
+        rule: 'required',
+        scope: 'pay'
+      });
+      this.$validator.localize({
+        zh_CN: {
+          attributes: {
+            payWay: '支付方式',
+            protocol: '支付须知'
+          }
 //          custom: {
 //            payWay: {
 //              required: field => '请勾选' + field
 //            }
 //          }
-          }
-        });
-        this._getCourseApplyByCourseId().then((res) => {
-          if (res.code) {
-            if (res.code != ERR_OK) {
-              this.toptipTxt = res.message;
-              this.$refs.toptip.show();
-              return;
-            }
-            this.applyInfo = res.result;
-          }
-        }, erro => {
-          this.toptipTxt = erro.message;
-          this.$refs.toptip.show();
-        });
+        }
+      });
+      var fnName = '_getCourseApplyByCourseId';
+      if (this.aggregation) {
+        fnName = '_getCoursePackageApplyByPackageId';
       }
-      this.$route.meta.isBack = false;
-      this.isFirstEnter = false;
+      this[fnName]().then((res) => {
+        if (res.code) {
+          if (res.code != ERR_OK) {
+            this.toptipTxt = res.message;
+            this.$refs.toptip.show();
+            return;
+          }
+          this.applyInfo = res.result;
+          this.showData = this.aggregation ? this.applyInfo.coursePackage : this.applyInfo.course;
+        }
+      }, erro => {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      });
     },
     mounted () {
       this._getWxJsApiConfig().then((res) => {
@@ -372,8 +379,16 @@
       confirm () {
         if (this.toPaying) {
           this.toPaying = false;
+          var payTargetId, query = {};
+          if (this.aggregation) {
+            payTargetId = this.applyInfo.coursePackage.id;
+            query.aggregation = 1;
+          } else {
+            payTargetId = this.applyInfo.course.id;
+          }
           this.$router.replace({
-            path: `/train/all/${this.applyInfo.course.id}`
+            path: `/train/all/${payTargetId}`,
+            query: query
           });
         }
       },
@@ -502,6 +517,14 @@
           productGuid: this.productGuid
         };
         return getCourseApplyByCourseId(params);
+      },
+      _getCoursePackageApplyByPackageId () {
+        let params = {
+          coursePackageApplyId: this.applyID,
+          id: this.applyTargetID,
+          userGuid: this.userGuid
+        };
+        return getCoursePackageApplyByPackageId(params);
       },
       _getWxJsApiConfig () {
         this.loadingTxt = '环境初始化中...';

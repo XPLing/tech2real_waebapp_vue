@@ -40,6 +40,7 @@
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import Select from 'base/select/select';
   import { applyCourse } from 'api/courseDetail';
+  import { applyCoursePackage } from 'api/coursePackage';
   import { mapGetters, mapMutations } from 'vuex';
   import { ERR_OK } from 'api/config';
   import { listInfoCollectionsByGuid } from 'api/apply';
@@ -79,6 +80,7 @@
       };
     },
     created () {
+      this.aggregation = this.$route.query.aggregation == 1;
       this._getTargetGuid();
       this._listInfoCollectionsByGuid().then((res) => {
         if (res.code) {
@@ -151,27 +153,32 @@
               infoCollect.push(newItem);
             });
             this.$refs.loading.show();
-            this._applyCourse(infoCollect).then((res) => {
+            var fnName = '_applyCourse';
+            if (this.aggregation) {
+              fnName = '_applyCoursePackage';
+            }
+            this[fnName](infoCollect).then((res) => {
               this.$emit('changeapplyres', res.result);
               submitBtn.changeSubmitBtn(false);
               this.$refs.loading.hide();
+              var applyKey = 'courseApply', query = {};
+              if (this.aggregation) {
+                applyKey = 'coursePackageApply';
+                query.aggregation = 1;
+              }
+              query.applyId = res.result[applyKey].id;
+              query.applyTargetId = this.applyTargetID;
               if (res.code == '201') {
                 this.$emit('updateResult', res.result);
                 this.$router.replace({
                   path: `/pay/courseApplypay`,
-                  query: {
-                    applyTargetId: this.applyTargetID,
-                    applyId: res.result.courseApply.id
-                  }
+                  query: query
                 });
               } else if (/2.*/.test(res.code)) {
                 this.$emit('updateResult', res.result);
                 this.$router.replace({
                   path: `/train/all/applyresult`,
-                  query: {
-                    id: this.applyTargetID,
-                    applyId: res.result.courseApply.id
-                  }
+                  query: query
                 });
               } else {
                 submitBtn.changeSubmitBtn(false);
@@ -205,6 +212,15 @@
           courseValidityPeriodId: this.applyResult.courseValidityPeriod.id
         };
         return applyCourse(params);
+      },
+      _applyCoursePackage () {
+        let params = {
+          id: this.applyTargetID,
+          userGuid: this.userGuid,
+          productGuid: this.productGuid,
+          validityPeriodId: this.applyResult.courseValidityPeriod.id
+        };
+        return applyCoursePackage(params);
       },
       _listInfoCollectionsByGuid (infoCollections) {
         let params = {

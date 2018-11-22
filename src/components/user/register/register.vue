@@ -4,19 +4,19 @@
       <input type="hidden" id="userGuid">
       <p class="verify error"></p>
       <ul class="form-main form-hook step-item user-hook active" v-if="!passsFirst">
-        <li class="input-item" :class="{'has-error': errors.has('registerFirst.nickname')}">
-          <div class="main">
-            <i class="icon">昵&nbsp;&nbsp;&nbsp;&nbsp;称</i>
-            <input type="text" placeholder="请输入昵称" name="nickname"
-                   v-validate="'required|nickname'" v-model="nickname"
-                   :class="{'input': true, 'has-error': errors.has('registerFirst.nickname') }">
-            <!--<i class="fa fa-exclamation-circle tipinfo"></i>-->
-          </div>
-          <div v-show="errors.has('registerFirst.nickname')" class="c-tip error">
-            <i class="icon fa fa-exclamation-circle text-danger"></i>
-            <span class="meg text-danger">{{ errors.first('registerFirst.nickname')}}</span>
-          </div>
-        </li>
+        <!--<li class="input-item" :class="{'has-error': errors.has('registerFirst.nickname')}">-->
+          <!--<div class="main">-->
+            <!--<i class="icon">昵&nbsp;&nbsp;&nbsp;&nbsp;称</i>-->
+            <!--<input type="text" placeholder="请输入昵称" name="nickname"-->
+                   <!--v-validate="'required|nickname'" v-model="nickname"-->
+                   <!--:class="{'input': true, 'has-error': errors.has('registerFirst.nickname') }">-->
+            <!--&lt;!&ndash;<i class="fa fa-exclamation-circle tipinfo"></i>&ndash;&gt;-->
+          <!--</div>-->
+          <!--<div v-show="errors.has('registerFirst.nickname')" class="c-tip error">-->
+            <!--<i class="icon fa fa-exclamation-circle text-danger"></i>-->
+            <!--<span class="meg text-danger">{{ errors.first('registerFirst.nickname')}}</span>-->
+          <!--</div>-->
+        <!--</li>-->
         <li class="input-item" :class="{'has-error': errors.has('registerFirst.phone') }">
           <div class="main">
             <i class="icon">手机号</i>
@@ -89,6 +89,7 @@
   import HeaderTitle from 'components/header-title/header-title';
   import { ERR_OK, ERR_OK_STR } from 'api/config';
   import * as util from 'assets/js/util';
+  import * as filters from 'assets/js/filters';
   import { registerByPhone, authRegisterByPhone } from 'api/login';
   import FormTipError from 'base/form-tip-error/form-tip-error';
   import Confirm from 'base/confirm/confirm';
@@ -187,6 +188,7 @@
         }
       },
       _registerByPhone () {
+        this.nickname = filters.formatPhoneHide(this.phone, 3);
         return registerByPhone({
           product_guid: this.productGuid,
           phone: this.phone,

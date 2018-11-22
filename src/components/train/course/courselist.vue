@@ -115,7 +115,7 @@
         };
         if (this.listType === 'aggregation') {
           opt.query = {
-            aggregation: true
+            aggregation: 1
           }
         }
         this.$router.push(opt);

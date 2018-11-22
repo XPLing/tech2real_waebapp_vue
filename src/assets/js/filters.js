@@ -1,51 +1,57 @@
-function formatDate(timeStamp, fmt) {
-    if (!timeStamp) {
-        return '';
-    }
-    var time = new Date(timeStamp);
-    var y, m, d, h, min, second, result;
-    y = time.getFullYear();
-    m = time.getMonth() + 1;
-    d = time.getDate();
-    h = time.getHours();
-    min = time.getMinutes();
-    second = time.getSeconds();
+function formatDate (timeStamp, fmt) {
+  if (!timeStamp) {
+    return '';
+  }
+  var time = new Date(timeStamp);
+  var y, m, d, h, min, second, result;
+  y = time.getFullYear();
+  m = time.getMonth() + 1;
+  d = time.getDate();
+  h = time.getHours();
+  min = time.getMinutes();
+  second = time.getSeconds();
 
-    var res;
-    if (/(y+)/.test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, (y + '').substr(4 - RegExp.$1.length));
+  var res;
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (y + '').substr(4 - RegExp.$1.length));
+  }
+
+  var o = {
+    'M+': time.getMonth() + 1,
+    'd+': time.getDate(),
+    'h+': time.getHours(),
+    'm+': time.getMinutes(),
+    's+': time.getSeconds()
+  };
+  for (var k in o) {
+    var reg = new RegExp('(' + k + ')');
+    if (reg.test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? o[k] : padLeftZero((o[k] + '')));
     }
 
-    var o = {
-        'M+': time.getMonth() + 1,
-        'd+': time.getDate(),
-        'h+': time.getHours(),
-        'm+': time.getMinutes(),
-        's+': time.getSeconds()
-    };
-    for (var k in o) {
-        var reg = new RegExp('(' + k + ')');
-        if (reg.test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? o[k] : padLeftZero((o[k] + '')));
-        }
-
-    }
-    return fmt;
+  }
+  return fmt;
 }
 
-function padLeftZero(str) {
-    return ('00' + str).substr(str.length);
+function padLeftZero (str) {
+  return ('00' + str).substr(str.length);
 }
 
-function ellipsis(str, limit) {
+function ellipsis (str, limit) {
 
-    if (str && (str.length > limit)) {
-        str = `${str.substr(0, limit)}...`;
-    }
-    return str;
+  if (str && (str.length > limit)) {
+    str = `${str.substr(0, limit)}...`;
+  }
+  return str;
+}
+
+function formatPhoneHide (phone, start) {
+  var reg = new RegExp('^(\\d{' + start + '})\\d{4}(\\d+)$');
+  return phone.replace(reg, '$1****$2');
 }
 
 export {
-    formatDate,
-    ellipsis
+  formatDate,
+  ellipsis,
+  formatPhoneHide
 };

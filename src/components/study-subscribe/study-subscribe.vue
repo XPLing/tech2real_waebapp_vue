@@ -90,7 +90,7 @@
         this.$router.push({
           path: `/train/all/applyresult`,
           query: {
-            id: data.courseId,
+            applyTargetId: data.courseId,
             applyId: data.courseApplyValidityPeriod.courseApplyId
           }
         });

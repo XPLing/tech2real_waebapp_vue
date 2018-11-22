@@ -16,8 +16,8 @@
                 <span>{{applyState}}</span>
               </div>
               <div class="intro" v-if="applyInfo">
-                <apply-item :apply-result-base="applyInfo.course"
-                            :apply-result-detail="applyInfo.course"
+                <apply-item :apply-result-base="showData"
+                            :apply-result-detail="showData"
                             :apply-result="applyInfo"
                             @selectApplyResultItem="selectApplyTarget"></apply-item>
               </div>
@@ -28,18 +28,19 @@
                 <p class="item"> ·请检查报名信息，一经报名恕不办理退款；</p>
               </div>
               <div class="tip" v-else>
-                <p class="item">{{applyInfo.courseApplyExtend.failMsg}}</p>
+                <p class="item">
+                  {{aggregation ? applyInfo.checkResult.resultMsg : applyInfo.courseApplyExtend.failMsg}}</p>
               </div>
               <div class="control" v-if="applyInfo.applyState==3">
                 <button class="btn cancel" @click="cancelApply">取消报名</button>
                 <router-link
-                  :to="{path: `/pay/courseApplypay`,query: {applyId: applyInfo.id, applyTargetId:applyInfo.course.id}}"
+                  :to="{path: `/pay/courseApplypay`,query: {applyId: applyInfo.id, applyTargetId:showData.id, aggregation: this.aggregation?1:0}}"
                   tag="button" class="btn confirm">去支付（还剩{{remainTime}}）
                 </router-link>
               </div>
               <div class="control" v-else>
                 <router-link
-                  :to="{path: `/train/all/${applyInfo.course.id}`, query:{isReapply:1}}"
+                  :to="{path: `/train/all/${showData.id}`, query:{isReapply:1, aggregation: this.aggregation?1:0}}"
                   tag="button" class="btn reapply">重新报名
                 </router-link>
               </div>
@@ -49,7 +50,8 @@
                 <p>详细信息</p>
               </div>
               <div class="chunk time">
-                <p class="time">有效期：{{ applyInfo.courseApplyValidityPeriod.discription}}</p>
+                <p class="time">
+                  有效期：{{ aggregation ? applyInfo.applyValidityPeriod.discription : applyInfo.courseApplyValidityPeriod.discription}}</p>
                 <p class="address">
                   时间：{{ applyInfo.createTime | formatDate('yyyy-MM-dd')}}</p>
               </div>
@@ -77,6 +79,7 @@
   import * as util from 'assets/js/util';
   import * as filters from 'assets/js/filters';
   import { getCourseApplyByCourseId, cancelOpenCourseApplyByApplyId } from 'api/courseDetail';
+  import { getCoursePackageApplyByPackageId, cancelCoursePackageApplyByApplyId } from 'api/coursePackage';
   import { ERR_OK } from 'api/config';
   import Loading from 'base/loading/loading';
   import TopTip from 'base/top-tip/top-tip';
@@ -109,12 +112,15 @@
         order: null,
         timer: null,
         remainTime: '',
-        applyID: 0
+        applyID: 0,
+        aggregation: false,
+        showData: null
       };
     },
     created () {
-      this.applyTargetID = this.$route.query.id;
+      this.applyTargetID = this.$route.query.applyTargetId;
       this.applyID = this.$route.query.applyId;
+      this.aggregation = this.$route.query.aggregation == 1;
       this.getApplyInfo();
     },
     computed: {
@@ -126,7 +132,11 @@
     methods: {
       cancelApply () {
         this.$refs.loading.show();
-        this._cancelOpenCourseApplyByApplyId().then((res) => {
+        var fnName = '_cancelOpenCourseApplyByApplyId';
+        if (this.aggregation) {
+          fnName = '_cancelCoursePackageApplyByApplyId';
+        }
+        this[fnName]().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
               this.toptipTxt = res.message;
@@ -143,7 +153,11 @@
         });
       },
       getApplyInfo () {
-        return this._getCourseApplyByCourseId().then((res) => {
+        var fnName = '_getCourseApplyByCourseId';
+        if (this.aggregation) {
+          fnName = '_getCoursePackageApplyByPackageId';
+        }
+        return this[fnName]().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
               this.toptipTxt = res.message;
@@ -151,6 +165,8 @@
               return;
             }
             this.applyInfo = res.result;
+            this.showData = this.aggregation ? this.applyInfo.coursePackage : this.applyInfo.course;
+
             this.initDate();
           }
         }, erro => {
@@ -173,16 +189,18 @@
             break;
           case 3:
             /* 设置倒计时 */
-            this.timer = setInterval(() => {
-              var distance = 30 * 60 * 1000 - (new Date().getTime() - this.applyInfo.order.initiateTime);
-              if (distance <= 0) {
-                this.cancelApply();
-                clearInterval(this.timer);
-                this.timer = null;
-              } else {
-                this.remainTime = filters.formatDate(distance, 'mm:ss').replace(/^([\w]*):([\w]*)$/, '$1分$2秒');
-              }
-            }, 1000);
+            if (this.applyInfo.order && this.applyInfo.order.initiateTime) {
+              this.timer = setInterval(() => {
+                var distance = 30 * 60 * 1000 - (new Date().getTime() - this.applyInfo.order.initiateTime);
+                if (distance <= 0) {
+                  this.cancelApply();
+                  clearInterval(this.timer);
+                  this.timer = null;
+                } else {
+                  this.remainTime = filters.formatDate(distance, 'mm:ss').replace(/^([\w]*):([\w]*)$/, '$1分$2秒');
+                }
+              }, 1000);
+            }
             break;
           case 4:
             break;
@@ -195,8 +213,16 @@
         this.$emit('courseApplyUpdate');
       },
       selectApplyTarget () {
-        this.$router.push({
-          path: `/train/all/${this.applyInfo.course.id}`
+        var payTargetId, query = {};
+        if (this.aggregation) {
+          payTargetId = this.applyInfo.coursePackage.id;
+          query.aggregation = 1;
+        } else {
+          payTargetId = this.applyInfo.course.id;
+        }
+        this.$router.replace({
+          path: `/train/all/${payTargetId}`,
+          query: query
         });
       },
       _getCourseApplyByCourseId () {
@@ -208,6 +234,14 @@
         };
         return getCourseApplyByCourseId(params);
       },
+      _getCoursePackageApplyByPackageId () {
+        let params = {
+          coursePackageApplyId: this.applyID,
+          id: this.applyTargetID,
+          userGuid: this.userGuid
+        };
+        return getCoursePackageApplyByPackageId(params);
+      },
       _cancelOpenCourseApplyByApplyId () {
         let params = {
           id: this.applyID,
@@ -215,6 +249,13 @@
           productGuid: this.productGuid
         };
         return cancelOpenCourseApplyByApplyId(params);
+      },
+      _cancelCoursePackageApplyByApplyId () {
+        let params = {
+          id: this.applyID,
+          userGuid: this.userGuid
+        };
+        return cancelCoursePackageApplyByApplyId(params);
       }
     },
     components: {
