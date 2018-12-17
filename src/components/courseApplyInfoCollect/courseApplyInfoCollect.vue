@@ -80,7 +80,7 @@
       };
     },
     created () {
-      this.aggregation = this.$route.query.aggregation == 1;
+      this.aggregation = this.$route.query.type === "aggregation";
       this._getTargetGuid();
       this._listInfoCollectionsByGuid().then((res) => {
         if (res.code) {
@@ -154,17 +154,13 @@
             });
             this.$refs.loading.show();
             var fnName = '_applyCourse';
-            if (this.aggregation) {
-              fnName = '_applyCoursePackage';
-            }
             this[fnName](infoCollect).then((res) => {
               this.$emit('changeapplyres', res.result);
               submitBtn.changeSubmitBtn(false);
               this.$refs.loading.hide();
               var applyKey = 'courseApply', query = {};
               if (this.aggregation) {
-                applyKey = 'coursePackageApply';
-                query.aggregation = 1;
+                query.type = 'aggregation';
               }
               query.applyId = res.result[applyKey].id;
               query.applyTargetId = this.applyTargetID;

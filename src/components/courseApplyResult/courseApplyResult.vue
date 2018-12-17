@@ -29,18 +29,19 @@
               </div>
               <div class="tip" v-else>
                 <p class="item">
-                  {{aggregation ? applyInfo.checkResult.resultMsg : applyInfo.courseApplyExtend.failMsg}}</p>
+                  {{ applyInfo.courseApplyExtend.failMsg }}
+                </p>
               </div>
               <div class="control" v-if="applyInfo.applyState==3">
                 <button class="btn cancel" @click="cancelApply">取消报名</button>
                 <router-link
-                  :to="{path: `/pay/courseApplypay`,query: {applyId: applyInfo.id, applyTargetId:showData.id, aggregation: this.aggregation?1:0}}"
+                  :to="{path: `/pay/courseApplypay`,query: {applyId: applyInfo.id, applyTargetId:showData.id, typ: this.aggregation?'aggregation':'course'}}"
                   tag="button" class="btn confirm">去支付（还剩{{remainTime}}）
                 </router-link>
               </div>
               <div class="control" v-else>
                 <router-link
-                  :to="{path: `/train/all/${showData.id}`, query:{isReapply:1, aggregation: this.aggregation?1:0}}"
+                  :to="{path: `/train/all/${showData.id}`, query:{isReapply:1, typ: this.aggregation?'aggregation':'course'}}"
                   tag="button" class="btn reapply">重新报名
                 </router-link>
               </div>
@@ -51,7 +52,7 @@
               </div>
               <div class="chunk time">
                 <p class="time">
-                  有效期：{{ aggregation ? applyInfo.applyValidityPeriod.discription : applyInfo.courseApplyValidityPeriod.discription}}</p>
+                  有效期：{{ applyInfo.courseApplyValidityPeriod.discription }}</p>
                 <p class="address">
                   时间：{{ applyInfo.createTime | formatDate('yyyy-MM-dd')}}</p>
               </div>
@@ -120,7 +121,7 @@
     created () {
       this.applyTargetID = this.$route.query.applyTargetId;
       this.applyID = this.$route.query.applyId;
-      this.aggregation = this.$route.query.aggregation == 1;
+      this.aggregation = this.$route.query.type === 'aggregation';
       this.getApplyInfo();
     },
     computed: {
@@ -133,9 +134,6 @@
       cancelApply () {
         this.$refs.loading.show();
         var fnName = '_cancelOpenCourseApplyByApplyId';
-        if (this.aggregation) {
-          fnName = '_cancelCoursePackageApplyByApplyId';
-        }
         this[fnName]().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
@@ -154,9 +152,6 @@
       },
       getApplyInfo () {
         var fnName = '_getCourseApplyByCourseId';
-        if (this.aggregation) {
-          fnName = '_getCoursePackageApplyByPackageId';
-        }
         return this[fnName]().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
@@ -165,7 +160,7 @@
               return;
             }
             this.applyInfo = res.result;
-            this.showData = this.aggregation ? this.applyInfo.coursePackage : this.applyInfo.course;
+            this.showData = this.applyInfo.course;
 
             this.initDate();
           }
@@ -214,11 +209,9 @@
       },
       selectApplyTarget () {
         var payTargetId, query = {};
+        payTargetId = this.applyInfo.course.id;
         if (this.aggregation) {
-          payTargetId = this.applyInfo.coursePackage.id;
-          query.aggregation = 1;
-        } else {
-          payTargetId = this.applyInfo.course.id;
+          query.type = 'aggregation';
         }
         this.$router.replace({
           path: `/train/all/${payTargetId}`,

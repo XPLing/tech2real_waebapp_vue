@@ -106,6 +106,13 @@
   //  };
   //  Validator.updateDictionary(dictionary);
   export default {
+    inject: ['setTabList'],
+    beforeRouteEnter (to, from, next) {
+      var currentPath = to.fullPath;
+      console.log(currentPath);
+      this.setTabList(currentPath);
+      next();
+    },
     data () {
       return {
         password: '',
@@ -119,6 +126,10 @@
         btnText: '下一步',
         routerPrefix: util.routerPrefix
       };
+    },
+    created () {
+      var currentPath = this.$router.currentRoute.fullPath;
+      this.setTabList(currentPath);
     },
     computed: {
       ...mapGetters([

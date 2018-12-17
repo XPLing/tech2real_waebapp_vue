@@ -69,6 +69,7 @@
   import * as util from 'assets/js/util';
 
   export default {
+    inject: ['setTabList'],
     data () {
       return {
         phone: '',
@@ -99,6 +100,10 @@
         }
         return true;
       });
+    },
+    created () {
+      var currentPath = this.$router.currentRoute.fullPath;
+      this.setTabList(currentPath);
     },
     mounted () {
       setTimeout(() => {

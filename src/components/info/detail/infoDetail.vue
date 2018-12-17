@@ -128,6 +128,7 @@
       };
     },
     beforeRouteEnter (to, from, next) {
+      console.log(to);
       next((vm) => {
 //        if (from.name === 'activity' || /clubDetail/.test(from.name)) {
 //          vm.articleId = to.params.articleId;
@@ -162,13 +163,14 @@
     },
     created () {
       this.likeFlag = true;
+      this.initData();
     },
     activated () {
-      if (!this.$route.meta.isBack || this.isFirstEnter) {
-        this.initData();
-      }
-      this.$route.meta.isBack = false;
-      this.isFirstEnter = false;
+//      if (!this.$route.meta.isBack || this.isFirstEnter) {
+//        this.initData();
+//      }
+//      this.$route.meta.isBack = false;
+//      this.isFirstEnter = false;
     },
     computed: {
       loadingImgs () {

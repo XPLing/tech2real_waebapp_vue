@@ -113,8 +113,8 @@ export function listBannersByLocationType (params) {
   });
 }
 
-export function listRecommendCourses (params) {
-  var url = debug ? '/api/listRecommendCourses' : `/listRecommendCourses`;
+export function listRecommendCourses (params, privateConfig) {
+  var url = debug ? '/api/listRecommendCoursesV2' : `/listRecommendCoursesV2`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -122,7 +122,8 @@ export function listRecommendCourses (params) {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     },
-    data: JSON.stringify(data)
+    data: JSON.stringify(data),
+    privateConfig: privateConfig
   }).then((res) => {
     return Promise.resolve(res.data);
   }, (err) => {

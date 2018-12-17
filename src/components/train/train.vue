@@ -83,9 +83,10 @@
           </div>
           <ul class="list">
             <course-item :course="item" v-for="(item, index) in courseLiveList" :key="index"
-                         @selectcourse="selectcourse"></course-item>
+                         @selectcourse="selectLike"></course-item>
           </ul>
-          <p class="request-result refresh"><i @click="getCourseLiveList" class="icon c-icon-fresh"></i><span @click="getCourseLiveList">换一换</span></p>
+          <p class="request-result refresh"><i @click="getCourseLiveList" class="icon c-icon-fresh"></i><span
+            @click="getCourseLiveList">换一换</span></p>
         </div>
       </div>
     </scroll>
@@ -225,7 +226,7 @@
           this.toptipTxt = erro.message;
           this.$refs.toptip.show();
         });
-        this._listRecommendCoursePackage().then((res) => {
+        this._listRecommendCourses(1, 2).then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
               return Promise.reject(res);
@@ -245,7 +246,7 @@
           this.isRouterAlive = true;
         });
       },
-      getCourseLiveList(){
+      getCourseLiveList () {
         this._listCoursesForYouWant().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
@@ -293,11 +294,18 @@
           path: `/train/all/${course.id}`
         });
       },
+      selectLike (data) {
+        if (data.stype === 1) {
+            this.selectcourse(data);
+        } else {
+          this.selectCourseAggregation(data);
+        }
+      },
       selectCourseAggregation (course) {
         this.$router.push({
           path: `/train/all/${course.id}`,
           query: {
-            aggregation: 1
+            type: 'aggregation'
           }
         });
       },
@@ -396,13 +404,20 @@
         };
         return listCoursesForYouWant(param);
       },
-      _listRecommendCourses (page) {
+      _listRecommendCourses (page, stype) {
         var param = {
           productGuid: this.productGuid,
           page: page,
+//          limitFlag: false,
           limitSize: 3
         };
-        return listRecommendCourses(param);
+        if (stype) {
+          param.stype = stype;
+        }
+        var privateConfig = {
+          concurrent: true
+        };
+        return listRecommendCourses(param, privateConfig);
       },
       _listRecommendCoursePackage (page) {
         var param = {

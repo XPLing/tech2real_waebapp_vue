@@ -20,7 +20,18 @@
               <li class="course-item" v-for="chapter in chapters.chapters" :key="chapter.id">
                 <a href="javascript:void(0);" :data-url="chapter.videoUrl"
                    @click.stop="changeVideo(chapter,$event)">
-                  <i class="fa fa-caret-square-o-right"></i><em>{{chapter.title}}</em>
+                  <p class="title"><i class="fa fa-caret-square-o-right"></i><em>{{chapter.title}}</em></p>
+                  <template v-if="chapter.type===4">
+                      <div class="detail">
+                        <p class="icon">
+                          <i class="c-icon-position"></i>
+                        </p>
+                        <div class="info">
+                          <p v-if="chapter.startTime" class="time">开始时间：{{chapter.startTime}}</p>
+                          <p v-if="chapter.province" class="address">地址：{{chapter.province+chapter.city+chapter.district}}</p>
+                        </div>
+                      </div>
+                  </template>
                 </a>
               </li>
             </ul>
@@ -73,7 +84,7 @@
       };
     },
     created () {
-      this.aggregation = this.$route.query.aggregation == 1;
+      this.aggregation = this.$route.query.type === "aggregation";
       if (this.aggregationOpts && this.aggregationOpts.length > 0) {
         this.currentPackage = this.aggregationOpts[this.currentSelect].title;
       }
@@ -134,8 +145,8 @@
       chaptersCollapse (chapters, index, event) {
         chapters.isCollapsed = !chapters.isCollapsed;
       },
-      changeVideo (url) {
-        this.$emit('changevideo', url);
+      changeVideo (chapter) {
+        this.$emit('changevideo', chapter);
       }
     },
     components: {

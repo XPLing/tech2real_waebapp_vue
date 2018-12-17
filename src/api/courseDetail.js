@@ -9,6 +9,7 @@ const debug = process.env.NODE_ENV !== 'production';
 
 export function getCourseById (params) {
   var url = debug ? '/api/getCourseByIdV2' : `/getCourseByIdV2`;
+  params.version = 3;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

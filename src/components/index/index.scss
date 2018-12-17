@@ -1,3 +1,11 @@
+.g-app-wrapper, .g-header, .g-main{
+  @media screen and(min-width: 768px){
+    width: 100%;
+    max-width: $maxWidth;
+    margin: 0 auto;
+    box-shadow: 5px 0 5px -5px $color-transparency-black-1, -5px 0 5px -5px $color-transparency-black-1;
+  }
+}
 .g-app-wrapper {
   font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -7,6 +15,7 @@
   margin: 0 auto;
   color: $color-text-2B3;
   @include fs(14);
+
   .g-nav{
     position: fixed;
     z-index: 100;
@@ -16,7 +25,7 @@
     @media screen and(min-width: 768px){
       left: 50%;
       width: 100%;
-      max-width: 375px;
+      max-width: $maxWidth;
       transform: translate3d(-50%,0,0);
     }
   }

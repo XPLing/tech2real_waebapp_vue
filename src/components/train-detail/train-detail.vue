@@ -237,9 +237,6 @@
         this._getCourseID();
         this.getCourseData();
         var fnName = '_listCourseValidityPeriodByCourseId';
-        if (this.aggregation) {
-          fnName = '_listValidityPeriodByPackageId';
-        }
         this[fnName]().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
@@ -300,6 +297,7 @@
         this.$refs.mask.hide();
       },
       getCourseData ($this) {
+
         $this = $this || this;
         $this._getCourseData($this);
         if (!this.aggregation) {
@@ -331,6 +329,12 @@
       },
       changeVideo (data) {
         var vurl = data.videoUrl, type = data.type, furl = data.fileUrl;
+
+        if (type === 4) {
+          // 线下课程
+          return;
+        }
+
         if (type === 2) {
           if (vurl === this.videoUrl) {
             return;
@@ -372,7 +376,7 @@
         var query = {}, applyIdKey = 'courseApplyValidityPeriod', applyId;
         query.applyTargetId = this.courseData.id;
         if (this.aggregation) {
-          query.aggregation = 1;
+          query.type = 'aggregation';
         }
         switch (this.appliedState) {
           case 0:
@@ -382,11 +386,7 @@
           case 6:
           case 7:
           case 8:
-            if (this.aggregation) {
-              applyId = this.courseData.applyValidityPeriod.tagId;
-            } else {
-              applyId = this.courseData.courseApplyValidityPeriod.courseApplyId;
-            }
+            applyId = this.courseData.courseApplyValidityPeriod.courseApplyId;
             query.applyId = applyId;
             this.$router.push({
               path: `/train/all/applyresult`,
@@ -396,11 +396,7 @@
             break;
           case 9:
             var isReapply = this.$route.query.isReapply == 1;
-            if (this.aggregation) {
-              applyId = this.courseData.applyValidityPeriod.tagId;
-            } else {
-              applyId = this.courseData.courseApplyValidityPeriod.courseApplyId;
-            }
+            applyId = this.courseData.courseApplyValidityPeriod.courseApplyId;
             query.applyId = applyId;
             if (isReapply) {
               this.$refs.selectPeriod.showFlag = true;
@@ -427,7 +423,7 @@
         if (this.courseStateStr === COURSESTATECONFIG.STATE_APPLY || this.courseStateStr === COURSESTATECONFIG.STATE_APPLY_GO_ON || this.courseStateStr === COURSESTATECONFIG.STATE_APPLY_AGAIN || this.courseStateStr === COURSESTATECONFIG.STATE_AUDIT_FAIL) {
           var query = {};
           if (this.aggregation) {
-            query.aggregation = 1;
+            query.type = 'aggregation';
           }
           if (this.courseData.needInfo) {
             this.applyResult = this.courseData;
@@ -437,17 +433,10 @@
             });
           } else {
             this.$refs.loading.show();
-            var fnName = '_applyCourse';
-            if (this.aggregation) {
-              fnName = '_applyCoursePackage';
-            }
-            this[fnName]().then((res) => {
+            this._applyCourse().then((res) => {
               this.$refs.loading.hide();
               this.applyResult = res.result;
               var applyKey = 'courseApply';
-              if (this.aggregation) {
-                applyKey = 'coursePackageApply';
-              }
               query.applyId = this.applyResult[applyKey].id;
               query.applyTargetId = this.courseID;
               if (res.code == ERR_OK) {
@@ -495,15 +484,11 @@
         });
       },
       _getCourseID () {
-        this.aggregation = this.$route.query.aggregation == 1;
+        this.aggregation = this.$route.query.type === 'aggregation';
         this.courseID = this.$route.params.id;
       },
       _getCourseData ($this) {
-        var fnName = '_getCourseById';
-        if ($this.aggregation) {
-          fnName = '_getCoursePackageById';
-        }
-        return this[fnName]($this).then((res) => {
+        return this._getCourseById($this).then((res) => {
           if (res.code || $this.aggregation) {
             if (res.code != ERR_OK && !$this.aggregation) {
               $this.toptipTxt = res.message;
@@ -513,7 +498,7 @@
             let courseResultData = res.result;
             if ($this.aggregation) {
               courseResultData = res.result;
-              var aggregationOpts = courseResultData.courseList;
+              var aggregationOpts = courseResultData.itemList;
               if (aggregationOpts && aggregationOpts.length > 0) {
                 $this.aggregationOpts = aggregationOpts;
                 $this._listChaptersByCourseId($this.aggregationOpts[0].id).then((res) => {
@@ -612,6 +597,9 @@
           id: $this.courseID,
           userGuid: $this.userGuid
         };
+        if ($this.aggregation) {
+          params.stype = 2;
+        }
         return getCourseById(params);
       },
       _listChaptersByCourseId (id) {

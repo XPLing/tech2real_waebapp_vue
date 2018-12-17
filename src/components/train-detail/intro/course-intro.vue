@@ -139,7 +139,6 @@
             return;
           }
           Promise.all(imgOnload(imgs, this, 'descImageLoaded')).then((res) => {
-            console.log('img: ' + res);
             this.imgsLoadStatus = 'loaded';
             this.loadedImgs = res;
             this.$nextTick(() => {

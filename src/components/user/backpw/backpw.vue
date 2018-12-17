@@ -78,6 +78,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
+    inject: ['setTabList'],
     data () {
       return {
         password: '',
@@ -94,6 +95,10 @@
       ...mapGetters([
         'productGuid'
       ])
+    },
+    created () {
+      var currentPath = this.$router.currentRoute.fullPath;
+      this.setTabList(currentPath);
     },
     mounted () {
     },

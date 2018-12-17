@@ -23,7 +23,7 @@
           <div class="main">
             <i class="icon">手机号</i>
             <input name="phone" v-validate="'required|phone'" v-model="phone"
-                   :class="{'input': true}" type="text"
+                   :class="{'input': true}" type="text" @blur="inputBlur"
                    placeholder="请输入手机号">
           </div>
           <div v-show="errors.has('mobilebind.phone')" class="c-tip error">
@@ -122,6 +122,13 @@
   } from 'api/login';
 
   export default {
+    inject: ['setTabList'],
+    beforeRouteEnter (to, from, next) {
+      var currentPath = to.fullPath;
+      console.log(currentPath);
+      this.setTabList(currentPath);
+      next();
+    },
     data () {
       return {
         formName: 'mobilebind',
@@ -136,13 +143,17 @@
         toptipTxt: '',
         loginError: false,
         topTipAutoHide: false,
-        routerPrefix: util.routerPrefix
-      };
+        routerPrefix: util.routerPrefix,
+        pageDom: 5
+    }
+      ;
     },
     mounted () {
+
     },
     created () {
-
+      var currentPath = this.$router.currentRoute.fullPath;
+      this.setTabList(currentPath);
       this.thirdPartVerify();
       this.regiterFinish = false;
     },
@@ -162,10 +173,13 @@
       ...mapActions([
         'signIn'
       ]),
+      inputBlur () {
+        document.body.scrollTop += ++this.pageDom;
+      },
       startSend () {
         this.$validator.validate('mobilebind.phone', this.phone).then((result) => {
           if (result) {
-            this._getResetPwdAuthCode().then((response) => {
+            this._boundMobileVerify().then((response) => {
               var res = response;
               if (res.code == ERR_OK) {
                 var dom = 'sendMsg';
@@ -223,7 +237,9 @@
                       this.$refs.sendMsg.send();
                     });
                   } else {
-                    this.$refs.sendMsgRegister.send();
+                    this.$nextTick(() => {
+                      this.$refs.sendMsgRegister.send();
+                    });
                   }
                 } else {
                   util.formErrorMsg({

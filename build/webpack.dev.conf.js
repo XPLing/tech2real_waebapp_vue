@@ -16,13 +16,13 @@ module.exports = merge(baseWebpackConfig, {
     output: {
         path: config.dev.assetsRoot,
         filename: utils.assetsPath('js/[name].js'),
-        chunkFilename: utils.assetsPath('js/[id].js')
+        chunkFilename: utils.assetsPath('js/[name].chunk.js')
     },
     module: {
         // rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
         rules: utils.styleLoaders({
             sourceMap: config.build.productionSourceMap,
-            extract: true
+            extract: false
         })
     },
     // cheap-module-eval-source-map is faster for development
@@ -32,9 +32,9 @@ module.exports = merge(baseWebpackConfig, {
         new webpack.DefinePlugin({
             'process.env': config.dev.env
         }),
-        new ExtractTextPlugin({
-            filename: utils.assetsPath('css/[name].css')
-        }),
+        // new ExtractTextPlugin({
+        //     filename: utils.assetsPath('css/[name].css')
+        // }),
         // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),

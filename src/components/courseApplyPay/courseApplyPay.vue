@@ -148,7 +148,7 @@
       };
     },
     created () {
-      this.aggregation = this.$route.query.aggregation == 1;
+      this.aggregation = this.$route.query.type === "aggregation";
       this.applyTargetID = this.$route.query.applyTargetId;
       this.applyID = this.$route.query.applyId;
       this.errors.update({
@@ -171,9 +171,7 @@
         }
       });
       var fnName = '_getCourseApplyByCourseId';
-      if (this.aggregation) {
-        fnName = '_getCoursePackageApplyByPackageId';
-      }
+
       this[fnName]().then((res) => {
         if (res.code) {
           if (res.code != ERR_OK) {
@@ -182,7 +180,7 @@
             return;
           }
           this.applyInfo = res.result;
-          this.showData = this.aggregation ? this.applyInfo.coursePackage : this.applyInfo.course;
+          this.showData = this.applyInfo.course;
         }
       }, erro => {
         this.toptipTxt = erro.message;
@@ -382,7 +380,7 @@
           var payTargetId, query = {};
           if (this.aggregation) {
             payTargetId = this.applyInfo.coursePackage.id;
-            query.aggregation = 1;
+            query.type = 'aggregation';
           } else {
             payTargetId = this.applyInfo.course.id;
           }

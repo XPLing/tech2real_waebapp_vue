@@ -54,20 +54,17 @@
   ];
 
   export default {
+    provide () {
+      return {
+        setTabList: this.setTabList
+      };
+    },
     data () {
       return {
         pageTitle: '硬见 | 智慧连接硬件创新',
         hasBack: true,
         tabList: ROUTER_LOGINREGISTER
       };
-    },
-    beforeRouteUpdate (to, from, next) {
-      var currentPath = to.fullPath;
-      this.setTabList(currentPath);
-      next();
-    },
-    beforeRouteLeave (to, from, next) {
-      next();
     },
     created () {
       var currentPath = this.$router.currentRoute.fullPath;
@@ -78,7 +75,6 @@
     },
     methods: {
       setTabList (currentPath) {
-
         if (currentPath === REGISTERPATH || currentPath === LOGINPATH) {
           this.tabList = ROUTER_LOGINREGISTER;
           return;
@@ -86,7 +82,8 @@
         for (var i = 0, len = ROUTER_PARH.length; i < len; i++) {
           var item = ROUTER_PARH[i];
           var path = item.path;
-          if (currentPath === path) {
+          var reg = new RegExp('' + path + '');
+          if (reg.test(path)) {
             this.tabList = item.data;
             break;
           }

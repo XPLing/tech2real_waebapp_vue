@@ -6,6 +6,12 @@
   [data-dpr="3"] & {
     font-size: $px * 3 + px;
   }
+  @media screen and ( min-resolution : 2dppx ) and(min-width: 768px) {
+    font-size: $px * 2 + px;
+  }
+  @media screen and ( min-resolution : 3dppx ) and(min-width: 768px) {
+    font-size: $px * 3 + px;
+  }
 }
 
 @mixin lh($px) {

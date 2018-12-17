@@ -52,7 +52,7 @@ export function removeCookie (key) {
 
 export function setCookieSession (key, value, time) {
   if (!value) {
-    removeCookie(key);
+    removeCookieSession(key);
   } else {
     // value = Base64.encode(value);
     if (time) {

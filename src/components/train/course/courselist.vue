@@ -74,11 +74,7 @@
         }
         if (!this.requestMoreFlag) {
           this.requestMoreFlag = true;
-          var fnName = '_listRecommendCourses', dataName = '';
-          if (this.listType === 'aggregation') {
-            fnName = '_listCoursePackage'
-          }
-          this[fnName](this.requestPage).then((res) => {
+          this._listRecommendCourses(this.requestPage).then((res) => {
             this.$refs.scroll.finishPullUp();
             this.requestMoreFlag = false;
             if (res.code) {
@@ -115,8 +111,8 @@
         };
         if (this.listType === 'aggregation') {
           opt.query = {
-            aggregation: 1
-          }
+            type: 'aggregation'
+          };
         }
         this.$router.push(opt);
       },
@@ -125,6 +121,9 @@
           productGuid: this.productGuid,
           page: page
         };
+        if (this.listType === 'aggregation') {
+          param.stype = 2;
+        }
         return listRecommendCourses(param);
       },
       _listCoursePackage (page) {
