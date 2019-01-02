@@ -9,7 +9,7 @@
         <scroll ref="scroll">
           <div>
           <textarea class="feedback-cont" name="feedback" rows="100" v-model="feedbackCont"
-                    placeholder="您的意见..."></textarea>
+                    placeholder="您的意见..." @blur="inputBlur($event)"></textarea>
           </div>
         </scroll>
       </div>
@@ -38,14 +38,16 @@
         toptipTxt: '',
         pageTitle: '意见反馈',
         feedbackCont: '',
-        sendFlag: true
+        sendFlag: true,
+        scrollTop: 5
       };
     },
     computed: {
       ...mapGetters([
         'productGuid',
         'userGuid',
-        'userInfo'
+        'userInfo',
+        'systemInfo'
       ])
     },
     created () {
@@ -54,6 +56,22 @@
     mounted () {
     },
     methods: {
+      inputBlur (event) {
+        if (this.systemInfo.type() !== 1.2) {
+          return;
+        }
+        if (this.blurTimer) {
+          clearTimeout(this.blurTimer);
+        }
+        this.blurTimer = setTimeout(() => {
+          var activeElement = document.activeElement;
+          var isEqual = activeElement.isEqualNode(event.target),
+            isInput = /input|textarea/.test(activeElement.tagName.toLocaleLowerCase());
+          if (!isEqual && !isInput) {
+            document.body.scrollTop += ++this.scrollTop;
+          }
+        }, 300);
+      },
       confirm () {
         this.$router.push({
           path: '/user/login'

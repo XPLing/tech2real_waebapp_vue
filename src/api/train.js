@@ -51,7 +51,7 @@ export function listMyCourses (params, cancelSource) {
       'Content-Type': 'application/json;charset=UTF-8'
     },
     data: JSON.stringify(data),
-    customParam: {
+    privateConfig: {
       cancelSource: cancelSource
     }
   }).then((res) => {
@@ -114,7 +114,25 @@ export function listBannersByLocationType (params) {
 }
 
 export function listRecommendCourses (params, privateConfig) {
-  var url = debug ? '/api/listRecommendCoursesV2' : `/listRecommendCoursesV2`;
+  var url = debug ? '/api/listRecommendCourses' : `/listRecommendCourses`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data),
+    privateConfig: privateConfig
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
+export function listCourses (params, privateConfig) {
+  var url = debug ? '/api/listCourses' : `/listCourses`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

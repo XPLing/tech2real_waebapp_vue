@@ -8,6 +8,7 @@
         <div class="g-scroll-continer" v-if="infoCollectData">
           <!--<form class="c-form" data-vv-scope="infoCollect">-->
           <info-collect ref="infoCollect" :collect-target-data="infoCollectData"
+                        :parent-scroll="this.$refs.scroll"
                         @showselect="showSelect" @submitForm="validateForm"></info-collect>
           <!--</form>-->
         </div>
@@ -174,7 +175,10 @@
               duration: 2000,
               className: 'c-toast w200'
             });
-            this.$refs.scrollDom.scrollTop = 0;
+            this.$nextTick(() => {
+              this.$refs.scroll.refresh();
+              this.$refs.scrollDom.scrollTop = 0;
+            });
           }
         }, (erro) => {
           console.log('Form erro!');

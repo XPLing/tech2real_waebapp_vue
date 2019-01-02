@@ -8,7 +8,7 @@
             <i class="icon">手机号</i>
             <input name="phone" v-model="phone" v-validate="'required|phone'"
                    :class="{'input': true}" type="text"
-                   placeholder="请输入手机号">
+                   placeholder="请输入手机号" @blur="inputBlur($event)">
           </div>
           <div v-show="errors.has('backpw.phone')" class="c-tip error">
             <i class="icon fa fa-warning text-danger"></i><span class="meg text-danger">{{ errors.first('backpw.phone')
@@ -19,7 +19,7 @@
           <div class="main">
             <i class="icon">验证码</i>
             <input class="input" v-validate="'required'" v-model="verifycode" type="text" placeholder="请输入验证码"
-                   name="verifycode"
+                   name="verifycode" @blur="inputBlur($event)"
                    :class="{'input': true}">
             <send-msg @startsend="startSend" ref="sendMsg"></send-msg>
           </div>
@@ -33,7 +33,7 @@
           <div class="main">
             <i class="icon">设置密码</i>
             <input name="password" type="password" placeholder="输入6-16位密码"
-                   v-validate="{rules:{required: true,pw:true}}" v-model="password"
+                   v-validate="{rules:{required: true,pw:true}}" v-model="password" @blur="inputBlur($event)"
                    :class="{'input': true, 'has-error': errors.has('password')}">
           </div>
           <div v-show="errors.has('backpw.password')" class="c-tip error">
@@ -45,7 +45,7 @@
           <div class="main">
             <i class="icon">确认密码</i>
             <input type="password" placeholder="确认密码" name="confirmPW"
-                   v-validate="'required|confirmed:password'"
+                   v-validate="'required|confirmed:password'" @blur="inputBlur($event)"
                    :class="{'input': true, 'has-error': errors.has('confirmPW')}">
           </div>
           <div v-show="errors.has('backpw.confirmPW')" class="c-tip error">
@@ -88,12 +88,14 @@
         verifycode: '',
         isActiving: false,
         confirmType: '',
-        routerPrefix: util.routerPrefix
+        routerPrefix: util.routerPrefix,
+        scrollTop: 5
       };
     },
     computed: {
       ...mapGetters([
-        'productGuid'
+        'productGuid',
+        'systemInfo'
       ])
     },
     created () {
@@ -103,6 +105,22 @@
     mounted () {
     },
     methods: {
+      inputBlur (event) {
+        if (this.systemInfo.type() !== 1.2) {
+          return;
+        }
+        if (this.blurTimer) {
+          clearTimeout(this.blurTimer);
+        }
+        this.blurTimer = setTimeout(() => {
+          var activeElement = document.activeElement;
+          var isEqual = activeElement.isEqualNode(event.target),
+            isInput = /input|textarea/.test(activeElement.tagName.toLocaleLowerCase());
+          if (!isEqual && !isInput) {
+            document.body.scrollTop += ++this.scrollTop;
+          }
+        }, 300);
+      },
       confirm () {
         switch (this.confirmType) {
           case 'submit':

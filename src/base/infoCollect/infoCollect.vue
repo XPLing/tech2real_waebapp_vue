@@ -10,7 +10,7 @@
           <div class="name">{{item.title}}</div>
           <div class="cont">
             <input type="text" :name="`info_${item.id}`" :placeholder="item.tips"
-                   v-model="filedName[`info_${item.id}`].value"
+                   v-model="filedName[`info_${item.id}`].value" @blur="inputBlur($event)"
                    v-validate="{ required: item.isRequired?true:false, regex: item.pattern?`${item.pattern}`:'' }">
           </div>
           <i class="request-icon" v-if="item.isRequired===1">*</i>
@@ -50,7 +50,8 @@
         </div>
         <!-- datetime-picker 不能放置到控制选择器开关的容器里面，否则其this的指向会出错，出现无法关闭的情况 -->
         <datetime-picker ref="picker" type="date" v-model="filedName[`info_${item.id}`].value"
-                         @confirm="pickerConfirm" @cancel="pickerCancel"></datetime-picker>
+                         @confirm="pickerConfirm" @cancel="pickerCancel"
+                         @visible-change="visibleChange"></datetime-picker>
         <div v-show="errors.has('infoCollect.info_'+item.id)" class="c-tip error">
           <i class="icon fa fa-warning text-danger"></i>
           <span class="meg text-danger">{{ errors.first('infoCollect.info_' + item.id)}}</span>
@@ -63,7 +64,7 @@
         </p>
         <div class="input-item">
           <div class="cont">
-            <textarea v-model="filedName[`info_${item.id}`].value" :placeholder="item.tips"
+            <textarea v-model="filedName[`info_${item.id}`].value" :placeholder="item.tips" @blur="inputBlur($event)"
                       v-validate="{ required: item.isRequired?true:false, regex: item.pattern?`${item.pattern}`:'' }"></textarea>
           </div>
         </div>
@@ -126,11 +127,16 @@
   import ButtomBtnFull from 'base/bottom-btn-full/bottom-btn-full';
   import { DatetimePicker } from 'mint-ui';
   import * as Filters from 'assets/js/filters';
+  import { mapGetters } from 'vuex';
 
   export default {
     props: {
       collectTargetData: {
         type: Array,
+        default: null
+      },
+      parentScroll: {
+        type: Object,
         default: null
       }
     },
@@ -148,7 +154,9 @@
           textarea: [],
           timePicker: [],
           select: []
-        }
+        },
+        scrollTop: 5,
+        scrollY: 0
       };
     },
     created () {
@@ -161,11 +169,44 @@
     },
     mounted () {
     },
+    computed: {
+      ...mapGetters([
+        'systemInfo'
+      ])
+    },
     methods: {
+      inputBlur (event) {
+        if (this.systemInfo.type() !== 1.2) {
+          return;
+        }
+        if (this.blurTimer) {
+          clearTimeout(this.blurTimer);
+        }
+        this.blurTimer = setTimeout(() => {
+          var activeElement = document.activeElement;
+          var isEqual = activeElement.isEqualNode(event.target),
+            isInput = /input|textarea/.test(activeElement.tagName.toLocaleLowerCase());
+          if (!isEqual && !isInput) {
+            document.body.scrollTop += ++this.scrollTop;
+          }
+        }, 300);
+      },
       pickerConfirm (data) {
       },
       pickerCancel () {
-
+      },
+      visibleChange (status) {
+        if (!this.parentScroll) {
+          return;
+        }
+        if (status) {
+          this.scrollY = this.parentScroll.getBase().y;
+          this.parentScroll.scrollTo(0, this.parentScroll.getBase().maxY);
+          this.parentScroll.disable();
+        } else {
+          this.parentScroll.scrollTo(0, this.scrollY);
+          this.parentScroll.enable();
+        }
       },
       openPicker (index) {
         this.currentDataTimePicker = index;

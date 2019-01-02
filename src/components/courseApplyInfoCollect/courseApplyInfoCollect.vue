@@ -4,16 +4,21 @@
       <header class="g-header">
         <HeaderTitle :title="pageTitle" :has-back="hasBack"></HeaderTitle>
       </header>
-      <div class="info-collect-wrapper" ref="scrollDom">
-        <div class="g-scroll-continer" v-if="infoCollectData">
-          <!--<form class="c-form" data-vv-scope="infoCollect">-->
-          <info-collect ref="infoCollect" :collect-target-data="infoCollectData"
-                        @showselect="showSelect" @submitForm="validateForm"></info-collect>
-          <!--</form>-->
-        </div>
-        <div class="no-result" v-else>
-          <no-result :title="'暂无报名信息~~'"></no-result>
-        </div>
+      <div class="info-collect-wrapper">
+        <scroll ref="scroll" :data="infoCollectData">
+          <div>
+            <div class="g-scroll-continer" v-if="infoCollectData">
+              <!--<form class="c-form" data-vv-scope="infoCollect">-->
+              <info-collect ref="infoCollect" :collect-target-data="infoCollectData"
+                            :parent-scroll="this.$refs.scroll"
+                            @showselect="showSelect" @submitForm="validateForm"></info-collect>
+              <!--</form>-->
+            </div>
+            <div class="no-result" v-else>
+              <no-result :title="'暂无报名信息~~'"></no-result>
+            </div>
+          </div>
+        </scroll>
       </div>
       <div class="g-select-box">
         <g-select :select-data="selectOpts" :current-select="currentSelect" ref="select"
@@ -193,7 +198,10 @@
               duration: 2000,
               className: 'c-toast w200'
             });
-            this.$refs.scrollDom.scrollTop = 0;
+            this.$nextTick(() => {
+              this.$refs.scroll.refresh();
+              this.$refs.scrollDom.scrollTop = 0;
+            });
           }
         }, (erro) => {
           console.log('Form erro!');

@@ -7,6 +7,7 @@
   right: 0;
   color: $color-text-b45;
   background: $color-shadow-nav;
+  overflow-y: auto;
   .info-collect-wrapper{
     position: fixed;
     z-index: 101;

@@ -44,7 +44,8 @@ export let browser = {
       webApp: u.indexOf('Safari') == -1 // 是否web应该程序，没有头部与底部
     };
   })(),
-  language: (navigator.browserLanguage || navigator.language).toLowerCase()
+  language: (navigator.browserLanguage || navigator.language).toLowerCase(),
+  type: getbrowserType
 };
 
 export function getbrowserType () {

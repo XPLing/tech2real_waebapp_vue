@@ -55,6 +55,10 @@ const mutations = {
   // 记录进入登录流程之前的页面路径 待废除
   [types.SET_BEFORELOGINPAGE] (state, val) {
     state.beforeLoginPage = val;
+  },
+  // 记录系统信息
+  [types.RECORD_SYSTEMINFO] (state) {
+    state.systemInfo = util.browser;
   }
 };
 

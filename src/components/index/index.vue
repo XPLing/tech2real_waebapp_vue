@@ -12,6 +12,7 @@
 <script>
   import Tab from 'components/tab/tab';
   import { mapMutations } from 'vuex';
+  import * as util from 'assets/js/util';
 
   export default {
     name: 'App',
@@ -27,17 +28,21 @@
       };
     },
     created () {
+      this.recordSystemInfo();
     },
     activated () {
-      console.log('activated');
+
     },
     methods: {
-      reload() {
+      reload () {
         this.isRouterAlive = false;
         this.$nextTick(() => {
           this.isRouterAlive = true;
         });
-      }
+      },
+      ...mapMutations({
+        recordSystemInfo: 'RECORD_SYSTEMINFO'
+      })
     },
     components: {
       'g-tab': Tab

@@ -23,7 +23,7 @@
           <div class="main">
             <i class="icon">手机号</i>
             <input name="phone" v-validate="'required|phone'" v-model="phone"
-                   :class="{'input': true}" type="text" @blur="inputBlur"
+                   :class="{'input': true}" type="text" @blur="inputBlur($event)"
                    placeholder="请输入手机号">
           </div>
           <div v-show="errors.has('mobilebind.phone')" class="c-tip error">
@@ -38,7 +38,7 @@
           <div class="main">
             <i class="icon">验证码</i>
             <input class="input" v-model="verifycode" v-validate="'required'" type="text" placeholder="请输入验证码"
-                   name="verifycode">
+                   name="verifycode" @blur="inputBlur($event)">
             <send-msg @startsend="startSend" ref="sendMsg"></send-msg>
           </div>
           <div v-show="errors.has('mobilebind.verifycode')" class="c-tip error">
@@ -53,7 +53,7 @@
           <div class="main">
             <i class="icon">验证码</i>
             <input class="input" v-model="verifycode" v-validate="'required'" type="text" placeholder="请输入验证码"
-                   name="verifycode">
+                   name="verifycode" @blur="inputBlur($event)">
             <send-msg @startsend="startSend" ref="sendMsgRegister"></send-msg>
           </div>
           <div v-show="errors.has('mobilebind.verifycode')" class="c-tip error">
@@ -67,7 +67,8 @@
             <i class="icon">设置密码</i>
             <input name="password" type="password" placeholder="输入6-16位密码"
                    v-validate="{rules:{required: true,pw:true}}" v-model="password"
-                   :class="{'input': true, 'has-error': errors.has('registerFirst.password')}">
+                   :class="{'input': true, 'has-error': errors.has('registerFirst.password')}"
+                   @blur="inputBlur($event)">
           </div>
           <div v-show="errors.has('registerFirst.password')" class="c-tip error">
             <i class="icon fa fa-exclamation-circle text-danger"></i>
@@ -79,7 +80,8 @@
             <i class="icon">确认密码</i>
             <input type="password" placeholder="确认密码" name="confirmPW"
                    v-validate="'required|confirmed:password'"
-                   :class="{'input': true, 'has-error': errors.has('registerFirst.confirmPW')}">
+                   :class="{'input': true, 'has-error': errors.has('registerFirst.confirmPW')}"
+                   @blur="inputBlur($event)">
             <!--<i class="fa fa-exclamation-circle tipinfo"></i>-->
           </div>
           <div v-show="errors.has('registerFirst.confirmPW')" class="c-tip error">
@@ -144,9 +146,9 @@
         loginError: false,
         topTipAutoHide: false,
         routerPrefix: util.routerPrefix,
-        pageDom: 5
-    }
-      ;
+        scrollTop: 5,
+        blurTimer: null
+      };
     },
     mounted () {
 
@@ -162,7 +164,8 @@
         'productGuid',
         'thirdParty',
         'thirdPartyInfo',
-        'beforeLoginPage'
+        'beforeLoginPage',
+        'systemInfo'
       ])
     },
     methods: {
@@ -173,8 +176,21 @@
       ...mapActions([
         'signIn'
       ]),
-      inputBlur () {
-        document.body.scrollTop += ++this.pageDom;
+      inputBlur (event) {
+        if (this.systemInfo.type() !== 1.2) {
+          return;
+        }
+        if (this.blurTimer) {
+          clearTimeout(this.blurTimer);
+        }
+        this.blurTimer = setTimeout(() => {
+          var activeElement = document.activeElement;
+          var isEqual = activeElement.isEqualNode(event.target),
+            isInput = /input|textarea/.test(activeElement.tagName.toLocaleLowerCase());
+          if (!isEqual && !isInput) {
+            document.body.scrollTop += ++this.scrollTop;
+          }
+        }, 300);
       },
       startSend () {
         this.$validator.validate('mobilebind.phone', this.phone).then((result) => {

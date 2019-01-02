@@ -8,7 +8,7 @@ import axios from './axios';
 const debug = process.env.NODE_ENV !== 'production';
 
 export function getCourseById (params) {
-  var url = debug ? '/api/getCourseByIdV2' : `/getCourseByIdV2`;
+  var url = debug ? '/api/getCourseById' : `/getCourseById`;
   params.version = 3;
   const data = Object.assign({}, commonParams, params);
   return axios({

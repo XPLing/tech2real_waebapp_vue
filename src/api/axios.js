@@ -19,8 +19,8 @@ axios.interceptors.request.use(config => {
   config.cancelToken = new CancelToken((c) => {
     // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
     pending.push({u: config.url + '&' + config.method, f: c});
-    if (config.customParam && config.customParam.cancelSource) {
-      config.customParam.cancelSource.cancel = c;
+    if (config.privateConfig && config.privateConfig.cancelSource) {
+      config.privateConfig.cancelSource.cancel = c;
     }
   });
   return config;

@@ -8,7 +8,7 @@
             <i class="icon c-icon-mobile"></i>
             <input class="needsclick" name="phone" v-model="phone" v-validate:phone="'required|phone'" data-vv-as="手机号"
                    :class="{'input': true}" type="text"
-                   placeholder="手机号">
+                   placeholder="手机号" @blur="inputBlur($event)">
           </div>
           <div v-show="errors.has('login.phone')" class="c-tip error">
             <i class="icon fa fa-warning text-danger"></i><span class="meg text-danger">{{ errors.first('login.phone')
@@ -20,7 +20,7 @@
             <i class="icon c-icon-pw"></i>
             <input class="needsclick" name="password" v-model="password" v-validate="'required|pw'" data-key="pw"
                    :class="{'input': true}" type="password"
-                   placeholder="密码">
+                   placeholder="密码" @blur="inputBlur($event)">
           </div>
           <div v-show="errors.has('login.password')" class="c-tip error">
             <i class="icon fa fa-warning text-danger"></i><span
@@ -78,7 +78,8 @@
         isActiving: false,
         btnText: '登录',
         formName: 'login',
-        routerPrefix: util.routerPrefix
+        routerPrefix: util.routerPrefix,
+        scrollTop: 5
       };
     },
     beforeRouteEnter (to, from, next) {
@@ -118,48 +119,26 @@
     },
     computed: {
       ...mapGetters([
-        'beforeLoginPage'
+        'beforeLoginPage',
+        'systemInfo'
       ])
     },
     methods: {
-      ...mapActions([
-        'signIn'
-      ]),
-      _login () {
-        this.changeSubmitBtn(true, '登录中...');
-        var data = {
-          mobile: this.phone.trim(),
-          password: this.password.trim()
-        };
-        webLoginByPhone(data).then((res) => {
-          if (res.code == ERR_OK) {
-            this.changeSubmitBtn(false, '登录');
-            this.signIn(res.result);
-            this.$router.push({
-              path: this.beforeLoginPage
-            });
-          } else {
-            this.changeSubmitBtn(false, '登录');
-            util.formErrorMsg({
-              errorObj: this.errors,
-              name: 'totalMsg',
-              message: res.message,
-              rule: undefined,
-              scope: this.formName,
-              interval: 2000
-            });
+      inputBlur (event) {
+        if (this.systemInfo.type() !== 1.2) {
+          return;
+        }
+        if (this.blurTimer) {
+          clearTimeout(this.blurTimer);
+        }
+        this.blurTimer = setTimeout(() => {
+          var activeElement = document.activeElement;
+          var isEqual = activeElement.isEqualNode(event.target),
+            isInput = /input|textarea/.test(activeElement.tagName.toLocaleLowerCase());
+          if (!isEqual && !isInput) {
+            document.body.scrollTop += ++this.scrollTop;
           }
-        }, (error) => {
-          this.changeSubmitBtn(false, '登录');
-          util.formErrorMsg({
-            errorObj: this.errors,
-            name: 'totalMsg',
-            message: error.message,
-            rule: undefined,
-            scope: this.formName,
-            interval: 2000
-          });
-        });
+        }, 300);
       },
       thirdPartLogin (type) {
         var url = '', uri = '', href = '';
@@ -213,7 +192,46 @@
         if (text) {
           this.btnText = text;
         }
-      }
+      },
+      _login () {
+        this.changeSubmitBtn(true, '登录中...');
+        var data = {
+          mobile: this.phone.trim(),
+          password: this.password.trim()
+        };
+        webLoginByPhone(data).then((res) => {
+          if (res.code == ERR_OK) {
+            this.changeSubmitBtn(false, '登录');
+            this.signIn(res.result);
+            this.$router.push({
+              path: this.beforeLoginPage
+            });
+          } else {
+            this.changeSubmitBtn(false, '登录');
+            util.formErrorMsg({
+              errorObj: this.errors,
+              name: 'totalMsg',
+              message: res.message,
+              rule: undefined,
+              scope: this.formName,
+              interval: 2000
+            });
+          }
+        }, (error) => {
+          this.changeSubmitBtn(false, '登录');
+          util.formErrorMsg({
+            errorObj: this.errors,
+            name: 'totalMsg',
+            message: error.message,
+            rule: undefined,
+            scope: this.formName,
+            interval: 2000
+          });
+        });
+      },
+      ...mapActions([
+        'signIn'
+      ])
     },
     components: {
       FormTipError

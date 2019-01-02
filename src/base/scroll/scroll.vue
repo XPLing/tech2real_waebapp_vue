@@ -57,6 +57,14 @@
       }, 20);
     },
     methods: {
+      getBase () {
+        return {
+          x: this.scroll.x,
+          y: this.scroll.y,
+          maxX: this.scroll.maxScrollX,
+          maxY: this.scroll.maxScrollY
+        }
+      },
       enable () {
         this.scroll && this.scroll.enable();
       },

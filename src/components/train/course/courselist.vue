@@ -34,7 +34,7 @@
   import HeaderTitle from 'components/header-title/header-title';
   import { ERR_OK } from 'api/config';
   import * as util from 'assets/js/util';
-  import { listRecommendCourses } from 'api/train';
+  import { listCourses } from 'api/train';
   import { listCoursePackage } from 'api/coursePackage';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -74,7 +74,7 @@
         }
         if (!this.requestMoreFlag) {
           this.requestMoreFlag = true;
-          this._listRecommendCourses(this.requestPage).then((res) => {
+          this._listCourses(this.requestPage).then((res) => {
             this.$refs.scroll.finishPullUp();
             this.requestMoreFlag = false;
             if (res.code) {
@@ -116,15 +116,16 @@
         }
         this.$router.push(opt);
       },
-      _listRecommendCourses (page) {
+      _listCourses (page) {
         var param = {
           productGuid: this.productGuid,
-          page: page
+          page: page,
+          version: 3
         };
         if (this.listType === 'aggregation') {
           param.stype = 2;
         }
-        return listRecommendCourses(param);
+        return listCourses(param);
       },
       _listCoursePackage (page) {
         var param = {

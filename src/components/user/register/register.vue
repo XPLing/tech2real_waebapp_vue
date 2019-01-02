@@ -5,24 +5,24 @@
       <p class="verify error"></p>
       <ul class="form-main form-hook step-item user-hook active" v-if="!passsFirst">
         <!--<li class="input-item" :class="{'has-error': errors.has('registerFirst.nickname')}">-->
-          <!--<div class="main">-->
-            <!--<i class="icon">昵&nbsp;&nbsp;&nbsp;&nbsp;称</i>-->
-            <!--<input type="text" placeholder="请输入昵称" name="nickname"-->
-                   <!--v-validate="'required|nickname'" v-model="nickname"-->
-                   <!--:class="{'input': true, 'has-error': errors.has('registerFirst.nickname') }">-->
-            <!--&lt;!&ndash;<i class="fa fa-exclamation-circle tipinfo"></i>&ndash;&gt;-->
-          <!--</div>-->
-          <!--<div v-show="errors.has('registerFirst.nickname')" class="c-tip error">-->
-            <!--<i class="icon fa fa-exclamation-circle text-danger"></i>-->
-            <!--<span class="meg text-danger">{{ errors.first('registerFirst.nickname')}}</span>-->
-          <!--</div>-->
+        <!--<div class="main">-->
+        <!--<i class="icon">昵&nbsp;&nbsp;&nbsp;&nbsp;称</i>-->
+        <!--<input type="text" placeholder="请输入昵称" name="nickname"-->
+        <!--v-validate="'required|nickname'" v-model="nickname" @blur="inputBlur($event)" -->
+        <!--:class="{'input': true, 'has-error': errors.has('registerFirst.nickname') }">-->
+        <!--&lt;!&ndash;<i class="fa fa-exclamation-circle tipinfo"></i>&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div v-show="errors.has('registerFirst.nickname')" class="c-tip error">-->
+        <!--<i class="icon fa fa-exclamation-circle text-danger"></i>-->
+        <!--<span class="meg text-danger">{{ errors.first('registerFirst.nickname')}}</span>-->
+        <!--</div>-->
         <!--</li>-->
         <li class="input-item" :class="{'has-error': errors.has('registerFirst.phone') }">
           <div class="main">
             <i class="icon">手机号</i>
             <input name="phone" v-validate="'required|phone'" v-model="phone"
                    :class="{'input': true, 'has-error': errors.has('registerFirst.phone') }" type="text"
-                   placeholder="请输入手机号">
+                   placeholder="请输入手机号" @blur="inputBlur($event)">
           </div>
           <div v-show="errors.has('registerFirst.phone')" class="c-tip error">
             <i class="icon fa fa-exclamation-circle text-danger"></i>
@@ -33,7 +33,7 @@
           <div class="main">
             <i class="icon">设置密码</i>
             <input name="password" type="password" placeholder="输入6-16位密码"
-                   v-validate="{rules:{required: true,pw:true}}" v-model="password"
+                   v-validate="{rules:{required: true,pw:true}}" v-model="password" @blur="inputBlur($event)"
                    :class="{'input': true, 'has-error': errors.has('registerFirst.password')}">
           </div>
           <div v-show="errors.has('registerFirst.password')" class="c-tip error">
@@ -45,7 +45,7 @@
           <div class="main">
             <i class="icon">确认密码</i>
             <input type="password" placeholder="确认密码" name="confirmPW"
-                   v-validate="'required|confirmed:password'"
+                   v-validate="'required|confirmed:password'" @blur="inputBlur($event)"
                    :class="{'input': true, 'has-error': errors.has('registerFirst.confirmPW')}">
             <!--<i class="fa fa-exclamation-circle tipinfo"></i>-->
           </div>
@@ -60,7 +60,7 @@
           <div class="main">
             <i class="icon">验证码</i>
             <input class="input" type="text" placeholder="请输入验证码" name="verifycode" key="verifycode"
-                   v-validate="'required'" v-model="verifycode" :class="{'input': true}">
+                   v-validate="'required'" v-model="verifycode" :class="{'input': true}" @blur="inputBlur($event)">
           </div>
           <div v-show="errors.has('registerFirst.verifycode')" class="c-tip error">
             <i class="icon fa fa-exclamation-circle text-danger"></i><span
@@ -124,7 +124,8 @@
         formName: 'registerFirst',
         isActiving: false,
         btnText: '下一步',
-        routerPrefix: util.routerPrefix
+        routerPrefix: util.routerPrefix,
+        scrollTop: 5
       };
     },
     created () {
@@ -133,10 +134,27 @@
     },
     computed: {
       ...mapGetters([
-        'productGuid'
+        'productGuid',
+        'systemInfo'
       ])
     },
     methods: {
+      inputBlur (event) {
+        if (this.systemInfo.type() !== 1.2) {
+          return;
+        }
+        if (this.blurTimer) {
+          clearTimeout(this.blurTimer);
+        }
+        this.blurTimer = setTimeout(() => {
+          var activeElement = document.activeElement;
+          var isEqual = activeElement.isEqualNode(event.target),
+            isInput = /input|textarea/.test(activeElement.tagName.toLocaleLowerCase());
+          if (!isEqual && !isInput) {
+            document.body.scrollTop += ++this.scrollTop;
+          }
+        }, 300);
+      },
       confirm () {
         if (!this.passsFirst) {
           this.passsFirst = true;
@@ -203,7 +221,9 @@
         return registerByPhone({
           product_guid: this.productGuid,
           phone: this.phone,
+          reg_way: 4,
           password: this.password,
+          regType: 1,
           nickname: this.nickname
         });
       },
