@@ -15,7 +15,6 @@ Object.keys(validateRules).forEach((key) => {
     validateRules[key].validate && Validator.extend(key, validateRules[key].validate);
     // merge the validator messages
     Object.keys(validateRules[key].messages).forEach(locale => {
-
         Validator.localize({
             [locale]: {
                 messages: {

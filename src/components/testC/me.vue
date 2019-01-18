@@ -1,10 +1,10 @@
 <template>
-    <transition name="slide">
-        <div class="g-recommend">
+    <transition-group name="slide">
+        <div class="g-recommend" :key="'gRecommend'">
             CCC
         </div>
-        <router-link to="/testB"></router-link>
-    </transition>
+        <router-link to="/testB" :key="'testB'"></router-link>
+    </transition-group>
 </template>
 
 <script type="text/ecmascript-6">

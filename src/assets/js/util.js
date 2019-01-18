@@ -258,7 +258,7 @@ export let common = {
   },
   calculateWH (num) {
     var windowW = parseInt(window.outerWidth || window.innerWidth || window.screen.width);
-    windowW = windowW > 375 ? 375 / 10 : windowW / 10;
+    windowW = windowW > 768 ? 768 / 10 : windowW / 10;
     return num / config.originWidth * windowW;
   },
   cssPrefix (style) {

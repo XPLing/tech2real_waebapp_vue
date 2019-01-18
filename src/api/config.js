@@ -4,7 +4,7 @@
 export let commonParams = {
   productGuid: 'a5c72d76-16dc-4bb6-b6af-f2e562b1839b',
   version: 2,
-  clientType: 1
+  clientType: 3 // 设置来源端  0:未知   1:来自安卓客户端  2：ios客户端   3:微信网页  4:QQ网页   5:新浪网页
 };
 export let options = {
   param: 'jsonpCallback'

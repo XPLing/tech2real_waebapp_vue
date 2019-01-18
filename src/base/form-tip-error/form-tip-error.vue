@@ -21,6 +21,7 @@
       }
     },
     created(){
+      console.log(this.errors);
     },
     methods: {
 
