@@ -20,7 +20,7 @@
           <div class="chunk pay-wrapper">
             <h1 class="title">支付方式</h1>
             <div class="c-form-group">
-              <div class="input-item">
+              <div class="input-item" v-if="isWx">
                 <input class="float-input" v-model="payWay" type="radio" name="payWay" id="wepay"
                        value="wepay"
                        v-validate="'required|in:wepay,alipay'">
@@ -38,7 +38,7 @@
                   </p>
                 </label>
               </div>
-              <div class="input-item">
+              <div class="input-item" v-else>
                 <input class="float-input" type="radio" v-model="payWay" name="payWay" id="alipay"
                        value="alipay">
                 <label class="label" for="alipay">
@@ -144,10 +144,12 @@
         confirmTxt: '',
         confirmDialog: true,
         topTipAutoHide: false,
+        isWx: false,
         aggregation: false
       };
     },
     created () {
+      this.isWx = util.common.getbrowserType() < 2 && util.common.getbrowserType() > 0;
       this.aggregation = this.$route.query.type === "aggregation";
       this.applyTargetID = this.$route.query.applyTargetId;
       this.applyID = this.$route.query.applyId;
@@ -308,7 +310,7 @@
       },
       wxInit (data) {
         wx.config({
-          //  debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+//            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
           appId: data.result.appId, // 必填，公众号的唯一标识
           timestamp: data.result.timestamp, // 必填，生成签名的时间戳
           nonceStr: data.result.nonceStr, // 必填，生成签名的随机串
@@ -526,9 +528,10 @@
       },
       _getWxJsApiConfig () {
         this.loadingTxt = '环境初始化中...';
+//        alert(window.location.href);
         this.$refs.loading.show();
         let params = {
-          url: window.location.href
+          url: encodeURIComponent(window.location.href)
         };
         return getWxJsApiConfig(params);
       },

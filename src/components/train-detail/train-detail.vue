@@ -22,7 +22,8 @@
         <img v-else :src="coverUrl">
       </div>
       <nav class="g-nav-wrapper">
-        <TrainDetailTab @changeTab="changeTab" :applied-state="appliedState"></TrainDetailTab>
+        <TrainDetailTab @changeTab="changeTab" :applied-state="appliedState"
+                        :chapter-data="chapterData"></TrainDetailTab>
       </nav>
       <div class="g-main">
         <keep-alive>
@@ -276,7 +277,9 @@
       },
       selectPeriodConfirm (data) {
         this.setCourseValidityPeriod(data.item);
-        this.$refs.confirmsWrapper.show();
+//  弹出询问框 已去除
+//        this.$refs.confirmsWrapper.show();
+        this.confirm();
       },
       selectPeriodItem (data) {
         this.setCourseValidityPeriod(data.item);
@@ -330,11 +333,14 @@
       changeVideo (data) {
         var vurl = data.videoUrl, type = data.type, furl = data.fileUrl;
 
+        if (this.appliedState != 1 && !data.isFree) {
+          this.operate();
+          return;
+        }
         if (type === 4) {
           // 线下课程
           return;
         }
-
         if (type === 2) {
           if (vurl === this.videoUrl) {
             return;

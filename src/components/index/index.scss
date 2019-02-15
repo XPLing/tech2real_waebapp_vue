@@ -1,13 +1,14 @@
-.g-app-wrapper, .g-header, .g-main{
-  @media screen and(min-width: 768px){
+.g-app-wrapper, .g-header, .g-main {
+  @media screen and(min-width: 768px) {
     width: 100%;
     max-width: $maxWidth;
     margin: 0 auto;
     box-shadow: 5px 0 5px -5px $color-transparency-black-1, -5px 0 5px -5px $color-transparency-black-1;
   }
 }
+
 .g-app-wrapper {
-  font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
+  font-family:  -apple-system, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "WenQuanYi Micro Hei", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: all .3s;
@@ -16,20 +17,20 @@
   color: $color-text-2B3;
   @include fs(14);
 
-  .g-nav{
+  .g-nav {
     position: fixed;
     z-index: 100;
     left: 0;
     bottom: 0;
     width: 100%;
-    @media screen and(min-width: 768px){
+    @media screen and(min-width: 768px) {
       left: 50%;
       width: 100%;
       max-width: $maxWidth;
-      transform: translate3d(-50%,0,0);
+      transform: translate3d(-50%, 0, 0);
     }
   }
-  .page-loader{
+  .page-loader {
     position: fixed;
     top: 0;
     bottom: 0;

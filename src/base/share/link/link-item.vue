@@ -51,7 +51,7 @@
         case 1:
           sourceType = 'course';
           requestName = '_getCourseById';
-          firstType = 'infoFirst';
+          firstType = 'courseFirst';
           this.shareUrl = `/train/all/${this.shareContent}`;
           break;
         case 2:
@@ -59,7 +59,7 @@
           requestName = '_getArticleById';
           titleName = 'listTitle';
           coverName = 'pictureUrl';
-          firstType = 'courseFirst';
+          firstType = 'infoFirst';
           this.shareUrl = `/info/infodetail/${this.shareContent}`;
           break;
         case 3:
@@ -77,21 +77,23 @@
         this.title = this.shareContent.link_title;
       } else {
         this.currentType = firstType;
-        this[requestName]().then((res) => {
-          this.likeFlag = false;
-          if (res.code) {
-            if (res.code != ERR_OK) {
-              this.toptipTxt = res.message;
-              this.$refs.toptip.show();
-              return false;
-            }
-            this.cover = res.result[coverName];
-            this.title = res.result[titleName];
-          }
-        }, erro => {
-          this.toptipTxt = erro.message;
-          this.$refs.toptip.show();
-        });
+        this.cover = this.data[sourceType][coverName];
+        this.title = this.data[sourceType][titleName];
+//        this[requestName]().then((res) => {
+//          this.likeFlag = false;
+//          if (res.code) {
+//            if (res.code != ERR_OK) {
+//              this.toptipTxt = res.message;
+//              this.$refs.toptip.show();
+//              return false;
+//            }
+//            this.cover = res.result[coverName];
+//            this.title = res.result[titleName];
+//          }
+//        }, erro => {
+//          this.toptipTxt = erro.message;
+//          this.$refs.toptip.show();
+//        });
       }
 
     },

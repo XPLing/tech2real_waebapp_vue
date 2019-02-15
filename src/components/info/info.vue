@@ -94,7 +94,7 @@
         currView: 'v-a',
         isRouterAlive: true,
         swiperOPts: {
-          loop: true,
+          loop: false,
           autoplay: {
             delay: 5000,
             stopOnLastSlide: false,

@@ -56,8 +56,8 @@
         <div class="chunk g-recommend course aggregation">
           <div class="titlebox">
             <p class="title">合辑推荐</p>
-            <router-link class="more" :to="{path: '/train/all/courselist', query:{type: 'aggregation'}}">更多
-              <i class="icon c-icon-angle-right"></i></router-link>
+            <!--<router-link class="more" :to="{path: '/train/all/courselist', query:{type: 'aggregation'}}">更多-->
+              <!--<i class="icon c-icon-angle-right"></i></router-link>-->
           </div>
           <ul class="list">
             <course-item :course="item" v-for="(item, index) in courseAggregationList" :key="index"
@@ -68,8 +68,8 @@
         <div class="chunk g-recommend course">
           <div class="titlebox">
             <p class="title">课程推荐</p>
-            <router-link class="more" :to="{path: '/train/all/courselist'}">更多 <i
-              class="icon c-icon-angle-right"></i></router-link>
+            <!--<router-link class="more" :to="{path: '/train/all/courselist'}">更多 <i-->
+              <!--class="icon c-icon-angle-right"></i></router-link>-->
           </div>
           <ul class="list">
             <course-item :course="item" v-for="(item, index) in courseList" :key="index"
@@ -137,7 +137,7 @@
         routerPrefix: util.routerPrefix,
         swiperOPts: {
           slideToClickedSlide: true,
-          loop: true,
+          loop: false,
           autoplay: {
             delay: 5000,
             stopOnLastSlide: false,
@@ -226,7 +226,7 @@
           this.toptipTxt = erro.message;
           this.$refs.toptip.show();
         });
-        this._listRecommendCourses(1, 2).then((res) => {
+        this._listRecommendCourses(1, 2, 3).then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {
               return Promise.reject(res);
@@ -315,7 +315,7 @@
         }
         if (!this.requestMoreFlag) {
           this.requestMoreFlag = true;
-          this._listRecommendCourses(this.coursePage).then((res) => {
+          this._listRecommendCourses(this.coursePage, 1, 10).then((res) => {
             this.$refs.scroll.finishPullUp();
             this.requestMoreFlag = false;
             if (res.code) {
@@ -404,12 +404,13 @@
         };
         return listCoursesForYouWant(param);
       },
-      _listRecommendCourses (page, stype) {
+      _listRecommendCourses (page, stype, limitSize) {
         var param = {
           productGuid: this.productGuid,
           page: page,
 //          limitFlag: false,
-          limitSize: 3
+          limitSize: limitSize,
+          version: 3
         };
         if (stype) {
           param.stype = stype;

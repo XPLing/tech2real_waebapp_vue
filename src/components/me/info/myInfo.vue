@@ -59,6 +59,13 @@
                     <i class="icon fa fa-angle-right"></i>
                   </div>
                 </li>
+                <li class="item">
+                  <p class="name">公司</p>
+                  <div class="right" @click="changeCompany">
+                    <span class="data">{{company}}</span>
+                    <i class="icon fa fa-angle-right"></i>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -75,6 +82,7 @@
       <router-view v-if="isRouterAlive"></router-view>
       <confirm :text="operateTip" ref="confirm" @cancel="cancel" @confirm="confirm"></confirm>
       <bottom-form ref="bottomForm" :init-cont="privateSolgan" @confirm="editConfirm"></bottom-form>
+      <bottom-form ref="companyBottomForm" :init-cont="company" :limitNum="companyLimit" @confirm="companyConfirm"></bottom-form>
     </div>
   </transition>
 </template>
@@ -103,6 +111,8 @@
         isRouterAlive: true,
         toptipTxt: '',
         operateTip: '',
+        company: '',
+        companyLimit: 100,
         aList: [
           {
             name: '地区',
@@ -207,6 +217,7 @@
     created () {
       this.nickname = this.userInfo.nickname;
       this.privateSolgan = this.privateSolganEdit = this.userInfo.privateSolgan;
+      this.company = this.userInfo.company;
       this.city = this.userInfo.city;
       this.province = this.userInfo.province;
       this.sex = this.userInfo.sex;
@@ -233,8 +244,17 @@
           this.privateSolgan = this.privateSolganEdit = this.userInfo.privateSolgan;
         });
       },
+      companyConfirm (data) {
+        this.company = data;
+        this.setUserInfo({company: this.company}).then(() => {
+          this.company = this.userInfo.company;
+        });
+      },
+      changeCompany () {
+        this.$refs.companyBottomForm.show();
+      },
       changePrivateSolgan () {
-        this.editShowFlag = true;
+        this.$refs.bottomForm.show();
       },
       changeAddress () {
         this.$refs.picker.show();
@@ -398,6 +418,9 @@
         }
         if (data.privateSolgan) {
           param.privateSolgan = data.privateSolgan;
+        }
+        if (data.company) {
+          param.company = data.company;
         }
         return setUserInfoByGuid(param);
       },

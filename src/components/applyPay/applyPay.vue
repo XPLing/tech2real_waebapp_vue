@@ -19,7 +19,7 @@
           <div class="chunk pay-wrapper">
             <h1 class="title">支付方式</h1>
             <div class="c-form-group">
-              <div class="input-item">
+              <div class="input-item" v-if="isWx">
                 <input class="float-input" v-model="payWay" type="radio" name="payWay" id="wepay" value="wepay"
                        v-validate="'required|in:wepay,alipay'">
                 <label class="label" for="wepay">
@@ -35,7 +35,7 @@
                   </p>
                 </label>
               </div>
-              <div class="input-item">
+              <div class="input-item" v-else>
                 <input class="float-input" type="radio" v-model="payWay" name="payWay" id="alipay" value="alipay">
                 <label class="label" for="alipay">
                   <div class="title-wrapper">
@@ -133,10 +133,12 @@
         payConfirmTxt: '请确认支付是否已完成',
         confirmTxt: '',
         confirmDialog: true,
-        topTipAutoHide: false
+        topTipAutoHide: false,
+        isWx: false
       };
     },
     created () {
+      this.isWx = util.common.getbrowserType() < 2 && util.common.getbrowserType() > 0;
       this.applyTargetID = this.$route.query.applyTargetId;
       this.applyID = this.$route.query.applyId;
       this.errors.update({

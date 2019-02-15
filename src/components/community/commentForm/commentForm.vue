@@ -37,12 +37,13 @@
             </div>
             <div class="bottom" v-if="favoriteClub && type==='comment'">
               <div class="info-group text">
-                <div class="input-item text" @click="toggleCommunityList">
+                <div class="input-item text">
+                  <!--@click="toggleCommunityList"-->
                   <div class="name">发布到：</div>
                   <div class="cont">
                     <input :value="clubName" type="text" readonly="readonly" disabled="disabled">
                   </div>
-                  <i class="icon fa fa-angle-down" :class="{'active': communityListShowFlag}"></i>
+                  <!--<i class="icon fa fa-angle-down" :class="{'active': communityListShowFlag}"></i>-->
                 </div>
                 <transition name="slide-down" mode="out-in">
                   <div v-show="communityListShowFlag" class="selectList">
@@ -107,8 +108,8 @@
         commentFormCont: '',
         communityListShowFlag: false,
         favoriteClub: null,
-        clubName: '',
-        clubId: null,
+        clubName: '云创硬见',
+        clubId: 1,
         uploadStatus: '',
         uploadInfo: {
           regex: /.jpg|.gif|.png|.bmp/i,
@@ -133,6 +134,7 @@
       ])
     },
     created () {
+      this.sendResult = false;
       var routeParams = this.$route.params;
       if (routeParams) {
         if (routeParams.shareData) {
@@ -262,15 +264,19 @@
           this.$router.push({
             path: '/user/login'
           });
+        } else if (this.sendResult){
+          this.$router.back();
         } else {
           this.$refs.upload.removeUploadFile(this.uploadInfo.remove.item, this.uploadInfo.remove.index);
         }
-
       },
       cancel () {
-
+        if (this.sendResult){
+          this.$router.back();
+        }
       },
       send () {
+        this.sendResult = false;
         if (!this.sendFlag || !this.commentFormCont.trim() || !this.userGuid) {
           if (!this.userGuid) {
             this.currentConfirmsOperate = 1;
@@ -312,8 +318,9 @@
             } else {
               this.$emit('replayUpdate');
             }
-
-            this.$router.back();
+            this.sendResult = true;
+            this.confirmTxt = '发布成功!';
+            this.$refs.confirmsWrapper.show();
           }
         }).catch(error => {
           this.toptipTxt = error.message;

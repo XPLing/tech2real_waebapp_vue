@@ -63,24 +63,36 @@
             @include lh(35);
             @include fs(14);
             color: $color-gray-717;
-            i, em {
-              @extend %lineElem_middle;
+            >p{
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              em {
+                &.cont{
+                  flex: 1;
+                }
+                &.try{
+                  @include fs(10);
+                  color: $color-theme;
+                }
+              }
+              i {
+                text-indent: 1em;
+                &.type{
+                  margin-right: formatVal(10,rem);
+                }
+              }
             }
-            em {
-              max-width: 80%;
-              @extend %ellipsis;
-            }
-            i {
-              text-indent: 1em;
-              margin-right: 1em;
-            }
+
             .detail {
               display: flex;
               p{
-                line-height: 1.8em;
+                line-height: 2em;
               }
               .icon {
-                line-height: 1.3;
+                text-indent: 1em;
+                margin-right: formatVal(10,rem);
+                //line-height: 1.3;
               }
               .info {
                 @include fs(12);

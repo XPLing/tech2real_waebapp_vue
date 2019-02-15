@@ -1,0 +1,53 @@
+.g-club-list {
+  .c-media {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    .avatar {
+      margin-bottom: formatVal(10, rem);
+      @include w(60);
+      @include h(60);
+
+      img {
+        @include w(60);
+        @include h(60);
+        border-radius: 50%;
+      }
+    }
+    .desc {
+      padding-top: 0;
+      text-align: center;
+      .title {
+        color: $color-text-40;
+        @include fs(14);
+        @include lh(20);
+        margin-bottom: formatVal(10,rem);
+      }
+      .info {
+        max-width: 100%;
+        margin-top: 5px;
+        color: $color-gray-99;
+        &.career {
+          @include fs(14);
+
+        }
+      }
+      .btn{
+        margin: 0 auto;
+        @include w(48);
+        @include h(22);
+        @include lh(22);
+        @include fs(12);
+        color: $whiteColor;
+        background-color: $color-theme;
+        border: 1px solid $color-theme;
+        border-radius: 3px;
+        &.joined{
+          background-color: transparent;
+          color: $color-gray-B6B;
+          border: 1px solid $color-gray-B6B;
+        }
+      }
+    }
+  }
+}

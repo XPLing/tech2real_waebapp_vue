@@ -3,9 +3,9 @@
     <div class="operate">
       <div class="title">
         <span>对该课程的评价</span>
-        <p class="tools" @click="evaluate">编辑</p>
+        <!--<p class="tools" @click="evaluate">编辑</p>-->
       </div>
-      <div class="score">
+      <div class="score" @click="evaluate">
         <star :score="score/2" :size="36"></star>
       </div>
     </div>

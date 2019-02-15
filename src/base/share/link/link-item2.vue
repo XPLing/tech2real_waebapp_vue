@@ -1,5 +1,5 @@
 <template>
-  <div @click.stop="clickLink" class="c-share-link">
+  <div class="c-share-link">
     <img class="cover" v-lazy="{
           src: data.cover,
           error: lazy.error,

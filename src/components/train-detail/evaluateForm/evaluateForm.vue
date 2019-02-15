@@ -87,7 +87,7 @@
 
             },
             send() {
-                if (!this.sendFlag || !this.formCont.trim() || !this.userGuid || !this.userInfo) {
+                if (!this.sendFlag || !this.userGuid || !this.userInfo) {
                     if (!this.userGuid) {
                         this.$refs.confirmsWrapper.show();
                     }

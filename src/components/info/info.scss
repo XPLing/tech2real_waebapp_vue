@@ -82,7 +82,11 @@
         .list{
           /deep/ .c-info-list-item{
             &+.c-info-list-item{
-              border-top: formatVal(10,rem) solid $color-shadow-nav;
+              border-top: formatVal(1,rem) solid $color-shadow-nav;
+            }
+            &.chunk{
+              border-top: formatVal(13,rem) solid $color-shadow-nav;
+              border-bottom: formatVal(12,rem) solid $color-shadow-nav;
             }
           }
         }

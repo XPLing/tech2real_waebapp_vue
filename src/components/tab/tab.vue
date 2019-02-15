@@ -6,15 +6,15 @@
     </router-link>
     <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/train'}">
       <i class="icon c-icon-study"></i>
-      <span class="tab-link">培训</span>
+      <span class="tab-link">学习</span>
     </router-link>
     <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/community'}">
       <i class="icon c-icon-community"></i>
-      <span class="tab-link">社群</span>
+      <span class="tab-link">话题</span>
     </router-link>
     <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/activity'}">
       <i class="icon c-icon-find"></i>
-      <span class="tab-link">活动</span>
+      <span class="tab-link">发现</span>
     </router-link>
     <router-link tag="li" class="tab-item" :to="{path: routerPrefix + '/me'}">
       <i class="icon c-icon-me"></i>

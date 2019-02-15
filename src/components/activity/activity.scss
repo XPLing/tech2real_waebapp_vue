@@ -106,7 +106,7 @@ $color-green: #7ED321;
       &.cont{
         .cont-swiper /deep/ .c-info-list-item{
           &+.c-info-list-item{
-            border-top: formatVal(10,rem) solid $color-border-split;
+            border-top: formatVal(1,rem) solid $color-border-split;
           }
         }
       }

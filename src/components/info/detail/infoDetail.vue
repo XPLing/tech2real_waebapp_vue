@@ -16,7 +16,7 @@
             <download v-if="isShare" ref="downloadApp"></download>
             <article class="g-article-cont wechat-article" id="articleCont" data-top-flog="true"
                      v-if="articleInfo">
-              <div class="rich_media_inner" v-html="articleInfo.content" ref="articleCont"></div>
+              <div class="rich_media_inner" v-html="articleInfoContent" ref="articleCont"></div>
             </article>
             <div class="community">
               <div class="community-cont" v-if="clubInfo" @click="selectClub">
@@ -50,6 +50,9 @@
                 <info-item-left :info="item" v-for="(item, index) in recommendList" :key="index"
                                 @selectInfo="selectInfo"></info-item-left>
               </ul>
+            </div>
+            <div class="download-app">
+              <download ref="downloadApp"></download>
             </div>
             <back-top ref="backTop" @backTop="backTop"></back-top>
           </div>
@@ -145,6 +148,7 @@
         toptipTxt: '',
         pageTitle: '资讯详情',
         articleInfo: null,
+        articleInfoContent: null,
         probeType: 3,
         listenScroll: true,
         introImgs: [],
@@ -162,15 +166,15 @@
       };
     },
     created () {
-      this.likeFlag = true;
-      this.initData();
+//      this.likeFlag = true;
+//      this.initData();
     },
     activated () {
-//      if (!this.$route.meta.isBack || this.isFirstEnter) {
-//        this.initData();
-//      }
-//      this.$route.meta.isBack = false;
-//      this.isFirstEnter = false;
+      if (!this.$route.meta.isBack || this.isFirstEnter) {
+        this.initData();
+      }
+      this.$route.meta.isBack = false;
+      this.isFirstEnter = false;
     },
     computed: {
       loadingImgs () {
@@ -207,6 +211,8 @@
               return;
             }
             this.articleInfo = res.result;
+            this.articleInfoContent = this.articleInfo.content.replace(/(width|height|min-width|min-height|max-width|max-height)\s*?(:|=)\s*?\d+[^%]*?;/ig, '');
+
             this.pageTitle = res.result.listTitle;
             this.shareInfo = Object.assign({}, share, {
               url: window.location.href,
@@ -461,7 +467,7 @@
         var param = {
           product_guid: this.productGuid,
           page: 1,
-          page_size: 10,
+          page_size: 2,
           user_guid: this.userGuid
         };
         return listRecommendArticles(param);
@@ -530,7 +536,7 @@
     },
     watch: {
       scrollY (newVal) {
-        if (newVal < -100) {
+        if (newVal < -100 && this.$refs.scroll.directionY === -1) {
           if (!this.$refs.backTop.backTopShowFlag && this.$refs.scroll.directionY === -1) {
             this.$refs.backTop.showIcon();
           }

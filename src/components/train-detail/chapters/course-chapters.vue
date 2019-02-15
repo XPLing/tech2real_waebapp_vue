@@ -2,7 +2,8 @@
   <div class="g-course-chapters" :class="{'joined':this.appliedState===1}">
     <scroll :data="chapterData" ref="scroll">
       <div class="g-scroll-continer">
-        <div v-if="this.aggregationOpts && this.aggregationOpts.length > 0" class="g-package c-form-item" ref="package" @click.stop="showSelect">
+        <div v-if="this.aggregationOpts && this.aggregationOpts.length > 0" class="g-package c-form-item" ref="package"
+             @click.stop="showSelect">
           <p class="form-left">课程</p>
           <p class="form-body">{{currentPackage}}</p>
           <p class="form-right">
@@ -20,17 +21,41 @@
               <li class="course-item" v-for="chapter in chapters.chapters" :key="chapter.id">
                 <a href="javascript:void(0);" :data-url="chapter.videoUrl"
                    @click.stop="changeVideo(chapter,$event)">
-                  <p class="title"><i class="fa fa-caret-square-o-right"></i><em>{{chapter.title}}</em></p>
-                  <template v-if="chapter.type===4">
-                      <div class="detail">
-                        <p class="icon">
-                          <i class="c-icon-position"></i>
-                        </p>
+                  <p class="title">
+                    <i class="fa type"
+                       :class="{'c-icon-play': chapter.type===1 ||chapter.type===2, 'c-icon-word': chapter.type===3}"></i>
+                    <em class="cont">{{chapter.title}}</em>
+                    <i class="fa c-icon-course_lock_icon" v-if="!(appliedState == 1 || chapter.isFree)"></i>
+                    <em class="try" v-if="chapter.isFree">试看</em>
+                  </p>
+                  <template v-if="chapter.type===4 && (appliedState == 1 || chapter.isFree)">
+                    <div class="detail">
+                      <p class="icon"
+                         v-if="(chapter.type==4&&( chapter.infoFlag.startTimeFlag|| chapter.infoFlag.endTimeFlag|| chapter.infoFlag.addressFlag))||chapter.type!=4">
+                        <i class="c-icon-position"></i>
+                      </p>
+                      <template v-if="chapter.type==4">
                         <div class="info">
-                          <p v-if="chapter.startTime" class="time">开始时间：{{chapter.startTime}}</p>
-                          <p v-if="chapter.province" class="address">地址：{{chapter.province+chapter.city+chapter.district}}</p>
+                          <p v-if="chapter.startTime && chapter.infoFlag.startTimeFlag" class="time">
+                            开始时间：{{chapter.startTime | formatDate('yyyy-MM-dd')}}</p>
+                          <p v-if="chapter.endTime && chapter.infoFlag.endTimeFlag" class="time">
+                            结束时间：{{chapter.endTime | formatDate('yyyy-MM-dd')}}</p>
+                          <p v-if="chapter.province && chapter.infoFlag.addressFlag" class="address">
+                            地址：{{chapter.province + chapter.city + chapter.district}}</p>
                         </div>
-                      </div>
+                      </template>
+                      <template v-else>
+                        <div class="info">
+                          <p v-if="chapter.startTime" class="time">
+                            开始时间：{{chapter.startTime | formatDate('yyyy-MM-dd')}}</p>
+                          <p v-if="chapter.endTime" class="time">
+                            结束时间：{{chapter.endTime | formatDate('yyyy-MM-dd')}}</p>
+                          <p v-if="chapter.province" class="address">
+                            地址：{{chapter.province + chapter.city + chapter.district}}</p>
+                        </div>
+                      </template>
+
+                    </div>
                   </template>
                 </a>
               </li>
@@ -57,6 +82,10 @@
   import Select from 'base/select/select';
   import communication from 'assets/js/communication';
 
+  /**
+   * chapterData.type
+   * 章节类型  1:视频，  2:点播， 3:教材， 4:线下授课
+   */
   export default {
     props: {
       chapterData: {
@@ -84,7 +113,7 @@
       };
     },
     created () {
-      this.aggregation = this.$route.query.type === "aggregation";
+      this.aggregation = this.$route.query.type === 'aggregation';
       if (this.aggregationOpts && this.aggregationOpts.length > 0) {
         this.currentPackage = this.aggregationOpts[this.currentSelect].title;
       }

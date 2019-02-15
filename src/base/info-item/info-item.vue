@@ -1,5 +1,5 @@
 <template>
-  <li class="c-info-list-item" @click.stop="selectItem(initInfo)">
+  <li class="c-info-list-item" :class="{'chunk':(type===1 && showSpecial && initInfo.isRecommend==='Y') || (showSpecial && initInfo.infoType===2)}" @click.stop="selectItem(initInfo)">
     <template v-if="initInfo">
       <template v-if="type===1">
         <div class="wrapper recommend" v-if="showSpecial && initInfo.isRecommend==='Y'">
@@ -27,7 +27,7 @@
             <p class="title">{{initInfo.listTitle | ellipsis(28)}}</p>
             <p class="info">
               <span>{{ initInfo.source }}</span>
-              <span>{{ new Date(initInfo.createdTime) | formatDate('yyyy-MM-dd')}}</span>
+              <span>{{ initInfo.createdTime.split(' ')[0]}}</span>
             </p>
           </div>
           <div class="media-right">
@@ -42,15 +42,10 @@
       <template v-else>
         <div class="wrapper club" v-if="showSpecial && initInfo.infoType===2">
           <div class="titlebox green">
-            <p class="icon left"><span class="small"></span><span class="big"></span></p>
             <p class="title">社群推荐</p>
-            <p class="icon right"><span class="big"></span><span class="small"></span></p>
-            <a class="more" @click.stop="toClubs">更多社群</a>
+            <a class="more" @click.stop="toClubs">更多<i class="arrow"></i></a>
           </div>
-          <ul class="club-list">
-            <clubs-item v-for="(citem, index) in initInfo" :key="index" :club="citem"
-                        @selectClub="selectClub"></clubs-item>
-          </ul>
+          <clubs-list-horizontal :clubList="initInfo" @selectClub="selectClub"></clubs-list-horizontal>
         </div>
         <div class="wrapper c-media" v-else>
           <div class="media-body">
@@ -75,6 +70,7 @@
 
 <script type="text/ecmascript-6">
   import ClubsItem from 'base/clubs-item/clubs-item';
+  import ClubsListHorizontal from 'base/clubs-list-horizontal/clubs-list-horizontal';
 
   export default {
     // type: 1.listNewsArticlesByCategory 2.listNewsArticlesByCategory
@@ -139,7 +135,8 @@
       }
     },
     components: {
-      ClubsItem
+      ClubsItem,
+      ClubsListHorizontal
     }
   };
 </script>

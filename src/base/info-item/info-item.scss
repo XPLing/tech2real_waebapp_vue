@@ -50,10 +50,10 @@
       }
     }
     &.club{
+      margin: formatVal(12,rem) 0;
       .titlebox{
         position: relative;
         display: flex;
-        justify-content: center;
         align-items: center;
         margin-bottom: formatVal(15,rem);
         &.red{
@@ -88,16 +88,20 @@
           }
         }
         .title{
-          @include fs(16);
-          margin: 0 formatVal(10,rem);
-          color: $color-text-tip-b9a;
+          @include fs(24);
+          color: $color-text-2B3;
         }
         .more{
           position: absolute;
           top: formatVal(4,rem);
           right: 0;
           @include fs(12);
-          color: $color-text-tip-ac;
+          color: $color-gray-717;
+          .fa{
+            @include fs(14);
+            color: $color-theme;
+            margin-left: formatVal(7,rem);
+          }
         }
       }
     }

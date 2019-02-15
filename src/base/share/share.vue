@@ -85,6 +85,9 @@
         var browser = util.common.getbrowserType();
         var isWechat = /^1.*/.test(browser);
         switch (data) {
+          case -1:
+            isOpen = false;
+            break;
           case 'weixin':
           case 'friends':
             if (isWechat) {

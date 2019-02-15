@@ -3,7 +3,7 @@
     <i v-if="hasBack" class="fa fa-angle-left left" @click="back" aria-hidden="true"></i>
     <span class="title">{{title}}</span>
     <i v-if="hasSearch" class="fa c-icon-search right" aria-hidden="true"></i>
-    <i v-if="hasShare" class="fa c-icon-share right" aria-hidden="true" @click="share"></i>
+    <i v-if="hasShare" class="fa c-icon-share_top right" aria-hidden="true" @click="share"></i>
     <i v-if="hasOperate" class="operate right" @click="operateHandle">{{operateStr}}</i>
   </div>
 </template>

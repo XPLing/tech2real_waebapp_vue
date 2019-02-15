@@ -107,10 +107,10 @@
         tagList: [
           {
             name: '文章'
-          },
-          {
-            name: '话题'
           }
+//          {
+//            name: '动态'
+//          }
         ],
         tagCurrentIndex: 0,
         requestMoreFlag: [false, false],

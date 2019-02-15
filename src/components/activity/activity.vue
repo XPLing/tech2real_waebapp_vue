@@ -6,7 +6,7 @@
     <div class="g-main">
       <scroll ref="scroll" :data="bannerInfo">
         <div>
-          <div class="g-banner" v-if="bannerInfo">
+          <div class="g-banner" v-if="bannerInfo" @click="selectInfo(bannerInfo)">
             <p class="cover"><img :src="bannerInfo.pictureUrl"></p>
             <div class="detail">
               <p class="title">{{bannerInfo.name}}</p>
@@ -108,7 +108,7 @@
         toptipTxt: '',
         pageTitle: '活动',
         swiperOPts_activity: {
-          loop: true,
+          loop: false,
           autoplay: {
             delay: 5000,
             stopOnLastSlide: false,
@@ -120,7 +120,7 @@
           }
         },
         swiperOPts_ad: {
-          loop: true,
+          loop: false,
           autoplay: {
             delay: 5000,
             stopOnLastSlide: false,
@@ -133,7 +133,7 @@
         },
         swiperOPts_cont: {
           slidesPerView: 1,
-          loop: true,
+          loop: false,
           spaceBetween: 10,
           autoplay: {
             delay: 5000,

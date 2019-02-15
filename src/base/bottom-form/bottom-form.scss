@@ -11,16 +11,29 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    .mask{
+      flex: 1;
+    }
+
     .cont{
+      position: relative;
       //padding: formatVal(10,rem);
       background-color: $whiteColor;
       textarea{
-        padding: formatVal(10,rem);
+        padding: formatVal(10,rem) formatVal(10,rem) formatVal(30,rem);
         width: 100%;
         @include h(200);
         border: none;
         resize: none;
         font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
+      }
+      .limit{
+        bottom: 0;
+        right: 0;
+        padding: formatVal(10,rem);
+        text-align: right;
+        position: absolute;
+        color: $color-gray-99;
       }
     }
     .control-btn{

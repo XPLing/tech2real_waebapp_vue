@@ -690,6 +690,12 @@ Router.beforeEach((to, form, next) => {
   //     next();
   //   }
   // }
+  var u = navigator.userAgent, app = navigator.appVersion,
+    isWx = u.toLowerCase().match(/MicroMessenger/i) == 'micromessenger',
+    isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+  if (isIOS && isWx && '/m-web' + to.path !== window.location.pathname) {
+    window.location.assign('/m-web' + to.fullPath);
+  }
   next();
 });
 
