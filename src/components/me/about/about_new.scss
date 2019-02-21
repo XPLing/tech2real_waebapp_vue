@@ -5,7 +5,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: $whiteColor;
+  background-color: $color-gray-F6;
   .g-main {
     position: fixed;
     z-index: 2;
@@ -13,61 +13,23 @@
     right: 0;
     top: formatVal(40, rem);
     bottom: 0;
-    padding: formatVal(30,rem) formatVal(15,rem);
     .logo {
-      //@include h(200);
-      //height: 100%;
+      @include h(200);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      //background-color: $whiteColor;
+      background-color: $whiteColor;
       margin-bottom: formatVal(10,rem);
-      text-align: center;
-      color: $color-text-2B3;
-      line-height: 1.8;
-      .chunk-item{
-        &.introbox{
-          .avatar {
-            @include w(72);
-            @include h(72);
-            margin-bottom: formatVal(10, rem);
-          }
-          .version{
-            @include fs(16);
-          }
-          .subtitle,.intro{
-            @include fs(12);
-            color: $color-gray-B6B;
-          }
-          .intro{
-            margin-top: formatVal(20,rem);
-          }
-        }
-        &.cooperationbox{
-          margin-top: formatVal(40,rem);
-            .item{
-              &+.item{
-                margin-top: formatVal(15,rem);
-              }
-              .email{
-                @include fs(12);
-                color: $color-gray-B6B;
-              }
-            }
-        }
-        &.copyrightbox{
-          margin-top: formatVal(40,rem);
-          @include fs(12);
-          color: $color-gray-717;
-          .link{
-            display: block;
-            margin-bottom: formatVal(10,rem);
-            color: $color-text-link;
-          }
-        }
+      .avatar {
+        @include w(72);
+        @include h(72);
+        margin-bottom: formatVal(10, rem);
       }
-
+      .version{
+        @include fs(16);
+        color: $color-theme;
+      }
     }
     .base-info{
       margin-bottom: formatVal(10,rem);
