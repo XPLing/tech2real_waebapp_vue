@@ -56,7 +56,7 @@
     },
     methods: {
       confirm () {
-        this.$router.push({
+        this.$router.replace({
           path: '/user/login'
         });
       },

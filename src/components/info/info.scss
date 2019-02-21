@@ -20,7 +20,7 @@
       img{
         display: block;
         width: 100%;
-        height: formatVal(200,rem);
+        height: formatVal(260,rem);
       }
     }
   }
@@ -60,7 +60,7 @@
   .bg-layer{
     position: fixed;
     height: 100%;
-    top: formatVal(284,rem);
+    top: formatVal(344,rem);
     left: 0;
     right: 0;
     bottom: formatVal(50,rem);
@@ -70,7 +70,7 @@
   .g-main{
     position: fixed;
     z-index: 99;
-    top: formatVal(284,rem);
+    top: formatVal(344,rem);
     left: 0;
     right: 0;
     bottom: formatVal(50,rem);

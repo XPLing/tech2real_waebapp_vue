@@ -261,7 +261,7 @@
       },
       confirm () {
         if (this.currentConfirmsOperate === 1) {
-          this.$router.push({
+          this.$router.replace({
             path: '/user/login'
           });
         } else if (this.sendResult){

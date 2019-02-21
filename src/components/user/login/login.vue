@@ -88,6 +88,7 @@
         var toPath = to.fullPath;
         var fromPath = from.fullPath;
         var isUser = false;
+
         for (var i = 0, len = from.matched.length; i < len; i++) {
           var item = from.matched[i];
           var name = item.name;
@@ -203,7 +204,7 @@
           if (res.code == ERR_OK) {
             this.changeSubmitBtn(false, '登录');
             this.signIn(res.result);
-            this.$router.push({
+            this.$router.replace({
               path: this.beforeLoginPage
             });
           } else {
@@ -231,7 +232,10 @@
       },
       ...mapActions([
         'signIn'
-      ])
+      ]),
+      ...mapMutations({
+          updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
+      })
     },
     components: {
       FormTipError

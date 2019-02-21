@@ -75,7 +75,7 @@
 
   const NAV_HEIGHT = util.common.calculateWH(40);
   const TAG_HEIGHT = util.common.calculateWH(44);
-  const BANNER_HEIGHT = util.common.calculateWH(200);
+  const BANNER_HEIGHT = util.common.calculateWH(260);
   const transform = util.common.cssPrefix('transform');
 
   export default {

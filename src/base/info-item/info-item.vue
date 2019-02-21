@@ -15,7 +15,7 @@
           <div class="info">
             <p class="left">
               <span class="source">{{ initInfo.source }}</span>
-              <span class="time">{{ new Date(initInfo.createdTime) | formatDate('yyyy-MM-dd')}}</span>
+              <span class="time">{{ initInfo.createdTime.split(' ')[0]}}</span>
             </p>
             <p class="right">
               <span class="flag org">推荐</span>

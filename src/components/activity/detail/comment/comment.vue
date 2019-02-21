@@ -24,7 +24,7 @@
       <keep-alive :include="keepAliveList">
         <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" @commentUpdate="update"></router-view>
       </keep-alive>
-      <router-link :to="`/activity/detail/${this.$route.params.id}/commentlist/commentform`" class="add-comment">
+      <router-link :to="`/activity/detail/${this.$route.params.id}/commentlist/commentform?title=${this.$route.query.title}`" class="add-comment">
         <i class="icon c-icon-pencil"></i>
       </router-link>
       <top-tip ref="toptip" :delay="10000">
