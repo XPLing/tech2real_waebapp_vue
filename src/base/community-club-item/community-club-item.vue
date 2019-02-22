@@ -9,13 +9,13 @@
     <div class="cont" @click.stop="selectItem(community)">
       <community-cont :data="community"></community-cont>
     </div>
-    <div class="club" @click.stop="selectClub">
-      <p class="info">
-        <img :src="community.club.logoUrl">
-        <span class="name">{{community.club.name}}</span>
-      </p>
-      <i class="icon c-icon-angle-right"></i>
-    </div>
+    <!--<div class="club" @click.stop="selectClub">-->
+      <!--<p class="info">-->
+        <!--<img :src="community.club.logoUrl">-->
+        <!--<span class="name">{{community.club.name}}</span>-->
+      <!--</p>-->
+      <!--<i class="icon c-icon-angle-right"></i>-->
+    <!--</div>-->
     <div class="operate">
       <p class="time">
         <span>

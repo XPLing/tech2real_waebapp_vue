@@ -13,7 +13,7 @@
             <div class="swiper-pagination swiper-pagination-banner" slot="pagination"></div>
           </swiper>
         </div>
-        <div class="chunk g-tagList">
+        <div class="chunk g-tagList" v-if="tagList">
           <ul class="list">
             <li class="item" v-for="(item, index) in tagList" :key="index">
               <router-link :to="{path: `/train/all/tagdetail/${item.id}`}">
@@ -35,9 +35,9 @@
         </div>
         <div class="chunk g-recommend teachers">
           <div class="titlebox">
-            <p class="title">名师推荐</p>
-            <router-link class="more" :to="{path: '/train/all/teacherlist'}">更多 <i
-              class="icon c-icon-angle-right"></i></router-link>
+            <p class="title">导师推荐</p>
+            <!--<router-link class="more" :to="{path: '/train/all/teacherlist'}">更多 <i-->
+              <!--class="icon c-icon-angle-right"></i></router-link>-->
           </div>
           <div class="list">
             <swiper :options="swiperOPtsCourse" class="g-swiper">
@@ -53,18 +53,6 @@
             </swiper>
           </div>
         </div>
-        <div class="chunk g-recommend course aggregation">
-          <div class="titlebox">
-            <p class="title">合辑推荐</p>
-            <!--<router-link class="more" :to="{path: '/train/all/courselist', query:{type: 'aggregation'}}">更多-->
-              <!--<i class="icon c-icon-angle-right"></i></router-link>-->
-          </div>
-          <ul class="list">
-            <course-item :course="item" v-for="(item, index) in courseAggregationList" :key="index"
-                         @selectcourse="selectCourseAggregation"></course-item>
-          </ul>
-          <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
-        </div>
         <div class="chunk g-recommend course">
           <div class="titlebox">
             <p class="title">课程推荐</p>
@@ -74,6 +62,18 @@
           <ul class="list">
             <course-item :course="item" v-for="(item, index) in courseList" :key="index"
                          @selectcourse="selectcourse"></course-item>
+          </ul>
+          <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
+        </div>
+        <div class="chunk g-recommend course aggregation">
+          <div class="titlebox">
+            <p class="title">课程合辑</p>
+            <!--<router-link class="more" :to="{path: '/train/all/courselist', query:{type: 'aggregation'}}">更多-->
+            <!--<i class="icon c-icon-angle-right"></i></router-link>-->
+          </div>
+          <ul class="list">
+            <course-item :course="item" v-for="(item, index) in courseAggregationList" :key="index"
+                         @selectcourse="selectCourseAggregation"></course-item>
           </ul>
           <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
         </div>
@@ -204,17 +204,18 @@
           this.toptipTxt = erro.message;
           this.$refs.toptip.show();
         });
-        this._getTrainHomeContainer().then((res) => {
-          if (res.code) {
-            if (res.code != ERR_OK) {
-              return Promise.reject(res);
-            }
-            this.tagList = res.result.tagList;
-          }
-        }).catch(erro => {
-          this.toptipTxt = erro.message;
-          this.$refs.toptip.show();
-        });
+        // 请求分类
+//        this._getTrainHomeContainer().then((res) => {
+//          if (res.code) {
+//            if (res.code != ERR_OK) {
+//              return Promise.reject(res);
+//            }
+//            this.tagList = res.result.tagList;
+//          }
+//        }).catch(erro => {
+//          this.toptipTxt = erro.message;
+//          this.$refs.toptip.show();
+//        });
         this._listRecommendTeachers().then((res) => {
           if (res.code) {
             if (res.code != ERR_OK) {

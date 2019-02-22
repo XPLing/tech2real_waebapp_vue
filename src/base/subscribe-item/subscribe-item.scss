@@ -61,8 +61,9 @@
       flex: 1;
       flex-flow: column;
       justify-content: space-between;
-      >.title{
-
+      >.name{
+        word-break: break-all;
+        line-height: 1.5em;
       }
       .info{
         display: flex;

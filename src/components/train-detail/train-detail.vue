@@ -79,7 +79,8 @@
     listChaptersByCourseId,
     listCourseValidityPeriodByCourseId,
     applyCourse,
-    getUnpaidCourseApply
+    getUnpaidCourseApply,
+    readChapter
   } from 'api/courseDetail';
   import { getCoursePackageById, listValidityPeriodByPackageId, applyCoursePackage } from 'api/coursePackage';
   import { ERR_OK } from 'api/config';
@@ -154,13 +155,17 @@
         courseOriginalPrice: '0.00',
         // 底部按钮激活状态
         joinOff: false,
-        aggregationOpts: null
+        aggregationOpts: null,
+        customConfirm: false,
+        customConfirmTxt: ''
       };
     },
     computed: {
       confirmTxt () {
         if (!this.userGuid) {
           return APPLYTIP.LOGINTIP;
+        } else if (this.customConfirm) {
+          return this.customConfirmTxt;
         } else {
           for (var key in COURSESTATECONFIG) {
             if (this.courseStateStr == COURSESTATECONFIG[key]) {
@@ -333,10 +338,33 @@
       changeVideo (data) {
         var vurl = data.videoUrl, type = data.type, furl = data.fileUrl;
 
-        if (this.appliedState != 1 && !data.isFree) {
-          this.operate();
-          return;
+        if (this.appliedState === 1) {
+          if (!this.courseData.canWatch) {
+            this.customConfirm = true;
+            this.customConfirmTxt = `本课程开放时间为${this.courseData.courseApplyValidityPeriod.discription}`;
+            this.$refs.confirmsWrapper.show();
+            return;
+          }
+          if (!data.read) {
+            data.read = true;
+            this._readChapter({chapterId: data.id, courseId: data.courseId}).then((res) => {
+              if (res.code) {
+                if (res.code != ERR_OK) {
+                  return Promise.reject(res);
+                }
+              }
+            }).catch(erro => {
+              this.toptipTxt = erro.message;
+              this.$refs.toptip.show();
+            });
+          }
+        } else {
+          if (!data.isFree) {
+            this.operate();
+            return;
+          }
         }
+
         if (type === 4) {
           // 线下课程
           return;
@@ -419,6 +447,9 @@
 
       },
       confirm () {
+        if (this.customConfirm) {
+          this.customConfirm = false;
+        }
         if (!this.userGuid) {
           this.updataBeforeLoginPage(this.$route.fullPath);
           this.$router.push({
@@ -467,10 +498,8 @@
         }
       },
       cancel () {
-        if (this.confirmTxt === JOINTIP) {
-          console.log(JOINTIP);
-        } else {
-          console.log(LOGINTIP);
+        if (this.customConfirm) {
+          this.customConfirm = false;
         }
       },
       selectAggregation (data) {
@@ -607,6 +636,17 @@
           params.stype = 2;
         }
         return getCourseById(params);
+      },
+      _readChapter (data) {
+        let params = {
+          chapterId: data.chapterId,
+          courseId: data.courseId,
+          userGuid: this.userGuid
+        };
+        if (this.aggregation) {
+          params.stype = 2;
+        }
+        return readChapter(params);
       },
       _listChaptersByCourseId (id) {
         let params = {

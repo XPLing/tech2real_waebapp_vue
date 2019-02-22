@@ -641,8 +641,6 @@ const Router = new VueRouter({
                     path: 'login',
                     component: Login,
                     beforeEnter: (to, from, next) => {
-                        console.log('zya!!!!');
-                        console.log(Router.app.$options.store);
                         var store = Router.app.$options.store, toPath = to.fullPath;
                         var fromPath = from.fullPath;
                         var isUser = false;

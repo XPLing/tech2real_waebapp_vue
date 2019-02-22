@@ -144,6 +144,23 @@ export function addEvaluate (params) {
   });
 }
 
+export function readChapter (params) {
+  var url = debug ? '/api/readChapter' : `/readChapter`;
+  const data = Object.assign({}, commonParams, params);
+  return axios({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: JSON.stringify(data)
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }, (err) => {
+    return Promise.reject(err);
+  });
+}
+
 export function listCourseValidityPeriodByCourseId (params) {
   var url = debug ? '/api/listCourseValidityPeriodByCourseId' : `/listCourseValidityPeriodByCourseId`;
   const data = Object.assign({}, commonParams, params);

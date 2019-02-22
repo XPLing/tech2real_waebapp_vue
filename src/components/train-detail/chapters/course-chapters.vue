@@ -18,17 +18,17 @@
               <i class="fa collapsible up"></i>
             </div>
             <ul class="course-list">
-              <li class="course-item" v-for="chapter in chapters.chapters" :key="chapter.id">
+              <li class="course-item" v-for="chapter in chapters.chapters" :class="{'current': currentChapterId === chapter.id}" :key="chapter.id">
                 <a href="javascript:void(0);" :data-url="chapter.videoUrl"
                    @click.stop="changeVideo(chapter,$event)">
-                  <p class="title">
+                  <p class="title" :class="{'readed': chapter.read}">
                     <i class="fa type"
                        :class="{'c-icon-play': chapter.type===1 ||chapter.type===2, 'c-icon-word': chapter.type===3}"></i>
                     <em class="cont">{{chapter.title}}</em>
-                    <i class="fa c-icon-course_lock_icon" v-if="!(appliedState == 1 || chapter.isFree)"></i>
+                    <i class="fa c-icon-course_lock_icon" v-if="!((appliedState == 1 && courseData.canWatch) || chapter.isFree)"></i>
                     <em class="try" v-if="chapter.isFree">试看</em>
                   </p>
-                  <template v-if="chapter.type===4 && (appliedState == 1 || chapter.isFree)">
+                  <template v-if="chapter.type===4 && ((appliedState == 1 && courseData.canWatch) || chapter.isFree)">
                     <div class="detail">
                       <p class="icon"
                          v-if="(chapter.type==4&&( chapter.infoFlag.startTimeFlag|| chapter.infoFlag.endTimeFlag|| chapter.infoFlag.addressFlag))||chapter.type!=4">
@@ -54,7 +54,6 @@
                             地址：{{chapter.province + chapter.city + chapter.district}}</p>
                         </div>
                       </template>
-
                     </div>
                   </template>
                 </a>
@@ -92,6 +91,10 @@
         type: [Object, Array],
         default: null
       },
+      courseData: {
+        type: Object,
+        default: null
+      },
       appliedState: {
         type: Number,
         default: 0
@@ -109,7 +112,8 @@
         currentSelect: 0,
         chapters: [],
         currentPackage: '',
-        aggregation: null
+        aggregation: null,
+        currentChapterId: -1
       };
     },
     created () {
@@ -175,6 +179,7 @@
         chapters.isCollapsed = !chapters.isCollapsed;
       },
       changeVideo (chapter) {
+        this.currentChapterId = chapter.id;
         this.$emit('changevideo', chapter);
       }
     },

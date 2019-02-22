@@ -54,12 +54,12 @@
       percentage () {
         var percentage = 0;
         if (this.data) {
-          if (this.data.courseRecord) {
-            if (this.data.courseRecord.isComplete) {
+          if (this.data.course.courseRecord) {
+            if (this.data.course.courseRecord.isComplete) {
               percentage = 100;
             } else {
-              var hadRead = this.data.courseRecord.chapterIds.split(',').length;
-              percentage = (hadRead / Number(this.data.courseRecord.chapterCount)) * 100;
+              var hadRead = this.data.course.courseRecord.chapterIds.split(',').length;
+              percentage = (hadRead / Number(this.data.course.courseRecord.chapterCount)) * 100;
             }
           }
         }

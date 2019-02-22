@@ -56,6 +56,10 @@
       .course-list {
         display: none;
         .course-item {
+          padding: formatVal(15,rem) 0;
+          &.current{
+            background-color: $color-background-theme;
+          }
           a {
             display: block;
             padding: 0 formatVal(15, rem);
@@ -66,8 +70,9 @@
             >p{
               display: flex;
               justify-content: space-between;
-              align-items: center;
+              align-items: flex-start;
               em {
+                @include lh(20);
                 &.cont{
                   flex: 1;
                 }
@@ -77,18 +82,20 @@
                 }
               }
               i {
-                text-indent: 1em;
+                @include lh(20);
+                text-indent: .5em;
                 &.type{
-                  margin-right: formatVal(10,rem);
+                  margin-right: formatVal(15,rem);
                 }
               }
-            }
-
-            .detail {
-              display: flex;
-              p{
-                line-height: 2em;
+              &.readed{
+                color: $color-theme;
               }
+            }
+            .detail {
+              padding: formatVal(15,rem) formatVal(10,rem) 0;
+              display: flex;
+              @include lh(20);
               .icon {
                 text-indent: 1em;
                 margin-right: formatVal(10,rem);

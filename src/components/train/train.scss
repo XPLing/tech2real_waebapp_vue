@@ -15,7 +15,7 @@ $color-green: #7ED321;
     line-height: 0;
     bottom: formatVal(20,rem);
   }
-  .chunk{
+  .chunk.g-recommend{
     &+.chunk{
       margin-top: formatVal(10,rem);
     }
