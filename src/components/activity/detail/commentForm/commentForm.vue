@@ -51,19 +51,27 @@
       ])
     },
     created () {
+      this.sendFlag = false;
     },
     mounted () {
     },
     methods: {
       confirm () {
-        this.$router.replace({
-          path: '/user/login'
-        });
+        if (!this.userGuid) {
+          this.$router.replace({
+            path: '/user/login'
+          });
+        } else if (this.sendResult) {
+          this.$router.back();
+        }
       },
       cancel () {
-
+        if (this.sendResult) {
+          this.$router.back();
+        }
       },
       send () {
+        this.sendFlag = false;
         if (!this.sendFlag || !this.commentFormCont.trim() || !this.userGuid || !this.userInfo || !this.userInfo.mobile) {
           if (!this.userGuid) {
             this.$refs.confirmsWrapper.show();
@@ -88,7 +96,9 @@
               this.$emit('replyUpdate');
             }
 
-            this.$router.back();
+            this.sendResult = true;
+            this.confirmTxt = '发布成功!';
+            this.$refs.confirmsWrapper.show();
           }
         }).catch(erro => {
           this.toptipTxt = erro.message;

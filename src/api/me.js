@@ -7,6 +7,19 @@ import axios from './axios';
 
 const debug = process.env.NODE_ENV !== 'production';
 
+export function checkUnreadNotify (params) {
+  var url = debug ? '/api/checkUnreadNotify' : `/checkUnreadNotify`;
+  const data = Object.assign({}, {}, params);
+  return axios({
+    url: url,
+    method: 'post',
+    data: data
+  }).then((res) => {
+    return Promise.resolve(res.data);
+  }).catch((err) => {
+    return Promise.reject(err);
+  });
+}
 export function getUserInfoByGuid (params) {
   var url = debug ? '/api/getUserInfoByGuid' : `/getUserInfoByGuid`;
   const data = Object.assign({}, {}, params);

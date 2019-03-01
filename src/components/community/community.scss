@@ -1,4 +1,5 @@
 .g-community {
+
   &.slide-enter-active, &.slide-leave-active {
     transition: all .3s;
   }
@@ -15,6 +16,7 @@
     .community-list{
       >.item{
         padding: formatVal(10,rem);
+        background-color: $whiteColor;
         &+.item{
           border-top: formatVal(10,rem) solid $color-gray-F6;
         }

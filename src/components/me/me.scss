@@ -4,70 +4,85 @@
   left: 0;
   right: 0;
   top: 0;
-  bottom: formatVal(50,rem);
+  bottom: formatVal(50, rem);
   background: $color-shadow-nav;
-  /deep/ .c-share{
-    bottom: formatVal(50,rem);
+  /deep/ .c-share {
+    bottom: formatVal(50, rem);
   }
   .g-header {
     display: flex;
     justify-content: flex-end;
-    padding: formatVal(10,rem) formatVal(10,rem) 0 formatVal(10,rem);
+    padding: formatVal(10, rem) formatVal(10, rem) 0 formatVal(10, rem);
     background-color: $whiteColor;
     .icon {
+      position: relative;
       @include fs(26);
+      &.new-msg {
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          z-index: 2;
+          top: -5px;
+          right: -5px;
+          width: 8px;
+          height: 8px;
+          background-color: $color-auxiliary-red;
+          border-radius: 50%;
+        }
+      }
     }
   }
   .g-main {
-    >div{
-      padding: 0 formatVal(20,rem);
+    > div {
+      padding: 0 formatVal(20, rem);
       background-color: $whiteColor;
-      border-bottom: formatVal(10,rem) solid $color-shadow-nav;
+      border-bottom: formatVal(10, rem) solid $color-shadow-nav;
     }
     .info-base {
-      padding: formatVal(15,rem) formatVal(20,rem);
+      padding: formatVal(15, rem) formatVal(20, rem);
       display: flex;
       align-items: center;
-      img{
+      img {
         @include w(60);
         @include h(60);
         border-radius: 50%;
-        margin-right: formatVal(10,rem);
+        margin-right: formatVal(10, rem);
       }
-      .info{
+      .info {
         @include fs(24);
         color: $color-text-211;
       }
     }
     .info-my {
-      .list{
-        .item{
+      .list {
+        .item {
           display: flex;
           align-items: center;
-          &+.item{
-            .desc{
+          & + .item {
+            .desc {
               border-top: 1px solid $color-shadow-nav;
             }
           }
-          .icon-wrapper{
+          .icon-wrapper {
             font-size: 0;
-            margin-right: formatVal(10,rem);
-            /deep/ span{
+            margin-right: formatVal(10, rem);
+            /deep/ span {
               @include fs(20);
             }
           }
-          .desc{
+          .desc {
             flex: 1;
-            padding: formatVal(15,rem) 0;
+            padding: formatVal(15, rem) 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            .name{
+            .name {
               flex: 1;
               color: $color-text-211;
               @include fs(16);
             }
-            .icon{
+            .icon {
               @include fs(20);
               color: $color-gray-99;
             }

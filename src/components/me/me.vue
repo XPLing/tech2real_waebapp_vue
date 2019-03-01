@@ -3,7 +3,8 @@
     <scroll ref="scroll" :data="userInfo">
       <div>
         <header class="g-header">
-          <router-link :to="{path:'message', append: true}" tag="i" class="icon c-icon-message"></router-link>
+          <router-link :to="{path:'message', append: true}" tag="i" class="icon c-icon-message"
+                       :class="{'new-msg':hasNewMsg}"></router-link>
         </header>
         <section class="g-main">
           <div class="info-base">
@@ -46,7 +47,7 @@
     </top-tip>
     <share :no-self="true" @cancel="cancelShare" @share="share" ref="share"></share>
     <confirm ref="confirmsWrapper" :text="confirmTxt" @confirm="confirm"></confirm>
-    <keep-alive >
+    <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
@@ -62,7 +63,7 @@
   import * as util from 'assets/js/util';
   import { mapGetters, mapMutations, mapActions } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
-  import { getUserInfoByGuid } from 'api/me';
+  import { getUserInfoByGuid, checkUnreadNotify } from 'api/me';
   import Loading from 'base/loading/loading';
   import NoResult from 'base/no-result/no-result';
   import Confirm from 'base/confirm/confirm';
@@ -73,6 +74,7 @@
     name: 'KA_rootMe',
     data () {
       return {
+        hasNewMsg: false,
         toptipTxt: '',
         pageTitle: '我的',
         isRouterAlive: true,
@@ -169,6 +171,7 @@
     created () {
       if (this.userGuid) {
         this.getInfo();
+        this.upDateUnreadNotify();
         if (/^1.*/.test(util.common.getbrowserType())) {
 //          wx.config({
 //            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -242,6 +245,21 @@
           this.$refs.toptip.show();
         });
       },
+      upDateUnreadNotify () {
+        return this._checkUnreadNotify().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return false;
+            }
+            this.hasNewMsg = res.result ? res.result : false;
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
+        });
+      },
       _getUserInfoByGuid () {
         let params = {
           user_guid: this.userGuid,
@@ -249,11 +267,25 @@
         };
         return getUserInfoByGuid(params);
       },
+      _checkUnreadNotify () {
+        let params = {
+          userGuid: this.userGuid,
+          productGuid: this.productGuid
+        };
+        return checkUnreadNotify(params);
+      },
       ...mapActions([
         'updateUserInfo'
       ])
     },
-    watch: {},
+    watch: {
+      $route: function (route) {
+        if (route.name === 'rootMe') {
+          this.upDateUnreadNotify();
+        }
+
+      }
+    },
     components: {
       HeaderTitle,
       swiper,

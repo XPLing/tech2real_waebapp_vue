@@ -368,12 +368,12 @@
               path: `/train/all/${params.id}`
             });
             break;
-          case 4:
+          case 5:
             this.$router.push({
               path: `/train/all/teacherdetail/${params.id}`
             });
             break;
-          case 5:
+          case 4:
             window.open(params.url);
             break;
         }

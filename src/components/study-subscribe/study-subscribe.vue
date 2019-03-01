@@ -4,11 +4,17 @@
             @pullingUp="requestScrollData">
       <div>
         <div class="g-recommend course">
-          <ul class="list" v-if="requestScrollDataList">
-            <subscribe-item :data="item" v-for="(item, index) in requestScrollDataList" :key="index"
-                            @selectItem="selectItem" @details="courseDetails"></subscribe-item>
-          </ul>
-          <p v-show="requestMoreFlag || noMore" class="request-result">{{noMore ? noMoreStr : noResult}}</p>
+          <template v-if="requestScrollDataList">
+            <ul class="list">
+              <subscribe-item :subscribe-data="item" v-for="(item, index) in requestScrollDataList" :key="index"
+                              @selectItem="selectItem" @details="courseDetails"></subscribe-item>
+            </ul>
+            <p v-show="(requestMoreFlag || noMore) || !requestScrollDataList" class="request-result">
+              {{noMore || !requestScrollDataList ? noMoreStr : noResult}}</p>
+          </template>
+          <template v-else>
+            <no-result :title="'暂无内容~~'"></no-result>
+          </template>
         </div>
       </div>
     </scroll>
@@ -66,7 +72,14 @@
     },
     activated () {
       if (!this.$route.meta.isBack || this.isFirstEnter) {
-        this.requestScrollData();
+        this.noMore = false;
+        this.requestPage = 1;
+        this.requestScrollDataList = null;
+        if (this.userGuid) {
+          this.requestScrollData();
+        } else {
+          this.requestScrollDataList = null;
+        }
       }
       this.$route.meta.isBack = false;
       this.isFirstEnter = false;

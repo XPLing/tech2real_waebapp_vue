@@ -85,9 +85,14 @@
             @include fs(12);
             border: 1px solid $color-theme;
             border-radius: 20px;
+            &.joined {
+              color: $whiteColor;
+              background-color: $color-theme;
+            }
             .icon {
               @include fs(18);
               margin-right: formatVal(8, rem);
+
             }
           }
         }
@@ -136,9 +141,9 @@
         }
       }
     }
-    .download-app{
+    .download-app {
       border-bottom: formatVal(20, rem) solid $color-gray-F6;
-      /deep/ .download-app{
+      /deep/ .download-app {
         box-shadow: none;
       }
     }

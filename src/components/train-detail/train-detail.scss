@@ -48,7 +48,7 @@
       video{
         background-color: #000;
         height: 100%;
-        width: auto;
+        width: formatVal(375,rem);
       }
     }
     .file-link{

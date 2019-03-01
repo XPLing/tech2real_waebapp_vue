@@ -23,7 +23,7 @@
       </div>
       <nav class="g-nav-wrapper">
         <TrainDetailTab @changeTab="changeTab" :applied-state="appliedState"
-                        :chapter-data="chapterData"></TrainDetailTab>
+                        :chapter-data="chapterData" ref="TrainDetailTab"></TrainDetailTab>
       </nav>
       <div class="g-main">
         <keep-alive>
@@ -91,6 +91,7 @@
   import Mask from 'base/mask/mask';
   import GSelect from 'base/select2/select2';
   import Share from 'base/share/share';
+  import NoResult from 'base/no-result/no-result';
 
   const LOGINTIP = '请先登录!';
   const JOINTIP = '是否加入课程开始学习?';
@@ -321,6 +322,7 @@
                 } else {
                   $this.videoUrl = res.result[0].videoUrl;
                 }
+
               }
             }
           }).catch(erro => {
@@ -394,7 +396,6 @@
           return;
         }
         if (this.isCanplay) {
-
           this.Vplay();
         }
       },
@@ -563,6 +564,9 @@
             $this.appliedState = courseResultData.appliedState;
             $this.courseState = courseResultData.status;
             $this.courseStateStr = COURSESTATESTR[$this.appliedState];
+            if (courseResultData.appliedState === 1 && courseResultData.chapterCount > 0) {
+              this.$refs.TrainDetailTab.changeTab(this.$refs.TrainDetailTab.list[1]);
+            }
             if ($this.appliedState > 1) {
               $this.courseStateStr = COURSESTATESTR[$this.appliedState - 4];
             }
@@ -677,7 +681,8 @@
       CourseEvaluate,
       CourseChapters,
       CourseCommunity,
-      Share
+      Share,
+      NoResult
     },
     watch: {
       videoUrl (newVal) {
