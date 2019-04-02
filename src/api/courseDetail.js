@@ -5,10 +5,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function getCourseById (params) {
-  var url = debug ? '/api/getCourseById' : `/getCourseById`;
+  var url = debug ? '/api/getCourseById' : `${REQUEST_PREFIX}/getCourseById`;
   params.version = 3;
   const data = Object.assign({}, commonParams, params);
   return axios({
@@ -26,7 +26,7 @@ export function getCourseById (params) {
 }
 
 export function listChaptersByCourseId (params) {
-  var url = debug ? '/api/listChaptersByCourseId' : `/listChaptersByCourseId`;
+  var url = debug ? '/api/listChaptersByCourseId' : `${REQUEST_PREFIX}/listChaptersByCourseId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -43,7 +43,7 @@ export function listChaptersByCourseId (params) {
 }
 
 export function applyCourse (params) {
-  var url = debug ? '/api/applyCourseV2' : `/applyCourseV2`;
+  var url = debug ? '/api/applyCourseV2' : `${REQUEST_PREFIX}/applyCourseV2`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -60,7 +60,7 @@ export function applyCourse (params) {
 }
 
 export function cancelOpenCourseApplyByApplyId (params) {
-  var url = debug ? '/api/cancelOpenCourseApplyByApplyId' : `/cancelOpenCourseApplyByApplyId`;
+  var url = debug ? '/api/cancelOpenCourseApplyByApplyId' : `${REQUEST_PREFIX}/cancelOpenCourseApplyByApplyId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -77,7 +77,7 @@ export function cancelOpenCourseApplyByApplyId (params) {
 }
 
 export function getCourseApplyByCourseId (params) {
-  var url = debug ? '/api/getCourseApplyByCourseId' : `/getCourseApplyByCourseId`;
+  var url = debug ? '/api/getCourseApplyByCourseId' : `${REQUEST_PREFIX}/getCourseApplyByCourseId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -94,7 +94,7 @@ export function getCourseApplyByCourseId (params) {
 }
 
 export function getUnpaidCourseApply (params) {
-  var url = debug ? '/api/getUnpaidCourseApply' : `/getUnpaidCourseApply`;
+  var url = debug ? '/api/getUnpaidCourseApply' : `${REQUEST_PREFIX}/getUnpaidCourseApply`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -111,7 +111,7 @@ export function getUnpaidCourseApply (params) {
 }
 
 export function listEvaluatesByTargetId (params) {
-  var url = debug ? '/api/listEvaluatesByTargetId' : `/listEvaluatesByTargetId`;
+  var url = debug ? '/api/listEvaluatesByTargetId' : `${REQUEST_PREFIX}/listEvaluatesByTargetId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -128,7 +128,7 @@ export function listEvaluatesByTargetId (params) {
 }
 
 export function addEvaluate (params) {
-  var url = debug ? '/api/addEvaluate' : `/addEvaluate`;
+  var url = debug ? '/api/addEvaluate' : `${REQUEST_PREFIX}/addEvaluate`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -145,7 +145,7 @@ export function addEvaluate (params) {
 }
 
 export function readChapter (params) {
-  var url = debug ? '/api/readChapter' : `/readChapter`;
+  var url = debug ? '/api/readChapter' : `${REQUEST_PREFIX}/readChapter`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -162,7 +162,7 @@ export function readChapter (params) {
 }
 
 export function listCourseValidityPeriodByCourseId (params) {
-  var url = debug ? '/api/listCourseValidityPeriodByCourseId' : `/listCourseValidityPeriodByCourseId`;
+  var url = debug ? '/api/listCourseValidityPeriodByCourseId' : `${REQUEST_PREFIX}/listCourseValidityPeriodByCourseId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

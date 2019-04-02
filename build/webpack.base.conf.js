@@ -4,6 +4,7 @@ var config = require('../config');
 var vueLoaderConfig = require('./vue-loader.conf');
 var glob = require('glob');
 var entries = utils.getEntry2('./src/view/**/*.js', true);
+const debug = process.env.NODE_ENV === 'development';
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir);
@@ -14,9 +15,9 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath,
+    publicPath: debug
+      ? config.dev.assetsPublicPath
+      : config.build.assetsPublicPath,
     libraryTarget: "umd"
   },
   resolve: {

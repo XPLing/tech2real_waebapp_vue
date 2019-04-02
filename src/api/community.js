@@ -5,10 +5,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function listAllComments (params) {
-  var url = debug ? '/api/listAllComments' : `/listAllComments`;
+  var url = debug ? '/api/listAllComments' : `${REQUEST_PREFIX}/listAllComments`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -24,7 +24,7 @@ export function listAllComments (params) {
   });
 }
 export function listMyClubs (params) {
-  var url = debug ? '/api/listMyClubs' : `/listMyClubs`;
+  var url = debug ? '/api/listMyClubs' : `${REQUEST_PREFIX}/listMyClubs`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

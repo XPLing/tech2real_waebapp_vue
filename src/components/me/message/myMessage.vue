@@ -8,7 +8,9 @@
         <div class="tag-item" v-for="(item, index) in tagList" :key="index"
              :class="{'active': tagCurrentIndex === index}"
              @click="changeTag(item, index)">
-          {{item.name}}
+          <span class="title" :class="{'new-msg': item.hasMeg && hasNewMsg}">
+            {{item.name}}
+          </span>
         </div>
       </div>
       <div class="g-main" ref="main">
@@ -51,7 +53,7 @@
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
       <back-top ref="backTop" @backTop="backTop"></back-top>
-      <keep-alive >
+      <keep-alive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
       <router-view v-if="!$route.meta.keepAlive"></router-view>
@@ -70,7 +72,7 @@
   import TopTip from 'base/top-tip/top-tip';
   import Loading from 'base/loading/loading';
   import NoResult from 'base/no-result/no-result';
-  import { listNotifiesByType } from 'api/me';
+  import { listNotifiesByType, clickNotifyMessage, checkUnreadNotify } from 'api/me';
   import BackTop from 'base/backtop/backtop';
   import MyMsgReply from 'base/myMsg-reply/myMsg-reply';
   import MyMsgLike from 'base/myMsg-like/myMsg-like';
@@ -81,6 +83,7 @@
       return {
         probeType: 2,
         toptipTxt: '',
+        hasNewMsg: false,
         pageTitle: '我的消息',
         tagList: [
           {
@@ -93,7 +96,8 @@
           },
           {
             name: '通知',
-            type: 3
+            type: 3,
+            hasMeg: true
           }
         ],
         tagCurrentIndex: 0,
@@ -108,8 +112,9 @@
       };
     },
     created () {
+      this.upDateUnreadNotify();
     },
-    activated(){
+    activated () {
       if (!this.$route.meta.isBack || this.isFirstEnter) {
         this.requestScrollData();
       }
@@ -126,13 +131,37 @@
       selectNotice (data) {
         console.log(data);
         if (!data.isRead) {
-          data.isRead = false;
+          this._clickNotifyMessage(data.id).then((res) => {
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                return Promise.reject(res);
+              }
+              data.isRead = true;
+              this.upDateUnreadNotify();
+            }
+          }).catch(erro => {
+            console.log(erro);
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
         }
-        var params = JSON.parse(data.params);
-        var url = `/activity/detail/${params.activityId}/applyresult`;
-        this.$router.push({
-          path: url
-        });
+        var params = JSON.parse(data.params), url = '';
+        if (data.type === 3) {
+          // 活动申请详情
+          url = `/activity/detail/${params.activityId}/applyresult`;
+        } else if (data.type === 5) {
+          // 课程申请详情
+          url = `/train/all/applyresult?applyTargetId=${params.courseId}&applyId=${params.applyId}`;
+        } else if (data.type === 6) {
+          // 课程合辑申请详情
+//          url = `/train/all/applyresult?applyTargetId=${params.coursePackageId}&applyId=${params.applyId}`;
+        }
+        if (url) {
+          this.$router.push({
+            path: url
+          });
+        }
+
       },
       selectReply (data, detail) {
 
@@ -173,6 +202,21 @@
         }
         this.$nextTick(() => {
           this.$refs.scroll.refresh();
+        });
+      },
+      upDateUnreadNotify () {
+        return this._checkUnreadNotify().then((res) => {
+          if (res.code) {
+            if (res.code != ERR_OK) {
+              this.toptipTxt = res.message;
+              this.$refs.toptip.show();
+              return false;
+            }
+            this.hasNewMsg = res.result ? res.result : false;
+          }
+        }, erro => {
+          this.toptipTxt = erro.message;
+          this.$refs.toptip.show();
         });
       },
       requestScrollData () {
@@ -221,11 +265,29 @@
           limitSize: 10,
           page: page,
           version: 1,
-          clientType: 1,
           type: type,
           userGuid: this.userGuid
         };
-        return listNotifiesByType(param);
+        return listNotifiesByType(param, {
+          concurrent: true
+        });
+      },
+      _clickNotifyMessage (id, type) {
+        var param = {
+          id: id,
+          version: 1,
+          userGuid: this.userGuid
+        };
+        return clickNotifyMessage(param);
+      },
+      _checkUnreadNotify () {
+        let params = {
+          userGuid: this.userGuid,
+          productGuid: this.productGuid
+        };
+        return checkUnreadNotify(params, {
+          concurrent: true
+        });
       }
     },
     watch: {

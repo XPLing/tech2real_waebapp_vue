@@ -115,7 +115,6 @@
                     targetGuid: this.courseData.guid,
                     targetId: this.courseData.id,
                     type: 1,
-                    clientType: 1,
                     version: 1,
                     star: this.score * 2,
                     content: this.formCont

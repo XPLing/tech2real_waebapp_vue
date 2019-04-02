@@ -306,8 +306,7 @@
         var param = {
           club_guid: this.clubGuid,
           user_guid: this.userGuid,
-          product_guid: this.productGuid,
-          clientType: 1
+          product_guid: this.productGuid
         };
         return getClubByClubGuid(param);
       },
@@ -335,7 +334,6 @@
       _likeCommentV2 (id) {
         var param = {
           isLike: 'Y',
-          clientType: 1,
           type: 1,
           userGuid: this.userGuid,
           targetId: id

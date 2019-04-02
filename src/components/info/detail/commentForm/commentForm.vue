@@ -108,8 +108,7 @@
           targetId: this.$route.params.articleId,
           userGuid: this.userGuid,
           content: this.commentFormCont,
-          type: 2,
-          clientType: 1
+          type: 2
         };
         return addCommentV2(param);
       },
@@ -117,8 +116,7 @@
         var param = {
           commentId: this.$route.params.commentId,
           userGuid: this.userGuid,
-          content: this.commentFormCont,
-          clientType: 1
+          content: this.commentFormCont
         };
         if (this.$route.query.replyId) {
           param = Object.assign({}, param, {

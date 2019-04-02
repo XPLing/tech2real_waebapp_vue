@@ -4,16 +4,16 @@
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
-export function getWxJsApiConfig (params) {
-  var url = debug ? '/api/wxJsApi/getWxJsApiConfig' : `/wxJsApi/getWxJsApiConfig`;
+export function getWxJsApiConfig (params, other) {
+  var url = debug ? '/api/wxJsApi/getWxJsApiConfig' : `${REQUEST_PREFIX}/wxJsApi/getWxJsApiConfig`;
   const data = Object.assign({}, commonParams, params);
-  console.log(params);
   return axios({
     url: url,
     method: 'get',
-    params: data
+    params: data,
+    privateConfig: other
   }).then((res) => {
     return Promise.resolve(res.data);
   }, (err) => {
@@ -22,7 +22,7 @@ export function getWxJsApiConfig (params) {
 }
 
 export function wechatPay (params) {
-  var url = debug ? '/api/wxJsApi/wechatPay' : `/wxJsApi/wechatPay`;
+  var url = debug ? '/api/wxJsApi/wechatPay' : `${REQUEST_PREFIX}/wxJsApi/wechatPay`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -36,7 +36,7 @@ export function wechatPay (params) {
 }
 
 export function getOrderSuc (params) {
-  var url = debug ? '/api/h5/getOrderSuc' : `/h5/getOrderSuc`;
+  var url = debug ? '/api/h5/getOrderSuc' : `${REQUEST_PREFIX}/h5/getOrderSuc`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -50,7 +50,7 @@ export function getOrderSuc (params) {
 }
 
 export function wxPayH5 (params) {
-  var url = debug ? '/api/h5/wechatPay' : `/h5/wechatPay`;
+  var url = debug ? '/api/h5/wechatPay' : `${REQUEST_PREFIX}/h5/wechatPay`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -64,7 +64,7 @@ export function wxPayH5 (params) {
 }
 
 export function generateAlipayPaymentInfoV2 (params) {
-  var url = debug ? '/api/generateAlipayPaymentInfoV2' : `/generateAlipayPaymentInfoV2`;
+  var url = debug ? '/api/generateAlipayPaymentInfoV2' : `${REQUEST_PREFIX}/generateAlipayPaymentInfoV2`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -116,7 +116,7 @@ export function alipay (params) {
 }
 
 export function getAlipayConfig (params) {
-  var url = debug ? '/api/h5/alipay' : `/h5/alipay`;
+  var url = debug ? '/api/h5/alipay' : `${REQUEST_PREFIX}/h5/alipay`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

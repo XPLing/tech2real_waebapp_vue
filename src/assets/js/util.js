@@ -399,7 +399,7 @@ export function getData (el, name, val) {
 
 export let config = {
   originWidth: 37.5,
-  payRedirectUri: process.env.NODE_ENV === 'development' ? 'https://open.dev.tech2real.com/m-web/payresult' : 'https://open.dev.tech2real.com/m-web/payresult'
+  payRedirectUri: process.env.NODE_ENV === 'production' ? 'https://m.tech2real.com/payresult' : 'https://m.dev.tech2real.com/payresult'
 };
 
 export function formErrorMsg ({errorObj, name, message, rule, scope, interval}) {

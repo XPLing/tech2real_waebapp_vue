@@ -60,15 +60,17 @@
             <i class="icon c-icon-comment-square-o"></i>
             <span class="name">评论</span>
           </router-link>
-        </div>
+        </div>·
         <p class="btn disable" v-if="applyStatus.isDisable">{{applyStatus.value}}</p>
         <p class="btn" v-else @click="applyActivity">{{applyStatus.value}}</p>
       </div>
-      <share @cancel="cancelShare" @share="share" ref="share"></share>
+      <share @cancel="shareCancel" @share="share" @error="shareError" :share-info="shareInfo"
+             @getConfigStart="shareGetConfigStart" @getConfigEnd="shareGetConfigEnd" ref="share"></share>
       <back-top ref="backTop" @backTop="backTop"></back-top>
       <keep-alive :include="keepAliveList">
         <router-view :comment-form-placeholder="'请输入评论内容'" :type="'comment'" :activity="dataInfo" @applyUpdate="applyUpdate"></router-view>
       </keep-alive>
+      <loading ref="loading" :title="loadingTxt"></loading>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
@@ -108,6 +110,8 @@
         introImgs: [],
         loadedImgs: [],
         imgsLoadStatus: 'ready',
+        shareInfo: null,
+        loadingTxt: '',
         confirmTxt: ''
       };
     },
@@ -172,6 +176,13 @@
               return;
             }
             this.dataInfo = res.result;
+            this.shareInfo = {
+              url: window.location.href,
+              cover: this.dataInfo.pictureUrl,
+              desc: this.dataInfo.sponsor,
+              title: this.dataInfo.listTitle,
+              summary: this.dataInfo.listTitle
+            };
             this.pageTitle = res.result.title;
             this.applyStatus = this.applyStatusValue(res.result.applyStatus);
           }
@@ -180,28 +191,42 @@
           this.$refs.toptip.show();
         });
       },
-      cancelShare () {},
       showShare () {
         this.$refs.share.show();
       },
+      shareCancel () {
+
+      },
+      shareError (erro) {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      },
+      shareGetConfigStart () {
+        this.loadingTxt = '环境初始化中...';
+        this.$refs.loading.show();
+      },
+      shareGetConfigEnd () {
+        this.$refs.loading.hide();
+      },
       share (data) {
-        if (data < 0) {
-          this.$router.push({
-            name: 'community_commentFormRoot',
-            params: {
-              shareData: this.dataInfo,
-              shareType: 3
-            }
-          });
-
-        } else if (data === 1) {
-
-        } else if (data === 2) {
-
-        } else if (data === 3) {
-
-        } else if (data === 4) {
-
+        switch (data) {
+          case 0:
+            this.$router.push({
+              name: 'community_commentFormRoot',
+              params: {
+                shareData: this.dataInfo,
+                shareType: 3
+              }
+            });
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          case 4:
+            break;
         }
       },
       applyStatusValue (status) {

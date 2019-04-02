@@ -335,7 +335,6 @@
           userGuid: this.userGuid,
           content: this.commentFormCont,
           type: 4,
-          clientType: 1,
           version: 1,
           shareType: 1,
           imgHashes: this.uploadInfo.imgHashes
@@ -350,8 +349,7 @@
       _listMyClubs () {
         var param = {
           userGuid: this.userGuid,
-          version: 1,
-          clientType: 1
+          version: 1
         };
         return listMyClubs(param);
       },
@@ -366,7 +364,6 @@
           commentId: this.$route.params.commentId,
           userGuid: this.userGuid,
           content: this.commentFormCont,
-          clientType: 1,
           version: 1,
           imgHashes: this.uploadInfo.imgHashes
         };

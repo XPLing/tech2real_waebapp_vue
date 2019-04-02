@@ -191,7 +191,6 @@
       _likeCommentV2 (id) {
         var param = {
           isLike: 'Y',
-          clientType: 1,
           type: 1,
           userGuid: this.userGuid,
           targetId: id

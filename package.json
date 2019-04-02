@@ -5,11 +5,11 @@
   "author": "XPL <616954589@qq.com>",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js --inline --progress --config",
+    "dev": "cross-env NODE_ENV=development node build/dev-server.js --inline --progress --config",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
-    "build": "node build/build.js",
-    "dev-build": "node build/dev-build.js"
+    "build": "cross-env NODE_ENV=production node build/build.js",
+    "testing": "cross-env NODE_ENV=production_testing node build/build_testing.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -38,7 +38,6 @@
     "weixin-js-sdk": "^1.3.3"
   },
   "devDependencies": {
-    "vux-loader": "^1.0.56",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
@@ -55,6 +54,7 @@
     "chalk": "^1.1.3",
     "connect-history-api-fallback": "^1.5.0",
     "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^5.2.0",
     "css-loader": "^0.28.0",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
@@ -72,7 +72,11 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.3",
+    "jest": "^21.2.0",
+    "jest-serializer-vue": "^0.3.0",
     "json-loader": "^0.5.4",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.5.3",
     "opn": "^4.0.2",
@@ -94,14 +98,11 @@
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
+    "vux-loader": "^1.0.56",
     "webpack": "^2.3.3",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.18.0",
-    "webpack-merge": "^4.1.0",
-    "less": "^2.7.1",
-    "less-loader": "^2.2.3",
-    "jest": "^21.2.0",
-    "jest-serializer-vue": "^0.3.0"
+    "webpack-merge": "^4.1.0"
   },
   "engines": {
     "node": ">= 6.0.0",

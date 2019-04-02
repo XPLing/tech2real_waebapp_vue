@@ -5,11 +5,11 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 
 export function listTickets (params) {
-  var url = debug ? '/api/listTickets' : `/listTickets`;
+  var url = debug ? '/api/listTickets' : `${REQUEST_PREFIX}/listTickets`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

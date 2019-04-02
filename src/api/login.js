@@ -5,7 +5,7 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, removePending, REQUEST_PREFIX } from './config';
 import axios from 'api/axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function webLoginByPhone (params) {
   var url = debug ? '/open/webLoginByPhone' : `${REQUEST_PREFIX}/webLoginByPhone`;
@@ -134,7 +134,7 @@ export function webLoginByThirdPartCode (params) {
 }
 
 export function boundMobileByThirdPartUid (params) {
-  var url = debug ? '/api/boundMobileByThirdPartUid' : `/boundMobileByThirdPartUid`;
+  var url = debug ? '/api/boundMobileByThirdPartUid' : `${REQUEST_PREFIX}/boundMobileByThirdPartUid`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -147,7 +147,7 @@ export function boundMobileByThirdPartUid (params) {
   });
 }
 export function unbindThirdParty (params) {
-  var url = debug ? '/api/unbindThirdParty' : `/unbindThirdParty`;
+  var url = debug ? '/api/unbindThirdParty' : `${REQUEST_PREFIX}/unbindThirdParty`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,

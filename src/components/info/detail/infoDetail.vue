@@ -28,7 +28,8 @@
                   <p class="intro">{{clubInfo.profile | ellipsis(28)}}</p>
                 </div>
                 <p class="btn">
-                  <a href="javascript:void(0);" :class="{'joined': clubInfo.userClubId==1}" @click.stop="joinClub" v-if="clubInfo.isDefault==='N'">
+                  <a href="javascript:void(0);" :class="{'joined': clubInfo.userClubId==1}" @click.stop="joinClub"
+                     v-if="clubInfo.isDefault==='N'">
                     <i class="icon" v-if="clubInfo.userClubId !== 1">+</i>
                     <span>{{clubInfo.userClubId == 1 ? '已加入' : '加入'}}</span>
                   </a>
@@ -79,12 +80,14 @@
           <span class="name">评论 <i v-if="viewArticle && viewArticle.commentCount>0">({{viewArticle.commentCount}})</i> </span>
         </router-link>
       </div>
-      <share @cancel="cancelShare" @share="share" :share-info="shareInfo" ref="share"></share>
+      <share @cancel="shareCancel" @share="share" @error="shareError" :share-info="shareInfo"
+             @getConfigStart="shareGetConfigStart" @getConfigEnd="shareGetConfigEnd" ref="share"></share>
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
       <confirm ref="confirmsWrapper" :text="confirmTxt" @confirm="confirm"></confirm>
       <back-top ref="backTop" @backTop="backTop"></back-top>
+      <loading ref="loading" :title="loadingTxt"></loading>
       <keep-alive :include="keepAliveList" :exclude="notkeepAliveList">
         <router-view></router-view>
       </keep-alive>
@@ -99,7 +102,7 @@
   import Scroll from 'base/scroll/scroll';
   import HeaderTitle from 'components/header-title/header-title';
   import download from 'components/download/download';
-  import { ERR_OK, share, ERR_OK_STR } from 'api/config';
+  import { ERR_OK, ERR_OK_STR } from 'api/config';
   import * as util from 'assets/js/util';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -138,6 +141,7 @@
         keepAliveList: /^KA_infoDetail/,
         notkeepAliveList: ['NKA_infoDetailCommentItem'],
         toptipTxt: '',
+        loadingTxt: '',
         pageTitle: '资讯详情',
         articleInfo: null,
         articleInfoContent: null,
@@ -212,13 +216,14 @@
             }
             this.articleInfo = res.result;
             this.articleInfoContent = this.articleInfo.content.replace(/(width|height|min-width|min-height|max-width|max-height)\s*?(:|=)\s*?\d+[^%]*?;/ig, '');
-
             this.pageTitle = res.result.listTitle;
-            this.shareInfo = Object.assign({}, share, {
+            this.shareInfo = {
               url: window.location.href,
               cover: this.articleInfo.pictureUrl,
+              desc: this.articleInfo.brief,
+              title: this.articleInfo.listTitle,
               summary: this.articleInfo.listTitle
-            });
+            };
             this._getClubByClubGuid().then((res) => {
               if (res.code) {
                 if (res.code != ERR_OK) {
@@ -265,9 +270,6 @@
           this.$refs.toptip.show();
         });
       },
-      cancelShare () {
-
-      },
       operate (type) {
         if (!this.userGuid) {
           this.confirmTxt = '请先登录！';
@@ -279,24 +281,39 @@
       showShare () {
         this.$refs.share.show();
       },
+      shareCancel () {
+
+      },
+      shareError (erro) {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      },
+      shareGetConfigStart () {
+        this.loadingTxt = '环境初始化中...';
+        this.$refs.loading.show();
+      },
+      shareGetConfigEnd () {
+        this.$refs.loading.hide();
+      },
       share (data) {
-        if (data < 0) {
-          this.$router.push({
-            name: 'community_commentFormRoot',
-            params: {
-              shareData: this.articleInfo,
-              shareType: 2
-            }
-          });
-
-        } else if (data === 1) {
-
-        } else if (data === 2) {
-
-        } else if (data === 3) {
-
-        } else if (data === 4) {
-
+        switch (data) {
+          case 0:
+            this.$router.push({
+              name: 'community_commentFormRoot',
+              params: {
+                shareData: this.articleInfo,
+                shareType: 2
+              }
+            });
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          case 4:
+            break;
         }
       },
       setLike () {
@@ -533,7 +550,6 @@
       _likeCommentV2 (id) {
         var param = {
           isLike: 'Y',
-          clientType: 1,
           type: 1,
           userGuid: this.userGuid,
           targetId: id
@@ -543,7 +559,6 @@
       _viewArticle () {
         var param = {
           article_id: this.articleId,
-          clientType: 1,
           product_guid: this.productGuid,
           user_guid: this.userGuid
         };

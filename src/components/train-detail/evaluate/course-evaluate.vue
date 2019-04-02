@@ -169,7 +169,6 @@
       _likeCommentV2 (id) {
         var param = {
           isLike: 'Y',
-          clientType: 1,
           type: 1,
           userGuid: this.userGuid,
           targetId: id
@@ -183,8 +182,7 @@
           limitSize: 10,
           type: 1,
           id: this.$route.params.id,
-          version: 1,
-          clientType: 1
+          version: 1
         };
         return listEvaluatesByTargetId(param);
       }

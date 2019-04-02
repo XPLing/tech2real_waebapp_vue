@@ -5,10 +5,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function addFeedback (params) {
-  var url = debug ? '/api/addFeedback' : `/addFeedback`;
+  var url = debug ? '/api/addFeedback' : `${REQUEST_PREFIX}/addFeedback`;
   // const data = Object.assign({}, commonParams, params);
   const data = params;
   return axios({

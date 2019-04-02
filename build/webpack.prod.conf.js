@@ -10,7 +10,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 var glob = require('glob');
 var env = config.build.env;
-
+var isPro = process.env.NODE_ENV === 'production';
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -22,7 +22,7 @@ var webpackConfig = merge(baseWebpackConfig, {
   //  config.build.productionSourceMap ? '#source-map' : false
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
-    path: config.build.assetsRoot,
+    path: isPro ? config.build.assetsRoot : config.build.assetsRootTest,
     filename: utils.assetsPath('js/[name].[hash].js'),
     chunkFilename: utils.assetsPath('js/[name].chunk.[chunkhash].js')
   },

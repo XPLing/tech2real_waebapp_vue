@@ -5,10 +5,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function listActivities (params) {
-  var url = debug ? '/api/listActivities' : `/listActivities`;
+  var url = debug ? '/api/listActivities' : `${REQUEST_PREFIX}/listActivities`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -24,7 +24,7 @@ export function listActivities (params) {
   });
 }
 export function getActivityById (params) {
-  var url = debug ? '/api/getActivityById' : `/getActivityById`;
+  var url = debug ? '/api/getActivityById' : `${REQUEST_PREFIX}/getActivityById`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

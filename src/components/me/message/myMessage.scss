@@ -56,6 +56,23 @@
         color: $color-theme;
         border-bottom-color: $color-theme;
       }
+      .title{
+        position: relative;
+        &.new-msg {
+          &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            z-index: 2;
+            top: -5px;
+            right: -5px;
+            width: 8px;
+            height: 8px;
+            background-color: $color-auxiliary-red;
+            border-radius: 50%;
+          }
+        }
+      }
     }
   }
   .g-main{

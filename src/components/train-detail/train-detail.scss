@@ -54,6 +54,21 @@
     .file-link{
       display: block;
       height: 100%;
+      position: relative;
+      .mask{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        @include fs(60);
+        color: $whiteColor;
+        background: $color-background-d;
+      }
     }
     img{
       display: block;

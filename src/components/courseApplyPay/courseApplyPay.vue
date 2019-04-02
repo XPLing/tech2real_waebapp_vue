@@ -397,9 +397,9 @@
       payConfirm () {
       },
       authorization (type) {
-        var url = '', uri = '', href = '';
+        var url = '', uri = '', href = '', isPro = process.env.NODE_ENV === 'production';
         var uriKey = 'uri', appIdKey = 'appId', currentUrl = window.location.href;
-        if (/open.dev./.test(currentUrl)) {
+        if (!isPro) {
           uriKey = 'devUri';
           appIdKey = 'devAppId';
         }

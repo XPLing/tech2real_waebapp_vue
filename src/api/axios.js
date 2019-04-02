@@ -1,4 +1,11 @@
 import axios from 'axios';
+import { REQUEST_PREFIX } from './config';
+
+const debug = process.env.NODE_ENV === 'development';
+
+// if (!debug) {
+//   axios.defaults.baseURL = REQUEST_PREFIX;
+// }
 
 const whiteList = '/getProductAppSetup|/api/getProductAppSetup';
 export let pending = []; //  声明一个数组用于存储每个ajax请求的取消函数和ajax标识

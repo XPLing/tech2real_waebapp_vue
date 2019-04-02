@@ -5,10 +5,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function getTagByTagId (params) {
-  var url = debug ? '/api/getTagByTagId' : `/getTagByTagId`;
+  var url = debug ? '/api/getTagByTagId' : `${REQUEST_PREFIX}/getTagByTagId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -25,7 +25,7 @@ export function getTagByTagId (params) {
 }
 
 export function listCoursesForYouWant (params) {
-  var url = debug ? '/api/listCoursesForYouWant' : `/listCoursesForYouWant`;
+  var url = debug ? '/api/listCoursesForYouWant' : `${REQUEST_PREFIX}/listCoursesForYouWant`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -42,7 +42,7 @@ export function listCoursesForYouWant (params) {
 }
 
 export function listMyCourses (params, cancelSource) {
-  var url = debug ? '/api/listMyCourses' : `/listMyCourses`;
+  var url = debug ? '/api/listMyCourses' : `${REQUEST_PREFIX}/listMyCourses`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -63,7 +63,7 @@ export function listMyCourses (params, cancelSource) {
 }
 
 export function getTrainHomeContainer (params) {
-  var url = debug ? '/api/getTrainHomeContainer' : `/getTrainHomeContainer`;
+  var url = debug ? '/api/getTrainHomeContainer' : `${REQUEST_PREFIX}/getTrainHomeContainer`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -80,7 +80,7 @@ export function getTrainHomeContainer (params) {
 }
 
 export function listRecommendTeachers (params) {
-  var url = debug ? '/api/listRecommendTeachers' : `/listRecommendTeachers`;
+  var url = debug ? '/api/listRecommendTeachers' : `${REQUEST_PREFIX}/listRecommendTeachers`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -97,7 +97,7 @@ export function listRecommendTeachers (params) {
 }
 
 export function listBannersByLocationType (params) {
-  var url = debug ? '/api/listBannersByLocationType' : `/listBannersByLocationType`;
+  var url = debug ? '/api/listBannersByLocationType' : `${REQUEST_PREFIX}/listBannersByLocationType`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -114,7 +114,7 @@ export function listBannersByLocationType (params) {
 }
 
 export function listRecommendCourses (params, privateConfig) {
-  var url = debug ? '/api/listRecommendCourses' : `/listRecommendCourses`;
+  var url = debug ? '/api/listRecommendCourses' : `${REQUEST_PREFIX}/listRecommendCourses`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -132,7 +132,7 @@ export function listRecommendCourses (params, privateConfig) {
 }
 
 export function listCourses (params, privateConfig) {
-  var url = debug ? '/api/listCourses' : `/listCourses`;
+  var url = debug ? '/api/listCourses' : `${REQUEST_PREFIX}/listCourses`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -150,7 +150,7 @@ export function listCourses (params, privateConfig) {
 }
 
 export function listCoursesByTagId (params) {
-  var url = debug ? '/api/listCoursesByTagId' : `/listCoursesByTagId`;
+  var url = debug ? '/api/listCoursesByTagId' : `${REQUEST_PREFIX}/listCoursesByTagId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -167,7 +167,7 @@ export function listCoursesByTagId (params) {
 }
 
 export function listTagContainers (params) {
-  var url = debug ? '/api/listTagContainers' : `/listTagContainers`;
+  var url = debug ? '/api/listTagContainers' : `${REQUEST_PREFIX}/listTagContainers`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -184,7 +184,7 @@ export function listTagContainers (params) {
 }
 
 export function listCoursesByTeacherId (params) {
-  var url = debug ? '/api/listCoursesByTeacherId' : `/listCoursesByTeacherId`;
+  var url = debug ? '/api/listCoursesByTeacherId' : `${REQUEST_PREFIX}/listCoursesByTeacherId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -201,7 +201,7 @@ export function listCoursesByTeacherId (params) {
 }
 
 export function getTeacherById (params) {
-  var url = debug ? '/api/getTeacherById' : `/getTeacherById`;
+  var url = debug ? '/api/getTeacherById' : `${REQUEST_PREFIX}/getTeacherById`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -218,7 +218,7 @@ export function getTeacherById (params) {
 }
 
 export function listTeachers (params) {
-  var url = debug ? '/api/listTeachers' : `/listTeachers`;
+  var url = debug ? '/api/listTeachers' : `${REQUEST_PREFIX}/listTeachers`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

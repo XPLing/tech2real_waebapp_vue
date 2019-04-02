@@ -45,6 +45,7 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
+    <loading ref="loading" :title="loadingTxt"></loading>
     <share :no-self="true" @cancel="cancelShare" @share="share" ref="share"></share>
     <confirm ref="confirmsWrapper" :text="confirmTxt" @confirm="confirm"></confirm>
     <keep-alive>
@@ -146,6 +147,8 @@
         ],
         subPageTitle: '',
         currView: '',
+        shareInfo: null,
+        loadingTxt: '',
         confirmTxt: '请先登录!'
       };
     },
@@ -172,33 +175,38 @@
       if (this.userGuid) {
         this.getInfo();
         this.upDateUnreadNotify();
-        if (/^1.*/.test(util.common.getbrowserType())) {
-//          wx.config({
-//            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-//            appId: thirdParty.wechat.appId, // 必填，公众号的唯一标识
-//            timestamp: '', // 必填，生成签名的时间戳
-//            nonceStr: '', // 必填，生成签名的随机串
-//            signature: '',// 必填，签名
-//            jsApiList: [] // 必填，需要使用的JS接口列表
-//          });
-        }
       }
     },
     methods: {
+      showShare () {
+        this.$refs.share.show();
+      },
       cancelShare () {
 
       },
+      shareError (erro) {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      },
+      shareGetConfigStart () {
+        this.loadingTxt = '环境初始化中...';
+        this.$refs.loading.show();
+      },
+      shareGetConfigEnd () {
+        this.$refs.loading.hide();
+      },
       share (data) {
-        if (data < 0) {
-
-        } else if (data === 1) {
-
-        } else if (data === 2) {
-
-        } else if (data === 3) {
-
-        } else if (data === 4) {
-
+        switch (data) {
+          case 0:
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          case 4:
+            break;
         }
       },
       confirm () {
@@ -272,7 +280,9 @@
           userGuid: this.userGuid,
           productGuid: this.productGuid
         };
-        return checkUnreadNotify(params);
+        return checkUnreadNotify(params, {
+          concurrent: true
+        });
       },
       ...mapActions([
         'updateUserInfo'

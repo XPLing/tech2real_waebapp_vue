@@ -271,7 +271,6 @@
       _likeCommentV2 (type, targetId) {
         var param = {
           isLike: 'Y',
-          clientType: 1,
           type: type,
           userGuid: this.userGuid,
           targetId: targetId
@@ -280,7 +279,6 @@
       },
       _deleteCommentV2 () {
         var param = {
-          clientType: 1,
           userGuid: this.userGuid,
           id: this.commentId
         };

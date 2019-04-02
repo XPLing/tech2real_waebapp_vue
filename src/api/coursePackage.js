@@ -5,10 +5,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function getCoursePackageDetail (params) {
-  var url = debug ? '/api/open/coursePackage/getCoursePackageDetail' : `/open/coursePackage/getCoursePackageDetail`;
+  var url = debug ? '/api/open/coursePackage/getCoursePackageDetail' : `${REQUEST_PREFIX}/open/coursePackage/getCoursePackageDetail`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -24,7 +24,7 @@ export function getCoursePackageDetail (params) {
   });
 }
 export function getCoursePackageApplyByPackageId (params) {
-  var url = debug ? '/api/open/coursePackageApply/getCoursePackageApplyByPackageId' : `/open/coursePackageApply/getCoursePackageApplyByPackageId`;
+  var url = debug ? '/api/open/coursePackageApply/getCoursePackageApplyByPackageId' : `${REQUEST_PREFIX}/open/coursePackageApply/getCoursePackageApplyByPackageId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -40,7 +40,7 @@ export function getCoursePackageApplyByPackageId (params) {
   });
 }
 export function getCoursePackageById (params) {
-  var url = debug ? '/api/open/coursePackage/getCoursePackageById' : `/open/coursePackage/getCoursePackageById`;
+  var url = debug ? '/api/open/coursePackage/getCoursePackageById' : `${REQUEST_PREFIX}/open/coursePackage/getCoursePackageById`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -56,7 +56,7 @@ export function getCoursePackageById (params) {
   });
 }
 export function cancelCoursePackageApplyByApplyId (params) {
-  var url = debug ? '/api/open/coursePackageApply/cancelCoursePackageApplyByApplyId' : `/open/coursePackageApply/cancelCoursePackageApplyByApplyId`;
+  var url = debug ? '/api/open/coursePackageApply/cancelCoursePackageApplyByApplyId' : `${REQUEST_PREFIX}/open/coursePackageApply/cancelCoursePackageApplyByApplyId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -72,7 +72,7 @@ export function cancelCoursePackageApplyByApplyId (params) {
   });
 }
 export function listCoursePackage (params) {
-  var url = debug ? '/api/open/coursePackage/listCoursePackage' : `/open/coursePackage/listCoursePackage`;
+  var url = debug ? '/api/open/coursePackage/listCoursePackage' : `${REQUEST_PREFIX}/open/coursePackage/listCoursePackage`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -88,7 +88,7 @@ export function listCoursePackage (params) {
   });
 }
 export function listRecommendCoursePackage (params) {
-  var url = debug ? '/api/open/coursePackage/listRecommendCoursePackage' : `/open/coursePackage/listRecommendCoursePackage`;
+  var url = debug ? '/api/open/coursePackage/listRecommendCoursePackage' : `${REQUEST_PREFIX}/open/coursePackage/listRecommendCoursePackage`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -104,7 +104,7 @@ export function listRecommendCoursePackage (params) {
   });
 }
 export function listValidityPeriodByPackageId (params) {
-  var url = debug ? '/api/open/coursePackage/listValidityPeriodByPackageId' : `/open/coursePackage/listValidityPeriodByPackageId`;
+  var url = debug ? '/api/open/coursePackage/listValidityPeriodByPackageId' : `${REQUEST_PREFIX}/open/coursePackage/listValidityPeriodByPackageId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -120,7 +120,7 @@ export function listValidityPeriodByPackageId (params) {
   });
 }
 export function applyCoursePackage (params) {
-  var url = debug ? '/api/open/coursePackageApply/applyCoursePackage' : `/open/coursePackageApply/applyCoursePackage`;
+  var url = debug ? '/api/open/coursePackageApply/applyCoursePackage' : `${REQUEST_PREFIX}/open/coursePackageApply/applyCoursePackage`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

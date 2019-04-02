@@ -6,8 +6,9 @@ const config = require('../config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const packageConfig = require('../package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const isDev = process.env.NODE_ENV === 'development';
 
-function getEntry(globPath) {
+function getEntry (globPath) {
   var entries = {},
     basename;
 
@@ -19,7 +20,7 @@ function getEntry(globPath) {
   return entries;
 }
 
-function getEntry2(globPath, noFolder) {
+function getEntry2 (globPath, noFolder) {
   var entries = {},
     filesname, filesPath, entryName;
   glob.sync(globPath).forEach(function (entry) {
@@ -36,7 +37,7 @@ function getEntry2(globPath, noFolder) {
 }
 
 exports.assetsPath = function (_path) {
-  const assetsSubDirectory = process.env.NODE_ENV === 'production'
+  const assetsSubDirectory = /production/.test(process.env.NODE_ENV)
     ? config.build.assetsSubDirectory
     : config.dev.assetsSubDirectory;
 
@@ -61,7 +62,7 @@ exports.cssLoaders = function (options) {
   };
 
   // generate loader string to be used with extract text plugin
-  function generateLoaders(loader, loaderOptions) {
+  function generateLoaders (loader, loaderOptions) {
     const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader];
 
     if (loader) {
@@ -138,7 +139,7 @@ exports.htmlPlugins = function () {
   var arr = [];
   for (var pathname in pages) {
     // 配置生成的html文件，定义路径等
-    let chunks = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production-dev' ? ['manifest', 'vendor',pathname.replace(/^view\//, '')] : [pathname.replace(/^view\//, '')];
+    let chunks = isDev ? ['manifest', 'vendor', pathname.replace(/^view\//, '')] : ['manifest', 'vendor', pathname.replace(/^view\//, '')];
     var conf = {
       filename: pathname + '.html',
       template: pages[pathname], // 模板路径
@@ -150,7 +151,7 @@ exports.htmlPlugins = function () {
     if (/index.html/.test(path)) {
       conf.filename = 'index.html';
     }
-    if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production-dev') {
+    if (!isDev) {
       conf = merge(conf, {
         minify: {
           removeComments: true,

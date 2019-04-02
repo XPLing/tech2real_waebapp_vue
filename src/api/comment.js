@@ -5,10 +5,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function listCommentsByTargetId (params) {
-  var url = debug ? '/api/listCommentsByTargetId' : `/listCommentsByTargetId`;
+  var url = debug ? '/api/listCommentsByTargetId' : `${REQUEST_PREFIX}/listCommentsByTargetId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -25,7 +25,7 @@ export function listCommentsByTargetId (params) {
 }
 
 export function listRepliesByCommentId (params) {
-  var url = debug ? '/api/listRepliesByCommentId' : `/listRepliesByCommentId`;
+  var url = debug ? '/api/listRepliesByCommentId' : `${REQUEST_PREFIX}/listRepliesByCommentId`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -42,7 +42,7 @@ export function listRepliesByCommentId (params) {
 }
 
 export function getCommentById (params) {
-  var url = debug ? '/api/getCommentById' : `/getCommentById`;
+  var url = debug ? '/api/getCommentById' : `${REQUEST_PREFIX}/getCommentById`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -59,7 +59,7 @@ export function getCommentById (params) {
 }
 
 export function addCommentV2 (params) {
-  var url = debug ? '/api/addCommentV2' : `/addCommentV2`;
+  var url = debug ? '/api/addCommentV2' : `${REQUEST_PREFIX}/addCommentV2`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -76,7 +76,7 @@ export function addCommentV2 (params) {
 }
 
 export function addCommentReply (params) {
-  var url = debug ? '/api/addCommentReply ' : `/addCommentReply `;
+  var url = debug ? '/api/addCommentReply ' : `${REQUEST_PREFIX}/addCommentReply `;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -93,7 +93,7 @@ export function addCommentReply (params) {
 }
 
 export function likeCommentV2 (params) {
-  var url = debug ? '/api/likeCommentV2 ' : `/likeCommentV2 `;
+  var url = debug ? '/api/likeCommentV2 ' : `${REQUEST_PREFIX}/likeCommentV2 `;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -109,7 +109,7 @@ export function likeCommentV2 (params) {
   });
 }
 export function deleteCommentV2 (params) {
-  var url = debug ? '/api/deleteCommentV2 ' : `/deleteCommentV2 `;
+  var url = debug ? '/api/deleteCommentV2 ' : `${REQUEST_PREFIX}/deleteCommentV2 `;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

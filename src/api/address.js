@@ -2,10 +2,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, removePending, REQUEST_PREFIX } from './config';
 import axios from 'api/axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function getProvinces (params) {
-  var url = debug ? '/api/getProvinces' : `/getProvinces`;
+  var url = debug ? '/api/getProvinces' : `${REQUEST_PREFIX}/getProvinces`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -18,7 +18,7 @@ export function getProvinces (params) {
   });
 }
 export function getCities (params) {
-  var url = debug ? '/api/getCities' : `/getCities`;
+  var url = debug ? '/api/getCities' : `${REQUEST_PREFIX}/getCities`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,

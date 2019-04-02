@@ -5,10 +5,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, REQUEST_PREFIX } from './config';
 import axios from './axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function getClubByClubGuid (params) {
-  var url = debug ? '/api/getClubByClubGuid' : `/getClubByClubGuid`;
+  var url = debug ? '/api/getClubByClubGuid' : `${REQUEST_PREFIX}/getClubByClubGuid`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -21,7 +21,7 @@ export function getClubByClubGuid (params) {
   });
 }
 export function listArticlesByClubGuid (params) {
-  var url = debug ? '/api/listArticlesByClubGuid' : `/listArticlesByClubGuid`;
+  var url = debug ? '/api/listArticlesByClubGuid' : `${REQUEST_PREFIX}/listArticlesByClubGuid`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -34,7 +34,7 @@ export function listArticlesByClubGuid (params) {
   });
 }
 export function quitClub (params) {
-  var url = debug ? '/api/quitClub' : `/quitClub`;
+  var url = debug ? '/api/quitClub' : `${REQUEST_PREFIX}/quitClub`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -47,7 +47,7 @@ export function quitClub (params) {
   });
 }
 export function signPublicClubInView (params) {
-  var url = debug ? '/api/signPublicClubInView' : `/signPublicClubInView`;
+  var url = debug ? '/api/signPublicClubInView' : `${REQUEST_PREFIX}/signPublicClubInView`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
@@ -60,7 +60,7 @@ export function signPublicClubInView (params) {
   });
 }
 export function listClub (params) {
-  var url = debug ? '/api/listClub' : `/listClub`;
+  var url = debug ? '/api/listClub' : `${REQUEST_PREFIX}/listClub`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,
@@ -73,7 +73,7 @@ export function listClub (params) {
   });
 }
 export function listMyClubs (params) {
-  var url = debug ? '/api/listMyClubs' : `/listMyClubs`;
+  var url = debug ? '/api/listMyClubs' : `${REQUEST_PREFIX}/listMyClubs`;
   const data = Object.assign({}, commonParams, params);
   return axios({
     url: url,

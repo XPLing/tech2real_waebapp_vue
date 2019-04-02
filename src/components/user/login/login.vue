@@ -142,16 +142,17 @@
         }, 300);
       },
       thirdPartLogin (type) {
-        var url = '', uri = '', href = '';
-        var uriKey = 'uri', appIdKey = 'appId', currentUrl = window.location.href;
-        if (/open.dev./.test(currentUrl)) {
+        var url = '', uri = '', href = '', isPro = process.env.NODE_ENV === 'production';
+        var uriKey = 'uri', realUriKey = 'realUri', appIdKey = 'appId', currentUrl = window.location.href;
+        if (!isPro) {
           uriKey = 'devUri';
+          realUriKey = 'devRealUri';
           appIdKey = 'devAppId';
         }
         switch (type) {
           case 'weixin':
             url = thirdParty.wechat.url;
-            uri = encodeURIComponent(thirdParty.wechat[uriKey] + '?thridparty=weixin');
+            uri = encodeURIComponent(thirdParty.wechat[uriKey] + '?thridparty=weixin&realUrl=' + thirdParty.wechat[realUriKey] + '');
             if (util.browser.versions.mobile) {
               url = thirdParty.wechat.webUrl;
             }
@@ -234,7 +235,7 @@
         'signIn'
       ]),
       ...mapMutations({
-          updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
+        updataBeforeLoginPage: 'UPDATA_BEFORELOGINPAGE'
       })
     },
     components: {

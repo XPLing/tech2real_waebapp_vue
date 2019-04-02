@@ -2,10 +2,10 @@ import jsonp from 'assets/js/jsonp';
 import { commonParams, options, removePending, REQUEST_PREFIX } from './config';
 import axios from 'api/axios';
 
-const debug = process.env.NODE_ENV !== 'production';
+const debug = process.env.NODE_ENV === 'development';
 
 export function setUserInfoByGuid (params) {
-  var url = debug ? '/api/setUserInfoByGuid' : `/setUserInfoByGuid`;
+  var url = debug ? '/api/setUserInfoByGuid' : `${REQUEST_PREFIX}/setUserInfoByGuid`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,

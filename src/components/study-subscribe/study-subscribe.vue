@@ -4,7 +4,7 @@
             @pullingUp="requestScrollData">
       <div>
         <div class="g-recommend course">
-          <template v-if="requestScrollDataList">
+          <template v-if="userGuid && requestScrollDataList">
             <ul class="list">
               <subscribe-item :subscribe-data="item" v-for="(item, index) in requestScrollDataList" :key="index"
                               @selectItem="selectItem" @details="courseDetails"></subscribe-item>

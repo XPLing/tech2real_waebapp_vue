@@ -106,7 +106,7 @@ Vue.use(VueRouter);
 const Router = new VueRouter({
   linkActiveClass: 'active',
   mode: 'history',
-  base: '/m-web/',
+  // base: '/m-web/',
   scrollBehavior (to, from, savePosition) { // 在点击浏览器的“前进/后退”，或者切换导航的时候触发。
     to.meta.toTop = false;
     if (savePosition) {

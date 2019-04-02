@@ -15,8 +15,11 @@
                  :class="{'fa-spin fa-circle-o-notch': !isCanplay,'fa-play-circle':isCanplay}"></i>
             </p>
           </div>
-          <a class="file-link" v-else target="_blank" :href="fileUrl">
+          <a class="file-link" v-else target="_blank" :href="fileUrl" :title="fileBrief">
             <img :src="coverUrl">
+            <p class="mask" v-show="currentSelectSrc && currentSelectSrc.type!==4">
+              <i class="fa fa-play-circle"></i>
+            </p>
           </a>
         </div>
         <img v-else :src="coverUrl">
@@ -45,8 +48,9 @@
       <top-tip ref="toptip" :delay="10000">
         <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
       </top-tip>
-      <loading ref="loading"></loading>
-      <share @cancel="cancelShare" @share="share" ref="share"></share>
+      <loading ref="loading" :title="loadingTxt"></loading>
+      <share @cancel="shareCancel" @share="share" @error="shareError" :share-info="shareInfo"
+             @getConfigStart="shareGetConfigStart" @getConfigEnd="shareGetConfigEnd" ref="share"></share>
       <g-mask @clickMask="clickMask" ref="mask"></g-mask>
       <g-select :title="selectTitle" :select-data="listCourseValidityPeriod" @selectConfirm="selectPeriodConfirm"
                 @selectListItem="selectPeriodItem"
@@ -142,6 +146,7 @@
         videoUrl: null,
         coverUrl: null,
         fileUrl: null,
+        fileBrief: '',
         appliedState: null,
         isPause: true,
         isCanplay: false,
@@ -158,7 +163,10 @@
         joinOff: false,
         aggregationOpts: null,
         customConfirm: false,
-        customConfirmTxt: ''
+        customConfirmTxt: '',
+        currentSelectSrc: null,
+        loadingTxt: '',
+        shareInfo: null
       };
     },
     computed: {
@@ -198,30 +206,41 @@
           path: '/train'
         });
       },
-      cancelShare () {
-
-      },
       showShare () {
         this.$refs.share.show();
       },
+      shareCancel () {
+      },
+      shareError (erro) {
+        this.toptipTxt = erro.message;
+        this.$refs.toptip.show();
+      },
+      shareGetConfigStart () {
+        this.loadingTxt = '环境初始化中...';
+        this.$refs.loading.show();
+      },
+      shareGetConfigEnd () {
+        this.$refs.loading.hide();
+      },
       share (data) {
-        if (data < 0) {
-          this.$router.push({
-            name: 'community_commentFormRoot',
-            params: {
-              shareData: this.courseData,
-              shareType: 1
-            }
-          });
-
-        } else if (data === 1) {
-
-        } else if (data === 2) {
-
-        } else if (data === 3) {
-
-        } else if (data === 4) {
-
+        switch (data) {
+          case 0:
+            this.$router.push({
+              name: 'community_commentFormRoot',
+              params: {
+                shareData: this.courseData,
+                shareType: 1
+              }
+            });
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          case 4:
+            break;
         }
       },
       evaluateUpdate () {
@@ -306,7 +325,6 @@
         this.$refs.mask.hide();
       },
       getCourseData ($this) {
-
         $this = $this || this;
         $this._getCourseData($this);
         if (!this.aggregation) {
@@ -319,6 +337,7 @@
                 $this.chapterData = res.result;
                 if (res.result[0].type !== 2) {
                   $this.fileUrl = res.result[0].fileUrl;
+                  $this.fileBrief = res.result[0].brief;
                 } else {
                   $this.videoUrl = res.result[0].videoUrl;
                 }
@@ -339,7 +358,7 @@
       },
       changeVideo (data) {
         var vurl = data.videoUrl, type = data.type, furl = data.fileUrl;
-
+        this.currentSelectSrc = data;
         if (this.appliedState === 1) {
           if (!this.courseData.canWatch) {
             this.customConfirm = true;
@@ -378,6 +397,7 @@
           this.isCanplay = false;
           this.videoUrl = vurl;
           this.fileUrl = null;
+          this.fileBrief = '';
         } else {
           if (furl === this.fileUrl) {
             return;
@@ -385,6 +405,7 @@
           this.videoUrl = null;
           this.isCanplay = false;
           this.fileUrl = furl;
+          this.fileBrief = data.brief;
         }
       },
       changeApplyResult (res) {
@@ -547,6 +568,7 @@
                       $this.chapterData = res.result;
                       if (res.result[0].type !== 2) {
                         $this.fileUrl = res.result[0].fileUrl;
+                        $this.fileBrief = res.result[0].brief;
                       } else {
                         $this.videoUrl = res.result[0].videoUrl;
                       }
@@ -560,6 +582,13 @@
             }
             $this.courseData = courseResultData;
             $this.coverUrl = courseResultData.coverUrl;
+            $this.shareInfo = this.shareInfo = {
+              url: window.location.href,
+              cover: this.courseData.pictureUrl,
+              desc: this.courseData.listTitle,
+              title: this.courseData.listTitle,
+              summary: this.courseData.listTitle
+            };
             // applyStatus 0、加入学习  1、报名完成 6、待审核  7、未通过  8、待支付  9、被驳回  10、报名取消，显示重新报名  11、活动结束
             $this.appliedState = courseResultData.appliedState;
             $this.courseState = courseResultData.status;
