@@ -178,10 +178,10 @@
             this.dataInfo = res.result;
             this.shareInfo = {
               url: window.location.href,
-              cover: this.dataInfo.pictureUrl,
+              cover: this.dataInfo.coverUrl,
               desc: this.dataInfo.sponsor,
-              title: this.dataInfo.listTitle,
-              summary: this.dataInfo.listTitle
+              title: this.dataInfo.title,
+              summary: this.dataInfo.title
             };
             this.pageTitle = res.result.title;
             this.applyStatus = this.applyStatusValue(res.result.applyStatus);

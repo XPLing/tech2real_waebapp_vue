@@ -584,10 +584,10 @@
             $this.coverUrl = courseResultData.coverUrl;
             $this.shareInfo = this.shareInfo = {
               url: window.location.href,
-              cover: this.courseData.pictureUrl,
-              desc: this.courseData.listTitle,
-              title: this.courseData.listTitle,
-              summary: this.courseData.listTitle
+              cover: this.courseData.coverUrl,
+              desc: this.courseData.title,
+              title: this.courseData.title,
+              summary: this.courseData.title
             };
             // applyStatus 0、加入学习  1、报名完成 6、待审核  7、未通过  8、待支付  9、被驳回  10、报名取消，显示重新报名  11、活动结束
             $this.appliedState = courseResultData.appliedState;
