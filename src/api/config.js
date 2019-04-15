@@ -26,7 +26,7 @@ export let removePending = (config, obj) => {
 
 export const ERR_OK = 200;
 export const ERR_OK_STR = 'ok';
-export const REQUEST_PREFIX = pro ? 'https://open.tech2real.com' : 'https://open.dev.tech2real.com';
+export const REQUEST_PREFIX = pro ? '' : '';
 
 export let thirdParty = {
   wechat: {

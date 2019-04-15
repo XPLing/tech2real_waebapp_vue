@@ -9,10 +9,10 @@
       <div class="g-video" v-if="courseData">
         <div v-if="chapterData" class="recourse-wrapper">
           <div v-if="videoUrl" class="video-wrapper">
-            <video controls :src="videoUrl" ref="video" @canplay="videoCanplay"></video>
+            <video controls :src="videoUrl" ref="video" x-webkit-airplay="true" playsinline webkit-playsinline=”true” preload="auto" @canplay="videoCanplay"></video>
             <p class="video-mask" v-show="isPause" @click.stop="Vclick">
               <i class="fa"
-                 :class="{'fa-spin fa-circle-o-notch': !isCanplay,'fa-play-circle':isCanplay}"></i>
+                 :class="{'fa-spin fa-circle-o-notch': !isCanplay && !isIOS,'fa-play-circle':isCanplay || isIOS}"></i>
             </p>
           </div>
           <a class="file-link" v-else target="_blank" :href="fileUrl" :title="fileBrief">
@@ -166,6 +166,7 @@
         customConfirmTxt: '',
         currentSelectSrc: null,
         loadingTxt: '',
+        isIOS: false,
         shareInfo: null
       };
     },
@@ -190,6 +191,8 @@
       ])
     },
     created () {
+      var browser = util.common.getbrowserType();
+      this.isIOS = /1.2|2/.test(browser);
       this.init();
     },
     activated () {
@@ -412,11 +415,12 @@
         this.applyResult = res;
       },
       Vclick () {
+
         if (this.appliedState <= 0) {
           this.operate();
           return;
         }
-        if (this.isCanplay) {
+        if (this.isCanplay || this.isIOS) {
           this.Vplay();
         }
       },

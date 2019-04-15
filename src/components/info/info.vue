@@ -277,7 +277,8 @@
         var param = {
           productGuid: this.productGuid,
           type: 2,
-          userGuid: this.userGuid
+          userGuid: this.userGuid,
+          version: 1
         };
         return listBannersByLocationType(param);
       },
@@ -293,7 +294,8 @@
           productGuid: this.productGuid,
           categoryId: id,
           page: page,
-          limitSize: 10
+          limitSize: 10,
+          version: 1
         };
         return listNewsArticlesByCategory(param);
       },
@@ -301,7 +303,8 @@
         var param = {
           userGuid: this.userGuid,
           page: page,
-          limitSize: 10
+          limitSize: 10,
+          version: 1
         };
         return listArticlesByClubGuids(param);
       }
