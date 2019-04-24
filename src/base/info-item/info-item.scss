@@ -123,6 +123,9 @@
         margin-bottom: formatVal(10,rem);
       }
       .info{
+        span{
+          max-width: 8em;
+        }
         .price {
           &.red {
             color: $color-text-stress-r;

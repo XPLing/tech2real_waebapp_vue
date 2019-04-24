@@ -12,7 +12,10 @@ const state = {
     'qq': null,
     'sina': null
   },
-  beforeLoginPage: util.cookieOperate.getBeforeLoginPage() || '/info'
+  beforeLoginPage: util.cookieOperate.getBeforeLoginPage() || '/info',
+  routerHistory: [],
+  firstEnter: true,
+  firstBack: true
 };
 
 export default state;

@@ -9,6 +9,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { mapGetters, mapMutations } from 'vuex';
+
   export default {
     props: {
       title: {
@@ -43,10 +45,35 @@
     data () {
       return {};
     },
+    computed: {
+      ...mapGetters([
+        'firstBack',
+        'routerHistory'
+      ])
+    },
+    created () {
+      console.log(this.$route.query);
+    },
+    mounted () {
+      console.log(this.$route.query);
+    },
     methods: {
       back () {
         if (this.backHandle === 'default') {
-          this.$router.back();
+          console.log(this.$route);
+          var hsitory = this.routerHistory[0], isRoot = /root/.test(hsitory.name), path = this.$route.matched[0].path,
+            isSubRoute = this.$route.meta.isFirst == 1 && hsitory.fullPath === this.$route.fullPath;
+          if (window.history.length === 1 || isSubRoute) {
+            if (isSubRoute) {
+              this.$route.meta.isFirst = 0;
+              this.updateFirstBack(false);
+            }
+            this.$router.replace({
+              path: path
+            });
+          } else {
+            this.$router.back();
+          }
         }
         this.$emit('back');
       },
@@ -55,7 +82,10 @@
       },
       share () {
         this.$emit('share');
-      }
+      },
+      ...mapMutations({
+        updateFirstBack: 'UPDATE_FIRSTBACK'
+      })
     }
   };
 </script>

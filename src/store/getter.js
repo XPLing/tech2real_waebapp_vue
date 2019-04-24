@@ -6,3 +6,6 @@ export const thirdParty = (state) => state.thirdParty;
 export const thirdPartyInfo = (state) => state.thirdPartyInfo;
 export const beforeLoginPage = (state) => state.beforeLoginPage;
 export const systemInfo = (state) => state.systemInfo;
+export const routerHistory = (state) => state.routerHistory;
+export const firstEnter = (state) => state.firstEnter;
+export const firstBack = (state) => state.firstBack;

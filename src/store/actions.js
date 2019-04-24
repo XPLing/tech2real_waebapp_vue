@@ -23,3 +23,7 @@ export let signOut = function ({commit, state}) {
   commit(types.REMOVE_USEINFO);
   commit(types.REMOVE_USERGUID);
 };
+export let recordHistory = function ({commit, state}, data) {
+  commit(types.UPDATE_FIRSTENTER, data.isfirst);
+  commit(types.RECORD_ROUTERHISTORY, data.path);
+};

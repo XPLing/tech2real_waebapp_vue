@@ -188,7 +188,9 @@
       },
       changeTag (item, index) {
         this.tagCurrentIndex = index;
-        this.requestInfo();
+        if (this.tagCurrentIndex === 1 && this.infoList[this.tagCurrentIndex].length === 0) {
+          this.requestInfo();
+        }
         this.$nextTick(() => {
           this.$refs.scroll.refresh();
           this.$refs.scroll.scrollTo(0, 0);
@@ -217,6 +219,11 @@
                 return;
               }
               if (res.result.length > 0) {
+                if (this.tagCurrentIndex === 0) {
+                  res.result.forEach(function (value, i) {
+                    value.timeValue = value.createdTime.split(' ')[0];
+                  });
+                }
                 if (this.infoList[this.tagCurrentIndex]) {
                   this.$set(this.infoList, this.tagCurrentIndex, this.infoList[this.tagCurrentIndex].concat(res.result));
                 } else {
@@ -293,7 +300,8 @@
           productGuid: this.productGuid,
           categoryId: id,
           page: page,
-          limitSize: 10
+          limitSize: 10,
+          version: 1
         };
         return listNewsArticlesByCategory(param);
       },
@@ -301,7 +309,8 @@
         var param = {
           userGuid: this.userGuid,
           page: page,
-          limitSize: 10
+          limitSize: 10,
+          version: 1
         };
         return listArticlesByClubGuids(param);
       }

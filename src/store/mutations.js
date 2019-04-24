@@ -59,6 +59,18 @@ const mutations = {
   // 记录系统信息
   [types.RECORD_SYSTEMINFO] (state) {
     state.systemInfo = util.browser;
+  },
+  // 记录系统信息
+  [types.RECORD_ROUTERHISTORY] (state, val) {
+    state.routerHistory = [...state.routerHistory, val];
+  },
+  // 记录系统信息
+  [types.UPDATE_FIRSTENTER] (state, val) {
+    state.firstEnter = val;
+  },
+  // 记录系统信息
+  [types.UPDATE_FIRSTBACK] (state, val) {
+    state.firstBack = val;
   }
 };
 

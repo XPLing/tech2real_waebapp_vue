@@ -710,8 +710,17 @@ Router.beforeEach((to, form, next) => {
   var u = navigator.userAgent, app = navigator.appVersion,
     isWx = u.toLowerCase().match(/MicroMessenger/i) == 'micromessenger',
     isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-  if (isIOS && isWx && /\/pay\//.test(to.path) && '/m-web' + to.path !== window.location.pathname) {
-    window.location.assign('/m-web' + to.fullPath);
+  if (isIOS && isWx && /\/pay\//.test(to.path) && to.path !== window.location.pathname) {
+    window.location.assign(to.fullPath);
+  }
+  if (Router.app.$options.store.state.firstEnter) {
+    if (!/root/.test(to.name)) {
+      to.meta.isFirst = 1;
+    }
+    Router.app.$options.store.dispatch('recordHistory', {
+      isFist: false,
+      path: to
+    });
   }
   next();
 });

@@ -27,7 +27,8 @@
             <p class="title">{{initInfo.listTitle | ellipsis(28)}}</p>
             <p class="info">
               <span>{{ initInfo.source }}</span>
-              <span>{{ initInfo.createdTime.split(' ')[0]}}</span>
+              <span>{{ initInfo.timeValue }}</span>
+              <!--<span>{{ initInfo.createdTime.split(' ')[0]}}</span>-->
             </p>
           </div>
           <div class="media-right">
