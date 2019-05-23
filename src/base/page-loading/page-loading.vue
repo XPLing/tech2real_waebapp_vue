@@ -32,8 +32,12 @@
         showFlag: true
       };
     },
-    created(){},
-    activated(){},
+    created(){
+      console.log('page-loading');
+    },
+    activated(){
+
+    },
     methods: {
       show () {
         this.showFlag = true;

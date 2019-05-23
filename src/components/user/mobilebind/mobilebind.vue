@@ -452,16 +452,19 @@
         return webBoundMobileByThirdPartUid(param);
       },
       _webRegisterAndBoundMobileByThirdPartUid () {
-        var uidName = '';
+        var uidName = '', regType = 0;
         switch (this.thirdParty) {
           case 'weixin':
             uidName = 'unionid';
+            regType = 2;
             break;
           case 'qq':
             uidName = 'openid';
+            regType = 3;
             break;
           case 'sina':
             uidName = 'uid';
+            regType = 4;
             break;
         }
         var param = {
@@ -471,6 +474,8 @@
           nickname: this.thirdPartyInfo[this.thirdParty].nickname,
           faceHash: this.thirdPartyInfo[this.thirdParty].faceHash,
           code: this.verifycode,
+          reg_way: 4,
+          reg_type: regType,
           password: this.password
         };
         return webRegisterAndBoundMobileByThirdPartUid(param);

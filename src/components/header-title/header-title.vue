@@ -51,12 +51,6 @@
         'routerHistory'
       ])
     },
-    created () {
-      console.log(this.$route.query);
-    },
-    mounted () {
-      console.log(this.$route.query);
-    },
     methods: {
       back () {
         if (this.backHandle === 'default') {

@@ -223,7 +223,7 @@
           phone: this.phone,
           reg_way: 4,
           password: this.password,
-          regType: 1,
+          reg_type: 1,
           nickname: this.nickname
         });
       },
