@@ -3,7 +3,7 @@
     <div class="media-left" v-if="detail">
       <img v-lazy="detail.likeAvatar" alt="">
     </div>
-    <div class="media-body" v-if="detail">
+    <div class="media-body" v-if="detail" :class="{readed: data.isRead}">
       <p class="info">
         <span class="name">{{detail.likeNickname}}</span>
         <span class="time">{{data.updateTime | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>

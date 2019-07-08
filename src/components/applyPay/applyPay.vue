@@ -131,8 +131,8 @@
         toptipTxt: '',
         loadingTxt: '',
         payConfirmTxt: '请确认支付是否已完成',
-        confirmTxt: '',
         confirmDialog: true,
+        confirmTxt: '',
         topTipAutoHide: false,
         isWx: false
       };

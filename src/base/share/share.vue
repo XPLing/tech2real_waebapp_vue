@@ -16,10 +16,10 @@
             </div>
             <div class="split">分享到社交平台</div>
             <div class="to-vendor">
-              <img class="item" src="./wechat.png" @click="share('weixin')">
-              <img class="item" src="./qzone.png" @click="share('friends')">
-              <img class="item" src="./qq.png" @click="share('qq')">
-              <img class="item" src="./weibo.png" @click="share('sina')">
+              <img class="item" src="./wechat.png" @click.prevent="share('weixin')">
+              <img class="item" src="./qzone.png" @click.prevent="share('friends')">
+              <img class="item" src="./qq.png" @click.prevent="share('qq')">
+              <img class="item" src="./weibo.png" @click.prevent="share('sina')">
             </div>
           </div>
           <div class="operate">
@@ -96,6 +96,7 @@
             if (this.isWechat) {
               this.$refs.wechatShareGuide.show();
             } else {
+              this.confirmTxt = '请在微信打开此网页';
               this.$refs.confirmsWrapper.show();
             }
             isOpen = false;
@@ -214,9 +215,8 @@
         wx.error((res) => {
           // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
           console.log(res);
-          this.topTipAutoHide = true;
-          this.toptipTxt = res.errMsg;
-          this.$refs.toptip.show();
+          this.confirmTxt = res.errMsg;
+          this.$refs.confirmsWrapper.show();
         });
       },
       _getWxJsApiConfig () {

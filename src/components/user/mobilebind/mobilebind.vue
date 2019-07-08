@@ -474,8 +474,8 @@
           nickname: this.thirdPartyInfo[this.thirdParty].nickname,
           faceHash: this.thirdPartyInfo[this.thirdParty].faceHash,
           code: this.verifycode,
-          reg_way: 4,
-          reg_type: regType,
+          regWay: 4,
+          regType: regType,
           password: this.password
         };
         return webRegisterAndBoundMobileByThirdPartUid(param);

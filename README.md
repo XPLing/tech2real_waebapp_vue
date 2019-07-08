@@ -1,6 +1,6 @@
-# vue2-music
+# tech2realApp_wap
 
-> vue音乐播放器
+> 硬件app网页移动版
 
 ## Build Setup
 

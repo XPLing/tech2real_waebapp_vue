@@ -1,13 +1,18 @@
 <template>
-  <li class="c-info-list-item" :class="{'chunk':(type===1 && showSpecial && initInfo.isRecommend==='Y') || (showSpecial && initInfo.infoType===2)}" @click.stop="selectItem(initInfo)">
+  <li class="c-info-list-item"
+      :class="{'chunk':(initInfo.infoType===1 && currentTag !== tagCount && showSpecial && initInfo.isRecommend==='Y') || (showSpecial && initInfo.infoType===2)}"
+      @click.stop="selectItem(initInfo)">
     <template v-if="initInfo">
-      <template v-if="type===1">
-        <div class="wrapper recommend" v-if="showSpecial && initInfo.isRecommend==='Y'">
-          <img v-lazy="{
-            src: initInfo.pictureUrl,
+      <template v-if="initInfo.infoType===1">
+        <div class="wrapper recommend"
+             v-if="showSpecial && initInfo.isRecommend==='Y' && currentTag !== tagCount">
+          <p class="pic">
+            <img v-lazy="{
+            src: initInfo.drawImg || initInfo.pictureUrl,
             error: lazy.error,
             loading: lazy.loading
           }">
+          </p>
           <div class="detail">
             <p class="title">{{initInfo.listTitle | ellipsis(28)}}</p>
             <p class="brief">{{initInfo.brief | ellipsis(50)}}</p>
@@ -33,7 +38,7 @@
           </div>
           <div class="media-right">
             <img v-lazy="{
-          src: initInfo.pictureUrl,
+          src: initInfo.drawImg || initInfo.pictureUrl,
           error: lazy.error,
           loading: lazy.loading
         }" alt="">
@@ -46,13 +51,14 @@
             <p class="title">社群推荐</p>
             <a class="more" @click.stop="toClubs">更多<i class="arrow"></i></a>
           </div>
-          <clubs-list-horizontal :clubList="initInfo" @selectClub="selectClub"></clubs-list-horizontal>
+          <clubs-list-horizontal :clubList="initInfo.list" @selectItem="selectClubItem"
+                                 @join="joinClub"></clubs-list-horizontal>
         </div>
         <div class="wrapper c-media" v-else>
           <div class="media-body">
             <p class="title">{{initInfo.listTitle | ellipsis(28)}}</p>
             <p class="info">
-              <span>{{ initInfo.author }}</span>
+              <span>{{ initInfo.source }}</span>
               <span>{{ new Date(initInfo.createdTime) | formatDate('yyyy-MM-dd')}}</span>
             </p>
           </div>
@@ -72,19 +78,26 @@
 <script type="text/ecmascript-6">
   import ClubsItem from 'base/clubs-item/clubs-item';
   import ClubsListHorizontal from 'base/clubs-list-horizontal/clubs-list-horizontal';
+  import { imgOnloadSingle, changeImgRatio } from 'assets/js/imgOnload';
+  import { common } from 'assets/js/util';
 
+  const IMGBIG_W = common.calculateWH(347);
+  const IMGBIG_H = common.calculateWH(200);
+  const IMGSMALL_W = common.calculateWH(109);
+  const IMGSMALL_H = common.calculateWH(85);
   export default {
-    // type: 1.listNewsArticlesByCategory 2.listNewsArticlesByCategory
+    // type: 1.业界动态 2.关注
     props: {
       info: {
         type: Object,
         default: null
       },
       showSpecial: false,
-      type: {
+      currentTag: {
         type: Number,
         default: 1
-      }
+      },
+      tagCount: null
     },
     data () {
       return {
@@ -98,16 +111,44 @@
       };
     },
     created () {
-      if (this.type === 2) {
+      if (this.currentTag === this.tagCount) {
         if (this.info.article) {
-          this.initInfo = this.info.article;
-          this.$set(this.$data.initInfo, 'infoType', 1);
+          this.info.article.infoType = 1;
+          this.$set(this.$data, 'initInfo', this.info.article);
         } else if (this.info.club) {
-          this.initInfo = this.info.club;
-          this.$set(this.$data.initInfo, 'infoType', 2);
+          let obj = {
+            list: this.info.club,
+            infoType: 2
+          };
+          this.$set(this.$data, 'initInfo', obj);
         }
       } else {
-        this.initInfo = this.info;
+        this.info.infoType = 1;
+        this.$set(this.$data, 'initInfo', this.info);
+      }
+      // 图片处理
+      if (this.initInfo.pictureUrl && this.initInfo.infoType === 1) {
+        imgOnloadSingle(this.initInfo.pictureUrl).then(res => {
+          let imgSrc, boxImg;
+          if (this.showSpecial && this.initInfo.isRecommend === 'Y' && this.currentTag !== this.tagCount) {
+            // 大图
+            boxImg = {
+              width: IMGBIG_W,
+              height: IMGBIG_H
+            };
+
+          } else {
+            // 小图
+            boxImg = {
+              width: IMGSMALL_W,
+              height: IMGSMALL_H
+            };
+          }
+          imgSrc = changeImgRatio(res, boxImg);
+          this.$set(this.initInfo, 'drawImg', imgSrc);
+        }).catch(e => {
+          console.log(e);
+        });
       }
     },
     methods: {
@@ -122,17 +163,11 @@
         }
         this.$emit('selectInfo', data);
       },
-      selectClub (data) {
-        var url = `/clubs/clubdetail/${data.guid}`;
-        this.$router.push({
-          path: url,
-          query: {
-            first: this.clubFirst
-          }
-        });
-        if (this.clubFirst) {
-          this.clubFirst = false;
-        }
+      selectClubItem (data) {
+        this.$emit('selectClubItem', data);
+      },
+      joinClub (data) {
+        this.$emit('joinClub', data);
       }
     },
     components: {

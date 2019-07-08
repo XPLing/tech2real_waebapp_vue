@@ -30,9 +30,10 @@
             <div class="info-type-item" v-for="(item,index) in infoList" :key="index"
                  v-show="tagCurrentIndex===index">
               <ul class="list">
-                <info-item :show-special="true" :type="tagCurrentIndex+1" :info="Iitem"
+                <info-item :show-special="true" :current-tag="tagCurrentIndex+1" :tag-count="tagList && tagList.length"
+                           :info="Iitem"
                            v-for="(Iitem, Iindex) in item"
-                           :key="Iindex"
+                           :key="`${index}-${Iindex}`" @selectClubItem="selectClubItem" @joinClub="joinClub"
                            @selectInfo="selectInfo"></info-item>
               </ul>
               <div v-if="item.length<=0" class="no-result-wrapper">
@@ -50,6 +51,7 @@
     <top-tip ref="toptip" :delay="10000">
       <p class="error" v-show="toptipTxt" v-html="toptipTxt"></p>
     </top-tip>
+    <confirm ref="confirmsWrapper" :text="confirmTxt" :isDialog="true"></confirm>
     <back-top ref="backTop" @backTop="backTop"></back-top>
     <keep-alive :include="keepAliveList">
       <router-view></router-view>
@@ -62,7 +64,7 @@
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
   import Scroll from 'base/scroll/scroll';
   import HeaderTitle from 'components/header-title/header-title';
-  import { ERR_OK } from 'api/config';
+  import { ERR_OK, ERR_OK_STR } from 'api/config';
   import * as util from 'assets/js/util';
   import { mapGetters, mapMutations } from 'vuex';
   import TopTip from 'base/top-tip/top-tip';
@@ -70,8 +72,10 @@
   import InfoItem from 'base/info-item/info-item';
   import NoResult from 'base/no-result/no-result';
   import { listNewsCategories, listNewsArticlesByCategory, listArticlesByClubGuids } from 'api/info';
+  import { signPublicClubInView, quitClub, getClubByClubGuid } from 'api/club';
   import listBannersByLocationType from 'api/banner';
   import BackTop from 'base/backtop/backtop';
+  import Confirm from 'base/confirm/confirm';
 
   const NAV_HEIGHT = util.common.calculateWH(40);
   const TAG_HEIGHT = util.common.calculateWH(44);
@@ -87,6 +91,7 @@
     },
     data () {
       return {
+        confirmTxt: '',
         keepAliveList: /^KA_infoDetail/,
         probeType: 3,
         toptipTxt: '',
@@ -111,14 +116,14 @@
           pagination: false
         },
         tagList: null,
-        requestDataName: ['_listNewsArticlesByCategory', '_listArticlesByClubGuids'],
+        requestDataName: ['_listNewsArticlesByCategory', '_listArticlesByClubGuids', '_listArticlesByClubGuids'],
         tagCurrentIndex: 0,
         bannerList: null,
-        requestMoreFlag: [false, false],
-        noMore: [false, false],
+        requestMoreFlag: [],
+        noMore: [],
         noResult: '加载中。。。',
         noMoreStr: '没有更多了~',
-        infoPage: [1, 1],
+        infoPage: [],
         infoList: [],
         scrollY: 0,
         tagFloatFlag: false
@@ -144,6 +149,11 @@
             return Promise.reject(res);
           }
           this.tagList = res.result;
+          for (var tagIndex = 0, tagLen = this.tagList.length; tagIndex < tagLen; tagIndex++) {
+            this.$set(this.requestMoreFlag, tagIndex, false);
+            this.$set(this.infoPage, tagIndex, 1);
+            this.$set(this.noMore, tagIndex, false);
+          }
           for (var i = 0, len = res.result.length; i < len; i++) {
             this.$set(this.infoList, i, []);
           }
@@ -168,6 +178,36 @@
       ])
     },
     methods: {
+      selectClubItem (data) {
+        var url = `/clubs/clubdetail/${data.guid}`;
+        this.$router.push({
+          path: url,
+          query: {
+            first: this.clubFirst
+          }
+        });
+        if (this.clubFirst) {
+          this.clubFirst = false;
+        }
+      },
+      joinClub (data) {
+        if (data.userClubId !== 1) {
+          this._signPublicClubInView(data.guid).then((res) => {
+            if (res.status !== ERR_OK_STR) {
+              this.toptipTxt = res.results.message;
+              this.$refs.toptip.show();
+              return false;
+            }
+            data.userClubId = 1;
+            console.log(res);
+            this.confirmTxt = res.results.message;
+            this.$refs.confirmsWrapper.show();
+          }, erro => {
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+        }
+      },
       reload () {
         this.isRouterAlive = false;
         this.$nextTick(() => {
@@ -188,7 +228,7 @@
       },
       changeTag (item, index) {
         this.tagCurrentIndex = index;
-        if (this.tagCurrentIndex === 1 && this.infoList[this.tagCurrentIndex].length === 0) {
+        if (this.tagCurrentIndex === this.tagList.length - 1 && this.infoList[this.tagCurrentIndex].length === 0) {
           this.requestInfo();
         }
         this.$nextTick(() => {
@@ -280,6 +320,32 @@
             break;
         }
       },
+      _getClubByClubGuid (guid) {
+        var param = {
+          club_guid: guid,
+          user_guid: this.userGuid,
+          product_guid: this.productGuid
+        };
+        return getClubByClubGuid(param, {
+          concurrent: true
+        });
+      },
+      _quitClub (id) {
+        var param = {
+          club_guid: id,
+          user_guid: this.userGuid,
+          product_guid: this.productGuid
+        };
+        return quitClub(param);
+      },
+      _signPublicClubInView (id) {
+        var param = {
+          club_guid: id,
+          user_guid: this.userGuid,
+          product_guid: this.productGuid
+        };
+        return signPublicClubInView(param);
+      },
       _listBannersByLocationType () {
         var param = {
           productGuid: this.productGuid,
@@ -346,6 +412,30 @@
         this.$nextTick(() => {
           this.$refs.scroll.refresh();
         });
+      },
+      $route (to, from) {
+        if (from.name === 'clubDetail') {
+          let info = this.infoList[this.infoList.length - 1];
+          info = info.filter((val) => {
+            return val.club;
+          })[0].club.filter((val) => {
+            return val.guid === from.params.clubguId;
+          })[0];
+          if (info && info.guid) {
+            this._getClubByClubGuid(info.guid).then((res) => {
+              if (res.code) {
+                if (res.code != ERR_OK) {
+                  return Promise.reject(res);
+                }
+                info.userClubId = res.result.userClubId;
+              }
+            }).catch(erro => {
+              this.toptipTxt = erro.message;
+              this.$refs.toptip.show();
+            });
+          }
+
+        }
       }
     },
     components: {
@@ -357,7 +447,8 @@
       Scroll,
       InfoItem,
       BackTop,
-      NoResult
+      NoResult,
+      Confirm
     }
   };
 </script>

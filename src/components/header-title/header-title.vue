@@ -1,6 +1,7 @@
 <template>
   <div class="g-header-title">
     <i v-if="hasBack" class="fa fa-angle-left left" @click="back" aria-hidden="true"></i>
+    <img v-if="icon" class="icon" :src="icon">
     <span class="title">{{title}}</span>
     <i v-if="hasSearch" class="fa c-icon-search right" aria-hidden="true"></i>
     <i v-if="hasShare" class="fa c-icon-share_top right" aria-hidden="true" @click="share"></i>
@@ -14,6 +15,10 @@
   export default {
     props: {
       title: {
+        type: String,
+        default: ''
+      },
+      icon: {
         type: String,
         default: ''
       },
@@ -54,7 +59,6 @@
     methods: {
       back () {
         if (this.backHandle === 'default') {
-          console.log(this.$route);
           var hsitory = this.routerHistory[0], isRoot = /root/.test(hsitory.name), path = this.$route.matched[0].path,
             isSubRoute = this.$route.meta.isFirst == 1 && hsitory.fullPath === this.$route.fullPath;
           if (window.history.length === 1 || isSubRoute) {

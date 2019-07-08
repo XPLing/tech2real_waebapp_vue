@@ -73,11 +73,12 @@
         }, 300);
       },
       confirm () {
-        if (!this.userGuid) {
-          this.$router.replace({
-            path: '/user/login'
-          });
-        } else if (this.sendResult) {
+//        if (!this.userGuid) {
+//          this.$router.replace({
+//            path: '/user/login'
+//          });
+//        } else
+        if (this.sendResult) {
           this.$router.back();
         }
       },
@@ -114,8 +115,8 @@
       _addFeedback () {
         var param = {
           product_guid: this.productGuid,
-          user_guid: this.userGuid,
-          user_mobile: this.userInfo.mobile,
+          user_guid: this.userGuid || '',
+          user_mobile: this.userInfo.mobile || '',
           content: this.feedbackCont
         };
         return addFeedback(param);

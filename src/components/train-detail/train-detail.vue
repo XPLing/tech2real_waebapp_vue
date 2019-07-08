@@ -327,28 +327,6 @@
       getCourseData ($this) {
         $this = $this || this;
         $this._getCourseData($this);
-        if (!this.aggregation) {
-          $this._listChaptersByCourseId(this.courseID).then((res) => {
-            if (res.code) {
-              if (res.code != ERR_OK) {
-                return Promise.reject(res);
-              }
-              if (res.result.length > 0) {
-                $this.chapterData = res.result;
-                if (res.result[0].type !== 2) {
-                  $this.fileUrl = res.result[0].fileUrl;
-                  $this.fileBrief = res.result[0].brief;
-                } else {
-                  $this.videoUrl = res.result[0].videoUrl;
-                }
-
-              }
-            }
-          }).catch(erro => {
-            this.toptipTxt = erro.message;
-            this.$refs.toptip.show();
-          });
-        }
       },
       setDatas (key, val, index, dataName) {
         this.$set(this.chapterData[index], key, val);
@@ -546,6 +524,29 @@
       },
       _getCourseData ($this) {
         return this._getCourseById($this).then((res) => {
+          $this.aggregation = res.result.stype === 2;
+          if (!$this.aggregation) {
+            $this._listChaptersByCourseId(this.courseID).then((res) => {
+              if (res.code) {
+                if (res.code != ERR_OK) {
+                  return Promise.reject(res);
+                }
+                if (res.result.length > 0) {
+                  $this.chapterData = res.result;
+                  if (res.result[0].type !== 2) {
+                    $this.fileUrl = res.result[0].fileUrl;
+                    $this.fileBrief = res.result[0].brief;
+                  } else {
+                    $this.videoUrl = res.result[0].videoUrl;
+                  }
+
+                }
+              }
+            }).catch(erro => {
+              this.toptipTxt = erro.message;
+              this.$refs.toptip.show();
+            });
+          }
           if (res.code || $this.aggregation) {
             if (res.code != ERR_OK && !$this.aggregation) {
               $this.toptipTxt = res.message;

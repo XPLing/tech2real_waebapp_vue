@@ -1,8 +1,8 @@
 <template>
   <transition name="slide">
     <div class="g-info-detail">
-      <header class="g-header">
-        <HeaderTitle :title="pageTitle" :has-back="true"></HeaderTitle>
+      <header class="g-header" v-if="clubInfo">
+        <HeaderTitle :title="pageTitle" :has-back="true" :icon="clubInfo.logoUrl"></HeaderTitle>
       </header>
       <download v-if="isShare" ref="downloadAppFixed" :is-fixed="true"></download>
       <div class="g-main">
@@ -197,6 +197,9 @@
       ])
     },
     methods: {
+      alert(info){
+        alert(info)
+      },
       confirm () {
         if (!this.userGuid) {
           this.$router.push({
@@ -215,8 +218,8 @@
               return;
             }
             this.articleInfo = res.result;
-            this.articleInfoContent = this.articleInfo.content.replace(/(width|height|min-width|min-height|max-width|max-height)\s*?(:|=)\s*?\d+[^%]*?;/ig, '');
-            this.pageTitle = res.result.listTitle;
+            this.articleInfoContent = this.articleInfo.content.replace(/[^(line\-)](width|height|min-width|min-height|max-width|max-height)\s*?(:|=)\s*?\d+[^%]*?;/ig, '');
+            this.pageTitle = res.result.source;
             this.shareInfo = {
               url: window.location.href,
               cover: this.articleInfo.pictureUrl,
@@ -297,7 +300,7 @@
       },
       share (data) {
         switch (data) {
-          case 0:
+          case -1:
             this.$router.push({
               name: 'community_commentFormRoot',
               params: {

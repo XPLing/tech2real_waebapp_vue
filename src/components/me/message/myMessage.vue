@@ -8,7 +8,7 @@
         <div class="tag-item" v-for="(item, index) in tagList" :key="index"
              :class="{'active': tagCurrentIndex === index}"
              @click="changeTag(item, index)">
-          <span class="title" :class="{'new-msg': item.hasMeg && hasNewMsg}">
+          <span class="title" :class="{'new-msg': newMsgList[index] && newMsgList[index]>0}">
             {{item.name}}
           </span>
         </div>
@@ -96,8 +96,8 @@
           },
           {
             name: '通知',
-            type: 3,
-            hasMeg: true
+            type: 3
+//            hasMeg: true
           }
         ],
         tagCurrentIndex: 0,
@@ -108,6 +108,7 @@
         noMoreStr: '没有更多了~',
         infoPage: [1, 1, 1],
         infoList: [],
+        newMsgList: [],
         tagFloatFlag: false
       };
     },
@@ -129,7 +130,6 @@
     },
     methods: {
       selectNotice (data) {
-        console.log(data);
         if (!data.isRead) {
           this._clickNotifyMessage(data.id).then((res) => {
             if (res.code) {
@@ -154,7 +154,10 @@
           url = `/train/all/applyresult?applyTargetId=${params.courseId}&applyId=${params.applyId}`;
         } else if (data.type === 6) {
           // 课程合辑申请详情
-//          url = `/train/all/applyresult?applyTargetId=${params.coursePackageId}&applyId=${params.applyId}`;
+          url = `/train/all/applyresult?applyTargetId=${params.coursePackageId}&applyId=${params.applyId}`;
+        } else if (data.type === 8) {
+          // 课程合辑申请详情
+          url = `/train/all/${params.courseId}`;
         }
         if (url) {
           this.$router.push({
@@ -167,6 +170,21 @@
 
         /* commentType 2.资讯 3.活动 4.社群 */
         var url, title;
+        if (!data.isRead) {
+          this._clickNotifyMessage(data.id).then((res) => {
+            if (res.code) {
+              if (res.code != ERR_OK) {
+                return Promise.reject(res);
+              }
+              data.isRead = true;
+              this.upDateUnreadNotify();
+            }
+          }).catch(erro => {
+            console.log(erro);
+            this.toptipTxt = erro.message;
+            this.$refs.toptip.show();
+          });
+        }
         switch (detail.commentType) {
           case 2:
             url = `/info/infodetail/commentlist/${detail.commentId}`;
@@ -212,7 +230,8 @@
               this.$refs.toptip.show();
               return false;
             }
-            this.hasNewMsg = res.result ? res.result : false;
+            this.hasNewMsg = res.result.allNotifyFlag;
+            this.newMsgList = res.result.notifyCountList;
           }
         }, erro => {
           this.toptipTxt = erro.message;

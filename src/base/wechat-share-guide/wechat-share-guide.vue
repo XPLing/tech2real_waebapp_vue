@@ -1,8 +1,13 @@
 <template>
   <transition name="confirm-fade">
     <div class="c-wechat-share-guide" v-show="showFlag">
-      微信引导层
-      <i class="icon fa fa-times" @click="hide"></i>
+      <p class="top">
+        <img src="./top.png" @click.prevent>
+      </p>
+      <div class="btnbox">
+        <img class="btn" src="./btn.png" @click.prevent="hide">
+        <img class="line" src="./line.png" @click.prevent>
+      </div>
     </div>
   </transition>
 </template>

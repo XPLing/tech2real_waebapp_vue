@@ -1,7 +1,7 @@
 <template>
   <div class="c-share-link">
     <img class="cover" v-lazy="{
-          src: data.cover,
+          src: drawImg || data.cover,
           error: lazy.error,
           loading: lazy.loading
         }">
@@ -10,7 +10,13 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { imgOnloadSingle, changeImgRatio } from 'assets/js/imgOnload';
+  import { common } from 'assets/js/util';
   // shareType; //1 课程，2 资讯文章，3 活动，10 其他；
+
+  const IMG_W = common.calculateWH(46);
+  const IMG_H = common.calculateWH(46);
+
   export default {
     props: {
       data: {
@@ -23,10 +29,25 @@
         lazy: {
           error: require('./loading.jpg'),
           loading: require('./loading.jpg')
-        }
+        },
+        drawImg: null
       };
     },
     created () {
+
+    },
+    mounted(){
+      imgOnloadSingle(this.data.cover).then(res => {
+        let imgSrc, boxImg;
+        boxImg = {
+          width: IMG_W,
+          height: IMG_H
+        };
+        imgSrc = changeImgRatio(res, boxImg);
+        this.drawImg = imgSrc;
+      }).catch(e => {
+        console.log(e);
+      });
     },
     methods: {
     }

@@ -3,8 +3,8 @@
     <scroll ref="scroll" :data="userInfo">
       <div>
         <header class="g-header">
-          <router-link :to="{path:'message', append: true}" tag="i" class="icon c-icon-message"
-                       :class="{'new-msg':hasNewMsg}"></router-link>
+          <router-link :to="{path:'message', append: true}" tag="i" class="icon"
+                       :class="{'new-msg':hasNewMsg, 'c-icon-message':userInfo}"></router-link>
         </header>
         <section class="g-main">
           <div class="info-base">
@@ -48,7 +48,7 @@
     <loading ref="loading" :title="loadingTxt"></loading>
     <share :no-self="true" @cancel="cancelShare" @share="share" ref="share"></share>
     <confirm ref="confirmsWrapper" :text="confirmTxt" @confirm="confirm"></confirm>
-    <keep-alive>
+    <keep-alive :include="keepAliveList">
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
@@ -75,6 +75,7 @@
     name: 'KA_rootMe',
     data () {
       return {
+        keepAliveList: /^KA_/,
         hasNewMsg: false,
         toptipTxt: '',
         pageTitle: '我的',
@@ -215,7 +216,7 @@
         });
       },
       clickSystem (data) {
-        if (!this.userGuid) {
+        if (data.path === 'setting' && !this.userGuid) {
           this.$refs.confirmsWrapper.show();
           return false;
         }
@@ -261,7 +262,7 @@
               this.$refs.toptip.show();
               return false;
             }
-            this.hasNewMsg = res.result ? res.result : false;
+            this.hasNewMsg = res.result.allNotifyFlag;
           }
         }, erro => {
           this.toptipTxt = erro.message;

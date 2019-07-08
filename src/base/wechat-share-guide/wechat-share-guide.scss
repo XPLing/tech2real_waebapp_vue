@@ -5,15 +5,37 @@
   top: 0;
   bottom: 0;
   z-index: 998;
-  background-color: $color-background-d;
+  background-color: $color-transparency-black-7;
   color: $whiteColor;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   .icon{
     position: absolute;
     top: formatVal(10,rem);
     left: formatVal(10,rem);
+  }
+  .top{
+    margin-top: formatVal(20,rem);
+    font-size: 0;
+    text-align: right;
+    padding-right: formatVal(20,rem);
+    img{
+      @include w(228);
+    }
+  }
+  .btnbox{
+    position: relative;
+    margin-top: formatVal(50,rem);
+    font-size: 0;
+    text-align: center;
+    .btn{
+      @include w(118);
+    }
+    .line{
+      position: absolute;
+      bottom: 100%;
+      @include w(21);
+    }
   }
 }
 @keyframes confirm-fadein{

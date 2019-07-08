@@ -3,14 +3,18 @@
   z-index: 10;
   @include h(40);
   @include lh(40);
-  @include fs(18);
+  font-size: 0;
   color: $color-text-2B3;
   text-align: center;
   background-color: $whiteColor;
   border-bottom: 1px solid $color-border-split-D8D;
+  .icon,.title{
+    @extend %lineElem_middle;
+  }
   .title{
     max-width: 70%;
-    display: inline-block;
+    margin-left: formatVal(5,rem);
+    @include fs(18);
     @extend %ellipsis;
   }
   .fa{
@@ -24,6 +28,11 @@
     &.right{
       right: formatVal(15,rem);
     }
+  }
+  .icon{
+    @include w(20);
+    @include h(20);
+    border-radius: 50%;
   }
   .operate{
     @extend .fa;

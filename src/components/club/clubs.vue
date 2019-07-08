@@ -59,7 +59,7 @@
       return {
         isRouterAlive: true,
         toptipTxt: '',
-        pageTitle: '话题讨论',
+        pageTitle: '所有栏目',
         articleInfo: null,
         probeType: 2,
         listenScroll: true,

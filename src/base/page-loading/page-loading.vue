@@ -33,7 +33,6 @@
       };
     },
     created(){
-      console.log('page-loading');
     },
     activated(){
 

@@ -7,13 +7,14 @@ import axios from './axios';
 
 const debug = process.env.NODE_ENV === 'development';
 
-export function getClubByClubGuid (params) {
+export function getClubByClubGuid (params, other) {
   var url = debug ? '/api/getClubByClubGuid' : `${REQUEST_PREFIX}/getClubByClubGuid`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,
     method: 'post',
-    params: data
+    params: data,
+    privateConfig: other
   }).then((res) => {
     return Promise.resolve(res.data);
   }, (err) => {
@@ -47,7 +48,7 @@ export function quitClub (params) {
   });
 }
 export function signPublicClubInView (params) {
-  var url = debug ? '/api/signPublicClubInView' : `${REQUEST_PREFIX}/signPublicClubInView`;
+  var url = debug ? '/api/signPublicClub' : `${REQUEST_PREFIX}/signPublicClub`;
   const data = Object.assign({}, {}, params);
   return axios({
     url: url,

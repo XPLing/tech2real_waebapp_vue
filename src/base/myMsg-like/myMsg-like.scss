@@ -26,6 +26,9 @@
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+    &.readed{
+      opacity: 0.5;
+    }
     .cont-wrap{
       @include fs(14);
       margin: formatVal(10,rem) 0;

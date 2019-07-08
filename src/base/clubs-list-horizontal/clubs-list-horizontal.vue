@@ -1,14 +1,14 @@
 <template>
   <div class="g-club-list">
     <swiper :options="swiperOPtsClubs" class="g-swiper">
-      <swiper-slide class="swiper-item" v-for="(item,index) in clubList" :key="index">
+      <swiper-slide class="swiper-item" v-for="(item,index) in clubList" :key="index" @click.native="selectItem(item)">
         <div class="c-media">
           <div class="avatar">
             <img :src="item.logoUrl">
           </div>
           <div class="desc">
             <p class="title">{{item.name | ellipsis(5)}} </p>
-            <p class="btn">关注</p>
+            <p class="btn" @click.stop="operate(item)">{{item.userClubId==1?'已关注':'关注'}}</p>
           </div>
         </div>
       </swiper-slide>
@@ -38,8 +38,11 @@
       }
     },
     methods: {
-      selectClub (id) {
-        this.$emit('selectClub', id);
+      selectItem (data) {
+        this.$emit('selectItem', data);
+      },
+      operate (data) {
+        this.$emit('join', data);
       }
     },
     components: {
